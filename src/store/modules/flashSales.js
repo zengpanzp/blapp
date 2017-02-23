@@ -7,31 +7,80 @@
  */
 
 import * as types from '../mutation-types'
+import { Promise } from 'es6-promise'
+// import api from 'src/api'
 
 // initial state
 const state = {
-  slide: []
+  slide: [],
+  queryCate: [],
+  getFlashDetail: [],
+  pages: null
 }
 
 // getters
 const getters = {
-  allSlides: state => state.slide
+  allSlides: state => state.slide,
+  queryCate: state => state.queryCate,
+  getFlashDetail: state => state.getFlashDetail,
+  pages: state => state.pages
 }
 
 // actions
 const actions = {
-  getFlashSlides ({ commit }, params) {
-    window.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", params, {
-      success: function(res) {
-        let resData = window.JSON.parse(res)
-        commit(types.GET_SLIDE, resData)
-      },
-      fail: function(err) {
-        console.log(err)
-      },
-      progress: function(data) {
-        // console.log(data);
-      }
+  allSlides ({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      window.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", params, {
+        success: function(res) {
+          let resData = window.JSON.parse(res)
+          commit(types.GET_SLIDE, resData)
+          resolve()
+        },
+        fail: function(err) {
+          console.log(err)
+          reject()
+        },
+        progress: function(data) {
+          // console.log(data);
+        }
+      });
+      // api.getFlashSlides(params).then(res => {
+      //   // let resData = window.JSON.parse(res)
+      //   commit(types.GET_SLIDE, res.body)
+      // }, err => console.log(err))
+    })
+  },
+  queryCate ({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      window.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", params, {
+        success: (res) => {
+          let resData = window.JSON.parse(res)
+          commit(types.QUERY_CATE, resData)
+          resolve()
+        },
+        fail: (err) => {
+          console.log(err)
+          reject()
+        },
+        progress: (data) => {}
+      })
+    })
+  },
+  getFlashDetail ({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      window.LoadAPI("BLPromotionQueryFlashListAPIManager", params, {
+        success: (res) => {
+          let resData = window.JSON.parse(res)
+          commit(types.GET_FLASHDETAIL, resData)
+          commit(types.GET_PAGES, resData.pages)
+          resolve()
+        },
+        fail: (err) => {
+          console.log(err)
+          reject()
+        },
+        progress: (data) => {}
+      })
     })
   }
 }
@@ -40,6 +89,15 @@ const actions = {
 const mutations = {
   [types.GET_SLIDE] (state, res) {
     state.slide = res.otherResource[0].advList
+  },
+  [types.QUERY_CATE] (state, res) {
+    state.queryCate = res.list
+  },
+  [types.GET_FLASHDETAIL] (state, res) {
+    state.getFlashDetail = state.getFlashDetail.concat(res.list)
+  },
+  [types.GET_PAGES] (state, res) {
+    state.pages = res
   }
 }
 

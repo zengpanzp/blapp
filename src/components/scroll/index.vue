@@ -128,9 +128,11 @@ export default {
     },
 
     onScroll (e) {
+      console.log('scroll')
       if (!this.enableInfinite || this.infiniteLoading) {
         return
       }
+      console.log('no------scroll')
       let outerHeight = this.$el.clientHeight
       let innerHeight = this.$el.querySelector('.scroll-inner').clientHeight
       let scrollTop = this.$el.scrollTop

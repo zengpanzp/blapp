@@ -58,5 +58,11 @@ export default {
       Vue.http.post(baseUrl + '/getProducts', params)
     )
   },
+  // getFlashSlides
+  getFlashSlides: (params) => {
+    return (
+      Vue.http.post(baseUrl + '/getFlashSlides', params)
+    )
+  },
 
 }

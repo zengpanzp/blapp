@@ -17,7 +17,7 @@ export default {
 
   data () {
     return {
-
+      ready: false
     };
   },
   props: {
@@ -33,39 +33,39 @@ export default {
       type: Boolean,
       default: false
     },
-    switchLoad: {
-      type: String,
-      default: '_src'
-    }
-  },
-  created() {
-    if (!this.swiper) {
-      this.swiper = this.newSlide()
+    slides: {
+      type: Array
+    },
+    value: {
+      type: Boolean,
+      default: true
     }
   },
   mounted() {
-    this.$nextTick(() => {
-      if (!this.swiper) {
-        this.swiper = this.newSlide()
-      }
-    })
   },
-  updated() {
-    this.newSlide()
+  watch: {
+    value(loading) {
+      if (!loading) {
+        this.reInitPages()
+      }
+    }
   },
   methods: {
-    newSlide() {
-      TouchSlide({
-        slideCell: this.$refs.slide,
-        titCell: this.pagination ? ".swiper-pagination ul" : false,
-        mainCell: ".swiper-wrapper",
-        effect: this.effect,
-        autoPlay: this.autoPlay,
-        delayTime: 300,
-        interTime: 2000,
-        autoPage: this.pagination,
-        switchLoad: this.switchLoad
-      })
+    /* init */
+    reInitPages() {
+      this.$nextTick(() => {
+        TouchSlide({
+          slideCell: this.$refs.slide,
+          titCell: this.pagination ? ".swiper-pagination ul" : false,
+          mainCell: ".swiper-wrapper",
+          effect: this.effect,
+          autoPlay: this.autoPlay,
+          delayTime: 300,
+          interTime: 2000,
+          autoPage: this.pagination,
+          switchLoad: "_src"
+        })
+      });
     }
   }
 };

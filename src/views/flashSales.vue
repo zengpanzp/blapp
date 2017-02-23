@@ -1,90 +1,51 @@
 <template>
   <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading">
     <!-- 轮播图 -->
-    <bl-slide class="flash-swipe">
-      <template v-for="({jumpId, mediaUrl}, index) in slides">
-        <bl-slide-item>
-          <a href="javascript:;" :data-id="jumpId"><img :_src="mediaUrl" alt=""></a>
+    <bl-slide class="flash-swipe" v-model="isSwipeLoading">
+        <bl-slide-item v-for="({jumpId, mediaUrl, deployName}, index) in allSlides">
+          <a href="javascript:;" :data-jump-id="jumpId || ''"><img :_src="mediaUrl" :alt="deployName"></a>
         </bl-slide-item>
-      </template>
     </bl-slide>
     <!-- end -->
     <!-- 分类 -->
     <div class="navigation">
       <ul class="ovfs flash-ovfs">
-        <li class="ovfs-item active">
+        <li class="ovfs-item" :class="{ active: isActive === 'j' }" @click="selectCate('j')">
           <p>今日上新</p>
         </li>
-        <li class="ovfs-item">
+        <li class="ovfs-item" :class="{ active: isActive === flashCategories}" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories)">
+          <p v-text="flashCategoriesName"></p>
+        </li>
+        <li class="ovfs-item" :class="{ active: isActive === 'z' }" @click="selectCate('z')">
           <p>最后疯抢</p>
         </li>
-        <li class="ovfs-item">
+        <li class="ovfs-item" :class="{ active: isActive === 'p' }" @click="selectCate('p')">
           <p>品牌预告</p>
         </li>
       </ul>
     </div>
     <!-- end -->
+    <!-- <div class="title-todynew">
+      <div>
+        <span>今日上新</span>
+      </div>
+    </div> -->
     <!-- 闪购商品列表 -->
     <div class="flash-list">
-      <div class="todynew">
-        <div class="title-todynew">
-          <div>
-            <span>今日上新</span>
-          </div>
-        </div>
+      <div class="todynew" v-for="(item, index) in getFlashDetail">
         <div class="todynew-img">
           <div class="wumengcen">
-            <a href="javascript:;"><img src="http://placeholder.qiniudn.com/750x320" alt=""></a>
-            <!-- <div class="small-bg"><img src="images/flashSales/shangoubg.png" alt=""></div> -->
-            <div class="jian juan"><span>全场满99元减30元</span><i class="jj"><img src="../assets/flashSales/coupon.png" alt=""></i></div>
+            <a href="javascript:;"><img :src="item.pictures[3].picturesUrl" alt=""></a>
+            <div class="small-bg" style="display: none;"><img src="" alt=""></div>
+            <div class="jian juan"><span v-text="item.flashAdvertisement"></span><!-- <i class="jj"><img src="../assets/flashSales/coupon.png" alt=""></i> --></div>
           </div>
-          <div class="bottom-todynew">1
-            <!-- <div class="le-fonts"><img src="images/flashSales/flashSales-logo.png" alt=""></div> -->
+          <div class="bottom-todynew">
+            <div class="le-fonts"><img :src="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
             <div class="dd-fonts">
-              <div class="le2-fonts">霉霉闺蜜天团美物集合</div>
+              <div class="le2-fonts" v-text="item.flashName"></div>
               <div class="tian-number">仅剩3天</div>
             </div>
-            <div class="ri-fonts"><span>5.9</span>折起</div>
-          </div>
-        </div>
-      </div>
-      <div class="todynew">
-        <div class="title-todynew">
-          <div>
-            <span>最后疯抢</span>
-          </div>
-        </div>
-        <div class="todynew-img">
-          <div class="mengcen">
-            <a href="javascript:;"><img src="http://placeholder.qiniudn.com/750x320" alt=""></a>
-            <div class="mengcen-bg"></div>
-            <div class="jian"><span>全场满99元减30元</span></div>
-          </div>
-          <div class="D"><span>仅剩1天</span></div>
-          <div class="bottom-todynew">
-            <!-- <div class="le-fonts"><img src="images/flashSales/flashSales-logo.png" alt=""></div> -->
-            <div class="le2-fonts">霉霉闺蜜天团美物集合</div>
-            <div class="ri-fonts"><span>5.9</span>折起</div>
-          </div>
-        </div>
-      </div>
-      <div class="todynew">
-        <div class="title-todynew">
-          <div>
-            <span>品牌预告</span>
-          </div>
-        </div>
-        <div class="todynew-img">
-          <div class="mengcen">
-            <a href="javascript:;"><img src="http://placeholder.qiniudn.com/750x320" alt=""></a>
-            <div class="mengcen-bg"></div>
-            <div class="jian"><span>全场满99元减30元</span></div>
-          </div>
-          <div class="D"><span>8月8日 10:00开抢</span></div>
-          <div class="bottom-todynew">
-            <!-- <div class="le-fonts"><img src="images/flashSales/flashSales-logo.png" alt=""></div> -->
-            <div class="le2-fonts">霉霉闺蜜天团美物集合</div>
-            <div class="ri-fonts"><span>5.9</span>折起</div>
+            <div class="ri-fonts"><span v-text="item.advValue"></span>折起</div>
           </div>
         </div>
       </div>
@@ -111,21 +72,47 @@ export default {
   components: {},
   data() {
     return {
-      isLoading: true
+      loading: null,
+      isLoading: true,
+      isSwipeLoading: true,
+      isActive: 'j',
+
+      /* 活动列表 */
+      type: 1,
+      pageNum: 1,
+      pageSize: 10,
+      flashCategories: ''
     }
   },
   created() {
-    this.$store.dispatch('getFlashSlides', {
+    this.loading = this.$toast({
+      iconClass: 'preloader white',
+      message: '加载中',
+      duration: 'loading'
+    })
+    /* 获取轮播图 */
+    this.$store.dispatch('allSlides', {
       resourceId: 500
+    }).then(() => {
+      this.isSwipeLoading = false
+      /* 获取分类 */
+      this.$store.dispatch('queryCate', {
+        channelld: 1
+      }).then(() => {
+        this.getList()
+      })
     })
   },
   computed: {
-    ...mapGetters({
-      slides: 'allSlides'
-    })
+    ...mapGetters([
+      'allSlides',
+      'queryCate',
+      'getFlashDetail',
+      'pages'
+    ])
   },
   mounted() {
-    console.log(this.slides)
+    console.log(this.pageNum)
   },
   methods: {
     onRefresh(done) {
@@ -136,9 +123,30 @@ export default {
     },
     onInfinite(done) {
       console.log('infinite')
-      setTimeout(() => {
+      if (this.pageNum >= this.pages) {
+        this.$toast({
+          position: 'bottom',
+          message: '已经是最后一页'
+        })
         this.isLoading = false
-      }, 2000)
+      } else {
+        this.pageNum = this.pageNum + 1
+        /* 获取活动列表 */
+        this.$store.dispatch('getFlashDetail', {
+          channelid: 1,
+          type: this.type,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          parameter: 0,
+          flashCategories: (this.flashCategories === '') ? undefined : parseInt(this.flashCategories),
+        }).then(() => {
+          this.loading.close()
+        })
+        console.log(this.pages)
+      }
+    },
+    selectCate(key) {
+      this.isActive = key
     }
   }
 }

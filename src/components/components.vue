@@ -88,30 +88,6 @@
         <h3>switch</h3>
         <bl-switch v-model="values" type="pink"></bl-switch>{{ values }}
       </div>
-      <div class="navbar-box">
-        <h3>navbar</h3>
-        <bl-navbar v-model="selected">
-          <bl-tab-item id="1">已分配</bl-tab-item>
-          <bl-tab-item id="2">可分配</bl-tab-item>
-          <bl-tab-item id="3">已失效</bl-tab-item>
-        </bl-navbar>
-        <bl-tab-container :swipeable="true" v-model="selected">
-          <bl-tab-container-item id="1">
-            <bl-coupon-card></bl-coupon-card>
-          </bl-tab-container-item>
-          <bl-tab-container-item id="2">
-            <div class="no-coupon">
-              <div class="coupon-img flex-c-m">
-                <img src="../assets/i/coupon-img.png" />
-              </div>
-              <div class="no-text">暂无优惠券</div>
-            </div>
-          </bl-tab-container-item>
-          <bl-tab-container-item id="3">
-            <bl-coupon-card :isFailure="true"></bl-coupon-card>
-          </bl-tab-container-item>
-        </bl-tab-container>
-      </div>
 
     </div>
   </bl-scroll>
@@ -159,7 +135,6 @@ export default {
   name: 'components',
 
   components: {
-    'BlCouponCard': () => System.import('components/cloud-merchant/coupon-card')
   },
 
   data() {

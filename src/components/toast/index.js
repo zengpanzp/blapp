@@ -28,6 +28,8 @@ let Toast = (options = {}) => {
         if (instance.closed) return;
         instance.close();
       }, duration)
+    } else {
+      instance.className = "white-bg"
     }
   })
 

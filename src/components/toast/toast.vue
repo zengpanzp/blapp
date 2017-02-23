@@ -1,5 +1,5 @@
 <template>
-  <div class="ant-transparent" v-if="visible">
+  <div class="ant-transparent" :class="className" v-if="visible">
     <div class="ant-toast" :class="position" :style="{ 'padding': iconClass === '' ? '10px' : '15px 30px' }">
       <i class="ant-icon" :class="iconClass" v-if="iconClass !== ''"></i>
       <span class="ant-toast-text">{{ message }}</span>
@@ -10,6 +10,9 @@
 <style lang="scss">
   @import "src/sass/tobe/function";
   /* toast */
+  .ant-transparent.white-bg{
+    background-color: #fff;
+  }
   .ant-toast {
     position: fixed;
     z-index: 100;
@@ -70,6 +73,9 @@ export default {
     position: {
       type: String,
       default: 'middle'
+    },
+    className: {
+      type: String
     }
   }
 };
