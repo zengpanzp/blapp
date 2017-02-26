@@ -140,6 +140,27 @@ const isSeeing = (el, option) => {
   return el.width !== 0 && el.height !== 0 && boolX && boolY
 }
 
+/**
+ * 对象深拷贝
+ * @chenpeng
+ * @DateTime 2017-02-25T17:13:08+0800
+ * @param    {[obj]}                 obj1 [新对象]
+ * @param    {[obj]}                 obj2 [拷贝对象]
+ * @return   {[obj]}                      [返回一个新对象]
+ */
+const inCopy = (obj1, obj2) => {
+  let objNew = obj1 || {}
+  for (let i in obj2) {
+    if (obj2.hasOwnProperty(i)) {
+      objNew[i] = Array.isArray(obj2[i]) ? [] : {}
+      inCopy(objNew[i], obj2[i])
+    } else {
+      objNew[i] = obj2[i]
+    }
+  }
+  return objNew
+}
+
 export default {
   fmtDate,
   dbGet,

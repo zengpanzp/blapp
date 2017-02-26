@@ -15,7 +15,7 @@ const state = {
   slide: [],
   queryCate: [],
   getFlashDetail: [],
-  pages: null
+  pages: 0
 }
 
 // getters
@@ -94,7 +94,12 @@ const mutations = {
     state.queryCate = res.list
   },
   [types.GET_FLASHDETAIL] (state, res) {
-    state.getFlashDetail = state.getFlashDetail.concat(res.list)
+    // state.getFlashDetail = state.getFlashDetail.concat(res.list)
+    if (res.list) {
+      state.getFlashDetail = res.list
+    } else {
+      state.getFlashDetail = []
+    }
   },
   [types.GET_PAGES] (state, res) {
     state.pages = res

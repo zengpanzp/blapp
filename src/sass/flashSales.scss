@@ -1,6 +1,8 @@
 /* creat by chenpeng */
 @import "tobe/function";
-
+body{
+  background-color: #f7f7f7;
+}
 /* 轮播图 */
 
 .flash-swipe {
@@ -140,6 +142,10 @@
       width: rem(115);
       background-size: rem(115) rem(41);
       margin: 0 rem(23) 0 0;
+      img{
+        height: rem(31.14*2);
+        border: 0;
+      }
     }
     .dd-fonts {
       display: inline-block;
@@ -210,17 +216,7 @@
 
 //倒计时
 .todynew-img .D {
-  display: inline-block;
-  span {
-    display: inline-block;
-    line-height: rem(24);
-    padding: rem(20) 0;
-    font-size: rem(28);
-  }
-}
-
-.todynew-img .D {
-  line-height: rem(24);
+  line-height: rem(64);
   color: #ffffff;
   position: absolute;
   bottom: rem(180);
@@ -257,16 +253,26 @@
 .todynew-img {
   .wumengcen {
     position: relative;
+    a{
+      display: block;
+      img{
+        height: rem(227*2);
+      }
+    }
   }
   .mengcen {
     position: relative;
-    .mengcen-bg {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      left: 0;
-      top: 0;
-      background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
-    }
   }
+  .mengcen-bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+  }
+}
+.no-flash-list{
+  text-align: center;
+  margin-top: rem(20);
 }

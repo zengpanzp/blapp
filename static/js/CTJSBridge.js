@@ -13,6 +13,7 @@ String.prototype.hashCode = function() {
 
 function LinkToDevice(openCallback, closeCallback, errorCallback) {
   if (window.WebSocket != undefined && typeof isiOS == "undefined") {
+    // wsConnection = new WebSocket('ws://10.199.25.169:9000');
     wsConnection = new WebSocket('ws://192.168.2.100:9000');
 
     wsConnection.addEventListener("open", function(event) {

@@ -6,18 +6,18 @@
 
  import Vue from 'vue'
  import Vuex from 'vuex'
- import * as actions from './actions'
- import * as getters from './getters'
- import cart from './modules/cart'
+ // import * as actions from './actions'
+ // import * as getters from './getters'
+ // import cart from './modules/cart'
  import flashSales from './modules/flashSales'
 
  Vue.use(Vuex)
 
  export default new Vuex.Store({
-   actions,
-   getters,
+   // actions,
+   // getters,
    modules: {
-     cart,
+     // cart,
      flashSales
    },
    strict: process.env.NODE_ENV !== 'production'

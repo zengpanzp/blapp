@@ -13,14 +13,14 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/components'
+      redirect: '/flashSales'
     },
     {
       path: '/components',
       meta: {
         title: '组件'
       },
-      component: r => require.ensure([], () => r(require('../components/components')), 'components')
+      component: r => require.ensure([], () => r(require('vue-bluer/components')), 'components')
     },
     {
       path: '/vuexdemo',
@@ -36,7 +36,16 @@ export default new Router({
         title: '精品闪购',
         class: 'flashSales'
       },
-      component: r => require.ensure([], () => r(require('../views/flashSales')), 'flashSales')
+      component: r => require.ensure([], () => r(require('../views/flashSale/flashSales')), 'flashSales')
+    },
+    /* 陈鹏 精品闪购活动列表页 */
+    {
+      path: '/flashsaleproductspage/:flashId/:isStart',
+      meta: {
+        title: '精品闪购',
+        class: 'productsListView'
+      },
+      component: r => require.ensure([], () => r(require('../views/flashSale/productsListView')), 'flashsaleproductspage')
     }
   ]
 })
