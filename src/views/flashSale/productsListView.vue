@@ -7,10 +7,7 @@
       <div class="serviceWrap">
         <div class="priceSelect">
           <ul id="flashSale_brand">
-            <li class="select"><a>尚牧<svg class="icon"><use xlink:href="#icon-check"></use></svg></a></li>
-            <li><a>费奥德<svg class="icon"><use xlink:href="#icon-check"></use></svg></a></li>
-            <li><a>太食美<svg class="icon"><use xlink:href="#icon-check"></use></svg></a></li>
-            <li><a>果鼎<svg class="icon"><use xlink:href="#icon-check"></use></svg></a></li>
+            <li :class="[ brandHandle === index ? 'select': '' ]" @click="brandHandle = index" v-for="(item, index) in flashSalesGoods.brandList"><a>{{ item.brandNameCN }}<svg class="icon"><use xlink:href="#icon-check"></use></svg></a></li>
           </ul>
           <div class="chongzhi">
             <button type="button" data-role="none" class="resetIcon">重置选项</button>
@@ -38,22 +35,21 @@
         </div>
         <div class="quickbuy-active">
           <ul>
-            <li>
-              <a>
-                <img src="http://img19.iblimg.com/camp-1/images/flashPictures/flashImgs/2017/02/551247550.jpg">
+            <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
+              <a href="javascript:;">
+                <img v-lazy="picturesUrl" alt="">
               </a>
               <div class="quickbuy-active-titles">
-                <div class="active-store-logo">
-                  <img src="http://k21.iblimg.com/prd/images/brand/2016/10/shangmu.jpg">
+                <div class="active-store-logo" v-if="flashSalesGoods.brandList">
+                  <img :src="flashSalesGoods.brandList[0].brandLogo" :alt="flashSalesGoods.brandList[0].brandNameCN">
                 </div>
                 <div class="active-title-detail">
                   <div class="active-detail-container">
-                    <p>TOP生鲜水果小食</p>
-                    <p class="discount-store-text">满100减20</p>
+                    <p>{{ flashSalesGoods.flashName }}</p>
+                    <p class="discount-store-text">{{ flashSalesGoods.flashAdvertisement }}</p>
                     <p class="discount-num">
-                      <label>55</label>元起
+                      <label>{{ flashSalesGoods.advValue }}</label>元起
                     </p>
-                    <p id="countDown"></p>
                   </div>
                 </div>
               </div>
@@ -62,17 +58,21 @@
         </div>
         <div class="flashtitle">
           <div class="title-head"></div>
-          <div class="countdown">35分钟28秒后结束</div>
+          <div class="countdown">{{ days + hours + minutes + seconds + flag }}</div>
         </div>
         <div id="flashProductsList">
           <ul class="index-productlist">
-            <li>
-              <a href="javascript:LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', { goodsid: '249622', goodsName: '费奥德 熟冻帝王蟹礼盒装（帝王蟹1.5KG，南美白虾500g，万字酱油150ml） 智利进口', goodsPrice: '667.5', goodsImageUrl: 'http://Img.iblimg.com/goods-45/3030/2016/11/SP_3030_303000364456_01_10006.jpg', isGiftGoods: false })">
-                <img src="http://Img.iblimg.com/goods-45/3030/2016/11/SP_3030_303000364456_01_10006.jpg" alt="">
-                <h3>费奥德 熟冻帝王蟹礼盒装（帝王蟹1.5KG，南美白虾500g，万字酱油150ml） 智利进口</h3>
-                <p><span class="price">¥418.0</span><span class="cost">参考价：¥667.5</span></p>
-              </a>
-            </li>
+            <template v-for="item in listGoodsData">
+              <li @click="LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController',{ goodsid: item[0].goodsId, goodsName: item[0].goodsMsg, goodsPrice: item[0].goodsPrice, goodsImageUrl: item[0].goodsImgPath, isGiftGoods: false })">
+                <a href="javascript:;">
+                  <div class="lazy-box">
+                    <img class="lazy" :src="item[0].goodsImgPath" alt="">
+                  </div>
+                  <h3>{{ item[0].goodsMsg }}</h3>
+                  <p><span class="price">¥{{ item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
+                </a>
+              </li>
+            </template>
           </ul>
         </div>
       </div>
@@ -80,34 +80,129 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
 
   name: 'productsListView',
 
   data() {
     return {
+      setTime: null,
+      loading: null,
       isLoading: true,
       showModel: false,
       isSelect: 1,
-      isDown: ''
+      isDown: '',
+      isStart: null,
+      brandHandle: '',
+
+      days: '',
+      hours: '',
+      minutes: '',
+      seconds: '',
+      flag: '',
+
+      pageNum: 1,
+      pageSize: 10,
+      totalPage: 0,
+      listGoodsData: []
     };
+  },
+  computed: {
+    ...mapGetters([
+      'flashSalesGoods', // 活动闪购活动商品
+      'flashSalesListGoods' // 活动闪购活动商品列表
+    ])
+  },
+  mounted() {
+    this.LoadMethod = window.LoadMethod
+    this.loading = this.$toast({
+      iconClass: 'preloader white',
+      message: '加载中',
+      duration: 'loading',
+      className: 'white-bg'
+    })
+    /* 获取活动商品 */
+    this.$store.dispatch('flashSalesGoods', {
+      channelid: 1,
+      flashId: this.$route.params.flashId
+    }).then(() => {
+      this.loading.close()
+      let start = this.flashSalesGoods.effectiveStart
+      let end = this.flashSalesGoods.effectiveEnd
+      /* 倒计时 */
+      this.countdown(start, end)
+      /* 获取商品列表 */
+      this.getListGoods()
+    })
   },
   methods: {
     /* 滑到底部加载数据 */
     onInfinite(done) {
-      done()
-      // if (this.getFlashDetail.length < this.pageSize) {
-      //   this.$toast({
-      //     position: 'bottom',
-      //     message: '已经是最后一页'
-      //   })
-      //   this.isLoading = false
-      // }
-      // this.pageNum ++
-      // this.getList(done)
+      if (this.pageNum >= this.totalPage) {
+        this.$toast({
+          position: 'bottom',
+          message: '亲，没有更多数据了'
+        })
+        this.isLoading = false
+      }
+      this.pageNum ++
+      this.getListGoods(done)
     },
     selected(index) {
       this.isSelect = index
+    },
+    countdown(startTime, endTime) {
+      let startDate = new Date(startTime)
+      let endDate = new Date(endTime)
+      let countDate = ''
+      let now = new Date();
+      if (now >= startDate) {
+        this.isStart = 1;
+        countDate = endDate;
+        this.flag = "后结束"
+      } else {
+        countDate = startDate;
+        this.flag = "后开售"
+      }
+      let date3 = countDate.getTime() - now.getTime();
+      // 计算天数
+      let days = Math.floor(date3 / (24 * 3600 * 1000));
+      // 计算出小时数
+      let leave1 = date3 % (24 * 3600 * 1000); // 计算天数后剩余的毫秒数
+      let hours = Math.floor(leave1 / (3600 * 1000));
+      // 计算相差分钟数
+      let leave2 = leave1 % (3600 * 1000); // 计算小时数后剩余的毫秒数
+      let minutes = Math.floor(leave2 / (60 * 1000));
+      let level3 = leave2 % (60 * 1000);
+      let seconds = Math.floor(level3 / 1000);
+
+      this.days = days >= 1 ? days + '天' : ''
+      this.hours = (hours < 10 ? '0' + hours : hours) + '小时'
+      this.minutes = (minutes < 10 ? '0' + minutes : minutes) + '分钟'
+      this.seconds = (seconds < 10 ? '0' + seconds : seconds) + '秒'
+      this.setTime = setTimeout(() => {
+        if (minutes === 0) {
+          this.setTime = null
+        }
+        this.countdown(startTime, endTime)
+      }, 1000)
+    },
+    getListGoods(done) {
+      this.$store.dispatch('flashSalesListGoods', {
+        actCode: this.flashSalesGoods.flashCode,
+        sorCol: '',
+        sorTye: '',
+        pageSize: this.pageSize,
+        pageNo: this.pageNum
+      }).then(() => {
+        this.totalPage = this.flashSalesListGoods.totalPage
+        this.listGoodsData = this.listGoodsData.concat(this.flashSalesListGoods.rows)
+        if (this.pageNum >= this.totalPage) {
+          this.isLoading = false
+        }
+        done()
+      })
     }
   }
 };

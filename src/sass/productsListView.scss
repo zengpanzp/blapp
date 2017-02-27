@@ -64,10 +64,20 @@
 /* 标题 */
 .quickbuy-active{
   padding-top: rem(88);
+  ul{
+    height: rem(136*2);
+  }
   li {
     position: relative;
-    height: auto;
-    margin-bottom: .25rem*0.32
+    height: rem(136*2);
+    margin-bottom: .25rem*0.32;
+    a{
+      display: block;
+      height: 100%;
+      img{
+        height: 100%;
+      }
+    }
   }
   .quickbuy-active-titles {
     display: block;
@@ -296,7 +306,7 @@ div.plusMark {
     p {
       height: .64rem;
       line-height: 1rem*0.32;
-      padding: .25rem*0.32 .625rem*0.32 .625rem*0.32;
+      padding: .08rem .15rem .2rem;
       font-weight: 400;
       overflow: visible;
       margin-top: .375rem*0.32
@@ -323,17 +333,20 @@ div.plusMark {
       position: relative;
       overflow: hidden;
       .cost {
-        font-size: .75rem*0.32;
+        font-size: rem(24);
         margin-left: .375rem*0.32;
-        line-height: .75rem*0.32;
-        color: #b5b5b5
+        line-height: rem(44);
+        color: #b5b5b5;
+        text-decoration: none !important;
+        white-space: nowrap;
+        word-break: keep-all;
       }
       span {
-        vertical-align: middle;
         &.price {
-          font-size: 1.1rem*0.32;
+          font-size: rem(32);
           color: #e6133c;
-          font-weight: 300
+          font-weight: 300;
+          line-height: rem(44);
         }
       }
       img {

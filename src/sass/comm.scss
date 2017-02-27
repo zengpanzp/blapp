@@ -137,3 +137,8 @@ body{
 .gotop{
   @extend %gotop;
 }
+
+/* 懒加载 */
+.lazy-box{
+  @extend %lazy-box;
+}

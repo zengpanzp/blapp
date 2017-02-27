@@ -15,3 +15,7 @@ export const GET_SLIDE = 'GET_SLIDE' // 轮播图
 export const QUERY_CATE = 'QUERY_CATE' // 分类
 export const GET_FLASHDETAIL = 'GET_FLASHDETAIL' // 活动列表
 export const GET_PAGES = 'GET_PAGES' // 总页数
+
+/* productsListView */
+export const GET_FLASHSALESGOODS = 'GET_FLASHSALESGOODS' // 活动闪购活动商品
+export const GET_FLASHSALESLISTGOODS = 'GET_FLASHSALESLISTGOODS' // 活动闪购活动商品列表

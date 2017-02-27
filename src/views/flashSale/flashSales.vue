@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <bl-slide class="flash-swipe" v-model="isSwipeLoading">
       <bl-slide-item v-for="({jumpId, mediaUrl, deployName}, index) in allSlides">
-        <a href="javascript:;" :data-jump-id="jumpId || ''"><img :_src="mediaUrl" :alt="deployName"></a>
+        <router-link :to="{ path: '/flashsaleproductspage/' + jumpId + '/1' }"><img :_src="mediaUrl" :alt="deployName"></a>
       </bl-slide-item>
     </bl-slide>
     <!-- end -->
@@ -30,10 +30,12 @@
       <div class="todynew" v-for="(item, index) in getFlashDetailData">
         <div class="todynew-img">
           <div class="wumengcen" v-if="item.pictures">
-            <a href="javascript:;" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures"><img  v-lazy.container="{ src: picturesUrl, loading: require('./loading.png') }" alt=""></a>
+            <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/1' }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+              <img v-lazy.container="{ src: picturesUrl, loading: require('./loading.png') }" alt="">
+              <div class="mengcen-bg" v-if="isActive === '3'"></div>
+              <div class="mengcen-bg" v-else-if="isActive === '2'"></div>
+            </router-link>
             <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
-            <div class="mengcen-bg" v-if="isActive === '3'"></div>
-            <div class="mengcen-bg" v-else-if="isActive === '2'"></div>
           </div>
           <div class="D" v-if="isActive === '2'" v-text="timeCoundDown(item.effectiveEnd)"></div>
           <div class="D" v-else-if="isActive === '3'" v-text="timeCoundNotice(item.effectiveStart)"></div>
@@ -87,7 +89,7 @@ export default {
       getFlashDetailData: []
     }
   },
-  created() {
+  mounted() {
     this.loading = this.$toast({
       iconClass: 'preloader white',
       message: '加载中',

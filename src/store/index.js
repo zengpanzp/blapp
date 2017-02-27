@@ -10,6 +10,7 @@
  // import * as getters from './getters'
  // import cart from './modules/cart'
  import flashSales from './modules/flashSales'
+ import flashSalesList from './modules/flashSalesList'
 
  Vue.use(Vuex)
 
@@ -18,7 +19,8 @@
    // getters,
    modules: {
      // cart,
-     flashSales
+     flashSales,
+     flashSalesList
    },
    strict: process.env.NODE_ENV !== 'production'
  })

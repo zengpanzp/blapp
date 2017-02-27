@@ -1,3 +1,4 @@
+/* eslint-disable */
 ;(function(window) {
 
   var svgSprite = '<svg>' +
