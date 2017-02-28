@@ -22,13 +22,6 @@ Vue.use(VueLazyload)
 //   Vue.component(`Bl${name}`, components[key])
 // })
 
-// // components
-// import Toast from 'components/toast'
-// import Modal from 'components/modal'
-
-// Vue.$toast = Vue.prototype.$toast = Toast;
-// Vue.$modal = Vue.prototype.$modal = Modal;
-
 import bluer from 'vue-bluer'
 Vue.use(bluer)
 
@@ -36,11 +29,13 @@ Vue.use(bluer)
 Vue.directive('scroll-top', {
 
   bind: function (el) {
-    let winHeight = document.documentElement.clientHeight
     let ducDiv = document.createElement('div')
+    let winHeight = document.documentElement.clientHeight
     ducDiv.className = 'gotop'
     ducDiv.style.display = 'none'
-    el.appendChild(ducDiv)
+    if (el.parentNode) {
+      el.parentNode.appendChild(ducDiv)
+    }
     ducDiv.addEventListener('click', function() {
       ScrollTo.top(el, 0)
     })
@@ -52,12 +47,6 @@ Vue.directive('scroll-top', {
         ducDiv.style.display = 'none'
       }
     })
-  },
-
-  unbind: function (el) {
-    if (el.parentNode) {
-      el.parentNode.removeChild(el);
-    }
   }
 })
 

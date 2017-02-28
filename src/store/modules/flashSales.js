@@ -40,14 +40,8 @@ const actions = {
           console.log(err)
           reject()
         },
-        progress: function(data) {
-          // console.log(data);
-        }
+        progress: function(data) {}
       });
-      // api.getFlashSlides(params).then(res => {
-      //   // let resData = window.JSON.parse(res)
-      //   commit(types.GET_SLIDE, res.body)
-      // }, err => console.log(err))
     })
   },
   queryCate ({ commit }, params) {
@@ -94,12 +88,7 @@ const mutations = {
     state.queryCate = res.list
   },
   [types.GET_FLASHDETAIL] (state, res) {
-    // state.getFlashDetail = state.getFlashDetail.concat(res.list)
-    if (res.list) {
-      state.getFlashDetail = res.list
-    } else {
-      state.getFlashDetail = []
-    }
+    state.getFlashDetail = res.list
   },
   [types.GET_PAGES] (state, res) {
     state.pages = res

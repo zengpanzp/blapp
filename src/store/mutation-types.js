@@ -5,11 +5,6 @@
  * @type {String}
  */
 
-export const ADD_TO_CART = 'ADD_TO_CART'
-export const CHECKOUT_SUCCESS = 'CHECKOUT_SUCCESS'
-export const CHECKOUT_FAILURE = 'CHECKOUT_FAILURE'
-export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS'
-
 /* flashSales */
 export const GET_SLIDE = 'GET_SLIDE' // 轮播图
 export const QUERY_CATE = 'QUERY_CATE' // 分类
@@ -19,3 +14,4 @@ export const GET_PAGES = 'GET_PAGES' // 总页数
 /* productsListView */
 export const GET_FLASHSALESGOODS = 'GET_FLASHSALESGOODS' // 活动闪购活动商品
 export const GET_FLASHSALESLISTGOODS = 'GET_FLASHSALESLISTGOODS' // 活动闪购活动商品列表
+export const GET_FLASHSALESLISTGOODSPAGES = 'GET_FLASHSALESLISTGOODSPAGES' // 活动闪购活动商品列表总页数

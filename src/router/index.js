@@ -15,20 +15,13 @@ export default new Router({
       path: '/',
       redirect: '/flashSales'
     },
-    {
-      path: '/components',
-      meta: {
-        title: '组件'
-      },
-      component: r => require.ensure([], () => r(require('vue-bluer/components')), 'components')
-    },
-    {
-      path: '/vuexdemo',
-      meta: {
-        title: 'vuexdemo'
-      },
-      component: r => require.ensure([], () => r(require('../views/vuexdemo')), 'vuexdemo')
-    },
+    // {
+    //   path: '/components',
+    //   meta: {
+    //     title: '组件'
+    //   },
+    //   component: r => require.ensure([], () => r(require('vue-bluer/components')), 'components')
+    // },
     /* 陈鹏 精品闪购首页 */
     {
       path: '/flashSales',

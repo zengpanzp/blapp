@@ -232,6 +232,7 @@ $layerHeight: 2.2*0.4rem;
   top: -$layerHeight;
   width: 100%;
   left: 0;
+  overflow: hidden;
   transition-duration: 300ms;
   &.postop{
     top: 0;

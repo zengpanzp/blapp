@@ -13,13 +13,15 @@ import { Promise } from 'es6-promise'
 // initial state
 const state = {
   flashSalesGoods: {},
-  flashSalesListGoods: []
+  flashSalesListGoods: [],
+  pages: 0
 }
 
 // getters
 const getters = {
   flashSalesGoods: state => state.flashSalesGoods,
-  flashSalesListGoods: state => state.flashSalesListGoods
+  flashSalesListGoods: state => state.flashSalesListGoods,
+  listPages: state => state.pages
 }
 
 // actions
@@ -37,9 +39,7 @@ const actions = {
           console.log(err)
           reject()
         },
-        progress: function(data) {
-          // console.log(data);
-        }
+        progress: function(data) {}
       });
     })
   },
@@ -48,16 +48,15 @@ const actions = {
       window.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", params, {
         success: function(res) {
           let resData = window.JSON.parse(res)
-          commit(types.GET_FLASHSALESLISTGOODS, resData)
+          commit(types.GET_FLASHSALESLISTGOODS, resData.resultInfo.pageModel)
+          commit(types.GET_FLASHSALESLISTGOODSPAGES, resData.resultInfo.pageModel.totalPage)
           resolve()
         },
         fail: function(err) {
           console.log(err)
           reject()
         },
-        progress: function(data) {
-          // console.log(data);
-        }
+        progress: function(data) {}
       });
     })
   }
@@ -69,7 +68,10 @@ const mutations = {
     state.flashSalesGoods = res
   },
   [types.GET_FLASHSALESLISTGOODS] (state, res) {
-    state.flashSalesListGoods = res.resultInfo.pageModel
+    state.flashSalesListGoods = res
+  },
+  [types.GET_FLASHSALESLISTGOODSPAGES] (state, res) {
+    state.pages = res
   },
 }
 

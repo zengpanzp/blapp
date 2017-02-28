@@ -16,7 +16,7 @@ module.exports = {
 
   entry: {
     app: './src/main.js',
-    vue: ['vue', 'fastclick', 'es6-promise', 'vue-resource', 'vue-router']
+    vue: ['vue', 'fastclick', 'es6-promise', 'vue-router']
   },
   output: {
     path: config.build.assetsRoot,
@@ -92,7 +92,6 @@ module.exports = {
       'window.Vue': 'vue',
       'window.FastClick': 'fastclick',
       'window.Promise': 'es6-promise',
-      'window.VueResource': 'vue-resource',
       'window.Router': 'vue-router'
     }),
     new webpack.optimize.UglifyJsPlugin({

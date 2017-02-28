@@ -1,7 +1,6 @@
 @charset "utf-8";
 /* base */
 @import "tobe/base";
-// @import "icons";
 .icon {
   width: 1em; height: 1em;
   vertical-align: -0.15em;
@@ -10,6 +9,7 @@
 }
 body{
   background-color: #F8F8F8;
+  position: relative;
 }
 
 /* ios8 以上系统使用0.5px 解决1像素问题 */
