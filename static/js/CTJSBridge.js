@@ -13,8 +13,8 @@ String.prototype.hashCode = function() {
 
 function LinkToDevice(openCallback, closeCallback, errorCallback) {
   if (window.WebSocket != undefined && typeof isiOS == "undefined") {
-    wsConnection = new WebSocket('ws://10.199.14.138:9000');
-    // wsConnection = new WebSocket('ws://192.168.2.100:9000');
+    wsConnection = new WebSocket('ws://10.199.14.171:9000');
+    // wsConnection = new WebSocket('ws://192.168.2.104:9000');
 
     wsConnection.addEventListener("open", function(event) {
       openCallback ? openCallback(event) : null;
@@ -98,18 +98,18 @@ window.Callback = function(identifier, resultStatus, resultData) {
   }
 }
 
-if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
-  LinkToDevice(function(event) {
-    // linked
-    console.log('linked')
-  }, function() {
-    // close
-    console.log('close')
-  }, function(event) {
-    // error
-    console.log('error')
-  });
-} else {
-  console.log('close')
-  CloseLink();
-}
+// if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
+//   LinkToDevice(function(event) {
+//     // linked
+//     console.log('linked')
+//   }, function() {
+//     // close
+//     console.log('close')
+//   }, function(event) {
+//     // error
+//     console.log('error')
+//   });
+// } else {
+//   console.log('close')
+//   CloseLink();
+// }

@@ -26,8 +26,7 @@ export default new Router({
     {
       path: '/flashSales',
       meta: {
-        title: '精品闪购',
-        class: 'flashSales'
+        title: '精品闪购'
       },
       component: r => require.ensure([], () => r(require('../views/flashSale/flashSales')), 'flashSales')
     },
@@ -35,8 +34,7 @@ export default new Router({
     {
       path: '/flashsaleproductspage/:flashId/:isStart',
       meta: {
-        title: '精品闪购',
-        class: 'productsListView'
+        title: '精品闪购'
       },
       component: r => require.ensure([], () => r(require('../views/flashSale/productsListView')), 'flashsaleproductspage')
     }

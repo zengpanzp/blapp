@@ -1,3 +1,4 @@
+<style lang="scss" src="src/sass/flashSales.scss" scoped></style>
 <template>
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top>
@@ -32,7 +33,7 @@
           <div class="todynew-img">
             <div class="wumengcen" v-if="item.pictures">
               <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/1' }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                <img v-lazy.container="{ src: picturesUrl, loading: require('./loading.png') }" alt="">
+                <img v-lazy.container="{ src: picturesUrl, loading: require('src/assets/loading.png') }" alt="">
                 <div class="mengcen-bg" v-if="isActive === '3'"></div>
                 <div class="mengcen-bg" v-else-if="isActive === '2'"></div>
               </router-link>
@@ -41,7 +42,7 @@
             <div class="D" v-if="isActive === '2'" v-text="timeCoundDown(item.effectiveEnd)"></div>
             <div class="D" v-else-if="isActive === '3'" v-text="timeCoundNotice(item.effectiveStart)"></div>
             <div class="bottom-todynew">
-              <div class="le-fonts"><img :src="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
+              <div class="le-fonts"><img v-lazy="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
               <div class="dd-fonts">
                 <div class="le2-fonts" v-text="item.flashName"></div>
                 <div class="tian-number" v-if="isActive === '3'"></div>

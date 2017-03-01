@@ -1,7 +1,6 @@
 /* creat by chenpeng */
 @charset "utf-8";
 @import "tobe/function";
-
 .no-goods{
   text-align: center;
   margin-top: 10px;
@@ -131,9 +130,12 @@ div.plusMark {
 }
 
 .priceSelect {
-  overflow: hidden;
   margin-bottom: .375rem*0.32;
   background: #fff;
+  > ul{
+    max-height: rem(800);
+    overflow-y: auto;
+  }
   li{
     position: relative;
   }
@@ -185,8 +187,6 @@ div.plusMark {
   z-index: 600000;
   height: 100%;
   width: 75%;
-  top: 0;
-  right: 0;
   border-radius: 12px
 }
 
@@ -272,7 +272,6 @@ div.plusMark {
   bottom: 0;
   left: 0;
   right: 0;
-  overflow: auto
 }
 
 .topHeader,

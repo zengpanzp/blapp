@@ -3,24 +3,20 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import router from './router'
-import VueLazyload from 'vue-lazyload'
+import VueLazyload from 'bl-lazyload'
 import ScrollTo from 'scroll'
 
 import App from './App'
 import store from './store'
 
 // FastClick 调用
-FastClick.attach(document.body)
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function() {
+    FastClick.attach(document.body)
+  }, false);
+}
 
 Vue.use(VueLazyload)
-
-// 公共组件 引入
-// import components from 'components'
-// // 公共组件 调用
-// Object.keys(components).forEach((key) => {
-//   let name = key.replace(/(\w)/, (v) => v.toUpperCase()) // 首字母大写
-//   Vue.component(`Bl${name}`, components[key])
-// })
 
 import bluer from 'vue-bluer'
 Vue.use(bluer)
@@ -50,13 +46,34 @@ Vue.directive('scroll-top', {
   }
 })
 
+/* eslint-disable */
+function cssReady(fn, link) {
+  var d = document,
+  t = d.createStyleSheet,
+  r = t ? 'rules' : 'cssRules',
+  s = t ? 'styleSheet' : 'sheet',
+  l = d.getElementsByTagName('link');
+  // passed link or last link node
+  link || (link = l[l.length - 1]);
+  function check() {
+    try {
+      return link && link[s] && link[s][r] && link[s][r][0];
+    } catch(e) {
+      return false;
+    }
+  }
+  (function poll() {
+    check() && setTimeout(fn, 0) || setTimeout(poll, 100);
+  })();
+}
+
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
   document.title = meta.title
   if (meta.class) {
     linkCssObj.href = `static/css/${meta.class}.css`
-    linkCssObj.onload = () => next()
+    cssReady(() => next(), linkCssObj)
   }
   next()
 })
