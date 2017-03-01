@@ -1,7 +1,7 @@
 <style lang="scss" src="src/sass/flashSales.scss" scoped></style>
 <template>
   <div class="flash-sales">
-    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top>
+    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
       <!-- 轮播图 -->
       <bl-slide class="flash-swipe" v-model="isSwipeLoading">
         <bl-slide-item v-for="({jumpId, mediaUrl, deployName}, index) in allSlides">

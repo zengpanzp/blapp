@@ -137,4 +137,22 @@ export default {
 
   }
 
+  /* 闪购首页轮播图 */
+
+  .flash-swipe {
+    height: rem(350);
+    .swiper-slide:after {
+      padding-top: rem(350);
+    }
+    .swiper-pagination li {
+      background-color: rgba(#fff, .5);
+      width: rem(12);
+      height: rem(12);
+      border: 0;
+      &.on {
+        background-color: #C18800;
+      }
+    }
+  }
+
 </style>

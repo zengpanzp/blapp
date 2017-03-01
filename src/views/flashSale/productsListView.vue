@@ -1,15 +1,16 @@
+<style lang="scss" src="src/sass/productsListView.scss" scoped></style>
 <template>
   <div class="flash-list new">
-    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top>
+    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-record>
       <div class="quickbuy-active">
         <ul>
           <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
             <a href="javascript:;">
-              <img v-lazy="picturesUrl" alt="">
+              <img :src="picturesUrl" alt="">
             </a>
             <div class="quickbuy-active-titles">
               <div class="active-store-logo" v-if="flashSalesGoods.brandList">
-                <img :src="flashSalesGoods.brandList[0].brandLogo" :alt="flashSalesGoods.brandList[0].brandNameCN">
+                <img v-lazy="flashSalesGoods.brandList[0].brandLogo" :alt="flashSalesGoods.brandList[0].brandNameCN">
               </div>
               <div class="active-title-detail">
                 <div class="active-detail-container">
@@ -35,7 +36,7 @@
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
                 <div class="lazy-box">
-                  <img class="lazy" :src="item[0].goodsImgPath" alt="">
+                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt="">
                 </div>
                 <h3>{{ item[0].goodsMsg }}</h3>
                 <p><span class="price"><span style="font-size: 12px;">¥</span>{{ item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
@@ -62,8 +63,8 @@
         <li @click="showModel = true"><div class="flex-c-m">筛选</div></li>
       </ul>
     </div>
-    <bl-popup v-model="showModel" position="right" class="sxerji" @touchmove.native.prevent>
-      <div class="topHeader">
+    <bl-popup v-model="showModel" position="right" class="sxerji">
+      <div class="topHeader" ref="topHeader">
         <a class="cancel" @click="showModel = false">取消</a><span>筛选</span><a class="ok" @click="[showModel = false, sureFilter()]"><svg class="icon"><use xlink:href="#icon-check"></use></svg>确认</a>
       </div>
       <div class="serviceWrap">
@@ -74,8 +75,8 @@
               <a>{{ item.brandNameCN }}<svg class="icon"><use xlink:href="#icon-check"></use></svg></a>
             </li>
           </ul>
-          <div class="chongzhi">
-            <button type="button" data-role="none" class="resetIcon">重置选项</button>
+          <div class="chongzhi" ref="resetBtn">
+            <button type="button" data-role="none" class="resetIcon" @click="brandSid = []">重置选项</button>
           </div>
         </div>
       </div>
@@ -84,11 +85,14 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import routeData from 'src/vue-bluer/route-data'
 export default {
 
   name: 'productsListView',
 
-  data() {
+  mixins: [routeData],
+
+  routeData() {
     return {
       setTime: null,
       loading: null,
@@ -109,7 +113,6 @@ export default {
       sorTye: '',
       pageNum: 1,
       pageSize: 10,
-      listGoodsData: [],
 
       /* 倒计时用的变量 */
       days: '',
@@ -118,6 +121,11 @@ export default {
       seconds: '',
       flag: ''
     };
+  },
+  data() {
+    return {
+      listGoodsData: []
+    }
   },
   computed: {
     ...mapGetters([
@@ -191,6 +199,8 @@ export default {
     },
     /* 确定 */
     sureFilter() {
+      /* 参数调整 */
+      this.pageNum = 1
       /* 清空商品列表 */
       this.listGoodsData = []
       this.getListGoods()

@@ -12,9 +12,7 @@ import Vuex from 'vuex'
 import flashSales from './modules/flashSales'
 import flashSalesList from './modules/flashSalesList'
 
-if (process.env.NODE_ENV !== 'production') {
-  Vue.use(Vuex)
-}
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   // actions,

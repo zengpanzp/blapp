@@ -16,11 +16,11 @@ module.exports = {
 
   entry: {
     app: './src/main.js',
-    vue: ['vue', 'fastclick', 'es6-promise', 'vue-router']
+    vue: ['vue', 'fastclick', 'es6-promise', 'vue-router', 'bl-lazyload']
   },
   output: {
     path: config.build.assetsRoot,
-    filename: '[name].js',
+    filename: '[name].[chunkhash:7].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
@@ -80,7 +80,7 @@ module.exports = {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    filename: utils.assetsPath('js/[name].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
@@ -92,7 +92,8 @@ module.exports = {
       'window.Vue': 'vue',
       'window.FastClick': 'fastclick',
       'window.Promise': 'es6-promise',
-      'window.Router': 'vue-router'
+      'window.Router': 'vue-router',
+      'window.VueLazyload': 'bl-lazyload'
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -134,9 +135,9 @@ module.exports = {
     }),
     // extract webpack runtime and module manifest to its own file in order to
     // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vue']
-    })
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'manifest',
+    //   chunks: ['vue']
+    // })
   ]
 }

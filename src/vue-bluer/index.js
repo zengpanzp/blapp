@@ -1,4 +1,8 @@
-/* components */
+/*!
+ * vue-bluer
+ * (c) 2017 chen peng
+ * Released under the MIT License.
+ */
 // import Bar from './bar'
 // import Loading from './loading'
 // import Button from './button'
@@ -17,6 +21,8 @@ import Toast from './toast'
 // import ModalJs from './modal'
 import Slide from './slide'
 import SlideItem from './slide/slide-item'
+
+import scrollRecord from './route-data/scroll-record'
 
 const install = function(Vue) {
   if (install.installed) return;
@@ -39,6 +45,8 @@ const install = function(Vue) {
 
   Vue.$toast = Vue.prototype.$toast = Toast;
   // Vue.$modal = Vue.prototype.$modal = ModalJs;
+
+  Vue.directive('scroll-record', scrollRecord)
 }
 
 // auto install

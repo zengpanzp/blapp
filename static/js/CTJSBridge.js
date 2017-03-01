@@ -98,18 +98,18 @@ window.Callback = function(identifier, resultStatus, resultData) {
   }
 }
 
-// if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
-//   LinkToDevice(function(event) {
-//     // linked
-//     console.log('linked')
-//   }, function() {
-//     // close
-//     console.log('close')
-//   }, function(event) {
-//     // error
-//     console.log('error')
-//   });
-// } else {
-//   console.log('close')
-//   CloseLink();
-// }
+if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
+  LinkToDevice(function(event) {
+    // linked
+    console.log('linked')
+  }, function() {
+    // close
+    console.log('close')
+  }, function(event) {
+    // error
+    console.log('error')
+  });
+} else {
+  console.log('close')
+  CloseLink();
+}

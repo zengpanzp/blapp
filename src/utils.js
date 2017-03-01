@@ -161,6 +161,117 @@ const inCopy = (obj1, obj2) => {
   return objNew
 }
 
+/* eslint-disable */
+function getStyles(el) {
+  return window.getComputedStyle(el);
+}
+
+function swap(el, callback) {
+  var name, old = {};
+  var cssShow = { position: "absolute", visibility: "hidden", display: "block" };
+
+  for (name in cssShow) {
+    old[name] = el.style[name];
+    el.style[name] = cssShow[name];
+  }
+  callback(el);
+  for (name in cssShow) {
+    el.style[name] = old[name];
+  }
+}
+
+class BoxSize {
+  constructor(el) {
+    this.elems = document.querySelectorAll(el)
+  }
+  width() {
+    var value, i = 0,
+      valueArr = [];
+    for (; i < this.elems.length; i++) {
+      var clientWidth;
+      swap(this.elems[i], function(el) {
+        clientWidth = el.clientWidth;
+      });
+      var padding = parseInt(getStyles(this.elems[i]).paddingLeft) + parseInt(getStyles(this.elems[i]).paddingRight);
+      value = clientWidth - padding;
+      valueArr.push(value)
+    }
+    return valueArr.length === 1 ? valueArr[0] : valueArr;
+  }
+  height() {
+    var value, i = 0,
+      valueArr = [];
+    for (; i < this.elems.length; i++) {
+      var clientHeight;
+      swap(this.elems[i], function(el) {
+        clientHeight = el.clientHeight;
+      });
+      var padding = parseInt(getStyles(this.elems[i]).paddingTop) + parseInt(getStyles(this.elems[i]).paddingBottom);
+      value = clientHeight - padding;
+      valueArr.push(value)
+    }
+    return valueArr.length === 1 ? valueArr[0] : valueArr;
+  }
+  innerWidth() {
+    var value, i = 0,
+      valueArr = [];
+    for (; i < this.elems.length; i++) {
+      valueArr.push(this.elems[i].clientWidth)
+    }
+    return valueArr.length === 1 ? valueArr[0] : valueArr;
+  }
+  innerHeight() {
+    var value, i = 0,
+      valueArr = [];
+    for (; i < this.elems.length; i++) {
+      valueArr.push(this.elems[i].clientHeight)
+    }
+    return valueArr.length === 1 ? valueArr[0] : valueArr;
+  }
+  outerWidth(hasMargin) {
+    var value, i = 0,
+      valueArr = [];
+    for (; i < this.elems.length; i++) {
+      var clientWidth;
+      swap(this.elems[i], function(el) {
+        clientWidth = el.clientWidth;
+      });
+      var border = parseInt(getStyles(this.elems[i]).borderLeftWidth) + parseInt(getStyles(this.elems[i]).borderRightWidth);
+      var margin = parseInt(getStyles(this.elems[i]).marginLeft) + parseInt(getStyles(this.elems[i]).marginRight);
+      if (hasMargin === true) {
+        value = clientWidth + border + margin;
+      } else {
+        value = clientWidth + border;
+      }
+      valueArr.push(value)
+    }
+    return valueArr.length === 1 ? valueArr[0] : valueArr;
+  }
+  outerHeight(hasMargin) {
+    var value, i = 0,
+      valueArr = [];
+    for (; i < this.elems.length; i++) {
+      var clientHeight;
+      swap(this.elems[i], function(el) {
+        clientHeight = el.clientHeight;
+      });
+      var border = parseInt(getStyles(this.elems[i]).borderTopWidth) + parseInt(getStyles(this.elems[i]).borderBottomWidth);
+      var margin = parseInt(getStyles(this.elems[i]).marginTop) + parseInt(getStyles(this.elems[i]).marginBottom);
+      if (hasMargin === true) {
+        value = clientHeight + border + margin;
+      } else {
+        value = clientHeight + border;
+      }
+      valueArr.push(value)
+    }
+    return valueArr.length === 1 ? valueArr[0] : valueArr;
+  }
+}
+
+const boxsize = (el) => {
+  return new BoxSize(el)
+}
+
 export default {
   fmtDate,
   dbGet,
@@ -171,5 +282,6 @@ export default {
   deleteCookie,
   isWeixin,
   fmoney,
-  isSeeing
+  isSeeing,
+  boxsize
 }
