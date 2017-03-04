@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/flashSales.scss" scoped></style>
+<style lang="scss" src="src/sass/flashSales.scss"></style>
 <template>
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
@@ -49,7 +49,8 @@
                 <div class="tian-number" v-else-if="isActive === '2'"></div>
                 <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
               </div>
-              <div class="ri-fonts"><span v-text="item.advValue"></span>折起</div>
+              <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
+              <div class="ri-fonts" v-else><span v-text="item.advValue"></span>元起</div>
             </div>
           </div>
         </div>
@@ -70,6 +71,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import { mapGetters } from 'vuex'
 export default {
 
@@ -93,6 +95,11 @@ export default {
     }
   },
   mounted() {
+    setTimeout(() => {
+      if (window.isiOS) {
+        window._setNativeTitle('精品闪购')
+      }
+    }, 300)
     this.loading = this.$toast({
       iconClass: 'preloader white',
       message: '加载中',
@@ -112,6 +119,7 @@ export default {
       this.loading.close()
     })
     this.getList()
+
   },
   computed: {
     ...mapGetters([

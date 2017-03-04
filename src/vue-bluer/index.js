@@ -3,7 +3,7 @@
  * (c) 2017 chen peng
  * Released under the MIT License.
  */
-// import Bar from './bar'
+import Bar from './bar'
 // import Loading from './loading'
 // import Button from './button'
 // import Switch from './switch'
@@ -26,7 +26,7 @@ import scrollRecord from './route-data/scroll-record'
 
 const install = function(Vue) {
   if (install.installed) return;
-  // Vue.component('bl' + Bar.name, Bar);
+  Vue.component('bl' + Bar.name, Bar);
   // Vue.component('bl' + Loading.name, Loading);
   // Vue.component('bl' + Button.name, Button);
   // Vue.component('bl' + Switch.name, Switch);

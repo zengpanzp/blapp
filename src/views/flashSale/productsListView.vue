@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/productsListView.scss" scoped></style>
+<style lang="scss" src="src/sass/productsListView.scss"></style>
 <template>
   <div class="flash-list new">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-record>
@@ -17,7 +17,8 @@
                   <p>{{ flashSalesGoods.flashName }}</p>
                   <p class="discount-store-text">{{ flashSalesGoods.flashAdvertisement }}</p>
                   <p class="discount-num">
-                    <label>{{ flashSalesGoods.advValue }}</label>元起
+                    <label v-if="flashSalesGoods.advType == 0">{{ flashSalesGoods.advValue }}折起</label>
+                    <label else>{{ flashSalesGoods.advValue }}元起</label>
                   </p>
                 </div>
               </div>
@@ -147,12 +148,24 @@ export default {
       channelid: 1,
       flashId: this.$route.params.flashId
     }).then(() => {
+      setTimeout(() => {
+        if (window.isiOS) {
+          window._setNativeTitle(this.flashSalesGoods.flashName)
+        }
+      }, 300)
       this.loading.close()
       /* 倒计时 */
       this.countdown(this.flashSalesGoods.effectiveStart, this.flashSalesGoods.effectiveEnd)
       /* 获取商品列表 */
       this.getListGoods()
     })
+  },
+  destroyed() {
+    setTimeout(() => {
+      if (window.isiOS) {
+        window._setNativeTitle('精品闪购')
+      }
+    }, 300)
   },
   methods: {
     /* 滑到底部加载数据 */
