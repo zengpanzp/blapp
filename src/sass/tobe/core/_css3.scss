@@ -149,7 +149,7 @@ $prefixNo:                    true !default;
     image-rendering: -moz-crisp-edges;         /* Firefox */
     image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
     image-rendering: crisp-edges;
-    -ms-interpolation-mode: nearest-neighbor;  
+    -ms-interpolation-mode: nearest-neighbor;
   } @else {
     @include prefixer-value(image-rendering, webkit moz);
   }
@@ -165,8 +165,8 @@ $prefixNo:                    true !default;
 // http://www.css3files.com/font/
 // 1 The eot fontfile. Can be omitted if you don`t want to support Internet Explorer prior to version 9 (including semicolon).
 // 2 Can also be omitted for Internet Explorer < 9. ?iefix prevents IE6 from interpreting all of the following. If the whole IE family (6 to 9) should be supported, 1 and 2 are needed.
-// 3 Can be omitted if iPad versions prior to iOS 4.2 shouldn’t be supported. 
-// 4 The ttf fontfile. Necessary to support (Mobile) Safari and Opera. 
+// 3 Can be omitted if iPad versions prior to iOS 4.2 shouldn’t be supported.
+// 4 The ttf fontfile. Necessary to support (Mobile) Safari and Opera.
 // 5 The woff fontfile for all modern browsers (best choice).
 @mixin font-face($font-family, $file-path, $weight: normal, $style: normal ) {
   @font-face {
@@ -484,7 +484,7 @@ $prefixNo:                    true !default;
   $originalPrefixForMicrosoft: $prefixForMicrosoft;
   $originalPrefixForOpera: $prefixForOpera;
   $originalPrefixNo: $prefixNo;
-  
+
   @each $prefix in $prefixes {
     @if $prefix == webkit and $originalPrefixForWebkit == true {
       @include disable-prefix-for-all();
@@ -605,7 +605,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     display: -ms-flexbox; // IE 10
   }
-  
+
 }
 
 @mixin box-orient($orient: inline-axis) {
@@ -619,7 +619,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-pack: $pack; // IE 10
   }
-  
+
 }
 
 @mixin box-align($align: stretch) {
@@ -628,7 +628,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-align: $align; // IE 10
   }
-  
+
 }
 
 @mixin box-direction($direction: normal) {
@@ -637,7 +637,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-direction: $direction; // IE 10
   }
-  
+
 }
 
 @mixin box-lines($lines: single) {
@@ -650,7 +650,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-order: $int; // IE 10
   }
-  
+
 }
 
 @mixin box-flex($value: 0) {
@@ -658,7 +658,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex: $value; // IE 10
   }
-  
+
 }
 
 @mixin box-flex-group($int: 1) {
@@ -677,7 +677,7 @@ $prefixNo:                    true !default;
     // 2009
     display: -webkit-box;
     display: -moz-box;
-    
+
 
     // 2012
     display: -webkit-flex;
@@ -685,7 +685,7 @@ $prefixNo:                    true !default;
     @if $prefixForMicrosoft {
       display: -ms-flexbox; // 2011 (IE 10)
     }
-    
+
     display: flex;
   } @else if $value == "inline-flex" {
     display: -webkit-inline-box;
@@ -697,7 +697,7 @@ $prefixNo:                    true !default;
     @if $prefixForMicrosoft {
       display: -ms-inline-flexbox;
     }
-    
+
     display: inline-flex;
   } @else {
     display: $value;
@@ -753,7 +753,7 @@ $prefixNo:                    true !default;
     // 2011 (IE 10)
     -ms-flex-direction: $value;
   }
-  
+
 }
 
 // 2009 - box-lines (single | multiple)
@@ -790,12 +790,12 @@ $prefixNo:                    true !default;
 
   // 2012
   @include prefixer(order, $int, webkit moz spec);
-  
+
   @if $prefixForMicrosoft {
     // 2011 (IE 10)
     -ms-flex-order: $int;
   }
-  
+
 }
 
 // 2012 - flex-grow (number)
@@ -804,7 +804,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-positive: $number;
   }
-  
+
 }
 
 // 2012 - flex-shrink (number)
@@ -813,7 +813,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-negative: $number;
   }
-  
+
 }
 
 // 2012 - flex-basis (number)
@@ -822,7 +822,7 @@ $prefixNo:                    true !default;
   @if $prefixForMicrosoft {
     -ms-flex-preferred-size: $width;
   }
-  
+
 }
 
 // 2009 - box-pack (start | end | center | justify)
@@ -847,12 +847,12 @@ $prefixNo:                    true !default;
 
   // 2012
   @include prefixer(justify-content, $value, webkit moz ms o spec);
-  
+
   @if $prefixForMicrosoft {
     // 2011 (IE 10)
     -ms-flex-pack: $alt-value;
   }
-  
+
 }
 
 // 2009 - box-align (start | end | center | baseline | stretch)
@@ -873,12 +873,12 @@ $prefixNo:                    true !default;
 
   // 2012
   @include prefixer(align-items, $value, webkit moz ms o spec);
-  
+
   @if $prefixForMicrosoft {
     // 2011 (IE 10)
     -ms-flex-align: $alt-value;
   }
-  
+
 }
 
 // 2011 - flex-item-align (auto | start | end | center | baseline | stretch)
@@ -894,12 +894,12 @@ $prefixNo:                    true !default;
 
   // 2012
   @include prefixer(align-self, $value, webkit moz spec);
-  
+
   @if $prefixForMicrosoft {
     // 2011 (IE 10)
     -ms-flex-item-align: $value-2011;
   }
-  
+
 }
 
 // 2011 - flex-line-pack (start | end | center | justify | distribute | stretch)
@@ -924,7 +924,7 @@ $prefixNo:                    true !default;
     // 2011 (IE 10)
     -ms-flex-line-pack: $value-2011;
   }
-  
+
 }
 
 

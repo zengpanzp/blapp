@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
+    "vendor": "rm -rf lib/vendor && cross-env NODE_ENV=production webpack --config build/webpack.dll.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
@@ -13,15 +14,14 @@
   },
   "dependencies": {
     "array-find-index": "^1.0.2",
-    "bl-lazyload": "^1.0.0",
-    "es6-promise": "^4.0.5",
+    "es6-promise": "^4.1.0",
     "fastclick": "^1.0.6",
     "scroll": "^2.0.0",
     "vue": "^2.1.10",
-    "vue-bluer": "1.2.7",
+    "vue-lazyload": "0.8.0",
     "vue-popup": "^0.2.14",
-    "vue-resource": "^1.2.0",
     "vue-router": "^2.2.0",
+    "vue-slide": "^1.1.1",
     "vuex": "^2.1.2",
     "wind-dom": "^0.0.3"
   },

@@ -10,6 +10,16 @@ import * as types from '../mutation-types'
 import { Promise } from 'es6-promise'
 // import api from 'src/api'
 
+function isStart(start) {
+  let startTime = start.replace(/-/g, "/");
+  let startDate = new Date(startTime);
+  let now = new Date();
+  if (now >= startDate) {
+    return 1;
+  }
+  return 0;
+}
+
 // initial state
 const state = {
   slide: [],
@@ -22,7 +32,12 @@ const state = {
 const getters = {
   allSlides: state => state.slide,
   queryCate: state => state.queryCate,
-  getFlashDetail: state => state.getFlashDetail,
+  getFlashDetail: state => {
+    for (let i = 0; i < state.getFlashDetail.list.length; i++) {
+      state.getFlashDetail.list[i].start = isStart(state.getFlashDetail.list[i].effectiveStart)
+    }
+    return state.getFlashDetail
+  },
   pages: state => state.pages
 }
 
@@ -88,7 +103,7 @@ const mutations = {
     state.queryCate = res.list
   },
   [types.GET_FLASHDETAIL] (state, res) {
-    state.getFlashDetail = res.list
+    state.getFlashDetail = res
   },
   [types.GET_PAGES] (state, res) {
     state.pages = res

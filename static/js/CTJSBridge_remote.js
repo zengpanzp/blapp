@@ -12,9 +12,9 @@ String.prototype.hashCode = function() {
 };
 
 function LinkToDevice(openCallback, closeCallback, errorCallback) {
-  if (window.WebSocket != undefined && typeof isiOS == "undefined") {
-    // wsConnection = new WebSocket('ws://10.199.14.171:9000');
-    wsConnection = new WebSocket('ws://192.168.2.104:9000');
+  if (window.WebSocket != undefined) {
+    wsConnection = new WebSocket('ws://10.199.14.181:9000');
+    // wsConnection = new WebSocket('ws://192.168.2.104:9000');
 
     wsConnection.addEventListener("open", function(event) {
       openCallback ? openCallback(event) : null;
@@ -43,15 +43,7 @@ function CloseLink() {
 }
 
 function LoadNative(url) {
-  if (typeof isiOS != "undefined") {
-    var messagingIframe = document.createElement('iframe');
-    messagingIframe.style.display = 'none';
-    messagingIframe.src = url;
-    document.documentElement.appendChild(messagingIframe);
-    setTimeout(function() { document.documentElement.removeChild(messagingIframe) }, 0)
-  } else {
-    wsConnection.send(url);
-  }
+  wsConnection.send(url);
 }
 
 function LoadAPI(apiName, data, callback) {

@@ -37,6 +37,14 @@ export default new Router({
         title: '精品闪购'
       },
       component: r => require.ensure([], () => r(require('../views/flashSale/productsListView')), 'flashsaleproductspage')
+    },
+    /* 陈鹏 电器城首页 */
+    {
+      path: '/electricMainPage',
+      meta: {
+        title: '电器城'
+      },
+      component: r => require.ensure([], () => r(require('../views/electricCity/electricHome')), 'electricMainPage')
     }
   ]
 })

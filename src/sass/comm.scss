@@ -12,13 +12,6 @@ body{
   position: relative;
 }
 
-/* ios8 以上系统使用0.5px 解决1像素问题 */
-.ios-gt-8{
-  .hairline{
-    border-width: 0.5px !important;
-  }
-}
-
 /* 全屏空白div */
 .ant-transparent{
   position: fixed;
@@ -64,16 +57,16 @@ body{
 // preloader
 
 %preloader {
-  width: 20px;
-  height: 20px;
+  width: rem(40);
+  height: rem(40);
   display: inline-block;
   &.middle{
-    width: 30px;
-    height: 30px;
+    width: rem(60);
+    height: rem(60);
   }
   &.big{
-    width: 45px;
-    height: 45px;
+    width: rem(90);
+    height: rem(90);
   }
   -webkit-transform-origin: 50%;
           transform-origin: 50%;

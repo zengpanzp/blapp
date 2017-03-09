@@ -36,50 +36,10 @@ export default function(a){
   }
 
   var slideCell = opts.slideCell;
-  if( !slideCell ) return false;
-
-
   //简单模拟jquery选择器
   var obj = function(str,parEle){
-    // str = str.split(" ");
-    // var par = [];
-    // parEle = parEle||document;
-    // var retn = [ parEle ] ;
-    // for( var i in str ){ if(str[i].length!=0) par.push(str[i]) } //去掉重复空格
-    // for( var i in par ){
-    //   if( retn.length==0 ) return false;
-    //   var _retn = [];
-    //   for ( var r in retn )
-    //   {
-    //     if( par[i][0] =="#" ) _retn.push( document.getElementById( par[i].replace("#","") ) );
-    //     else if( par[i][0] =="." ){
-    //       var tag = retn[r].getElementsByTagName('*');
-    //       for( var j=0; j<tag.length; j++ ){
-    //         var cln = tag[j].className;
-    //         if( cln && cln.search(new RegExp("\\b" + par[i].replace(".","") + "\\b"))!=-1 ){ _retn.push( tag[j] ); }
-    //       }
-    //     }
-    //     else { var tag = retn[r].getElementsByTagName( par[i] ); for( var j=0; j<tag.length; j++ ){ _retn.push( tag[j] ) } }
-    //   }
-    //   retn =_retn;
-    // }
-
-    // return retn.length==0 || retn[0] == parEle ? false:retn;
     return document.querySelectorAll(str)
-  }// obj E
-
-  // 创建包裹层
-  var wrap = function(el, v){
-      var tmp = document.createElement('div');
-      tmp.innerHTML = v;
-      tmp = tmp.children[0];
-      var _el = el.cloneNode(true);
-      tmp.appendChild(_el);
-      el.parentNode.replaceChild(tmp, el);
-      conBox = _el; // 重置conBox
-      return tmp;
-  };
-
+  }
   // 获取样色数值
   var getStyleVal =function(el, attr){ var v=0; if(el.currentStyle){ v= el.currentStyle[attr] } else { v= getComputedStyle(el,false)[attr]; } return parseInt(v.replace("px","")) }
 
@@ -157,7 +117,6 @@ export default function(a){
     conBox.appendChild( conBox.children[0].cloneNode(true) );
     conBox.insertBefore( conBox.children[conBoxSize-1].cloneNode(true),conBox.children[0] );
   }
-  twCell = wrap(conBox,'<div class="tempWrap" style="overflow:hidden; position:relative;"></div>');
   conBox.style.cssText="width:"+tempSize*slideW+"px;"+"position:relative;overflow:hidden;padding:0;margin:0;";
   for ( var i =0; i<tempSize; i++ ){  conBox.children[i].style.cssText="display:table-cell;vertical-align:top;width:"+slideW+"px"  }
 
@@ -207,6 +166,51 @@ export default function(a){
     ele.msTransform = ele.MozTransform = ele.OTransform = 'translateX(' + dist + 'px)';
   }
 
+  var myStart=function(isTouch){
+
+    switch (effect)
+    {
+      case "left":
+        if ( index >= navObjSize) { index = isTouch?index-1:0; } else if( index < 0) { index = isTouch?0:navObjSize-1; }
+        if( sLoad!=null ){ doSwitchLoad(0) }
+        translate(  (-index*slideW),delayTime ); oldIndex=index; break;
+
+
+      case "leftLoop":
+        if( sLoad!=null ){ doSwitchLoad(0) }
+        conBox.style.webkitTransform = 'translate(' + -(index+1)*slideW + 'px,0)' + 'translateZ(0)';
+        conBox.style.msTransform = conBox.style.MozTransform = conBox.style.OTransform = 'translateX(' + -(index+1)*slideW + 'px)';
+        if ( index==-1){
+            timeout= setTimeout( function(){ translate( -navObjSize*slideW ,0 ); }, delayTime );
+            index = navObjSize-1;
+        }
+        else if( index==navObjSize ){ timeout= setTimeout( function(){ translate( -slideW ,0 ); }, delayTime );
+            index = 0;
+        }
+        oldIndex=index;
+        break;
+
+    }
+    doStartFun();
+    endTimeout= setTimeout( function(){ doEndFun() }, delayTime );
+
+    //设置className
+    for ( var i=0; i<navObjSize; i++ )
+    {
+      removeClass(navObj[i],opts.titOnClassName);
+      if( i == index ){ addClass(navObj[i],opts.titOnClassName) }
+    }
+
+    if( loop==false ){ //loop控制是否继续循环
+      removeClass( nextBtn,"nextStop" );removeClass( prevBtn,"prevStop" );
+      if (index==0 ){ addClass( prevBtn,"prevStop" ) }
+      else if (index==navObjSize-1 ){ addClass( nextBtn,"nextStop" ) }
+    }
+    if(pageState){ pageState.innerHTML= "<span>"+(index+1)+"</span>/"+navObjSize; }
+
+  };
+  myStart()
+
   //效果函数
   var doPlay=function(isTouch){
 
@@ -252,7 +256,7 @@ export default function(a){
   };// doPlay end
 
   //初始化执行
-  doPlay();
+  // doPlay();
 
   //自动播放
   if (autoPlay) {

@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/productsListView.scss"></style>
+<style lang="scss" src="src/sass/_productsListView.scss"></style>
 <template>
   <div class="flash-list new">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-record>
@@ -18,10 +18,13 @@
                   <p class="discount-store-text">{{ flashSalesGoods.flashAdvertisement }}</p>
                   <p class="discount-num">
                     <label v-if="flashSalesGoods.advType == 0">{{ flashSalesGoods.advValue }}折起</label>
-                    <label else>{{ flashSalesGoods.advValue }}元起</label>
+                    <label v-else>{{ flashSalesGoods.advValue }}元起</label>
                   </p>
                 </div>
               </div>
+            </div>
+            <div class="quickbuy-log" v-if="picturesType === 16" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
+              <img v-lazy="picturesUrl">
             </div>
           </li>
         </ul>
@@ -33,14 +36,14 @@
       <div id="flashProductsList">
         <ul class="index-productlist">
           <template v-for="item in listGoodsData">
-            <li @click="LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController',{ goodsid: item[0].goodsId, goodsName: item[0].goodsMsg, goodsPrice: item[0].goodsPrice, goodsImageUrl: item[0].goodsImgPath, isGiftGoods: false })">
+            <li v-go-native-goods-detail="item[0]">
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
                 <div class="lazy-box">
                   <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt="">
                 </div>
                 <h3>{{ item[0].goodsMsg }}</h3>
-                <p><span class="price"><span style="font-size: 12px;">¥</span>{{ item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
+                <p><span class="price"><span>¥</span>{{ $route.params.isStart == 0 ? '???' : item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
               </a>
             </li>
           </template>
@@ -158,9 +161,17 @@ export default {
       this.countdown(this.flashSalesGoods.effectiveStart, this.flashSalesGoods.effectiveEnd)
       /* 获取商品列表 */
       this.getListGoods()
+    }, (err) => {
+      let errs = JSON.parse(err)
+      if (errs.result === 'fail') {
+        this.$modal({
+          content: '找不到该闪购商品'
+        })
+      }
     })
   },
   destroyed() {
+    this.loading.close()
     setTimeout(() => {
       if (window.isiOS) {
         window._setNativeTitle('精品闪购')

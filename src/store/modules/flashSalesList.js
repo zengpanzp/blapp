@@ -37,7 +37,7 @@ const actions = {
         },
         fail: function(err) {
           console.log(err)
-          reject()
+          reject(err)
         },
         progress: function(data) {}
       });

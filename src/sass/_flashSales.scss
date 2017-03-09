@@ -78,6 +78,7 @@
       top: 0;
       left: 0;
       background-size: rem(176);
+      z-index: 9999;
       img {
         width: 100%;
         background-size: rem(176);
@@ -149,7 +150,6 @@
       float: right;
       font-size: rem(24);
       color: #333333;
-      display: inline-flex;
       span {
         color: #C18800;
         font-size: rem(40);

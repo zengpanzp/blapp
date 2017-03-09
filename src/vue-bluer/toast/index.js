@@ -4,7 +4,9 @@ const ToastConstructor = Vue.extend(require('./toast.vue'))
 
 ToastConstructor.prototype.close = function() {
   this.visible = false;
-  this.$el.parentNode.removeChild(this.$el)
+  if (this.$el.parentNode) {
+    this.$el.parentNode.removeChild(this.$el)
+  }
   this.closed = true;
 };
 

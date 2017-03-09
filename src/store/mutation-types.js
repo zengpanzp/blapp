@@ -15,3 +15,6 @@ export const GET_PAGES = 'GET_PAGES' // 总页数
 export const GET_FLASHSALESGOODS = 'GET_FLASHSALESGOODS' // 活动闪购活动商品
 export const GET_FLASHSALESLISTGOODS = 'GET_FLASHSALESLISTGOODS' // 活动闪购活动商品列表
 export const GET_FLASHSALESLISTGOODSPAGES = 'GET_FLASHSALESLISTGOODSPAGES' // 活动闪购活动商品列表总页数
+
+/* electricCity */
+export const GET_RESOURCE = 'GET_RESOURCE' // 获取资源位

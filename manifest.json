@@ -1,0 +1,37 @@
+{
+  "name": "vendor_common",
+  "content": {
+    "../node_modules/vue/dist/vue.common.js": {
+      "id": 0,
+      "meta": {}
+    },
+    "../node_modules/webpack/buildin/global.js": {
+      "id": 1,
+      "meta": {}
+    },
+    "../node_modules/fastclick/lib/fastclick.js": {
+      "id": 2,
+      "meta": {}
+    },
+    "../node_modules/vue-lazyload/vue-lazyload.es5.js": {
+      "id": 3,
+      "meta": {}
+    },
+    "../node_modules/vue-popup/lib/index.js": {
+      "id": 4,
+      "meta": {}
+    },
+    "../node_modules/vue-router/dist/vue-router.common.js": {
+      "id": 5,
+      "meta": {}
+    },
+    "../node_modules/es6-promise/dist/es6-promise.js": {
+      "id": 6,
+      "meta": {}
+    },
+    "../node_modules/process/browser.js": {
+      "id": 7,
+      "meta": {}
+    }
+  }
+}

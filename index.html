@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="format-detection" content="telephone=no, email=no, address=no">
     <meta name="applicable-device" content="mobile">
@@ -10,17 +9,19 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="description" content="">
     <meta name="Keywords" content="">
-    <title>cloudMerchant</title>
+    <title>百联商城</title>
     <script type="text/javascript">
-    (function() {var ver = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/); if(ver && parseInt(ver[1], 10) > 7){var divHtml = document.getElementsByTagName("html")[0]; divHtml.setAttribute('class', 'ios-gt-8')}; var a = this; a.width = 750; a.fontSize = 100; a.widthProportion = function() { var c = (document.getElementsByTagName("html")[0].offsetWidth) / a.width; return c > 1 ? 1 : c < 0.42667 ? 0.42667 : c; }; a.changePage=function() { var remVal=( parseFloat(a.widthProportion())*100).toFixed(2); document.getElementsByTagName( "html")[0].setAttribute( "style", "font-size:" + remVal + "px !important"); }; a.changePage(); window.addEventListener( "resize", function() { a.changePage() }, false); })();
+    !function(a,b){function c(){var b=f.getBoundingClientRect().width;b/i>540&&(b=540*i);var c=b/10;f.style.fontSize=c+"px",k.rem=a.rem=c}var d,e=a.document,f=e.documentElement,g=e.querySelector('meta[name="viewport"]'),h=e.querySelector('meta[name="flexible"]'),i=0,j=0,k=b.flexible||(b.flexible={});if(g){console.warn("将根据已有的meta标签来设置缩放比例");var l=g.getAttribute("content").match(/initial\-scale=([\d\.]+)/);l&&(j=parseFloat(l[1]),i=parseInt(1/j))}else if(h){var m=h.getAttribute("content");if(m){var n=m.match(/initial\-dpr=([\d\.]+)/),o=m.match(/maximum\-dpr=([\d\.]+)/);n&&(i=parseFloat(n[1]),j=parseFloat((1/i).toFixed(2))),o&&(i=parseFloat(o[1]),j=parseFloat((1/i).toFixed(2)))}}if(!i&&!j){var p=(a.navigator.appVersion.match(/android/gi),a.chrome),q=a.navigator.appVersion.match(/iphone/gi),r=a.devicePixelRatio;i=q||p?r>=3&&(!i||i>=3)?3:r>=2&&(!i||i>=2)?2:1:1,j=1/i}if(f.setAttribute("data-dpr",i),!g)if(g=e.createElement("meta"),g.setAttribute("name","viewport"),g.setAttribute("content","initial-scale="+j+", maximum-scale="+j+", minimum-scale="+j+", user-scalable=no"),f.firstElementChild)f.firstElementChild.appendChild(g);else{var s=e.createElement("div");s.appendChild(g),e.write(s.innerHTML)}a.addEventListener("resize",function(){clearTimeout(d),d=setTimeout(c,300)},!1),a.addEventListener("pageshow",function(a){a.persisted&&(clearTimeout(d),d=setTimeout(c,300))},!1),"complete"===e.readyState?e.body.style.fontSize=12*i+"px":e.addEventListener("DOMContentLoaded",function(a){e.body.style.fontSize=12*i+"px"},!1),c(),k.dpr=a.dpr=i,k.refreshRem=c,k.rem2px=function(a){var b=parseFloat(a)*this.rem;return"string"==typeof a&&a.match(/rem$/)&&(b+="px"),b},k.px2rem=function(a){var b=parseFloat(a)/this.rem;return"string"==typeof a&&a.match(/px$/)&&(b+="rem"),b}}(window,window.lib||(window.lib={}));
     </script>
     <link rel="stylesheet" type="text/css" href="static/css/comm.css">
     <link rel="stylesheet" type="text/css" id="classLink">
-    <script type="text/javascript" src="./static/js/CTJSBridge.js"></script>
     <script type="text/javascript" src="./static/js/iconfont.js"></script>
   </head>
   <body>
     <div id="app"></div>
+    <!--公共资源库-->
+    <script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script>
+    <script src="<%= htmlWebpackPlugin.options.path %>static/js/lib/vendor/vendor.common.js"></script>
     <!-- built files will be auto injected -->
   </body>
 </html>

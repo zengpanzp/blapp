@@ -12,7 +12,7 @@ $filter:                false !default; //是否为ie6-8开启css3滤镜兼容�
 
 // font相关
 //-----------------------------------------------------
-$baseFontSize:          .28rem !default;
+$baseFontSize:          28px !default;
 $baseLineHeight:        1.5 !default;
 $baseFontFamily:        "Helvetica Neue", Helvetica, Tahoma, sans-serif !default;
 $fontCn:                "SimSun"; //宋体
@@ -95,23 +95,23 @@ $roundRadius:           50% !default;
 
 // bar
 //-----------------------------------------------------
-$bar-title-font-size-ipad:        .36rem !default;
-$bar-button-font-size-ipad:       .3rem !default;
+$bar-title-font-size-ipad:        .36*2rem !default;
+$bar-button-font-size-ipad:       .3*2rem !default;
 
-$bar-title-font-size:             .36rem !default;
-$bar-button-font-size:            .38rem !default;
+$bar-title-font-size:             .36*2rem !default;
+$bar-button-font-size:            .38*2rem !default;
 
-$bar-title-font-size-iphone5:     .34rem !default;  //标题字号
-$bar-button-font-size-iphone5:    .3rem !default;  //左右按钮的字号
+$bar-title-font-size-iphone5:     .34*2rem !default;  //标题字号
+$bar-button-font-size-iphone5:    .3*2rem !default;  //左右按钮的字号
 
-$bar-button-padding:              .2rem !default; //左右按钮的左右内边距
+$bar-button-padding:              .2*2rem !default; //左右按钮的左右内边距
 $bar-title-font-weight:           400 !default; //标题文字fontWeight
 $bar-padding-portrait:            0 !default;  //bar的左右内边距
 
-$bar-height:                      .88rem !default;  //header-bar的高度
-$bar-footer-height:               .88rem !default;  //footer-bar的高度
-$bar-subheader-height:            .88rem !default;  //subheader-bar的高度
-$bar-subfooter-height:            .88rem !default;  //subfooter-bar的高度
+$bar-height:                      .88*2rem !default;  //header-bar的高度
+$bar-footer-height:               .88*2rem !default;  //footer-bar的高度
+$bar-subheader-height:            .88*2rem !default;  //subheader-bar的高度
+$bar-subfooter-height:            .88*2rem !default;  //subfooter-bar的高度
 
 $bar-light-bg:                    $grayLight !default;  //bar-light背景色
 $bar-light-text:                  #444 !default;  //bar-light-text   标题文字颜色
@@ -127,7 +127,7 @@ $z-index-bar:                     1001 !default;
 
 // rem
 //-----------------------------------------------------
-$remBase:     100!default;
+$remBase:     75 !default;
 
 // switch
 //-----------------------------------------------------

@@ -5,6 +5,7 @@ var vueLoaderConfig = require('./vue-loader.conf')
 
 const page = require('../configs')
 const webpack = require('webpack')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -12,14 +13,12 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    vendor: page.vendor
   },
   output: {
-    path: config.build.assetsRoot,
-    filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    path: path.resolve(__dirname, '../static/js/lib/vendor'),
+    filename: '[name].common.js',
+    library: '[name]_common'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -73,12 +72,26 @@ module.exports = {
       }
     ]
   },
-  plugins: []
-}
-
-if (page.useVendor) {
-  module.exports.plugins.push(new webpack.DllReferencePlugin({
-    context: __dirname,
-    manifest: require('../manifest.json')
-  }))
+  plugins: [
+    new webpack.DllPlugin({
+      path: path.resolve(__dirname, '../manifest.json'),
+      name: '[name]_common',
+      context: __dirname
+    }),
+    new ExtractTextPlugin('[name].common.css'),
+    new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      options: {
+        context: path.resolve(__dirname, '../'),
+        postcss: [require('autoprefixer')({ browsers: page.browsers })]
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: false,
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 }

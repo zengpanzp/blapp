@@ -23,7 +23,7 @@
     z-index: 100;
 
     width: 100%;
-    height: $bar-height;
+    height: rem(88);
 
     background-color: #ffffff;
     background-size: 0;
@@ -77,7 +77,7 @@
     .button {
       padding: 0 $bar-button-padding;
       min-width: initial;
-      font-size: rem(32);
+      font-size: $bar-button-font-size;
       border: 0;
       background-color: transparent;
       color: #000000;

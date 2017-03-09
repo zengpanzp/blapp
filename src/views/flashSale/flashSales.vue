@@ -1,11 +1,11 @@
-<style lang="scss" src="src/sass/flashSales.scss"></style>
+<style lang="scss" src="src/sass/_flashSales.scss"></style>
 <template>
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
       <!-- 轮播图 -->
-      <bl-slide class="flash-swipe" v-model="isSwipeLoading">
-        <bl-slide-item v-for="({jumpId, mediaUrl, deployName}, index) in allSlides">
-          <router-link :to="{ path: '/flashsaleproductspage/' + jumpId + '/1' }"><img :_src="mediaUrl" :alt="deployName"></a>
+      <bl-slide class="flash-swipe" v-model="isSwipeLoading" v-if="allSlides.lenght !== 0">
+        <bl-slide-item v-for="item in allSlides">
+          <a href="javascript:;" v-go-native-resource="item"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
         </bl-slide-item>
       </bl-slide>
       <!-- end -->
@@ -15,7 +15,7 @@
           <li class="ovfs-item" :class="{ active: isActive === '1' }" @click="selectCate('1')">
             <p>今日上新</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === flashCategories}" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, index)">
+          <li class="ovfs-item" :class="{ active: isActive === flashCategories}" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories)">
             <p v-text="flashCategoriesName"></p>
           </li>
           <li class="ovfs-item" :class="{ active: isActive === '2' }" @click="selectCate('2')">
@@ -32,10 +32,10 @@
         <div class="todynew" v-for="(item, index) in getFlashDetailData">
           <div class="todynew-img">
             <div class="wumengcen" v-if="item.pictures">
-              <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/1' }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+              <div class="small-bg" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
+              <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
                 <img v-lazy.container="{ src: picturesUrl, loading: require('src/assets/loading.png') }" alt="">
-                <div class="mengcen-bg" v-if="isActive === '3'"></div>
-                <div class="mengcen-bg" v-else-if="isActive === '2'"></div>
+                <div class="mengcen-bg" v-if="isActive === '3' || isActive === '2'"></div>
               </router-link>
               <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
             </div>
@@ -45,8 +45,7 @@
               <div class="le-fonts"><img v-lazy="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
               <div class="dd-fonts">
                 <div class="le2-fonts" v-text="item.flashName"></div>
-                <div class="tian-number" v-if="isActive === '3'"></div>
-                <div class="tian-number" v-else-if="isActive === '2'"></div>
+                <div class="tian-number" v-if="isActive === '3' || isActive === '2'"></div>
                 <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
               </div>
               <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
@@ -87,6 +86,7 @@ export default {
       isActive: '1',
 
       /* 活动列表 */
+      start: 0,
       type: 1,
       pageNum: 1,
       pageSize: 10,
@@ -119,7 +119,6 @@ export default {
       this.loading.close()
     })
     this.getList()
-
   },
   computed: {
     ...mapGetters([
@@ -156,7 +155,7 @@ export default {
         parameter: 0,
         flashCategories: (this.flashCategories === '') ? undefined : parseInt(this.flashCategories),
       }).then(() => {
-        this.getFlashDetailData = this.getFlashDetailData.concat(this.getFlashDetail)
+        this.getFlashDetailData = this.getFlashDetailData.concat(this.getFlashDetail.list)
         done()
       }, () => {
         /* 没数据了 */
@@ -169,7 +168,7 @@ export default {
     },
     /* 点击分类加载数据 */
     selectCate(key, index) {
-      this.flashCategories = index + 1
+      this.flashCategories = parseInt(index)
       this.isActive = key
       if (index === undefined) {
         this.type = parseInt(key)

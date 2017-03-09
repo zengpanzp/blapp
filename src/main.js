@@ -3,8 +3,8 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import router from './router'
-import VueLazyload from 'bl-lazyload'
 import ScrollTo from 'scroll'
+import VueLazyload from 'vue-lazyload'
 
 import App from './App'
 import store from './store'
@@ -16,10 +16,15 @@ if ('addEventListener' in document) {
   }, false);
 }
 
-Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  try: 3 // default 1
+})
 
-import bluer from 'vue-bluer'
+import bluer from './vue-bluer'
 Vue.use(bluer)
+
+Vue.$LoadMethod = Vue.prototype.$LoadMethod = window.LoadMethod || {};
 
 /* 返回顶部指令 */
 Vue.directive('scroll-top', {
@@ -44,6 +49,35 @@ Vue.directive('scroll-top', {
       }
     })
   }
+})
+
+/* 跳转到native商品详情页指令 */
+Vue.directive('go-native-goods-detail', {
+
+  bind: function (el, binding) {
+    let args = {
+      goodsid: binding.value.goodsId,
+      goodsName: binding.value.goodsMsg,
+      goodsPrice: binding.value.goodsPrice,
+      goodsImageUrl: binding.value.goodsImgPath,
+      isGiftGoods: binding.modifiers.isGiftGoods || false
+    }
+    el.addEventListener('click', function() {
+      Vue.$LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
+    }, false)
+  }
+
+})
+
+/* 资源位跳转 */
+Vue.directive('go-native-resource', {
+
+  bind: function (el, binding) {
+    el.addEventListener('click', function() {
+      Vue.$LoadMethod('BLAdvertResource', 'BLAdvertResourceController', binding.value)
+    }, false)
+  }
+
 })
 
 /* eslint-disable */
