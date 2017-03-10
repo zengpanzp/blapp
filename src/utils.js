@@ -161,14 +161,14 @@ const inCopy = (obj1, obj2) => {
   return objNew
 }
 
-/* eslint-disable */
 function getStyles(el) {
   return window.getComputedStyle(el);
 }
 
 function swap(el, callback) {
-  var name, old = {};
-  var cssShow = { position: "absolute", visibility: "hidden", display: "block" };
+  let name = {}
+  let old = {}
+  let cssShow = { position: "absolute", visibility: "hidden", display: "block" };
 
   for (name in cssShow) {
     old[name] = el.style[name];
@@ -179,65 +179,74 @@ function swap(el, callback) {
     el.style[name] = old[name];
   }
 }
-
+/**
+ * 获取display: none元素的宽度
+ * @chenpeng
+ * @DateTime 2017-03-10T20:55:19+0800
+ * @param    {[Obj]}                 el  [要获取的元素]
+ * @return   {[Obj]}                     [返回一个对象，里面有宽高信息]
+ */
 class BoxSize {
   constructor(el) {
     this.elems = document.querySelectorAll(el)
   }
   width() {
-    var value, i = 0,
-      valueArr = [];
+    let value = 0
+    let i = 0
+    let valueArr = [];
     for (; i < this.elems.length; i++) {
-      var clientWidth;
+      let clientWidth;
       swap(this.elems[i], function(el) {
         clientWidth = el.clientWidth;
       });
-      var padding = parseInt(getStyles(this.elems[i]).paddingLeft) + parseInt(getStyles(this.elems[i]).paddingRight);
+      let padding = parseInt(getStyles(this.elems[i]).paddingLeft) + parseInt(getStyles(this.elems[i]).paddingRight);
       value = clientWidth - padding;
       valueArr.push(value)
     }
     return valueArr.length === 1 ? valueArr[0] : valueArr;
   }
   height() {
-    var value, i = 0,
-      valueArr = [];
+    let value = 0
+    let i = 0
+    let valueArr = [];
     for (; i < this.elems.length; i++) {
-      var clientHeight;
+      let clientHeight;
       swap(this.elems[i], function(el) {
         clientHeight = el.clientHeight;
       });
-      var padding = parseInt(getStyles(this.elems[i]).paddingTop) + parseInt(getStyles(this.elems[i]).paddingBottom);
+      let padding = parseInt(getStyles(this.elems[i]).paddingTop) + parseInt(getStyles(this.elems[i]).paddingBottom);
       value = clientHeight - padding;
       valueArr.push(value)
     }
     return valueArr.length === 1 ? valueArr[0] : valueArr;
   }
   innerWidth() {
-    var value, i = 0,
-      valueArr = [];
+    let i = 0
+    let valueArr = [];
     for (; i < this.elems.length; i++) {
       valueArr.push(this.elems[i].clientWidth)
     }
     return valueArr.length === 1 ? valueArr[0] : valueArr;
   }
   innerHeight() {
-    var value, i = 0,
-      valueArr = [];
+    let i = 0
+    let valueArr = [];
     for (; i < this.elems.length; i++) {
       valueArr.push(this.elems[i].clientHeight)
     }
     return valueArr.length === 1 ? valueArr[0] : valueArr;
   }
   outerWidth(hasMargin) {
-    var value, i = 0,
-      valueArr = [];
+    let value = 0
+    let i = 0
+    let valueArr = [];
     for (; i < this.elems.length; i++) {
-      var clientWidth;
+      let clientWidth;
       swap(this.elems[i], function(el) {
         clientWidth = el.clientWidth;
       });
-      var border = parseInt(getStyles(this.elems[i]).borderLeftWidth) + parseInt(getStyles(this.elems[i]).borderRightWidth);
-      var margin = parseInt(getStyles(this.elems[i]).marginLeft) + parseInt(getStyles(this.elems[i]).marginRight);
+      let border = parseInt(getStyles(this.elems[i]).borderLeftWidth) + parseInt(getStyles(this.elems[i]).borderRightWidth);
+      let margin = parseInt(getStyles(this.elems[i]).marginLeft) + parseInt(getStyles(this.elems[i]).marginRight);
       if (hasMargin === true) {
         value = clientWidth + border + margin;
       } else {
@@ -248,15 +257,16 @@ class BoxSize {
     return valueArr.length === 1 ? valueArr[0] : valueArr;
   }
   outerHeight(hasMargin) {
-    var value, i = 0,
-      valueArr = [];
+    let value = 0
+    let i = 0
+    let valueArr = [];
     for (; i < this.elems.length; i++) {
-      var clientHeight;
+      let clientHeight;
       swap(this.elems[i], function(el) {
         clientHeight = el.clientHeight;
       });
-      var border = parseInt(getStyles(this.elems[i]).borderTopWidth) + parseInt(getStyles(this.elems[i]).borderBottomWidth);
-      var margin = parseInt(getStyles(this.elems[i]).marginTop) + parseInt(getStyles(this.elems[i]).marginBottom);
+      let border = parseInt(getStyles(this.elems[i]).borderTopWidth) + parseInt(getStyles(this.elems[i]).borderBottomWidth);
+      let margin = parseInt(getStyles(this.elems[i]).marginTop) + parseInt(getStyles(this.elems[i]).marginBottom);
       if (hasMargin === true) {
         value = clientHeight + border + margin;
       } else {
@@ -272,6 +282,34 @@ const boxsize = (el) => {
   return new BoxSize(el)
 }
 
+/**
+ * 判断css是否加载成功
+ * @chenpeng
+ * @DateTime 2017-03-10T20:53:14+0800
+ * @param    {Function}               fn   [加载成功的回调]
+ * @param    {[Obj]}                 link  [link标签元素]
+ * @return   {[Boolean]}                      [加载成功返回true，失败返回false]
+ */
+const cssReady = (fn, link) => {
+  let d = document
+  let t = d.createStyleSheet
+  let r = t ? 'rules' : 'cssRules'
+  let s = t ? 'styleSheet' : 'sheet'
+  let l = d.getElementsByTagName('link');
+  // passed link or last link node
+  link || (link = l[l.length - 1]);
+  function check() {
+    try {
+      return link && link[s] && link[s][r] && link[s][r][0]
+    } catch (e) {
+      return false
+    }
+  }
+  (function poll() {
+    check() && setTimeout(fn, 0) || setTimeout(poll, 100);
+  })();
+}
+
 export default {
   fmtDate,
   dbGet,
@@ -283,5 +321,6 @@ export default {
   isWeixin,
   fmoney,
   isSeeing,
-  boxsize
+  boxsize,
+  cssReady
 }

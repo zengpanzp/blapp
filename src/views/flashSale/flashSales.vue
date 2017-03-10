@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/_flashSales.scss"></style>
+<style lang="scss" src="src/sass/_flashSales.scss" scoped></style>
 <template>
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
@@ -156,6 +156,9 @@ export default {
         flashCategories: (this.flashCategories === '') ? undefined : parseInt(this.flashCategories),
       }).then(() => {
         this.getFlashDetailData = this.getFlashDetailData.concat(this.getFlashDetail.list)
+        if (this.getFlashDetailData.length < this.pageSize) {
+          this.isLoading = false
+        }
         done()
       }, () => {
         /* 没数据了 */

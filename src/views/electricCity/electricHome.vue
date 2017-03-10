@@ -1,125 +1,120 @@
 <style lang="scss" src="src/sass/_electricHome.scss" scoped></style>
 <template>
   <div class="new">
-    <bl-scroll :enableInfinite="false" :enableRefresh="false" id="container" v-scroll-top>
-      <form id="searchForm" v-on:submit.prevent="search">
-        <div class="nav-app">
-          <div class="nav-search col">
-            <input type="search" class="nav-search-input" name="" placeholder="空调" v-model="searchText">
-          </div>
+    <form id="searchForm" v-on:submit.prevent="search">
+      <div class="nav-app">
+        <div class="nav-search col">
+          <input type="search" class="nav-search-input" name="" placeholder="空调" v-model="searchText">
         </div>
-      </form>
-      <!-- 轮播图 -->
-      <bl-slide class="electric-swipe" v-model="isSwipeLoading">
-        <bl-slide-item v-for="item in filterAllSlides" v-go-native-resource="item">
-          <a href="javascript:;"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
-        </bl-slide-item>
-      </bl-slide>
-      <!-- end -->
-      <div class="row-list">
-        <a href="javascript:;" class="list-item col" v-for="{ imgUrl, text, id } in listHead" @click="goNative(id)">
-          <div class="item-hd"><img :src="imgUrl" alt=""></div>
-          <div class="item-bd">{{ text }}</div>
+      </div>
+    </form>
+    <!-- 轮播图 -->
+    <bl-slide class="electric-swipe" v-model="isSwipeLoading">
+      <bl-slide-item v-for="item in filterAllSlides" v-go-native-resource="item">
+        <a href="javascript:;"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
+      </bl-slide-item>
+    </bl-slide>
+    <!-- end -->
+    <div class="row-list">
+      <a href="javascript:;" class="list-item col" v-for="{ imgUrl, text, id } in listHead" @click="goNative(id)">
+        <div class="item-hd"><img :src="imgUrl" alt=""></div>
+        <div class="item-bd">{{ text }}</div>
+      </a>
+    </div>
+    <div class="row-box hot-pro">
+      <div class="pro-hd">
+        <div class="popularity-img"></div>
+      </div>
+      <div class="pro-hd-list js-proscroll">
+        <ul id="content">
+          <li v-for="item in filterListRows">
+            <a href="javascript:;" v-go-native-goods-detail="item">
+              <div class="col-img col lazy-box"><img class="lazy" v-lazy.content="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
+              <div class="pro-text">{{ item.productName }}</div>
+              <div class="pro-price red"><span class="small-price">￥</span>{{ item.goodsPrice }}</div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="three-minor">
+      <div class="aside-left col" v-if="hotTwoBrands.mediaUrl">
+        <a href="javascript:;" v-go-native-resource="hotTwoBrands">
+          <img v-lazy="hotTwoBrands.mediaUrl" :alt="hotTwoBrands.deployName" />
         </a>
       </div>
-      <div class="row-box hot-pro">
-        <div class="pro-hd">
-          <div class="popularity-img"></div>
-        </div>
-        <div class="pro-hd-list js-proscroll">
-          <ul id="content">
-            <li v-for="item in filterListRows">
-              <a href="javascript:;" v-go-native-goods-detail="item">
-                <div class="col-img col"><img v-lazy.content="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
-                <div class="pro-text">{{ item.productName }}</div>
-                <div class="pro-price red"><span class="small-price">￥</span>{{ item.goodsPrice }}</div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="three-minor">
-        <div class="aside-left col" v-if="hotTwoBrands.mediaUrl">
-          <!-- <a :href="hotTwoBrands.jumpUrl"> -->
-          <a href="javascript:;" v-go-native-resource="hotTwoBrands">
-            <img v-lazy.container="hotTwoBrands.mediaUrl" :alt="hotTwoBrands.deployName" />
+      <div class="aside-right col">
+        <div class="aside-section hairline-top" v-if="asideTwo.mediaUrl">
+          <a href="javascript:;" v-go-native-resource="asideTwo">
+            <img v-lazy="asideTwo.mediaUrl" :alt="asideTwo.deployName" />
           </a>
         </div>
-        <div class="aside-right col">
-          <div class="aside-section hairline-top" v-if="asideTwo.mediaUrl">
-            <!-- <a :href="asideTwo.jumpUrl"> -->
-            <a href="javascript:;" v-go-native-resource="asideTwo">
-              <img v-lazy.container="asideTwo.mediaUrl" :alt="asideTwo.deployName" />
-            </a>
-          </div>
-          <div class="aside-section" v-if="asideOne.mediaUrl">
-            <!-- <a :href="asideOne.jumpUrl"> -->
-            <a href="javascript:;" v-go-native-resource="asideOne">
-              <img v-lazy.container="asideOne.mediaUrl" :alt="asideOne.deployName" />
-            </a>
-          </div>
+        <div class="aside-section" v-if="asideOne.mediaUrl">
+          <a href="javascript:;" v-go-native-resource="asideOne">
+            <img v-lazy="asideOne.mediaUrl" :alt="asideOne.deployName" />
+          </a>
         </div>
       </div>
-      <div class="sales-promotion row-box">
-        <div class="pro-hd">
-          <div class="promotion-img"></div>
-        </div>
-        <div class="pro-hd-list">
-          <ul>
-            <li v-for="item in filterPromotion" v-go-native-resource="item">
-              <a href="javascript:;">
-                <div class="sub-title">{{ item.deployName }}</div>
-                <div class="col-img"><img v-lazy.container="item.mediaUrl" :alt="item.deployName"></div>
-              </a>
-              <div class="sup-con">{{ item.picDesc1 }}</div>
-            </li>
-          </ul>
-        </div>
+    </div>
+    <div class="sales-promotion row-box">
+      <div class="pro-hd">
+        <div class="promotion-img"></div>
       </div>
-      <div class="row-box hot-pro">
-        <div class="pro-hd">
-          <div class="hotbrand-img"></div>
-        </div>
-        <div class="hot-bd">
-          <div class="bd-1of3 col" v-if="hotBrands.mediaUrl">
-            <a :href="hotBrands.jumpUrl">
-              <img v-lazy.container="hotBrands.mediaUrl" :alt="hotBrands.deployName" />
+      <div class="pro-hd-list">
+        <ul>
+          <li v-for="item in filterPromotion" v-go-native-resource="item">
+            <a href="javascript:;">
+              <div class="sub-title">{{ item.deployName }}</div>
+              <div class="col-img"><img v-lazy="item.mediaUrl" :alt="item.deployName"></div>
             </a>
-          </div>
-          <div class="bd-2of3 col">
-            <div class="clearfix">
-              <div class="bd-in-1of2" v-for="item in filterBrands" v-go-native-resource="item">
-                <a href="javascript:;"><img class="pp-title" v-lazy.container="item.mediaUrl"></a>
-              </div>
+            <div class="sup-con">{{ item.picDesc1 }}</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row-box hot-pro">
+      <div class="pro-hd">
+        <div class="hotbrand-img"></div>
+      </div>
+      <div class="hot-bd">
+        <div class="bd-1of3 col" v-if="hotBrands.mediaUrl">
+          <a :href="hotBrands.jumpUrl">
+            <img v-lazy="hotBrands.mediaUrl" :alt="hotBrands.deployName" />
+          </a>
+        </div>
+        <div class="bd-2of3 col">
+          <div class="clearfix">
+            <div class="bd-in-1of2" v-for="item in filterBrands" v-go-native-resource="item">
+              <a href="javascript:;"><img class="pp-title" v-lazy="item.mediaUrl"></a>
             </div>
           </div>
         </div>
       </div>
-      <div class="appliance-tab">
-        <div class="tab-hairs">
-          <div class="tab-title js-proscroll">
-            <bl-navbar class="js-sctab" v-model="tabsModel">
-              <bl-tab-item class="el-tab-item" v-for="({ jumpId, deployName }, index) in filterEleTabs" :id="index" @click.native="elTabItem(jumpId)"><span>{{ deployName }}</span></bl-tab-item>
-            </bl-navbar>
-          </div>
-        </div>
-        <div class="tab-content">
-          <div class="tab-c-item">
-            <a class="item-href" href="javascript:;" v-for="item in filterTabRows" v-go-native-goods-detail="item">
-              <div class="col c-item-img"><img v-lazy.container="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
-              <div class="col c-item-text">
-                <div class="item-text1">{{ item.productName }}</div>
-                <div class="item-text2">{{ item.goodsMsg }}</div>
-                <div class="red item-text3"><span class="middle-price">￥</span>{{ item.goodsPrice }}</div>
-              </div>
-            </a>
-          </div>
-          <div class="tab-end">
-            - END -
-          </div>
+    </div>
+    <div class="appliance-tab">
+      <div class="tab-hairs">
+        <div class="tab-title js-proscroll">
+          <bl-navbar class="js-sctab" v-model="tabsModel">
+            <bl-tab-item class="el-tab-item" v-for="({ jumpId, deployName }, index) in filterEleTabs" :id="index" @click.native="elTabItem(jumpId)"><span>{{ deployName }}</span></bl-tab-item>
+          </bl-navbar>
         </div>
       </div>
-    </bl-scroll>
+      <div class="tab-content">
+        <div class="tab-c-item">
+          <a class="item-href" href="javascript:;" v-for="item in filterTabRows" v-go-native-goods-detail="item">
+            <div class="col c-item-img"><img v-lazy="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
+            <div class="col c-item-text">
+              <div class="item-text1">{{ item.productName }}</div>
+              <div class="item-text2">{{ item.goodsMsg }}</div>
+              <div class="red item-text3"><span class="middle-price">￥</span>{{ item.goodsPrice }}</div>
+            </div>
+          </a>
+        </div>
+        <div class="tab-end">
+          - END -
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>

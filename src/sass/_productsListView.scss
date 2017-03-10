@@ -349,17 +349,17 @@ div.plusMark {
         display: block;
         background: rgba(0,0,0,.65);
         color: #fff;
-        border-radius: 10*31.25;
-        height: 5*31.25;
-        width: 5*31.25;
-        line-height: 5*31.25;
+        border-radius: rem(10*31.25);
+        height: rem(5*31.25);
+        width: rem(5*31.25);
+        line-height: rem(5*31.25);
         text-align: center;
         position: absolute;
         left: 50%;
-        margin-left: -2.5*31.25;
+        margin-left: rem(-2.5*31.25);
         top: 35%;
-        margin-top: -2.5*31.25;
-        font-size: 1*31.25;
+        margin-top: rem(-2.5*31.25);
+        font-size: rem(1*31.25);
         font-weight: 700;
         z-index: 19;
       }

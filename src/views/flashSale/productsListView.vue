@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/_productsListView.scss"></style>
+<style lang="scss" src="src/sass/_productsListView.scss" scoped></style>
 <template>
   <div class="flash-list new">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-record>
@@ -139,7 +139,6 @@ export default {
     ])
   },
   mounted() {
-    this.LoadMethod = window.LoadMethod
     this.loading = this.$toast({
       iconClass: 'preloader white',
       message: '加载中',
@@ -199,6 +198,7 @@ export default {
       this.pageNum = 1
       this.sorCol = ''
       this.sorTye = ''
+      this.isFilter = '0'
       /* 清空商品列表 */
       this.listGoodsData = []
       /* 默认 */
