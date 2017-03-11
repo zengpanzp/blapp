@@ -180,7 +180,7 @@ function swap(el, callback) {
   }
 }
 /**
- * 获取display: none元素的宽度
+ * 获取display: none元素的宽度和高度
  * @chenpeng
  * @DateTime 2017-03-10T20:55:19+0800
  * @param    {[Obj]}                 el  [要获取的元素]
