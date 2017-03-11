@@ -3,11 +3,7 @@
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
       <!-- 轮播图 -->
-      <bl-slide class="flash-swipe" v-model="isSwipeLoading" v-if="allSlides.lenght !== 0">
-        <bl-slide-item v-for="item in allSlides">
-          <a href="javascript:;" v-go-native-resource="item"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
-        </bl-slide-item>
-      </bl-slide>
+      <bl-slide class="flash-swipe" :slides="allSlides"></bl-slide>
       <!-- end -->
       <!-- 分类 -->
       <div class="navigation">

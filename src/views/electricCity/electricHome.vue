@@ -9,11 +9,7 @@
       </div>
     </form>
     <!-- 轮播图 -->
-    <bl-slide class="electric-swipe" v-model="isSwipeLoading">
-      <bl-slide-item v-for="item in filterAllSlides" v-go-native-resource="item">
-        <a href="javascript:;"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
-      </bl-slide-item>
-    </bl-slide>
+    <bl-slide class="electric-swipe" :slides="filterAllSlides"></bl-slide>
     <!-- end -->
     <div class="row-list">
       <a href="javascript:;" class="list-item col" v-for="{ imgUrl, text, id } in listHead" @click="goNative(id)">

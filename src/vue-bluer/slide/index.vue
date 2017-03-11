@@ -1,7 +1,9 @@
 <template>
   <div class="swiper-container" ref="slide">
     <div class="swiper-wrapper">
-      <slot></slot>
+      <div class="swiper-slide" v-for="item in slides" v-go-native-resource="item">
+        <a href="javascript:;"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
+      </div>
     </div>
     <div class="swiper-pagination" v-if="pagination">
       <ul></ul>
@@ -33,22 +35,11 @@ export default {
       type: Boolean,
       default: false
     },
-    slides: {
-      type: Array
-    },
-    value: {
-      type: Boolean,
-      default: true
-    }
-  },
-  mounted() {
-    if (!this.value) {
-      this.reInitPages()
-    }
+    slides: Array
   },
   watch: {
-    value(loading) {
-      if (!loading) {
+    'slides'(items) {
+      if (items.length !== 0) {
         this.reInitPages()
       }
     }
