@@ -19,6 +19,7 @@ if ('addEventListener' in document) {
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
+  loading: require('./assets/loading-spin.svg'),
   try: 3 // default 1
 })
 

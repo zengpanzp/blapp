@@ -40,18 +40,18 @@
     <div class="three-minor">
       <div class="aside-left col" v-if="hotTwoBrands.mediaUrl">
         <a href="javascript:;" v-go-native-resource="hotTwoBrands">
-          <img v-lazy="hotTwoBrands.mediaUrl" :alt="hotTwoBrands.deployName" />
+          <img class="lazyload" v-lazy="hotTwoBrands.mediaUrl" :alt="hotTwoBrands.deployName" />
         </a>
       </div>
       <div class="aside-right col">
         <div class="aside-section hairline-top" v-if="asideTwo.mediaUrl">
           <a href="javascript:;" v-go-native-resource="asideTwo">
-            <img v-lazy="asideTwo.mediaUrl" :alt="asideTwo.deployName" />
+            <img class="lazyload" v-lazy="asideTwo.mediaUrl" :alt="asideTwo.deployName" />
           </a>
         </div>
         <div class="aside-section" v-if="asideOne.mediaUrl">
           <a href="javascript:;" v-go-native-resource="asideOne">
-            <img v-lazy="asideOne.mediaUrl" :alt="asideOne.deployName" />
+            <img class="lazyload" v-lazy="asideOne.mediaUrl" :alt="asideOne.deployName" />
           </a>
         </div>
       </div>
@@ -65,7 +65,7 @@
           <li v-for="item in filterPromotion" v-go-native-resource="item">
             <a href="javascript:;">
               <div class="sub-title">{{ item.deployName }}</div>
-              <div class="col-img"><img v-lazy="item.mediaUrl" :alt="item.deployName"></div>
+              <div class="col-img"><img class="lazyload" v-lazy="item.mediaUrl" :alt="item.deployName"></div>
             </a>
             <div class="sup-con">{{ item.picDesc1 }}</div>
           </li>
@@ -79,13 +79,13 @@
       <div class="hot-bd">
         <div class="bd-1of3 col" v-if="hotBrands.mediaUrl">
           <a :href="hotBrands.jumpUrl">
-            <img v-lazy="hotBrands.mediaUrl" :alt="hotBrands.deployName" />
+            <img class="lazyload" v-lazy="hotBrands.mediaUrl" :alt="hotBrands.deployName" />
           </a>
         </div>
         <div class="bd-2of3 col">
           <div class="clearfix">
             <div class="bd-in-1of2" v-for="item in filterBrands" v-go-native-resource="item">
-              <a href="javascript:;"><img class="pp-title" v-lazy="item.mediaUrl"></a>
+              <a href="javascript:;"><img class="pp-title lazyload" v-lazy="item.mediaUrl"></a>
             </div>
           </div>
         </div>
