@@ -92,12 +92,14 @@ export default {
       getFlashDetailData: []
     }
   },
-  mounted() {
+  activated() {
     setTimeout(() => {
       if (window.isiOS) {
         window._setNativeTitle('精品闪购')
       }
     }, 300)
+  },
+  mounted() {
     this.loading = this.$toast({
       iconClass: 'preloader white',
       message: '加载中',

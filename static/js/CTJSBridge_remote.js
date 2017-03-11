@@ -14,7 +14,13 @@ String.prototype.hashCode = function() {
 function LinkToDevice(openCallback, closeCallback, errorCallback) {
   if (window.WebSocket != undefined) {
     // wsConnection = new WebSocket('ws://10.199.14.179:9000');
-    wsConnection = new WebSocket('ws://192.168.2.104:9000');
+    if (window.sessionStorage.getItem('ip')) {
+      var addressIp = window.sessionStorage.getItem('ip')
+    } else {
+      var addressIp = prompt("请输入您的ip地址","");
+      window.sessionStorage.setItem('ip', addressIp)
+    }
+    wsConnection = new WebSocket('ws://' + addressIp + ':9000');
 
     wsConnection.addEventListener("open", function(event) {
       openCallback ? openCallback(event) : null;
@@ -100,6 +106,7 @@ if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
   }, function(event) {
     // error
     console.log('error')
+    window.sessionStorage.removeItem('ip')
   });
 } else {
   console.log('close')

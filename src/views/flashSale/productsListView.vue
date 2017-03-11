@@ -121,6 +121,7 @@ export default {
       minutes: '',
       seconds: '',
       flag: '',
+      /* 商品数据 */
       listGoodsData: []
     };
   },
@@ -164,11 +165,6 @@ export default {
   },
   destroyed() {
     this.loading.close()
-    setTimeout(() => {
-      if (window.isiOS) {
-        window._setNativeTitle('精品闪购')
-      }
-    }, 300)
   },
   methods: {
     /* 滑到底部加载数据 */
