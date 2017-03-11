@@ -70,13 +70,11 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
 import { mapGetters } from 'vuex'
 export default {
 
   name: 'keepFlashSales',
 
-  components: {},
   data() {
     return {
       loading: null,

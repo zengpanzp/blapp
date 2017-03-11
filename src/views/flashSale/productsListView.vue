@@ -1,7 +1,7 @@
 <style lang="scss" src="src/sass/_productsListView.scss" scoped></style>
 <template>
   <div class="flash-list new">
-    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-record>
+    <bl-scroll :enableRefresh="false" :onInfinite="onInfinite" :enableInfinite="isLoading" v-scroll-top>
       <div class="quickbuy-active">
         <ul>
           <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
@@ -89,14 +89,11 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import routeData from 'src/vue-bluer/route-data'
 export default {
 
   name: 'productsListView',
 
-  mixins: [routeData],
-
-  routeData() {
+  data() {
     return {
       setTime: null,
       loading: null,
@@ -123,13 +120,9 @@ export default {
       hours: '',
       minutes: '',
       seconds: '',
-      flag: ''
-    };
-  },
-  data() {
-    return {
+      flag: '',
       listGoodsData: []
-    }
+    };
   },
   computed: {
     ...mapGetters([
