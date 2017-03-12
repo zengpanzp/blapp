@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
-    "vendor": "rm -rf lib/vendor && cross-env NODE_ENV=production webpack --config build/webpack.dll.js",
+    "vendor": "rm -rf static/js/lib/vendor && cross-env NODE_ENV=production webpack --config build/webpack.dll.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
@@ -21,7 +21,6 @@
     "vue-lazyload": "0.8.0",
     "vue-popup": "^0.2.14",
     "vue-router": "^2.2.0",
-    "vue-slide": "^1.1.1",
     "vuex": "^2.1.2",
     "wind-dom": "^0.0.3"
   },

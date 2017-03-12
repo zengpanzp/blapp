@@ -20,7 +20,6 @@ import Toast from './toast'
 import Modal from './modal/modal'
 import ModalJs from './modal'
 import Slide from './slide'
-import SlideItem from './slide/slide-item'
 
 import scrollRecord from './route-data/scroll-record'
 
@@ -41,7 +40,6 @@ const install = function(Vue) {
   // Vue.component('bl' + DatetimePicker.name, DatetimePicker);
   Vue.component('bl' + Modal.name, Modal);
   Vue.component('bl' + Slide.name, Slide);
-  Vue.component('bl' + SlideItem.name, SlideItem);
 
   Vue.$toast = Vue.prototype.$toast = Toast;
   Vue.$modal = Vue.prototype.$modal = ModalJs;

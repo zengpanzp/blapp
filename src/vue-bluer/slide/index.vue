@@ -17,11 +17,6 @@ export default {
 
   name: 'Slide',
 
-  data () {
-    return {
-      ready: false
-    };
-  },
   props: {
     pagination: {
       type: Boolean,
@@ -62,7 +57,7 @@ export default {
       });
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

@@ -97,7 +97,7 @@
       </div>
       <div class="tab-content">
         <div class="tab-c-item">
-          <a class="item-href" href="javascript:;" v-for="item in filterTabRows" v-go-native-goods-detail="item">
+          <a class="item-href" href="javascript:;" v-for="item in filterTabRows" :key="item.goodsId" v-go-native-goods-detail="item">
             <div class="col c-item-img"><img v-lazy="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
             <div class="col c-item-text">
               <div class="item-text1">{{ item.productName }}</div>
@@ -122,8 +122,7 @@ export default {
     return {
       searchText: '',
       tabsModel: 0,
-      isSwipeLoading: true,
-      loading: null,
+      inlineLoading: null,
       listHead: [
         {
           imgUrl: require('src/assets/electricHome/phone-communication.png'),
@@ -184,17 +183,6 @@ export default {
   },
   created() {
     let self = this
-    setTimeout(() => {
-      if (window.isiOS) {
-        window._setNativeTitle('电器城')
-      }
-    }, 300)
-    self.loading = this.$toast({
-      iconClass: 'preloader white',
-      message: '加载中',
-      duration: 'loading',
-      className: 'white-bg'
-    })
     window.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {
       resourceId: "237300,237301,237302,237304,237306,237307,237310,237311,237320"
     }, {
@@ -211,8 +199,7 @@ export default {
         self.cateId = resData[8].advList[0].jumpId
         self.$nextTick(() => {
           self.getGoods(null, 0)
-          self.isSwipeLoading = false
-          self.loading.close()
+          self.$loading.close()
         });
       },
       fail: function(data) { console.log(data) },
@@ -230,7 +217,11 @@ export default {
     },
     elTabItem(jumpId) {
       this.cateId = jumpId
-      this.tabRows = []
+      this.inlineLoading = this.$toast({
+        iconClass: 'preloader white',
+        message: '加载中',
+        duration: 'loading'
+      })
       this.getGoods(null, 0)
     },
     getGoods(cateId, No) {
@@ -261,6 +252,9 @@ export default {
             if (resData.resultInfo.pageModel.rows) {
               self.tabRows = resData.resultInfo.pageModel.rows
             }
+          }
+          if (self.inlineLoading) {
+            self.inlineLoading.close()
           }
         },
         fail: function(data) { console.log(data) },

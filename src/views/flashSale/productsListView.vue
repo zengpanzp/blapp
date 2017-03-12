@@ -10,7 +10,7 @@
             </a>
             <div class="quickbuy-active-titles">
               <div class="active-store-logo" v-if="flashSalesGoods.brandList">
-                <img v-lazy="flashSalesGoods.brandList[0].brandLogo" :alt="flashSalesGoods.brandList[0].brandNameCN">
+                <img :src="flashSalesGoods.brandList[0].brandLogo" :alt="flashSalesGoods.brandList[0].brandNameCN">
               </div>
               <div class="active-title-detail">
                 <div class="active-detail-container">
@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="quickbuy-log" v-if="picturesType === 16" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
-              <img v-lazy="picturesUrl">
+              <img :src="picturesUrl">
             </div>
           </li>
         </ul>
@@ -96,7 +96,6 @@ export default {
   data() {
     return {
       setTime: null,
-      loading: null,
       isLoading: true,
       showModel: false,
       isSelect: 1,
@@ -133,12 +132,6 @@ export default {
     ])
   },
   mounted() {
-    this.loading = this.$toast({
-      iconClass: 'preloader white',
-      message: '加载中',
-      duration: 'loading',
-      className: 'white-bg'
-    })
     /* 获取活动商品 */
     this.$store.dispatch('flashSalesGoods', {
       channelid: 1,
@@ -149,7 +142,7 @@ export default {
           window._setNativeTitle(this.flashSalesGoods.flashName)
         }
       }, 300)
-      this.loading.close()
+      this.$loading.close()
       /* 倒计时 */
       this.countdown(this.flashSalesGoods.effectiveStart, this.flashSalesGoods.effectiveEnd)
       /* 获取商品列表 */
@@ -164,7 +157,7 @@ export default {
     })
   },
   destroyed() {
-    this.loading.close()
+    this.$loading.close()
   },
   methods: {
     /* 滑到底部加载数据 */

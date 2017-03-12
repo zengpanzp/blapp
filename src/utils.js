@@ -282,34 +282,6 @@ const boxsize = (el) => {
   return new BoxSize(el)
 }
 
-/**
- * 判断css是否加载成功
- * @chenpeng
- * @DateTime 2017-03-10T20:53:14+0800
- * @param    {Function}               fn   [加载成功的回调]
- * @param    {[Obj]}                 link  [link标签元素]
- * @return   {[Boolean]}                      [加载成功返回true，失败返回false]
- */
-const cssReady = (fn, link) => {
-  let d = document
-  let t = d.createStyleSheet
-  let r = t ? 'rules' : 'cssRules'
-  let s = t ? 'styleSheet' : 'sheet'
-  let l = d.getElementsByTagName('link');
-  // passed link or last link node
-  link || (link = l[l.length - 1]);
-  function check() {
-    try {
-      return link && link[s] && link[s][r] && link[s][r][0]
-    } catch (e) {
-      return false
-    }
-  }
-  (function poll() {
-    check() && setTimeout(fn, 0) || setTimeout(poll, 100);
-  })();
-}
-
 export default {
   fmtDate,
   dbGet,
@@ -321,6 +293,5 @@ export default {
   isWeixin,
   fmoney,
   isSeeing,
-  boxsize,
-  cssReady
+  boxsize
 }

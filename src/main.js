@@ -8,7 +8,6 @@ import VueLazyload from 'vue-lazyload'
 
 import App from './App'
 import store from './store'
-import utils from './utils'
 
 // FastClick 调用
 if ('addEventListener' in document) {
@@ -82,13 +81,54 @@ Vue.directive('go-native-resource', {
 
 })
 
+/**
+ * 判断css是否加载成功
+ * @chenpeng
+ * @DateTime 2017-03-10T20:53:14+0800
+ * @param    {Function}               fn   [加载成功的回调]
+ * @param    {[Obj]}                 link  [link标签元素]
+ * @return   {[Boolean]}                      [加载成功返回true，失败返回false]
+ */
+const cssReady = (fn, link) => {
+  let d = document
+  let t = d.createStyleSheet
+  let r = t ? 'rules' : 'cssRules'
+  let s = t ? 'styleSheet' : 'sheet'
+  let l = d.getElementsByTagName('link');
+  // passed link or last link node
+  link || (link = l[l.length - 1]);
+  function check() {
+    try {
+      return link && link[s] && link[s][r] && link[s][r][0]
+    } catch (e) {
+      return false
+    }
+  }
+  (function poll() {
+    check() && setTimeout(fn, 0) || setTimeout(poll, 100);
+  })();
+}
+
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
-  document.title = meta.title
+  Vue.$loading = Vue.prototype.$loading = Vue.$toast({
+    iconClass: 'preloader white',
+    message: '加载中',
+    duration: 'loading',
+    className: 'white-bg'
+  })
+  if (meta.title) {
+    document.title = meta.title
+    setTimeout(() => {
+      if (window.isiOS) {
+        window._setNativeTitle(meta.title)
+      }
+    }, 300)
+  }
   if (meta.class) {
     linkCssObj.href = `static/css/${meta.class}.css`
-    utils.cssReady(() => {
+    cssReady(() => {
       return next()
     }, linkCssObj)
   } else {

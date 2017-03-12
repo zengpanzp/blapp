@@ -17,33 +17,39 @@
     <link rel="stylesheet" type="text/css" id="classLink">
     <script type="text/javascript" src="static/js/iconfont.js"></script>
     <script type="text/javascript">
-    if (!window.isiOS && false) {
-      function LoadAPI(name, data, calback) {
+    (function() {
+      var u = navigator.userAgent;
+      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+      if (!window.isiOS && isAndroid) {
+        function LoadAPI(name, data, calback) {
 
-        if (!window.CTJSBridge) {
-          document.addEventListener(
-            'BLBridgeReady',
-            function() {
-              window.CTJSBridge.LoadAPI(
-                name, data, calback
-              );
-            },
-            false
-          );
-        } else {
-          window.CTJSBridge.LoadAPI(
-            name, data, calback
-          );
+          if (!window.CTJSBridge) {
+            document.addEventListener(
+              'BLBridgeReady',
+              function() {
+                window.CTJSBridge.LoadAPI(
+                  name, data, calback
+                );
+              },
+              false
+            );
+          } else {
+            window.CTJSBridge.LoadAPI(
+              name, data, calback
+            );
+          }
         }
-      }
 
-    }
+      } else {
+        window.LoadAPI = window.LoadAPI || function() {}
+      }
+    })();
     </script>
   </head>
   <body>
     <div id="app"></div>
     <!--公共资源库-->
-    <script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script>
+    <!-- <script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script> -->
     <script src="<%= htmlWebpackPlugin.options.path %>static/js/lib/vendor/vendor.common.js"></script>
     <!-- built files will be auto injected -->
   </body>

@@ -25,12 +25,16 @@
       "id": 5,
       "meta": {}
     },
-    "../node_modules/es6-promise/dist/es6-promise.js": {
+    "../node_modules/vuex/dist/vuex.js": {
       "id": 6,
       "meta": {}
     },
-    "../node_modules/process/browser.js": {
+    "../node_modules/es6-promise/dist/es6-promise.js": {
       "id": 7,
+      "meta": {}
+    },
+    "../node_modules/process/browser.js": {
+      "id": 8,
       "meta": {}
     }
   }

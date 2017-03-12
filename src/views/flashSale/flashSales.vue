@@ -73,9 +73,7 @@ export default {
 
   data() {
     return {
-      loading: null,
       isLoading: true,
-      isSwipeLoading: true,
       showNo: false,
       isActive: '1',
 
@@ -88,31 +86,16 @@ export default {
       getFlashDetailData: []
     }
   },
-  activated() {
-    setTimeout(() => {
-      if (window.isiOS) {
-        window._setNativeTitle('精品闪购')
-      }
-    }, 300)
-  },
   mounted() {
-    this.loading = this.$toast({
-      iconClass: 'preloader white',
-      message: '加载中',
-      duration: 'loading',
-      className: 'white-bg'
-    })
     /* 获取轮播图 */
     this.$store.dispatch('allSlides', {
       resourceId: 500
-    }).then(() => {
-      this.isSwipeLoading = false
     })
     /* 获取分类 */
     this.$store.dispatch('queryCate', {
       channelld: 1
     }).then(() => {
-      this.loading.close()
+      this.$loading.close()
     })
     this.getList()
   },
