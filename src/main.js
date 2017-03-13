@@ -25,8 +25,6 @@ Vue.use(VueLazyload, {
 import bluer from './vue-bluer'
 Vue.use(bluer)
 
-Vue.$LoadMethod = Vue.prototype.$LoadMethod = window.LoadMethod
-
 /* 返回顶部指令 */
 Vue.directive('scroll-top', {
 
@@ -64,7 +62,7 @@ Vue.directive('go-native-goods-detail', {
       isGiftGoods: binding.modifiers.isGiftGoods || false
     }
     el.addEventListener('click', function() {
-      Vue.$LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
+      window.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
     }, false)
   }
 
@@ -75,7 +73,7 @@ Vue.directive('go-native-resource', {
 
   bind: function (el, binding) {
     el.addEventListener('click', function() {
-      Vue.$LoadMethod('BLAdvertResource', 'BLAdvertResourceController', binding.value)
+      window.LoadMethod('BLAdvertResource', 'BLAdvertResourceController', binding.value)
     }, false)
   }
 
@@ -112,12 +110,14 @@ const cssReady = (fn, link) => {
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
-  Vue.$loading = Vue.prototype.$loading = Vue.$toast({
-    iconClass: 'preloader white',
-    message: '加载中',
-    duration: 'loading',
-    className: 'white-bg'
-  })
+  if (document.querySelectorAll('.ant-transparent.white-bg').length === 0) {
+    Vue.$loading = Vue.prototype.$loading = Vue.$toast({
+      iconClass: 'preloader white',
+      message: '加载中',
+      duration: 'loading',
+      className: 'white-bg'
+    })
+  }
   if (meta.title) {
     document.title = meta.title
     setTimeout(() => {

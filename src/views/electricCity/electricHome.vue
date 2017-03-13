@@ -212,7 +212,7 @@ export default {
       if (id === 'fashion') {
         window.location.href = "http://promotion.bl.com/nc/1_3020_21855_30298.html"
       } else {
-        this.$LoadMethod('BLCategory', 'BLCategoryViewController', { categoryId: '9999' + id })
+        window.LoadMethod('BLCategory', 'BLCategoryViewController', { categoryId: '9999' + id })
       }
     },
     elTabItem(jumpId) {
@@ -264,7 +264,7 @@ export default {
     search() {
       event.preventDefault()
       if (this.searchText !== '') {
-        this.$LoadMethod('SearchList', 'SearchList', {
+        window.LoadMethod('SearchList', 'SearchList', {
           searchkey: this.searchText
         })
       } else {
