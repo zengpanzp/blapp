@@ -137,7 +137,9 @@ export default {
       channelid: 1,
       flashId: this.$route.params.flashId
     }).then(() => {
-      window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)
+      setTimeout(() => {
+        window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)
+      }, 300)
       this.$loading.close()
       /* 倒计时 */
       this.countdown(this.flashSalesGoods.effectiveStart, this.flashSalesGoods.effectiveEnd)

@@ -109,7 +109,7 @@ body{
 .ovfs{
   white-space: nowrap;
   width: 100%;
-  overflow-x: scroll;
+  overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   background-color: #ffffff;

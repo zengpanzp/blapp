@@ -134,7 +134,13 @@ router.beforeEach(({ meta, path }, from, next) => {
   jsBridgeReady(() => {
     if (meta.title) {
       document.title = meta.title
-      window.CTJSBridge._setNativeTitle(meta.title)
+      if (window.isiOS) {
+        setTimeout(() => {
+          window.CTJSBridge._setNativeTitle(meta.title)
+        }, 300)
+      } else {
+        window.CTJSBridge._setNativeTitle(meta.title)
+      }
     }
     if (meta.class) {
       linkCssObj.href = `static/css/${meta.class}.css`
