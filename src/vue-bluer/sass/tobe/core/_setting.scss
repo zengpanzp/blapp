@@ -98,8 +98,8 @@ $roundRadius:           50% !default;
 $bar-title-font-size-ipad:        .36*2rem !default;
 $bar-button-font-size-ipad:       .3*2rem !default;
 
-$bar-title-font-size:             .36*2rem !default;
-$bar-button-font-size:            .38*2rem !default;
+$bar-title-font-size:             .30*2rem !default;
+$bar-button-font-size:            .20*2rem !default;
 
 $bar-title-font-size-iphone5:     .34*2rem !default;  //标题字号
 $bar-button-font-size-iphone5:    .3*2rem !default;  //左右按钮的字号
@@ -129,11 +129,6 @@ $z-index-bar:                     1001 !default;
 //-----------------------------------------------------
 $remBase:     75 !default;
 
-// imgPath
-// -----------------------------------------------------
-$url:         '/' !default;
-
 // switch
 //-----------------------------------------------------
 $switchColorClass:     (danger, #ff0000) (primary, $primary) (pink, $pink) (orange, $orange) (purple, $purple);
-
