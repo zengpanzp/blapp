@@ -83,16 +83,16 @@
           @include transition-duration($modalDuration);
       }
   }
-  .modal-close{
-      position: absolute;
-      z-index: 3;
-      right: rem(26);
-      top: rem(26);
-      background: transparent inline-image("base64/modal-close.png") no-repeat center center;
-      background-size: contain;
-      width: rem(30);
-      height: rem(30);
-  }
+  // .modal-close{
+  //     position: absolute;
+  //     z-index: 3;
+  //     right: rem(26);
+  //     top: rem(26);
+  //     background: transparent inline-image("base64/modal-close.png") no-repeat center center;
+  //     background-size: contain;
+  //     width: rem(30);
+  //     height: rem(30);
+  // }
   .modal-inner {
       padding: rem(30);
       @include hairline(bottom, $borderColor);

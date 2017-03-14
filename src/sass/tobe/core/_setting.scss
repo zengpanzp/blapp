@@ -129,6 +129,10 @@ $z-index-bar:                     1001 !default;
 //-----------------------------------------------------
 $remBase:     75 !default;
 
+// imgPath
+// -----------------------------------------------------
+$url:         '/' !default;
+
 // switch
 //-----------------------------------------------------
 $switchColorClass:     (danger, #ff0000) (primary, $primary) (pink, $pink) (orange, $orange) (purple, $purple);

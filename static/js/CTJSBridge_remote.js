@@ -96,6 +96,12 @@ window.Callback = function(identifier, resultStatus, resultData) {
   }
 }
 
+window.CTJSBridge = {
+  LoadMethod: window.LoadMethod,
+  LoadAPI: window.LoadAPI,
+  _setNativeTitle: window._setNativeTitle || function() {}
+}
+
 if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
   LinkToDevice(function(event) {
     // linked

@@ -62,7 +62,7 @@ Vue.directive('go-native-goods-detail', {
       isGiftGoods: binding.modifiers.isGiftGoods || false
     }
     el.addEventListener('click', function() {
-      window.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
+      window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
     }, false)
   }
 
@@ -73,7 +73,7 @@ Vue.directive('go-native-resource', {
 
   bind: function (el, binding) {
     el.addEventListener('click', function() {
-      window.LoadMethod('BLAdvertResource', 'BLAdvertResourceController', binding.value)
+      window.CTJSBridge.LoadMethod('BLAdvertResource', 'BLAdvertResourceController', binding.value)
     }, false)
   }
 
@@ -107,6 +107,19 @@ const cssReady = (fn, link) => {
   })();
 }
 
+const jsBridgeReady = (calback) => {
+  function check() {
+    try {
+      return window.CTJSBridge
+    } catch (e) {
+      return false
+    }
+  }
+  (function poll() {
+    check() && setTimeout(calback, 0) || setTimeout(poll, 100)
+  })();
+}
+
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
@@ -118,22 +131,20 @@ router.beforeEach(({ meta, path }, from, next) => {
       className: 'white-bg'
     })
   }
-  if (meta.title) {
-    document.title = meta.title
-    setTimeout(() => {
-      if (window.isiOS) {
-        window._setNativeTitle(meta.title)
-      }
-    }, 300)
-  }
-  if (meta.class) {
-    linkCssObj.href = `static/css/${meta.class}.css`
-    cssReady(() => {
-      return next()
-    }, linkCssObj)
-  } else {
-    next()
-  }
+  jsBridgeReady(() => {
+    if (meta.title) {
+      document.title = meta.title
+      window.CTJSBridge._setNativeTitle(meta.title)
+    }
+    if (meta.class) {
+      linkCssObj.href = `static/css/${meta.class}.css`
+      cssReady(() => {
+        return next()
+      }, linkCssObj)
+    } else {
+      next()
+    }
+  })
 })
 
 /* eslint-disable no-new */

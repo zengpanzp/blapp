@@ -29,7 +29,7 @@ const actions = {
   /* 获取闪购活动列表商品 */
   flashSalesGoods ({ commit }, params) {
     return new Promise((resolve, reject) => {
-      window.LoadAPI("BLPromotionQueryFlashGoodsAPIManager", params, {
+      window.CTJSBridge.LoadAPI("BLPromotionQueryFlashGoodsAPIManager", params, {
         success: function(res) {
           let resData = window.JSON.parse(res)
           commit(types.GET_FLASHSALESGOODS, resData)
@@ -45,7 +45,7 @@ const actions = {
   },
   flashSalesListGoods ({ commit }, params) {
     return new Promise((resolve, reject) => {
-      window.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", params, {
+      window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", params, {
         success: function(res) {
           let resData = window.JSON.parse(res)
           commit(types.GET_FLASHSALESLISTGOODS, resData.resultInfo.pageModel)

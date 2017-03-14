@@ -16,37 +16,6 @@
     <link rel="stylesheet" type="text/css" href="static/css/comm.css">
     <link rel="stylesheet" type="text/css" id="classLink">
     <script type="text/javascript" src="static/js/iconfont.js"></script>
-    <script type="text/javascript">
-    (function(window) {
-      var u = navigator.userAgent;
-      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
-      console.log(!window.isiOS && isAndroid)
-      if (!window.isiOS && isAndroid) {
-        function LoadAPI(name, data, calback) {
-
-          if (!window.CTJSBridge) {
-            document.addEventListener(
-              'BLBridgeReady',
-              function() {
-                window.CTJSBridge.LoadAPI(
-                  name, data, calback
-                );
-              },
-              false
-            );
-          } else {
-            window.CTJSBridge.LoadAPI(
-              name, data, calback
-            );
-          }
-        }
-        window.LoadAPI = LoadAPI
-
-      } else {
-        window.LoadAPI = window.LoadAPI || function() {}
-      }
-    })(window);
-    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -45,7 +45,7 @@ const getters = {
 const actions = {
   allSlides ({ commit }, params) {
     return new Promise((resolve, reject) => {
-      window.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", params, {
+      window.CTJSBridge.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", params, {
         success: function(res) {
           let resData = window.JSON.parse(res)
           commit(types.GET_SLIDE, resData)
@@ -61,7 +61,7 @@ const actions = {
   },
   queryCate ({ commit }, params) {
     return new Promise((resolve, reject) => {
-      window.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", params, {
+      window.CTJSBridge.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", params, {
         success: (res) => {
           let resData = window.JSON.parse(res)
           commit(types.QUERY_CATE, resData)
@@ -77,7 +77,7 @@ const actions = {
   },
   getFlashDetail ({ commit }, params) {
     return new Promise((resolve, reject) => {
-      window.LoadAPI("BLPromotionQueryFlashListAPIManager", params, {
+      window.CTJSBridge.LoadAPI("BLPromotionQueryFlashListAPIManager", params, {
         success: (res) => {
           let resData = window.JSON.parse(res)
           commit(types.GET_FLASHDETAIL, resData)

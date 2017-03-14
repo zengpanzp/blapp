@@ -183,7 +183,7 @@ export default {
   },
   created() {
     let self = this
-    window.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {
+    window.CTJSBridge.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {
       resourceId: "237300,237301,237302,237304,237306,237307,237310,237311,237320"
     }, {
       success: function(res) {
@@ -212,7 +212,7 @@ export default {
       if (id === 'fashion') {
         window.location.href = "http://promotion.bl.com/nc/1_3020_21855_30298.html"
       } else {
-        window.LoadMethod('BLCategory', 'BLCategoryViewController', { categoryId: '9999' + id })
+        window.CTJSBridge.LoadMethod('BLCategory', 'BLCategoryViewController', { categoryId: '9999' + id })
       }
     },
     elTabItem(jumpId) {
@@ -241,7 +241,7 @@ export default {
         }
       }
       /* 获取商品 */
-      window.LoadAPI("BLSearchByKeyWordAPIManager", resquestData, {
+      window.CTJSBridge.LoadAPI("BLSearchByKeyWordAPIManager", resquestData, {
         success: function(res) {
           let resData = window.JSON.parse(res)
           if (cateId === '268862') {
@@ -264,7 +264,7 @@ export default {
     search() {
       event.preventDefault()
       if (this.searchText !== '') {
-        window.LoadMethod('SearchList', 'SearchList', {
+        window.CTJSBridge.LoadMethod('SearchList', 'SearchList', {
           searchkey: this.searchText
         })
       } else {

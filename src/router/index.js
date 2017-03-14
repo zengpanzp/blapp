@@ -45,6 +45,14 @@ export default new Router({
         title: '电器城'
       },
       component: r => require.ensure([], () => r(require('../views/electricCity/electricHome')), 'electricMainPage')
+    },
+    /* 陈鹏 值得买首页 */
+    {
+      path: '/rankMainPage',
+      meta: {
+        title: '大家都在买'
+      },
+      component: r => require.ensure([], () => r(require('../views/rank/mainView')), 'rankMainPage')
     }
   ]
 })

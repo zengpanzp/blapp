@@ -1,6 +1,6 @@
 <template>
   <div class="ant-transparent" :class="className" v-if="visible">
-    <div class="ant-toast" :class="position" :style="{ 'padding': iconClass === '' ? '20px' : '30px 60px' }">
+    <div class="ant-toast" :class="position" :style="{ 'padding': iconClass === '' ? '.3rem' : '.4rem .8rem' }">
       <i class="ant-icon" :class="iconClass" v-if="iconClass !== ''"></i>
       <span class="ant-toast-text">{{ message }}</span>
     </div>
