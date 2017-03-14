@@ -2,12 +2,13 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import FastClick from 'fastclick'
-import router from './router'
 import ScrollTo from 'scroll'
 import VueLazyload from 'vue-lazyload'
 
 import App from './App'
 import store from './store'
+import router from './router'
+import bluer from './vue-bluer'
 
 // FastClick 调用
 if ('addEventListener' in document) {
@@ -22,7 +23,6 @@ Vue.use(VueLazyload, {
   try: 3 // default 1
 })
 
-import bluer from './vue-bluer'
 Vue.use(bluer)
 
 /* 返回顶部指令 */
