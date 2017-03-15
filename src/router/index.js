@@ -15,13 +15,11 @@ export default new Router({
       path: '/',
       redirect: '/electricMainPage'
     },
-    // {
-    //   path: '/components',
-    //   meta: {
-    //     title: '组件'
-    //   },
-    //   component: r => require.ensure([], () => r(require('vue-bluer/components')), 'components')
-    // },
+    /* 陈鹏 资源位跳转 */
+    {
+      path: '/resourceRouter',
+      component: r => require.ensure([], () => r(require('../views/resourceRouter')), 'resourceRouter')
+    },
     /* 陈鹏 精品闪购首页 */
     {
       path: '/flashSales',
@@ -33,9 +31,6 @@ export default new Router({
     /* 陈鹏 精品闪购活动列表页 */
     {
       path: '/flashsaleproductspage/:flashId/:isStart',
-      meta: {
-        title: '精品闪购'
-      },
       component: r => require.ensure([], () => r(require('../views/flashSale/productsListView')), 'flashsaleproductspage')
     },
     /* 陈鹏 电器城首页 */

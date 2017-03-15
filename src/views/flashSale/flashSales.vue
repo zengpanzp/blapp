@@ -25,30 +25,32 @@
       <!-- end -->
       <!-- 闪购商品列表 -->
       <div class="flash-list">
-        <div class="todynew" v-for="(item, index) in getFlashDetailData">
-          <div class="todynew-img">
-            <div class="wumengcen" v-if="item.pictures">
-              <div class="small-bg" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
-              <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                <img v-lazy.container="{ src: picturesUrl, loading: require('src/assets/loading.png') }" alt="">
-                <div class="mengcen-bg" v-if="isActive === '3' || isActive === '2'"></div>
-              </router-link>
-              <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
-            </div>
-            <div class="D" v-if="isActive === '2'" v-text="timeCoundDown(item.effectiveEnd)"></div>
-            <div class="D" v-else-if="isActive === '3'" v-text="timeCoundNotice(item.effectiveStart)"></div>
-            <div class="bottom-todynew">
-              <div class="le-fonts"><img v-lazy="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
-              <div class="dd-fonts">
-                <div class="le2-fonts" v-text="item.flashName"></div>
-                <div class="tian-number" v-if="isActive === '3' || isActive === '2'"></div>
-                <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
+        <template v-if="filterGetFlashDetailData.length !== 0">
+          <div class="todynew" v-for="item in filterGetFlashDetailData">
+            <div class="todynew-img">
+              <div class="wumengcen" v-if="item.pictures">
+                <div class="small-bg" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
+                <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+                  <img v-lazy.container="{ src: picturesUrl, loading: require('src/assets/loading.png') }" alt="">
+                  <div class="mengcen-bg" v-if="isActive === '3' || isActive === '2'"></div>
+                </router-link>
+                <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
               </div>
-              <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
-              <div class="ri-fonts" v-else><span v-text="item.advValue"></span>元起</div>
+              <div class="D" v-if="isActive === '2'" v-text="timeCoundDown(item.effectiveEnd)"></div>
+              <div class="D" v-else-if="isActive === '3'" v-text="timeCoundNotice(item.effectiveStart)"></div>
+              <div class="bottom-todynew">
+                <div class="le-fonts"><img v-lazy="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
+                <div class="dd-fonts">
+                  <div class="le2-fonts" v-text="item.flashName"></div>
+                  <div class="tian-number" v-if="isActive === '3' || isActive === '2'"></div>
+                  <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
+                </div>
+                <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
+                <div class="ri-fonts" v-else><span v-text="item.advValue"></span>元起</div>
+              </div>
             </div>
           </div>
-        </div>
+        </template>
         <div class="no-flash-list" v-if="showNo">暂时没有该闪购活动</div>
       </div>
       <!-- end -->
@@ -66,7 +68,6 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 export default {
 
   name: 'keepFlashSales',
@@ -78,40 +79,49 @@ export default {
       isActive: '1',
 
       /* 活动列表 */
-      start: 0,
-      type: 1,
-      pageNum: 1,
-      pageSize: 10,
-      flashCategories: '',
-      getFlashDetailData: []
+      pages: 0, // 总页数
+      getFlashDetailData: [], // 商品列表数据
+      requestData: {
+        channelid: 1,
+        type: 1,
+        pageNum: 1,
+        pageSize: 10,
+        parameter: 0,
+        flashCategories: ''
+      }
     }
   },
-  mounted() {
+  created() {
     /* 获取轮播图 */
-    this.$store.dispatch('allSlides', {
-      resourceId: 500
+    window.CTJSBridge.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {resourceId: 500}, {
+      success: res => {
+        let resData = window.JSON.parse(res)
+        this.allSlides = resData.otherResource[0].advList
+      },
+      fail: err => console.log(err),
+      progress: data => {}
     })
     /* 获取分类 */
-    this.$store.dispatch('queryCate', {
-      channelld: 1
-    }).then(() => {
-      this.$loading.close()
+    window.CTJSBridge.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", {channelld: 1}, {
+      success: res => {
+        let resData = window.JSON.parse(res)
+        this.queryCate = resData.list
+        this.$loading.close()
+      },
+      fail: err => this.$toast(JSON.parse(err.result)),
+      progress: data => {}
     })
     this.getList()
   },
   computed: {
-    ...mapGetters([
-      'allSlides', // 轮播图数据
-      'queryCate', // 分类数据
-      'getFlashDetail', // 活动列表数据
-      'pages' // 总页数数据
-    ])
+    filterGetFlashDetailData() {
+      return this.getFlashDetailData
+    }
   },
   methods: {
     /* 滑到底部加载数据 */
     onInfinite(done) {
-      this.pageNum ++
-      if (this.pageNum >= this.pages) {
+      if (this.requestData.pageNum >= this.pages) {
         this.$toast({
           position: 'bottom',
           message: '已经是最后一页'
@@ -119,45 +129,61 @@ export default {
         this.isLoading = false
         done()
       } else {
+        this.requestData.pageNum ++
         this.getList(done)
       }
     },
     getList(done) {
       this.showNo = false
-      this.isLoading = true
-      /* 获取活动列表 */
-      this.$store.dispatch('getFlashDetail', {
-        channelid: 1,
-        type: this.type,
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
-        parameter: 0,
-        flashCategories: (this.flashCategories === '') ? undefined : parseInt(this.flashCategories),
-      }).then(() => {
-        this.getFlashDetailData = this.getFlashDetailData.concat(this.getFlashDetail.list)
-        if (this.getFlashDetailData.length < this.pageSize) {
-          this.isLoading = false
-        }
-        done()
-      }, () => {
-        /* 没数据了 */
-        this.isLoading = false
-        if (this.getFlashDetailData.length === 0) {
-          this.showNo = true
-        }
-        done()
+
+      window.CTJSBridge.LoadAPI("BLPromotionQueryFlashListAPIManager", this.requestData, {
+        success: (res) => {
+          let resData = window.JSON.parse(res)
+          if (resData.count === 0 || resData.result === 'fail') {
+            this.showNo = true
+            this.isLoading = false
+            return
+          }
+          this.pages = resData.pages
+          for (let i = 0; i < resData.list.length; i++) {
+            resData.list[i].start = this.isStart(resData.list[i].effectiveStart)
+          }
+          this.getFlashDetailData = this.getFlashDetailData.concat(resData.list)
+
+          if (this.getFlashDetailData.length < this.requestData.pageSize) {
+            this.isLoading = false
+          } else {
+            this.isLoading = true
+          }
+          if (done) {
+            done()
+          }
+        },
+        fail: (res) => {
+          /* 没数据了 */
+          let resData = window.JSON.parse(res)
+          if (resData.count === 0 || resData.result === 'fail') {
+            this.showNo = true
+            this.isLoading = false
+            return
+          }
+          if (done) {
+            done()
+          }
+        },
+        progress: (data) => {}
       })
     },
     /* 点击分类加载数据 */
     selectCate(key, index) {
-      this.flashCategories = parseInt(index)
+      this.requestData.flashCategories = parseInt(index)
       this.isActive = key
       if (index === undefined) {
-        this.type = parseInt(key)
+        this.requestData.type = parseInt(key)
       } else {
-        this.type = 1
+        this.requestData.type = 1
       }
-      this.pageNum = 1
+      this.requestData.pageNum = 1
       this.getFlashDetailData = []
       this.getList()
     },
@@ -180,6 +206,15 @@ export default {
       let day = val.substring(8, 10);
       let time = val.substring(10, 16);
       return month + '月' + day + '日' + ' ' + time + '开抢'
+    },
+    isStart(start) {
+      let startTime = start.replace(/-/g, "/");
+      let startDate = new Date(startTime);
+      let now = new Date();
+      if (now >= startDate) {
+        return 1;
+      }
+      return 0;
     }
   }
 }

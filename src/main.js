@@ -6,7 +6,6 @@ import ScrollTo from 'scroll'
 import VueLazyload from 'vue-lazyload'
 
 import App from './App'
-import store from './store'
 import router from './router'
 import bluer from './vue-bluer'
 
@@ -108,21 +107,19 @@ const cssReady = (fn, link) => {
 }
 
 const jsBridgeReady = (calback) => {
-  function check() {
-    try {
-      return window.CTJSBridge
-    } catch (e) {
-      return false
-    }
+  if (window.CTJSBridge) {
+    calback()
+  } else {
+    document.addEventListener('BLBridgeReady', calback, false)
   }
-  (function poll() {
-    check() && setTimeout(calback, 0) || setTimeout(poll, 100)
-  })();
 }
 
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
+  if (path === '/resourceRouter') {
+    return next()
+  }
   if (document.querySelectorAll('.ant-transparent.white-bg').length === 0) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
@@ -137,7 +134,7 @@ router.beforeEach(({ meta, path }, from, next) => {
       if (window.isiOS) {
         setTimeout(() => {
           window.CTJSBridge._setNativeTitle(meta.title)
-        }, 300)
+        }, 400)
       } else {
         window.CTJSBridge._setNativeTitle(meta.title)
       }
@@ -157,7 +154,6 @@ router.beforeEach(({ meta, path }, from, next) => {
 new Vue({
   el: '#app',
   router,
-  store,
   template: '<App/>',
   components: { App }
 })

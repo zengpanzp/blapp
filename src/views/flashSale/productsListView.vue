@@ -35,7 +35,7 @@
       </div>
       <div id="flashProductsList">
         <ul class="index-productlist">
-          <template v-for="item in listGoodsData">
+          <template v-for="item in filterlistGoodsData">
             <li v-go-native-goods-detail="item[0]">
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
@@ -88,11 +88,8 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 export default {
-
   name: 'productsListView',
-
   data() {
     return {
       setTime: null,
@@ -101,18 +98,8 @@ export default {
       isSelect: 1,
       /* false 价格上， true 价格下， 默认价格上 */
       isDown: false,
-      /* 有无货 */
-      isFilter: '0',
-      brandHandle: false,
       brandSid: [],
-      indexData: false,
       noGoods: false,
-
-      /* 请求参数 */
-      sorCol: '',
-      sorTye: '',
-      pageNum: 1,
-      pageSize: 10,
 
       /* 倒计时用的变量 */
       days: '',
@@ -120,39 +107,61 @@ export default {
       minutes: '',
       seconds: '',
       flag: '',
+      listPages: 0, // 总页数
       /* 商品数据 */
-      listGoodsData: []
+      listGoodsData: [], // 闪购活动商品列表
+      flashSalesGoods: {}, // 闪购商品
+      requestData: {
+        actCode: '',
+        sorCol: '',
+        sorTye: '',
+        pageSize: 10,
+        pageNo: 1,
+        isava: '0'
+      }
     };
   },
-  computed: {
-    ...mapGetters([
-      'flashSalesGoods', // 活动闪购活动商品
-      'flashSalesListGoods', // 活动闪购活动商品列表
-      'listPages'
-    ])
-  },
-  mounted() {
+  created() {
     /* 获取活动商品 */
-    this.$store.dispatch('flashSalesGoods', {
+    window.CTJSBridge.LoadAPI("BLPromotionQueryFlashGoodsAPIManager", {
       channelid: 1,
       flashId: this.$route.params.flashId
-    }).then(() => {
-      setTimeout(() => {
-        window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)
-      }, 300)
-      this.$loading.close()
-      /* 倒计时 */
-      this.countdown(this.flashSalesGoods.effectiveStart, this.flashSalesGoods.effectiveEnd)
-      /* 获取商品列表 */
-      this.getListGoods()
-    }, (err) => {
-      let errs = JSON.parse(err)
-      if (errs.result === 'fail') {
-        this.$modal({
-          content: '找不到该闪购商品'
-        })
-      }
+    }, {
+      success: res => {
+        let resData = window.JSON.parse(res)
+        this.flashSalesGoods = resData
+        setTimeout(() => {
+          window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)
+        }, 400)
+        document.title = this.flashSalesGoods.flashName
+        this.$loading.close()
+        this.requestData.actCode = this.flashSalesGoods.flashCode
+        /* 倒计时 */
+        this.countdown(this.flashSalesGoods.effectiveStart, this.flashSalesGoods.effectiveEnd)
+        /* 获取商品列表 */
+        this.getListGoods()
+      },
+      fail: err => {
+        let errs = JSON.parse(err)
+        if (errs.result === 'fail') {
+          this.$modal({
+            content: '找不到该闪购商品',
+            buttons: [{
+              text: '确定',
+              onClick: () => {
+                this.$router.push({ path: '/flashSales' })
+              }
+            }]
+          })
+        }
+      },
+      progress: data => {}
     })
+  },
+  computed: {
+    filterlistGoodsData() {
+      return this.listGoodsData
+    }
   },
   destroyed() {
     this.$loading.close()
@@ -160,8 +169,7 @@ export default {
   methods: {
     /* 滑到底部加载数据 */
     onInfinite(done) {
-      this.pageNum ++
-      if (this.pageNum >= this.listPages) {
+      if (this.requestData.pageNo >= this.listPages) {
         this.$toast({
           position: 'bottom',
           message: '亲，没有更多数据了'
@@ -169,16 +177,17 @@ export default {
         this.isLoading = false
         done()
       } else {
+        this.requestData.pageNo ++
         this.getListGoods(done)
       }
     },
     selected(index) {
       this.isSelect = index
       /* 参数调整 */
-      this.pageNum = 1
-      this.sorCol = ''
-      this.sorTye = ''
-      this.isFilter = '0'
+      this.requestData.pageNo = 1
+      this.requestData.sorCol = ''
+      this.requestData.sorTye = ''
+      this.requestData.isava = '0'
       /* 清空商品列表 */
       this.listGoodsData = []
       /* 默认 */
@@ -188,23 +197,23 @@ export default {
       }
       /* 价格 */
       if (index === 2) {
-        this.sorCol = 'pri'
+        this.requestData.sorCol = 'pri'
         if (this.isDown) {
-          this.sorTye = 1
+          this.requestData.sorTye = 1
         } else {
-          this.sorTye = 0
+          this.requestData.sorTye = 0
         }
       }
       /* 显示有货 */
       if (index === 3) {
-        this.isFilter = '1'
+        this.requestData.isava = '1'
       }
       this.getListGoods()
     },
     /* 确定 */
     sureFilter() {
       /* 参数调整 */
-      this.pageNum = 1
+      this.requestData.pageNo = 1
       /* 清空商品列表 */
       this.listGoodsData = []
       this.getListGoods()
@@ -246,29 +255,44 @@ export default {
     },
     getListGoods(done) {
       this.noGoods = false
-      this.isLoading = true
-      this.$store.dispatch('flashSalesListGoods', {
-        actCode: this.flashSalesGoods.flashCode,
-        sorCol: this.sorCol,
-        sorTye: this.sorTye,
-        pageSize: this.pageSize,
-        pageNo: this.pageNum,
-        isava: this.isFilter,
-        brandSid: this.brandSid.length !== 0 ? this.brandSid.toString() : undefined
-      }).then(() => {
-        this.listGoodsData = this.listGoodsData.concat(this.flashSalesListGoods.rows)
-        if (this.listGoodsData.length < this.pageSize) {
-          this.isLoading = false
-        }
-        done()
-      }, () => {
-        if (this.listGoodsData.length === 0) {
-          this.noGoods = true
-          this.isLoading = false
-        }
-        done()
-      })
+
+      if (this.brandSid.length !== 0) {
+        this.requestData.brandSid = this.brandSid.toString()
+      }
+
+      window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", this.requestData, {
+        success: res => {
+          let resData = window.JSON.parse(res)
+          if (resData.count === 0 || resData.result === 'fail') {
+            this.noGoods = true
+            this.isLoading = false
+            return
+          }
+          this.listPages = resData.resultInfo.pageModel.totalPage
+          this.listGoodsData = this.listGoodsData.concat(resData.resultInfo.pageModel.rows)
+          if (this.listGoodsData.length < this.requestData.pageSize) {
+            this.isLoading = false
+          } else {
+            this.isLoading = true
+          }
+          if (done) {
+            done()
+          }
+        },
+        fail: res => {
+          let resData = window.JSON.parse(res)
+          if (resData.count === 0 || resData.result === 'fail') {
+            this.noGoods = true
+            this.isLoading = false
+            return
+          }
+          if (done) {
+            done()
+          }
+        },
+        progress: function(data) {}
+      });
     }
   }
-};
+}
 </script>

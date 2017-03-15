@@ -9,7 +9,7 @@
       </div>
     </form>
     <!-- 轮播图 -->
-    <bl-slide class="electric-swipe" :slides="filterAllSlides"></bl-slide>
+    <bl-slide class="electric-swipe" :slides="filterAllSlides" :autoPlay="true"></bl-slide>
     <!-- end -->
     <div class="row-list">
       <a href="javascript:;" class="list-item col" v-for="{ imgUrl, text, id } in listHead" @click="goNative(id)">
