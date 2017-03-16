@@ -3,7 +3,7 @@
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
       <!-- 轮播图 -->
-      <bl-slide class="flash-swipe" :slides="allSlides"></bl-slide>
+      <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
       <!-- 分类 -->
       <div class="navigation">
@@ -68,6 +68,7 @@
   </div>
 </template>
 <script>
+import urlConfig from 'src/urlConfig'
 export default {
 
   name: 'keepFlashSales',
@@ -116,6 +117,16 @@ export default {
   computed: {
     filterGetFlashDetailData() {
       return this.getFlashDetailData
+    }
+  },
+  mounted() {
+    let shareParams = {
+      url: urlConfig.H5_FLASH,
+      title: '精品闪购',
+      content: '更多优惠商品，尽在i百联，赶快来抢购吧!'
+    }
+    window.commShare = function() {
+      window.CTJSBridge.LoadMethod('BLShare', 'H5BLShareParams', shareParams)
     }
   },
   methods: {

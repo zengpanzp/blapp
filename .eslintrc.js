@@ -33,6 +33,8 @@ module.exports = {
     // 必须使用单引号
     'quotes': 0,
     // 定义字符串穿插正则
-    'no-useless-escape': 0
+    'no-useless-escape': 0,
+    // ===
+    'eqeqeq': 0
   }
 }

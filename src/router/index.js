@@ -16,10 +16,10 @@ export default new Router({
       redirect: '/electricMainPage'
     },
     /* 陈鹏 资源位跳转 */
-    {
-      path: '/resourceRouter',
-      component: r => require.ensure([], () => r(require('../views/resourceRouter')), 'resourceRouter')
-    },
+    // {
+    //   path: '/resourceRouter',
+    //   component: r => require.ensure([], () => r(require('../views/resourceRouter')), 'resourceRouter')
+    // },
     /* 陈鹏 精品闪购首页 */
     {
       path: '/flashSales',

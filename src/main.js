@@ -117,9 +117,6 @@ const jsBridgeReady = (calback) => {
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
-  if (path === '/resourceRouter') {
-    return next()
-  }
   if (document.querySelectorAll('.ant-transparent.white-bg').length === 0) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',

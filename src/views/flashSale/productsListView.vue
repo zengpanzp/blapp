@@ -88,6 +88,7 @@
   </div>
 </template>
 <script>
+import urlConfig from 'src/urlConfig'
 export default {
   name: 'productsListView',
   data() {
@@ -165,6 +166,16 @@ export default {
   },
   destroyed() {
     this.$loading.close()
+  },
+  mounted() {
+    let shareParams = {
+      url: urlConfig.H_FLASHSHOP + 'flashId=' + this.$route.params.flashId,
+      title: this.flashSalesGoods.flashName ? this.flashSalesGoods.flashName : '' + '&nbsp;' + this.flashSalesGoods.flashAdvertisement ? this.flashSalesGoods.flashAdvertisement : '',
+      content: '更多优惠商品，尽在i百联，赶快来抢购吧!'
+    }
+    window.commShare = function() {
+      window.CTJSBridge.LoadMethod('BLShare', 'H5BLShareParams', shareParams)
+    }
   },
   methods: {
     /* 滑到底部加载数据 */
