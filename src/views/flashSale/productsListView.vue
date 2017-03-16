@@ -269,6 +269,8 @@ export default {
 
       if (this.brandSid.length !== 0) {
         this.requestData.brandSid = this.brandSid.toString()
+      } else {
+        this.requestData.brandSid = undefined
       }
 
       window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", this.requestData, {
