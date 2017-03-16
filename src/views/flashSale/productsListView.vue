@@ -47,8 +47,8 @@
               </a>
             </li>
           </template>
-          <div class="no-goods" v-if="noGoods">当前闪购活动没有商品</div>
         </ul>
+        <div class="no-goods" v-if="noGoods">当前闪购活动没有商品</div>
       </div>
     </bl-scroll>
     <div class="product-filter">
@@ -264,20 +264,21 @@ export default {
         success: res => {
           let resData = window.JSON.parse(res)
           /* 没数据了 */
-          if (resData.count === 0 || resData.result === 'fail') {
+          if (resData.count === 0 || resData.result === 'fail' || resData.resultInfo.pageModel === null) {
             this.noGoods = true
             this.isLoading = false
             return
-          }
-          this.listPages = resData.resultInfo.pageModel.totalPage
-          this.listGoodsData = this.listGoodsData.concat(resData.resultInfo.pageModel.rows)
-          if (this.listGoodsData.length < this.requestData.pageSize) {
-            this.isLoading = false
           } else {
-            this.isLoading = true
-          }
-          if (done) {
-            done()
+            this.listPages = resData.resultInfo.pageModel.totalPage
+            this.listGoodsData = this.listGoodsData.concat(resData.resultInfo.pageModel.rows)
+            if (this.listGoodsData.length < this.requestData.pageSize) {
+              this.isLoading = false
+            } else {
+              this.isLoading = true
+            }
+            if (done) {
+              done()
+            }
           }
         },
         fail: res => {
