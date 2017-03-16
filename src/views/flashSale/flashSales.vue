@@ -139,6 +139,7 @@ export default {
       window.CTJSBridge.LoadAPI("BLPromotionQueryFlashListAPIManager", this.requestData, {
         success: (res) => {
           let resData = window.JSON.parse(res)
+          /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail') {
             this.showNo = true
             this.isLoading = false
@@ -176,6 +177,7 @@ export default {
     },
     /* 点击分类加载数据 */
     selectCate(key, index) {
+      this.isLoading = true
       this.requestData.flashCategories = parseInt(index)
       this.isActive = key
       if (index === undefined) {
