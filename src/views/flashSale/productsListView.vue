@@ -36,7 +36,7 @@
       <div id="flashProductsList">
         <ul class="index-productlist">
           <template v-for="item in filterlistGoodsData">
-            <li v-go-native-goods-detail="item[0]">
+            <li v-go-native-goods-detail="item[0]" :disabled="$route.params.isStart == 0">
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
                 <div class="lazy-box">

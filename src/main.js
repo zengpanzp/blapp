@@ -63,7 +63,9 @@ Vue.directive('go-native-goods-detail', {
       isGiftGoods: binding.modifiers.isGiftGoods || false
     }
     el.addEventListener('click', function() {
-      window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
+      if (!el.getAttribute('disabled')) {
+        window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
+      }
     }, false)
   }
 
