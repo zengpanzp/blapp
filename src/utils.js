@@ -220,62 +220,6 @@ class BoxSize {
     }
     return valueArr.length === 1 ? valueArr[0] : valueArr;
   }
-  innerWidth() {
-    let i = 0
-    let valueArr = [];
-    for (; i < this.elems.length; i++) {
-      valueArr.push(this.elems[i].clientWidth)
-    }
-    return valueArr.length === 1 ? valueArr[0] : valueArr;
-  }
-  innerHeight() {
-    let i = 0
-    let valueArr = [];
-    for (; i < this.elems.length; i++) {
-      valueArr.push(this.elems[i].clientHeight)
-    }
-    return valueArr.length === 1 ? valueArr[0] : valueArr;
-  }
-  outerWidth(hasMargin) {
-    let value = 0
-    let i = 0
-    let valueArr = [];
-    for (; i < this.elems.length; i++) {
-      let clientWidth;
-      swap(this.elems[i], function(el) {
-        clientWidth = el.clientWidth;
-      });
-      let border = parseInt(getStyles(this.elems[i]).borderLeftWidth) + parseInt(getStyles(this.elems[i]).borderRightWidth);
-      let margin = parseInt(getStyles(this.elems[i]).marginLeft) + parseInt(getStyles(this.elems[i]).marginRight);
-      if (hasMargin === true) {
-        value = clientWidth + border + margin;
-      } else {
-        value = clientWidth + border;
-      }
-      valueArr.push(value)
-    }
-    return valueArr.length === 1 ? valueArr[0] : valueArr;
-  }
-  outerHeight(hasMargin) {
-    let value = 0
-    let i = 0
-    let valueArr = [];
-    for (; i < this.elems.length; i++) {
-      let clientHeight;
-      swap(this.elems[i], function(el) {
-        clientHeight = el.clientHeight;
-      });
-      let border = parseInt(getStyles(this.elems[i]).borderTopWidth) + parseInt(getStyles(this.elems[i]).borderBottomWidth);
-      let margin = parseInt(getStyles(this.elems[i]).marginTop) + parseInt(getStyles(this.elems[i]).marginBottom);
-      if (hasMargin === true) {
-        value = clientHeight + border + margin;
-      } else {
-        value = clientHeight + border;
-      }
-      valueArr.push(value)
-    }
-    return valueArr.length === 1 ? valueArr[0] : valueArr;
-  }
 }
 
 const boxsize = (el) => {
