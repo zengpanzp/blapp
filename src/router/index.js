@@ -1,8 +1,8 @@
 /* creat by chenpeng */
 
 /*
-* 路由管理
-*/
+ * 路由管理
+ */
 
 import Vue from 'vue'
 import Router from 'vue-router'
