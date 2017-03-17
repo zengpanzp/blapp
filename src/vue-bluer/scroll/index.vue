@@ -39,7 +39,7 @@ export default {
   props: {
     offset: {
       type: Number,
-      default: 44
+      default: 66
     },
     enableInfinite: {
       type: Boolean,
@@ -169,7 +169,7 @@ export default {
   }
 }
 
-$layerHeight: 2.2*0.4rem;
+$layerHeight: rem(66);
 .pull-to-refresh-layer {
   position: relative;
   left: 0;
@@ -181,11 +181,11 @@ $layerHeight: 2.2*0.4rem;
     visibility: hidden;
   }
   .pull-to-refresh-arrow {
-    width: 0.65*0.4rem;
-    height: 1*0.4rem;
+    width: rem(26);
+    height: rem(40);
     background: no-repeat center;
     @include encoded-svg-background("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 40'><polygon points='9,22 9,0 17,0 17,22 26,22 13.5,40 0,22' fill='#8c8c8c'/></svg>");
-    background-size: 0.65*0.4rem 1*0.4rem;
+    background-size: rem(26) rem(40);
     z-index: 10;
     transform: rotate(0deg) translate3d(0, 0, 0);
     transition-duration: 300ms;
@@ -255,7 +255,7 @@ $layerHeight: 2.2*0.4rem;
 .pull-up .label-up,
 .refreshing .label-refresh {
   display: block;
-  padding-left: .5*0.4rem;
+  padding-left: rem(20);
 }
 
 .pull-to-refresh-layer {
@@ -265,14 +265,14 @@ $layerHeight: 2.2*0.4rem;
 
 .infinite-layer {
   width: 100%;
-  height: 2.2*0.4rem;
+  height: rem(66);
   @extend %comm-flex;
   @include justify-content(center);
   color: #ccc;
 }
 
 .infinite-preloader {
-  margin-right: .5*0.4rem;
+  margin-right: rem(20);
 }
 
 </style>

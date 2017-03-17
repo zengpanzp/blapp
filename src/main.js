@@ -9,6 +9,8 @@ import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
 
+Vue.config.devtools = process.env.NODE_ENV !== 'production'
+
 // FastClick 调用
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {

@@ -43,6 +43,14 @@ export default new Router({
         title: '大家都在买'
       },
       component: r => require.ensure([], () => r(require('../views/rank/mainView')), 'rankMainPage')
+    },
+    /* 陈鹏 领券中心 */
+    {
+      path: '/banknote',
+      meta: {
+        title: '领券中心'
+      },
+      component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
     }
   ]
 })
