@@ -26,6 +26,57 @@ Vue.use(VueLazyload, {
 
 Vue.use(bluer)
 
+Vue.directive('scroll-fixed', function(el) {
+  let u = navigator.userAgent;
+  let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+  if (!isAndroid) {
+    let xx
+    let yy
+    let XX
+    let YY
+    let swipeX
+    let swipeY
+    let h = document.body.clientHeight || document.body.offsetHeight
+    let bodyScroll = (e) => {
+      e.preventDefault();
+    }
+    el.addEventListener('touchstart', function(e) {
+      xx = e.targetTouches[0].screenX;
+      yy = e.targetTouches[0].screenY;
+      swipeX = true;
+      swipeY = true;
+    }, false)
+    el.addEventListener('touchmove', function(e) {
+      XX = e.targetTouches[0].screenX;
+      YY = e.targetTouches[0].screenY;
+      if (swipeX && Math.abs(XX - xx) - Math.abs(YY - yy) > 0) {
+        // 左右滑动
+        // e.stopPropagation();
+        // e.preventDefault();
+        swipeY = false;
+      } else if (swipeY && Math.abs(XX - xx) - Math.abs(YY - yy) < 0) {
+        // 上下滑动
+        let nScrollHight = el.scrollHeight;
+        let nScrollTop = el.scrollTop;
+        // 到达底部
+        if (nScrollTop + h >= nScrollHight) {
+          // 下滑
+          if (YY <= yy) {
+            el.addEventListener('touchmove', bodyScroll(e), false);
+          }
+        }
+        // 到达顶部
+        if (nScrollTop === 0) {
+          // 下滑
+          if (YY >= yy) {
+            el.addEventListener('touchmove', bodyScroll(e), false);
+          }
+        }
+      }
+    }, false)
+  }
+})
+
 /* 返回顶部指令 */
 Vue.directive('scroll-top', {
 

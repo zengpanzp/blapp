@@ -1,7 +1,7 @@
 <style lang="scss" src="src/sass/_flashSales.scss" scoped></style>
 <template>
   <div class="flash-sales">
-    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
+    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record v-scroll-fixed>
       <!-- 轮播图 -->
       <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
@@ -78,6 +78,7 @@ export default {
       isLoading: true,
       showNo: false,
       isActive: '1',
+      inlineLoading: null,
 
       /* 活动列表 */
       pages: 0, // 总页数
@@ -149,6 +150,9 @@ export default {
 
       window.CTJSBridge.LoadAPI("BLPromotionQueryFlashListAPIManager", this.requestData, {
         success: (res) => {
+          if (this.inlineLoading) {
+            this.inlineLoading.close()
+          }
           let resData = window.JSON.parse(res)
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail') {
@@ -172,6 +176,9 @@ export default {
           }
         },
         fail: (res) => {
+          if (this.inlineLoading) {
+            this.inlineLoading.close()
+          }
           /* 没数据了 */
           let resData = window.JSON.parse(res)
           if (resData.count === 0 || resData.result === 'fail') {
@@ -188,6 +195,11 @@ export default {
     },
     /* 点击分类加载数据 */
     selectCate(key, index) {
+      this.inlineLoading = this.$toast({
+        iconClass: 'preloader white',
+        message: '加载中',
+        duration: 'loading'
+      })
       this.isLoading = true
       this.requestData.flashCategories = parseInt(index)
       this.isActive = key

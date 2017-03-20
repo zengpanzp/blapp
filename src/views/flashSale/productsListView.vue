@@ -1,7 +1,7 @@
 <style lang="scss" src="src/sass/_productsListView.scss" scoped></style>
 <template>
   <div class="flash-list new">
-    <bl-scroll :enableRefresh="false" :onInfinite="onInfinite" :enableInfinite="isLoading" v-scroll-top>
+    <bl-scroll :enableRefresh="false" :onInfinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-fixed>
       <div class="quickbuy-active">
         <ul>
           <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
