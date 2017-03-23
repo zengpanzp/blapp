@@ -3,21 +3,21 @@
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record v-scroll-fixed>
       <!-- 轮播图 -->
-      <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
+      <bl-slide class="flash-swipe" v-show="allSlides && allSlides.length" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
       <!-- 分类 -->
       <div class="navigation">
         <ul class="ovfs flash-ovfs">
-          <li class="ovfs-item" :class="{ active: isActive === '1' }" @click="selectCate('1')">
+          <li class="ovfs-item" :class="{ active: isActive === '1' }" @click="selectCate('1', undefined, '今日上新')">
             <p>今日上新</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === flashCategories}" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories)">
+          <li class="ovfs-item" :class="{ active: isActive === flashCategories}" v-if="flashCategoriesName != '闪购首页'" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories, flashCategoriesName)">
             <p v-text="flashCategoriesName"></p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === '2' }" @click="selectCate('2')">
+          <li class="ovfs-item" :class="{ active: isActive === '2' }" @click="selectCate('2', undefined, '最后疯抢')">
             <p>最后疯抢</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === '3' }" @click="selectCate('3')">
+          <li class="ovfs-item" :class="{ active: isActive === '3' }" @click="selectCate('3', undefined, 品牌预告)">
             <p>品牌预告</p>
           </li>
         </ul>
@@ -30,7 +30,7 @@
             <div class="todynew-img">
               <div class="wumengcen" v-if="item.pictures">
                 <div class="small-bg" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
-                <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+                <router-link @click.native="sensorAnalytics(item.flashId)" :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
                   <img v-lazy.container="{ src: picturesUrl, loading: require('src/assets/loading.png') }" alt="">
                   <div class="mengcen-bg" v-if="isActive === '3' || isActive === '2'"></div>
                 </router-link>
@@ -115,12 +115,8 @@ export default {
     })
     this.getList()
   },
-  computed: {
-    filterGetFlashDetailData() {
-      return this.getFlashDetailData
-    }
-  },
-  mounted() {
+  activated() {
+    this.$loading.close()
     let shareParams = {
       url: urlConfig.H5_FLASH,
       title: '精品闪购',
@@ -128,6 +124,22 @@ export default {
     }
     window.commShare = function() {
       window.CTJSBridge.LoadMethod('BLShare', 'H5BLShareParams', shareParams)
+    }
+    // sensor analytics
+    try {
+      console.log((new Date()).toLocaleString())
+      window.sa.track('$pageview', {
+        pageId: 'APP_闪购首页',
+        categoryId: 'APP_SpecificZone',
+        $title: '精品闪购'
+      });
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
+  },
+  computed: {
+    filterGetFlashDetailData() {
+      return this.getFlashDetailData
     }
   },
   methods: {
@@ -194,7 +206,7 @@ export default {
       })
     },
     /* 点击分类加载数据 */
-    selectCate(key, index) {
+    selectCate(key, index, flashname) {
       this.inlineLoading = this.$toast({
         iconClass: 'preloader white',
         message: '加载中',
@@ -211,6 +223,17 @@ export default {
       this.requestData.pageNum = 1
       this.getFlashDetailData = []
       this.getList()
+      // sensor analytics
+      try {
+        console.log('点击分类' + (new Date()).toLocaleString())
+        window.sa.track('$pageview', {
+          pageId: 'APP_闪购_' + flashname,
+          categoryId: 'APP_SpecificZone',
+          $title: 'APP_闪购_' + flashname
+        });
+      } catch (err) {
+        console.log("sa error => " + err);
+      }
     },
     /* 倒计时 */
     timeCoundDown(val) {
@@ -240,6 +263,22 @@ export default {
         return 1;
       }
       return 0;
+    },
+    // 埋点
+    sensorAnalytics(flashId) {
+      // sensor analytics
+      try {
+        console.log((new Date()).toLocaleString())
+        window.sa.track('$pageview', {
+          pageId: 'APP_闪购_' + flashId,
+          categoryId: 'APP_SpecificZone',
+          $title: 'APP_闪购_' + flashId,
+          flagType: '卖场id',
+          flagValue: String(flashId)
+        })
+      } catch (err) {
+        console.log("sa error => " + err);
+      }
     }
   }
 }
