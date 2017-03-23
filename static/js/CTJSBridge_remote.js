@@ -100,7 +100,11 @@ window.CTJSBridge = {
   LoadMethod: window.LoadMethod,
   LoadAPI: window.LoadAPI,
   _setNativeTitle: window._setNativeTitle || function() {},
-  loadNativeJS: window.loadNativeJS || function() {}
+  loadNativeJS: window.loadNativeJS || function() {},
+  fetchUserInfo: window.fetchUserInfo || function() {}
+}
+window.sa = {
+  track: function() {}
 }
 
 if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {

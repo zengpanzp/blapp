@@ -1,6 +1,6 @@
 <style lang="scss" src="src/sass/_electricHome.scss" scoped></style>
 <template>
-  <div class="new">
+  <div class="new" v-scroll-top.window>
     <form id="searchForm" v-on:submit.prevent="search">
       <div class="nav-app">
         <div class="nav-search col">
@@ -34,18 +34,18 @@
       </div>
     </div>
     <div class="three-minor">
-      <div class="aside-left col" v-if="hotTwoBrands.mediaUrl">
+      <div class="aside-left col" v-if="hotTwoBrands && hotTwoBrands.mediaUrl">
         <a href="javascript:;" v-go-native-resource="hotTwoBrands">
           <img class="lazyload" v-lazy="hotTwoBrands.mediaUrl" :alt="hotTwoBrands.deployName" />
         </a>
       </div>
       <div class="aside-right col">
-        <div class="aside-section hairline-top" v-if="asideTwo.mediaUrl">
+        <div class="aside-section hairline-top" v-if="asideTwo && asideTwo.mediaUrl">
           <a href="javascript:;" v-go-native-resource="asideTwo">
             <img class="lazyload" v-lazy="asideTwo.mediaUrl" :alt="asideTwo.deployName" />
           </a>
         </div>
-        <div class="aside-section" v-if="asideOne.mediaUrl">
+        <div class="aside-section" v-if="asideOne && asideOne.mediaUrl">
           <a href="javascript:;" v-go-native-resource="asideOne">
             <img class="lazyload" v-lazy="asideOne.mediaUrl" :alt="asideOne.deployName" />
           </a>
@@ -73,7 +73,7 @@
         <div class="hotbrand-img"></div>
       </div>
       <div class="hot-bd">
-        <div class="bd-1of3 col" v-if="hotBrands.mediaUrl">
+        <div class="bd-1of3 col" v-if="hotBrands && hotBrands.mediaUrl">
           <a :href="hotBrands.jumpUrl">
             <img class="lazyload" v-lazy="hotBrands.mediaUrl" :alt="hotBrands.deployName" />
           </a>
@@ -206,6 +206,9 @@ export default {
       progress: function(data) {}
     })
     self.getGoods('268862', 0)
+  },
+  activated() {
+    this.$loading.close()
   },
   methods: {
     goNative(id) {

@@ -169,6 +169,19 @@ const jsBridgeReady = (calback) => {
   }
 }
 
+// jsBridgeReady(() => {
+//   let userInfo = window.CTJSBridge.fetchUserInfo()
+//   alert(userInfo)
+//   window.sa.register({
+//     platform: userInfo.platform,
+//     memberId: userInfo.memberId,
+//     resourceId: userInfo.resourceId,
+//     resourceType: userInfo.resourceType,
+//     deployId: userInfo.deployId,
+//     mmc: userInfo.mmc
+//   })
+// })
+
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
