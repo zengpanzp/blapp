@@ -5,7 +5,8 @@ const vendor = [
   'vue-lazyload',
   'vue-router',
   'vue-popup',
-  'vuex'
+  'vuex',
+  'vue-resource'
 ]
 
 module.exports = {

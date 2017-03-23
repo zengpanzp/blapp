@@ -20,6 +20,7 @@
     "vue": "^2.1.10",
     "vue-lazyload": "0.8.0",
     "vue-popup": "^0.2.14",
+    "vue-resource": "^1.2.1",
     "vue-router": "^2.2.0",
     "vuex": "^2.1.2",
     "wind-dom": "^0.0.3"
