@@ -3,7 +3,7 @@
   <div class="main">
     <div class="floor-head" v-if="!$route.query.more" v-scroll-top.window>
       <bl-navbar class="floor-head-ul ovfs" v-model="navTab" ref="oNav">
-        <bl-tab-item class="floor-head-item ovfs-item" :id="index" v-for="(item, index) in sortData" @click.native="fetchGoods(item.id)"><span>{{ item.rankName }}</span></bl-tab-item>
+        <bl-tab-item class="floor-head-item ovfs-item" :id="index" v-for="(item, index) in aSort" @click.native="fetchGoods(item.id)"><span>{{ item.rankName }}</span></bl-tab-item>
       </bl-navbar>
     </div>
     <div class="rank-space">
@@ -26,7 +26,7 @@ export default {
       inlineLoading: null,
       showToggle: false,
       navTab: 0,
-      sortData: [],
+      aSort: [],
       aPrd: []
     };
   },
@@ -41,7 +41,17 @@ export default {
       window.CTJSBridge._setNativeTitle(sTitle)
     }, 400)
     if (tools.dbGet('rankSort')) {
-      this.sortData = JSON.parse(tools.dbGet('rankSort'))
+      this.aSort = JSON.parse(tools.dbGet('rankSort'))
+    } else {
+      window.CTJSBridge.LoadAPI('BLQueryRankListAPIManager', { rankType: '1' }, {
+        success: data => {
+          let parseData = JSON.parse(data)
+          this.aSort = parseData.obj
+          tools.dbSet('rankSort', parseData.obj)
+        },
+        fail: err => { console.log(err) },
+        progress: data => {}
+      })
     }
     this.navTab = this.$route.query.sortIndex
     this.fetchGoods(this.$route.params.blackId)
