@@ -44,6 +44,11 @@ export default new Router({
       },
       component: r => require.ensure([], () => r(require('../views/rank/mainView')), 'rankMainPage')
     },
+    /* 陈鹏 值得买分类页 */
+    {
+      path: '/rankSortPage/:blackId',
+      component: r => require.ensure([], () => r(require('../views/rank/sortView')), 'rankSortView')
+    },
     /* 陈鹏 领券中心 */
     {
       path: '/banknote',
