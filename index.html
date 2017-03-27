@@ -19,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="static/css/comm.css">
     <link rel="stylesheet" type="text/css" id="classLink">
     <script type="text/javascript" src="static/js/iconfont.js"></script>
-    <!-- <script type="text/javascript">
+    <script type="text/javascript">
       (function(para) {
         window['sensorsDataAnalytic201505'] = para.name;
         window[para.name] = {
@@ -27,17 +27,17 @@
         };
       })({
         name: 'sa',
-        server_url: 'https://sensorsdata.bl.com/sa?project=default'  // 测试环境
-        // server_url: 'https://sensorsdata.bl.com/sa?project=production' // 生产
+        // server_url: 'https://sensorsdata.bl.com/sa?project=default'  // 测试环境
+        server_url: 'https://sensorsdata.bl.com/sa?project=production' // 生产
       });
     </script>
     <script type="text/javascript" src="static/js/sensorsdata.min.js"></script>
-    <script type="text/javascript">sa.quick('autoTrack');</script> -->
+    <script type="text/javascript">sa.quick('autoTrack');</script>
   </head>
   <body>
     <div id="app"></div>
     <!--公共资源库-->
-    <script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script>
+    <!-- <script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script> -->
     <script src="<%= htmlWebpackPlugin.options.path %>static/js/lib/vendor/vendor.common.js"></script>
     <!-- built files will be auto injected -->
   </body>
