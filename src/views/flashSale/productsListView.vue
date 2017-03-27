@@ -274,7 +274,7 @@ export default {
 
       window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", this.requestData, {
         success: res => {
-          let resData = window.JSON.parse(res)
+          let resData = window.JSON.parse(res.replace(/[\r\n]/g, ""))
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail' || resData.resultInfo.pageModel === null) {
             this.noGoods = true
