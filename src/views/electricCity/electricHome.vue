@@ -123,6 +123,7 @@ export default {
       searchText: '',
       tabsModel: 0,
       inlineLoading: null,
+      loaded: false,
       listHead: [
         {
           imgUrl: require('src/assets/electricHome/phone-communication.png'),
@@ -199,6 +200,7 @@ export default {
         self.cateId = resData[8].advList[0].jumpId
         self.$nextTick(() => {
           self.getGoods(null, 0)
+          self.loaded = true
           self.$loading.close()
         });
       },
@@ -208,7 +210,9 @@ export default {
     self.getGoods('268862', 0)
   },
   activated() {
-    this.$loading.close()
+    if (this.loaded) {
+      this.$loading.close()
+    }
   },
   methods: {
     goNative(id) {

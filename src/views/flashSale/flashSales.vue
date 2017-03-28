@@ -7,7 +7,7 @@
       <!-- end -->
       <!-- 分类 -->
       <div class="navigation">
-        <ul class="ovfs flash-ovfs">
+        <ul class="ovfs hide-scrollbar flash-ovfs">
           <li class="ovfs-item" :class="{ active: isActive === '1' }" @click="selectCate('1', undefined, '今日上新')">
             <p>今日上新</p>
           </li>
@@ -77,6 +77,7 @@ export default {
     return {
       isLoading: true,
       showNo: false,
+      loaded: false,
       isActive: '1',
       inlineLoading: null,
 
@@ -108,6 +109,7 @@ export default {
       success: res => {
         let resData = window.JSON.parse(res)
         this.queryCate = resData.list
+        this.loaded = true
         this.$loading.close()
       },
       fail: err => this.$toast(JSON.parse(err.result)),
@@ -116,7 +118,9 @@ export default {
     this.getList()
   },
   activated() {
-    this.$loading.close()
+    if (this.loaded) {
+      this.$loading.close()
+    }
     let shareParams = {
       url: urlConfig.H5_FLASH,
       title: '精品闪购',
