@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import tools from 'src/tools'
+import utils from 'src/utils'
 import ScrollTo from 'scroll'
 export default {
 
@@ -91,7 +91,7 @@ export default {
           } else {
             this.aSort = parseData.obj
             this.firstRankId = parseData.obj[0].id
-            tools.dbSet('rankSort', parseData.obj)
+            utils.dbSet('rankSort', parseData.obj)
           }
         },
         fail: err => { console.log(err) },

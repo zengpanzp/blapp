@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import tools from 'src/tools'
+import utils from 'src/utils'
 import ScrollTo from 'scroll'
 export default {
 
@@ -40,14 +40,14 @@ export default {
     setTimeout(() => {
       window.CTJSBridge._setNativeTitle(sTitle)
     }, 400)
-    if (tools.dbGet('rankSort')) {
-      this.aSort = JSON.parse(tools.dbGet('rankSort'))
+    if (utils.dbGet('rankSort')) {
+      this.aSort = JSON.parse(utils.dbGet('rankSort'))
     } else {
       window.CTJSBridge.LoadAPI('BLQueryRankListAPIManager', { rankType: '1' }, {
         success: data => {
           let parseData = JSON.parse(data)
           this.aSort = parseData.obj
-          tools.dbSet('rankSort', parseData.obj)
+          utils.dbSet('rankSort', parseData.obj)
         },
         fail: err => { console.log(err) },
         progress: data => {}
