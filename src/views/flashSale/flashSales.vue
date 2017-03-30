@@ -241,7 +241,7 @@ export default {
     },
     /* 倒计时 */
     timeCoundDown(val) {
-      let endDate = new Date(val);
+      let endDate = new Date(val.replace(/-/g, "/"));
       let now = new Date();
       let date3 = endDate.getTime() - now.getTime();
       // 计算天数
