@@ -69,3 +69,10 @@ Branc:master
 
 **注意版本号要替换成提交后的版本号**
 
+## 开发注意事项
+
+#### 因为数据请求是调Native接口请求的,本地开发的时候需要连接app的websocket服务,步骤如下:
+
+取消`index.html`下面的`<script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script>`注释,同时开着`BLAPIManagers`这个app,浏览器会提示输入ip地址,输入app上的ip地址,app找iOS的同事帮你在手机上装一个
+
+**注意本地开发需要引入这个js,build之前要把这段注释掉.**
