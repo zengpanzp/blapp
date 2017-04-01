@@ -193,7 +193,7 @@ $layerHeight: rem(66);
 }
 
 .scroll {
-  position: relative;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
@@ -236,6 +236,8 @@ $layerHeight: rem(66);
   transition-duration: 300ms;
   &.postop{
     top: 0;
+    -webkit-transform: inherit !important;
+    transform: inherit !important;
   }
 }
 

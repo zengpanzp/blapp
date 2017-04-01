@@ -69,12 +69,18 @@
 </template>
 <script>
 import urlConfig from 'src/urlConfig'
+import ScrollTo from 'scroll'
+
+let fnScroll = (el) => {
+  return el.offsetLeft - (document.body.clientWidth / 2 - el.clientWidth / 2)
+}
 export default {
 
   name: 'keepFlashSales',
 
   data() {
     return {
+      navTab: 0,
       isLoading: true,
       showNo: false,
       loaded: false,
@@ -283,6 +289,29 @@ export default {
       } catch (err) {
         console.log("sa error => " + err);
       }
+    }
+  },
+  updated() {
+    let nNavTop = $('.navigation')[0].offsetTop
+    let nNavHeight = $('.navigation').height()
+    let self = this
+    $('#container').on('scroll', function(event) {
+      if ($('#container')[0].scrollTop > nNavTop) {
+        $('.navigation').eq(0).css('padding-top', nNavHeight + 'px').children().addClass('fixed')
+      } else {
+        $('.navigation').eq(0).css('padding-top', '0px').children().removeClass("fixed")
+      }
+    });
+
+    $('.flash-ovfs .ovfs-item').on('click', function(event) {
+      self.navTab = $(this).index()
+    });
+  },
+  watch: {
+    'navTab'(val) {
+      this.$nextTick(() => {
+        ScrollTo.left($('.flash-ovfs')[0], fnScroll($('.flash-ovfs .ovfs-item').eq(val)[0]))
+      });
     }
   }
 }
