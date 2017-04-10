@@ -16,7 +16,8 @@ module.exports = {
     'html'
   ],
   "globals": {
-    "$": true //添加项目所需没有申明的全局变量
+    "$": true, //添加项目所需没有申明的全局变量
+    "sa": true
   },
   // 可以再rules中继续添加规则，0 - 关闭，1 - 警告，2 - 错误
   'rules': {
