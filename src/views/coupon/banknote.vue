@@ -114,7 +114,19 @@ export default {
     };
   },
   created() {
+    debugger;
     this.$loading.close();
+    setTimeout(function() {
+      alert(1);
+      // 获得登录的用户id
+      window.CTJSBridge.LoadMethod('BLGET', 'GET_MEMBER_ID', '', {
+        success: res => {
+          alert(res);
+        },
+        fail: res => {
+        }
+      });
+    }, 3000);
     service.getCouponList({url: 'h5/coupon/queryCouponTemplateDetail.htm', data: {}}).then(function(resove) {
       debugger;
       console.log(resove);

@@ -35,7 +35,7 @@ export const prdRouter = [
   },
   /* 陈鹏 领券中心 */
   {
-    path: '/banknote',
+    path: '/banknote/',
     meta: {
       title: '领券中心'
     },
