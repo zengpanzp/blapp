@@ -80,24 +80,49 @@
           </li>
 
         </ul>
+        <div class="getCoupon" v-show="btnShow">
+          立即领取
+        </div>
+        <div class="getTips" v-show="tipShow">
+          <div>
+            恭喜您，领券成功
+          </div>
+          <div>
+            优惠券正在飞来的路上，请耐心等候~
+          </div>
+          <div>
+            5S后返回活动页面
+          </div>
+        </div>
       </div>
     </bl-scroll>
   </div>
 </template>
 
 <script>
+import {getCouponList} from 'src/api/service'
 export default {
 
   name: 'banknote',
 
   data () {
     return {
+      btnShow: true,  // 立即领取按钮默认显示
+      tipShow: false, // 领取消息提示默认隐藏
       headerTab: 0,
       headerCon: ['全部', '美食保健', '箱包配饰', '家居个护', '服装鞋靴', '服装鞋靴']
     };
   },
   created() {
-    this.$loading.close()
+    this.$loading.close();
+    debugger;
+    getCouponList(3, 2).then(function(resove) {
+      debugger;
+      console.log(resove);
+      console.log(1)
+    }, function (failData) {
+      // body...
+    })
   },
   methods: {
     onRefresh(done) {

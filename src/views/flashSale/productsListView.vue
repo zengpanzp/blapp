@@ -129,7 +129,8 @@ export default {
       flashId: this.$route.params.flashId
     }, {
       success: res => {
-        let resData = window.JSON.parse(res)
+        // let resData = window.JSON.parse(res)
+        let resData = window.JSON.parse(res.replace(/[\r\n]/g, "").replace(/[\s]/g, " "))
         this.flashSalesGoods = resData
         setTimeout(() => {
           window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)

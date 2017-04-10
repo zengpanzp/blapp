@@ -102,8 +102,42 @@
       background-size: contain;
     }
   }
+  .getCoupon{
+    width:rem(600);
+    position:relative;
+    margin:0 auto;
+    height:rem(70);
+    text-align:center;
+    color:#fff;
+    background:#ec5743;
+    border-radius: rem(8);
+    line-height:rem(70);
+    font-size:rem(32);
+    margin-top:rem(70);
+  }
+  .getTips{
+    width:rem(600);
+    position:relative;
+    margin:0 auto;
+    text-align:center;
+    margin-top:rem(70);
+  }
+  .getTips div{
+    margin-top:rem(20);
+    text-align:center;
+  }
+  .getTips div:first-child{
+    font-size:rem(32);
+  }
+  .getTips div:nth-child(2){
+    font-size:rem(28);
+    color:#666;
+  }
+  .getTips div:nth-child(3){
+    font-size:rem(28);
+    color:#666;
+  }
 }
-
 .discount-itemicon {
   position: absolute;
   right: rem(-88);
