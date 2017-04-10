@@ -101,10 +101,20 @@ window.CTJSBridge = {
   LoadAPI: window.LoadAPI,
   _setNativeTitle: window._setNativeTitle || function() {},
   loadNativeJS: window.loadNativeJS || function() {},
-  fetchUserInfo: window.fetchUserInfo || function() {}
+  fetchUserInfo: window.fetchUserInfo || function() {
+    return {
+      platform: 'iOS',
+      mmc: 'AppStore',
+      deployId: 138106,
+      resourceId: 1161,
+      resourceType: 13,
+      memberId: 100000000298420
+    }
+  }
 }
 window.sa = {
-  track: function() {}
+  track: function() {},
+  register: function() {}
 }
 
 if (typeof wsConnection == "undefined" || wsConnection.readyState != 1) {
