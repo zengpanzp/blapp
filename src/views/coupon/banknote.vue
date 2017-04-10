@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import {getCouponList} from 'src/api/service'
+import service from 'src/api/index'
 export default {
 
   name: 'banknote',
@@ -115,8 +115,7 @@ export default {
   },
   created() {
     this.$loading.close();
-    debugger;
-    getCouponList(3, 2).then(function(resove) {
+    service.getCouponList({url: 'h5/coupon/queryCouponTemplateDetail.htm', data: {}}).then(function(resove) {
       debugger;
       console.log(resove);
       console.log(1)

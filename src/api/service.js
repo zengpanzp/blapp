@@ -31,6 +31,7 @@ var GET_DATA = async(type = 'GET', url = '', data = {}, method = 'fetch') => {
         value: JSON.stringify({data: data})
       })
     }
+    debugger
     try {
       var response = await fetch(url, requestConfig);
       var responseJson = await response.json();
@@ -77,7 +78,7 @@ var GET_DATA = async(type = 'GET', url = '', data = {}, method = 'fetch') => {
 // 编译环境使用真实数据
 if (process.env.NODE_ENV == 'development') {
   // 获取优惠券列表
-  var getCouponList = (couponTemplateId, memberId) => GET_DATA('GET', '/h5/coupon/queryCouponTemplateDetail.htm', {
+  var getCouponList = (couponTemplateId, memberId) => GET_DATA('POST', '/h5/coupon/queryCouponTemplateDetail.htm', {
     channelId: 3,
     couponTemplateId: couponTemplateId,
     memberId: memberId
