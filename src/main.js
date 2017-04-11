@@ -169,9 +169,12 @@ const cssReady = (fn, link) => {
   })();
 }
 
+const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
+window.isiBailianApp = isiBailianApp
+
 const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge) {
-    calback()
+  if (window.CTJSBridge || !isiBailianApp) {
+    return calback()
   } else {
     document.addEventListener('BLBridgeReady', calback, false)
   }
@@ -189,25 +192,36 @@ router.beforeEach(({ meta, path }, from, next) => {
     })
   }
   jsBridgeReady(() => {
-    // 资源位埋点
-    let userInfo = window.CTJSBridge.fetchUserInfo()
-    console.log('资源位埋点' + (new Date()).toLocaleString())
-    window.sa.register({
-      platform: userInfo.platform,
-      memberId: userInfo.memberId,
-      resourceId: userInfo.resourceId,
-      resourceType: userInfo.resourceType,
-      deployId: userInfo.deployId,
-      mmc: userInfo.mmc
-    })
+    if (isiBailianApp) {
+      // 资源位埋点
+      window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+        success: res => {
+          let userInfo = JSON.parse(res)
+          window.sa.register({
+            platform: userInfo.platform,
+            memberId: userInfo.memberId,
+            resourceId: userInfo.resourceId,
+            resourceType: userInfo.resourceType,
+            deployId: userInfo.deployId,
+            mmc: userInfo.mmc
+          })
+        },
+        fail: err => {
+          console.log(err)
+        },
+        progress: data => {}
+      })
+    }
     if (meta.title) {
       document.title = meta.title
-      if (window.isiOS) {
-        setTimeout(() => {
+      if (isiBailianApp) {
+        if (window.isiOS) {
+          setTimeout(() => {
+            window.CTJSBridge._setNativeTitle(meta.title)
+          }, 400)
+        } else {
           window.CTJSBridge._setNativeTitle(meta.title)
-        }, 400)
-      } else {
-        window.CTJSBridge._setNativeTitle(meta.title)
+        }
       }
     }
     if (meta.class) {
