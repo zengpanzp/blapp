@@ -22,10 +22,10 @@
   <bl-popup v-model="popupVisibleAddressPicker" position="bottom" style="width: 100%;">
     <bl-picker ref="addressPicker" :slots="addressSlots" @change="onAddressChange" :visible-item-count="5"></bl-picker>
   </bl-popup>
-  <bl-modal :buttons="buttons">
+  <!-- <bl-modal :buttons="buttons">
     <div slot="inner">确定要解绑百联卡吗？<br />百联卡余额可用于支付订单</div>
-  </bl-modal>
-  <bl-scroll :enableRefresh="true" :onRefresh="onRefresh" :on-infinite="onInfinite" :enableInfinite="isLoading">
+  </bl-modal> -->
+  <!-- <bl-scroll :enableRefresh="true" :onRefresh="onRefresh" :on-infinite="onInfinite" :enableInfinite="isLoading"> -->
     <div class="components" style="padding: 10px 20px;">
       <h2>js components</h2>
       <div class="toast-box">
@@ -88,9 +88,38 @@
         <h3>switch</h3>
         <bl-switch v-model="values" type="pink"></bl-switch>{{ values }}
       </div>
+      <div class="box">
+        <h3>swipe-out</h3>
+        <bl-swipeout>
+          <bl-swipeout-item>
+            <div slot="right-menu">
+              <button class="vux-swipeout-button" style="width: 80px;">hello</button>
+            </div>
+            <div slot="content" class="demo-content vux-1px-t">JavaScript is the best language</div>
+          </bl-swipeout-item>
+          <bl-swipeout-item>
+            <div slot="right-menu">
+              <button class="vux-swipeout-button" style="width: 80px;">hello</button>
+            </div>
+            <div slot="content" class="demo-content vux-1px-t">JavaScript is the best language</div>
+          </bl-swipeout-item>
+          <bl-swipeout-item>
+            <div slot="right-menu">
+              <button class="vux-swipeout-button" style="width: 80px;">hello</button>
+            </div>
+            <div slot="content" class="demo-content vux-1px-t">JavaScript is the best language</div>
+          </bl-swipeout-item>
+          <bl-swipeout-item>
+            <div slot="right-menu">
+              <button class="vux-swipeout-button" style="width: 80px;">hello</button>
+            </div>
+            <div slot="content" class="demo-content vux-1px-t">JavaScript is the best language</div>
+          </bl-swipeout-item>
+        </bl-swipeout>
+      </div>
 
     </div>
-  </bl-scroll>
+  <!-- </bl-scroll> -->
 </div>
 </template>
 <script>
@@ -243,17 +272,23 @@ export default {
       this.addressProvince = values[0];
       this.addressCity = values[1];
     },
-    onRefresh (done) {
+    onRefresh(done) {
       console.log('refresh')
       setTimeout(() => {
         done();
       }, 2000)
     },
-    onInfinite (done) {
+    onInfinite(done) {
       console.log('infinite')
       setTimeout(() => {
         this.isLoading = false
       }, 2000)
+    },
+    onButtonClick(type) {
+      alert('on button click ' + type)
+    },
+    handleEvents(type) {
+      console.log('event: ', type)
     }
   },
   computed: {
@@ -262,7 +297,7 @@ export default {
     }
   },
   mounted() {
-    this.buttonBottom = this.$refs.pupupButton.getBoundingClientRect().bottom;
+    // this.buttonBottom = this.$refs.pupupButton.getBoundingClientRect().bottom;
     this.$loading.close()
   }
 };
@@ -303,5 +338,11 @@ export default {
   p {
     margin-bottom: 10px;
   }
+}
+.demo-content{
+  padding: 20px 20px;
+}
+.vux-swipeout-item{
+  margin-bottom: 20px;
 }
 </style>
