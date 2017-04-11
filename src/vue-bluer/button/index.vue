@@ -39,6 +39,8 @@
     -webkit-appearance: none;
     border: 0;
     width: 100%;
+    border: 1px solid #c5c5c5;
+    border-radius: rem(6);
     &.middle{
       height: rem(68);
       font-size: rem(28);
@@ -48,28 +50,9 @@
       font-size: rem(24);
     }
     .preloader{
-      width: 15px;
-      height: 15px;
+      width: rem(30);
+      height: rem(30);
       margin-right: rem(16);
-    }
-    &:after{
-      content: '';
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      border: 1px solid #c5c5c5;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      width: 200%;
-      height: 200%;
-      -webkit-transform: scale(0.5);
-      transform: scale(0.5);
-      -webkit-transform-origin: left top;
-      transform-origin: left top;
-      -webkit-border-radius: 4px;
-      -moz-border-radius: 4px;
-      border-radius: 4px;
     }
   }
 
@@ -85,8 +68,6 @@
       $textColor:  nth($btn,4);
       .#{$btnBaseClass}.#{"" + $class}{
         color: $textColor;
-      }
-      .#{$btnBaseClass}.#{"" + $class}:after {
         background-color: $bgColor;
         border-color: $bdColor;
       }
@@ -105,7 +86,8 @@
     line-height: rem(88);
     font-size: rem(36);
     -webkit-appearance: none;
-    border: 0;
+    border: 1px solid #c5c5c5;
+    border-radius: rem(6);
     &.middle{
       line-height: rem(68);
       font-size: rem(28);
@@ -114,25 +96,6 @@
       line-height: rem(60);
       font-size: rem(24);
       padding: 0 rem(10);
-    }
-    &:after{
-      content: '';
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      border: 1px solid #c5c5c5;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      width: 200%;
-      height: 200%;
-      -webkit-transform: scale(0.5);
-      transform: scale(0.5);
-      -webkit-transform-origin: left top;
-      transform-origin: left top;
-      -webkit-border-radius: 4px;
-      -moz-border-radius: 4px;
-      border-radius: 4px;
     }
   }
 
@@ -149,18 +112,16 @@
       $textColor:  nth($multiInlineBtn,4);
       .#{$inlineBtnClass}.#{"" + $class} {
         color: $textColor;
-        &:after{
-          background-color: $bgColor;
-          border-color: $bdColor;
-        }
+        background-color: $bgColor;
+        border-color: $bdColor;
       }
     }
   }
 
-  $btnMulti: (primary #263238 transparent #ffffff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238);
+  $btnMulti: (primary #F13149 transparent #fff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238);
   @include btn-multi($btnMulti);
 
-  $inlineBtnMulti: (primary #263238 transparent #ffffff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238);
+  $inlineBtnMulti: (primary #F13149 transparent #fff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238);
   @include multiInlineBtn($inlineBtnMulti);
 
 </style>
