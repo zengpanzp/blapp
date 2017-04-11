@@ -192,24 +192,26 @@ router.beforeEach(({ meta, path }, from, next) => {
     })
   }
   jsBridgeReady(() => {
-    // 资源位埋点
-    window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
-      success: res => {
-        let userInfo = JSON.parse(res)
-        window.sa.register({
-          platform: userInfo.platform,
-          memberId: userInfo.memberId,
-          resourceId: userInfo.resourceId,
-          resourceType: userInfo.resourceType,
-          deployId: userInfo.deployId,
-          mmc: userInfo.mmc
-        })
-      },
-      fail: err => {
-        console.log(err)
-      },
-      progress: data => {}
-    })
+    if (isiBailianApp) {
+      // 资源位埋点
+      window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+        success: res => {
+          let userInfo = JSON.parse(res)
+          window.sa.register({
+            platform: userInfo.platform,
+            memberId: userInfo.memberId,
+            resourceId: userInfo.resourceId,
+            resourceType: userInfo.resourceType,
+            deployId: userInfo.deployId,
+            mmc: userInfo.mmc
+          })
+        },
+        fail: err => {
+          console.log(err)
+        },
+        progress: data => {}
+      })
+    }
     if (meta.title) {
       document.title = meta.title
       if (isiBailianApp) {

@@ -263,6 +263,7 @@ export default {
   },
   mounted() {
     this.buttonBottom = this.$refs.pupupButton.getBoundingClientRect().bottom;
+    this.$loading.close()
   }
 };
 </script>
