@@ -24,6 +24,14 @@ export const uiRouter = [
       title: '电子卡详情',
       class: 'ecardList'
     },
-    component: r => require.ensure([], () => r(require('../views/UI/ecardList.vue')), 'ecardList')
+    component: r => require.ensure([], () => r(require('../views/UI/eleCard/ecardList')), 'ecardList')
+  },
+  {
+    path: '/ui/eleCard',
+    meta: {
+      title: '电子卡',
+      class: 'eleCard'
+    },
+    component: r => require.ensure([], () => r(require('../views/UI/eleCard/eleCard')), 'eleCard')
   }
 ]

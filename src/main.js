@@ -173,11 +173,12 @@ const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是
 window.isiBailianApp = isiBailianApp
 
 const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge || !isiBailianApp) {
-    return calback()
-  } else {
-    document.addEventListener('BLBridgeReady', calback, false)
-  }
+  calback()
+  // if (window.CTJSBridge || !isiBailianApp) {
+  //   return calback()
+  // } else {
+  //   document.addEventListener('BLBridgeReady', calback, false)
+  // }
 }
 
 let linkCssObj = document.getElementById('classLink')
