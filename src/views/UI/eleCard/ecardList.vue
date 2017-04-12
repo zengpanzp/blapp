@@ -1,22 +1,5 @@
 <template>
   <div :class="{manage:!more}" >
-      <div class="content">
-        <header class="bar bar-header bar-light">
-          <div class="bar-left">
-            <a href="javascript:history.go(-1)" class="button back" >
-              <div class="iconfont arrow-back"></div>
-            </a>
-            <div class="all">
-              <div class="">全选</div>
-            </div>
-          </div>
-          <h1 class="title">电子卡详情</h1>
-          <div class="bar-right">
-            <a href="javascript:;" class="button manage-exit" v-show='more' @click='showmore'>批量管理</a>
-            <a href="javascript:;" class="button cancel" v-show='!more' @click='showmore'>取消</a>
-          </div>
-        </header>
-      </div>
       <div class="ecard-order margin-b">
         <div class="order-box">
           <div class="label-box"><span>订单编号：</span>BPE20150931052095</div>

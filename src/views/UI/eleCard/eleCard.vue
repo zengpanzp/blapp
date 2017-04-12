@@ -1,16 +1,6 @@
 <template>
   <div  >
       <div class="content">
-        <header class="bar bar-header bar-light">
-            <div class="bar-left">
-                <a href="javascript:history.go(-1)" class="button">
-                    <div class="iconfont arrow-back"></div>
-                </a>
-            </div>
-            <h1 class="title">
-              电子卡
-          </h1>
-        </header>
         <div class="card-rate">
             <div class="card-fonts">
                 <div class="fl-fonts">卡内余额</div>
