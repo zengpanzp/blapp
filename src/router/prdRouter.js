@@ -58,5 +58,14 @@ export const prdRouter = [
       class: 'giftcard-theme'
     },
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-theme')), 'giftCardTheme')
+  },
+  /* 陈鹏 电子卡详情 */
+  {
+    path: '/eCardList',
+    meta: {
+      title: '电子卡详情',
+      class: 'ecardList'
+    },
+    component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   }
 ]

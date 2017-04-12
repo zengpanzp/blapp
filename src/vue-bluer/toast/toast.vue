@@ -18,7 +18,7 @@
     z-index: 100;
     max-width: 80%;
     z-index: 10004;
-    border-radius: 10px;
+    border-radius: rem(10);
     background: rgba(0, 0, 0, 0.7);
     color: #fff;
     box-sizing: border-box;

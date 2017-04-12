@@ -20,7 +20,7 @@
                 </div>
                 <div class="suit-box">
                   <div>卡序号：001 654 998 437</div>
-                  <div>卡密码：••• ••• ••• ••• </div>
+                  <div>卡密码：··· ··· ··· ··· </div>
                 </div>
               </div>
               <div class="card-statu">
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import api from 'src/api'
 export default {
 
   name: 'ecardList',
@@ -60,6 +61,19 @@ export default {
   },
   created() {
     this.$loading.close()
+    api.payRed({
+      body: {
+        pageSize: "10",
+        currentPage: "1"
+      },
+      header: {
+        merOrderNo: "llTest20170117110500"
+      }
+    }).then(data => {
+      console.log(data)
+    }, err => {
+      console.log(err)
+    })
   },
   methods: {
     showmore() {

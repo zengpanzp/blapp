@@ -1,19 +1,20 @@
 <style lang="scss">
+@import "../sass/tobe/function";
 .loading-box {
   .msg {
-    line-height: 70px;
+    line-height: rem(70*2);
     text-align: center;
-    font-size: 14px;
+    font-size: rem(14*2);
   }
 }
 
 .loading-start {
-  margin: 20px auto 20px auto;
+  margin: rem(20*2) auto rem(20*2) auto;
   position: relative;
   animation: rotate-forever 1s infinite linear;
-  height: 30px;
-  width: 30px;
-  border: 4px solid #ccc;
+  height: rem(30*2);
+  width: rem(30*2);
+  border: rem(4*2) solid #ccc;
   border-right-color: transparent;
   border-radius: 50%;
   .msg {
