@@ -5,15 +5,19 @@
  */
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import urlConfig from 'src/urlConfig'
 
 Vue.use(VueResource)
 Vue.http.options.xhr = { withCredentials: true }
 Vue.http.options.emulateJSON = true
-
 Vue.http.interceptors.push((request, next) => {
-  request.headers.set('chnflg', 'h5')
-  next()
+  request.headers.set['chnflg'] = 'h5';
+  request.headers.set('Content-Type', 'application/json;charset=utf-8')
+  next((response) => {
+    return response
+  });
 })
+
 // 生产
 // const baseUrl = 'http://10.201.128.216:24080'
 
@@ -21,12 +25,18 @@ Vue.http.interceptors.push((request, next) => {
 // const baseUrl = '/api'
 
 // mock
-const baseUrl = '/mockapi'
-
+let baseUrl = urlConfig.SERVICE_BASE_URL;
+// baseUrl = '/mockapi'
+// Axios.defaults.withCredentials = true
+// Axios.defaults.baseURL = baseUrl;
+// Axios.defaults.headers.post['Content-Type'] = 'application/json';
+// Axios.defaults.headers.post['chnflg'] = 'h5';
 export default {
-  // test 验证
-  test: (params) => {
-    return Vue.http.post(baseUrl + '/getFlashSlides', params)
-  },
+  // 获得券列表
+  getCouponList: (params) => {
+    return (
+      Vue.http.post(baseUrl + (process.env.NODE_ENV !== 'production' ? '/getCouponDetail' : params.url), JSON.stringify(params.data))
+    )
+  }
 
 }

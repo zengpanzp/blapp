@@ -65,8 +65,7 @@ var mockDir = path.resolve(__dirname, '../mock');
     var mock;
     if (fs.statSync(filePath).isDirectory()) {
       setMock(filePath);
-    }
-    else {
+    } else {
       mock = require(filePath);
       app.use(mock.api, argv.proxy ? proxyMiddleware({target: 'http://' + argv.proxy}) : mock.response);
     }
