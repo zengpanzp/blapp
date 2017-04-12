@@ -34,7 +34,7 @@ export default {
   },
   watch: {
     'slides'(items) {
-      if (items.length !== 0) {
+      if (items.length > 1) {
         this.reInitPages()
       }
     }
