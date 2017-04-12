@@ -54,6 +54,7 @@
         .suit-box {
             @include flex(1);
             line-height: rem(48);
+            font-size:rem(24);
         }
     }
     .swiper-right {
