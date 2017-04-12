@@ -20,7 +20,7 @@
                 </div>
                 <div class="suit-box">
                   <div>卡序号：001 654 998 437</div>
-                  <div>卡密码：··· ··· ··· ··· </div>
+                  <div>卡密码：••• ••• ••• ••• </div>
                 </div>
               </div>
               <div class="card-statu">
