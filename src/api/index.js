@@ -23,7 +23,7 @@ Vue.http.interceptors.push((request, next) => {
 // 测试
 // const baseUrl = '/api'
 
-const baseUrl = process.env.NODE_ENV !== 'production' ? '/api' : urlConfig.SERVICE_BASE_URL
+const baseUrl = process.env.NODE_ENV !== 'production' ? '/mockapi' : urlConfig.SERVICE_BASE_URL
 
 export default {
   // 红卡卡密查询（HCT004）

@@ -7,7 +7,7 @@
         </div>
       </div>
       <div class="card-list">
-        <div class="swipe-contain margin-b">
+        <div class="swipe-contain margin-b" v-for="item in cardList">
           <div class="swiper-left">
             <div class="select-box">
               <div class="circle-select " v-show='!more'></div>
@@ -15,20 +15,21 @@
             <div class="card-box">
               <div class="card-num">
                 <div class="residue-box">
-                  <div>面值：¥500</div>
-                  <div>余额：<span class="red-font">¥300.00</span></div>
+                  <div>面值：¥{{ item.cardValue }}</div>
+                  <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
                 </div>
                 <div class="suit-box">
-                  <div>卡序号：001 654 998 437</div>
-                  <div>卡密码：··· ··· ··· ··· </div>
+                  <div>卡序号：{{ item.cardNo | limitLength(12) }}</div>
+                  <div>卡密码：••• ••• ••• ••• </div>
+                  <!-- <div>卡密码：{{ item.cardPin | limitLength(16) }}</div> -->
                 </div>
               </div>
               <div class="card-statu">
                 <div class="residue-box">
-                  <div class="ash-font">有效期：2017-10-10</div>
+                  <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
                 </div>
                 <div class="suit-box">
-                  <div><span  class="ash-font">状态：</span>正常  <span class="link-statu">未绑定</span></div>
+                  <div><span  class="ash-font">状态：</span>{{ item.cardStatus }}  <span class="link-statu">未绑定</span></div>
                 </div>
               </div>
             </div>
@@ -56,7 +57,8 @@ export default {
 
   data () {
     return {
-      more: true
+      more: true,
+      cardList: []
     };
   },
   created() {
@@ -70,7 +72,8 @@ export default {
         merOrderNo: "llTest20170117110500"
       }
     }).then(data => {
-      console.log(data)
+      let resData = JSON.parse(data.body.obj)
+      this.cardList = resData.body.cardList
     }, err => {
       console.log(err)
     })
