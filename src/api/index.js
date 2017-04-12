@@ -27,10 +27,6 @@ Vue.http.interceptors.push((request, next) => {
 // mock
 let baseUrl = urlConfig.SERVICE_BASE_URL;
 // baseUrl = '/mockapi'
-// Axios.defaults.withCredentials = true
-// Axios.defaults.baseURL = baseUrl;
-// Axios.defaults.headers.post['Content-Type'] = 'application/json';
-// Axios.defaults.headers.post['chnflg'] = 'h5';
 export default {
   // 获得券列表
   getCouponList: (params) => {
