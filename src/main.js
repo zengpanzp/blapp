@@ -26,6 +26,13 @@ Vue.use(VueLazyload, {
 
 Vue.use(bluer)
 
+Vue.filter('limitFixed', function (value, num) {
+  return parseFloat(value).toFixed(num)
+})
+Vue.filter('limitLength', function (value, num) {
+  return String(value).slice(0, num)
+})
+
 Vue.directive('scroll-fixed', function(el) {
   let u = navigator.userAgent;
   let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
