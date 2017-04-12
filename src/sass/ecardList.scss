@@ -146,9 +146,12 @@
         background: #F13149;
         color: #FFFFFF;
         font-size: rem(34);
-        width: 46.6%;
+        width: 100%;
         height: 100%;
         outline: none;
+    }
+    .show-pass.disabled-button{
+        background: #bbbbbb;
     }
     .link-card {
         border: none;
