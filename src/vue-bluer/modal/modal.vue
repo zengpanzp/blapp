@@ -21,7 +21,7 @@
   $modalButonBg:      #F8F8F8 !default;
   $borderColor:       #dddddd !default;
   $modalButtonHeight: rem(88) !default;
-  $border-radius:     3px !default;
+  $border-radius:     rem(6) !default;
   @keyframes fadeIn {
       0% {
           opacity: 0;
