@@ -36,7 +36,7 @@ Vue.directive('scroll-fixed', function(el) {
     let YY
     let swipeX
     let swipeY
-    let h = document.body.clientHeight || document.body.offsetHeight
+    let h = document.body.clientHeight || document.body.offsetHeight || window.innerHeight
     let bodyScroll = (e) => {
       e.preventDefault();
     }
@@ -173,12 +173,11 @@ const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是
 window.isiBailianApp = isiBailianApp
 
 const jsBridgeReady = (calback) => {
-  calback()
-  // if (window.CTJSBridge || !isiBailianApp) {
-  //   return calback()
-  // } else {
-  //   document.addEventListener('BLBridgeReady', calback, false)
-  // }
+  if (window.CTJSBridge || !isiBailianApp) {
+    return calback()
+  } else {
+    document.addEventListener('BLBridgeReady', calback, false)
+  }
 }
 
 let linkCssObj = document.getElementById('classLink')
@@ -213,16 +212,14 @@ router.beforeEach(({ meta, path }, from, next) => {
         progress: data => {}
       })
     }
-    if (meta.title) {
-      document.title = meta.title
-      if (isiBailianApp) {
-        if (window.isiOS) {
-          setTimeout(() => {
-            window.CTJSBridge._setNativeTitle(meta.title)
-          }, 400)
-        } else {
+    meta.title ? document.title = meta.title : null
+    if (meta.title && isiBailianApp) {
+      if (window.isiOS) {
+        setTimeout(() => {
           window.CTJSBridge._setNativeTitle(meta.title)
-        }
+        }, 400)
+      } else {
+        window.CTJSBridge._setNativeTitle(meta.title)
       }
     }
     if (meta.class) {
