@@ -79,7 +79,7 @@ export default {
   // 获得券列表
   getCouponList: (params) => {
     return (
-      Vue.http.post(baseUrl + params.url, JSON.stringify(params.data))
+      Vue.http.post(baseUrl + (process.env.NODE_ENV !== 'production' ? '/getCouponDetail' : params.url), JSON.stringify(params.data))
     )
   }
 
