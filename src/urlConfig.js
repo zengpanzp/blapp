@@ -3,7 +3,7 @@ let doMain = ''
 let serviceBaseUrl = ''; // 接口请求
 if (isDebug) {
   doMain = 'http://m.st.bl.com/h5-web';
-  serviceBaseUrl = 'http://10.201.128.110:6090'
+  serviceBaseUrl = 'http://10.201.128.110:7210'
 } else {
   doMain = 'http://m.bl.com/h5-web'
   serviceBaseUrl = 'http://10.201.32.152:7280'

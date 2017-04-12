@@ -33,9 +33,9 @@ export const prdRouter = [
     path: '/rankSortPage/:blackId',
     component: r => require.ensure([], () => r(require('../views/rank/sortView')), 'rankSortView')
   },
-  /* 陈鹏 领券中心 */
+  /* 陈鹏 领券中心 cid 为优惠券id */
   {
-    path: '/banknote/',
+    path: '/banknote/:cid',
     meta: {
       title: '领券中心'
     },
