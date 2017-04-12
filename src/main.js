@@ -212,8 +212,8 @@ router.beforeEach(({ meta, path }, from, next) => {
         progress: data => {}
       })
     }
-    if (meta.title) {
-      document.title = meta.title
+    meta.title ? document.title = meta.title : null
+    if (meta.title && isiBailianApp) {
       if (window.isiOS) {
         setTimeout(() => {
           window.CTJSBridge._setNativeTitle(meta.title)
