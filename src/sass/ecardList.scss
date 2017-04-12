@@ -1,26 +1,5 @@
 @charset "utf-8";
-@import "tobe/base";
-@import "tobe/components/bar/bar";
-.content {
-    position: relative;
-    padding-top: rem(88);
-}
-.bar { 
-    .button {
-        font-size: rem(28);
-        height: auto;
-    }
-    .arrow-back {
-        font-size: rem(38);
-    }
-    .cancel,
-    .all {
-        font-size: rem(28);
-        padding-left: rem(30);
-        color: #666666;
-        display: none;
-    }
-}
+@import "tobe/function";
 .ecard-order {
     position: relative;
     padding-top: rem(88);

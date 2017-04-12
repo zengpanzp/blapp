@@ -1,13 +1,5 @@
-@charset "utf-8"; //cp
-@import "tobe/base";
-@import "tobe/components/bar/bar";
-@import "tobe/components/toast/toast";
-.bar.bar-light {
-    background-color: #ffffff;
-    .arrow-back {
-        color: #888888;
-    }
-}
+@charset "utf-8";
+@import "tobe/function";
 
 .card-rate {
     background: #ffffff;
