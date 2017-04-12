@@ -29,6 +29,9 @@ export default {
   // 红卡卡密查询（HCT004）
   payRed: params => {
     return Vue.http.post(baseUrl + '/blpay/red.htm', params)
+  },
+  getCouponDetail: params => {
+    return Vue.http.post(baseUrl + '/coupon/queryCouponTemplateDetail.htm', params)
   }
 
 }

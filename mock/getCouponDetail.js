@@ -5,7 +5,7 @@
  */
 
 module.exports = {
-  api: '/mockapi/getCouponDetail',
+  api: '/mockapi/coupon/queryCouponTemplateDetail.htm',
   response: function (req, res) {
     res.json(
     	
