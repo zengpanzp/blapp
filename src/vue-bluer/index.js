@@ -5,7 +5,7 @@
  */
 import Bar from './bar'
 // import Loading from './loading'
-// import Button from './button'
+import Button from './button'
 // import Switch from './switch'
 // import Actionsheet from './actionsheet'
 import Navbar from './navbar'
@@ -20,6 +20,8 @@ import Toast from './toast'
 import Modal from './modal/modal'
 import ModalJs from './modal'
 import Slide from './slide'
+import Swipeout from './swipeout/swipeout'
+import SwipeoutItem from './swipeout/swipeout-item'
 
 import scrollRecord from './route-data/scroll-record'
 
@@ -27,7 +29,7 @@ const install = function(Vue) {
   if (install.installed) return;
   Vue.component('bl' + Bar.name, Bar);
   // Vue.component('bl' + Loading.name, Loading);
-  // Vue.component('bl' + Button.name, Button);
+  Vue.component('bl' + Button.name, Button);
   // Vue.component('bl' + Switch.name, Switch);
   // Vue.component('bl' + Actionsheet.name, Actionsheet);
   Vue.component('bl' + Navbar.name, Navbar);
@@ -40,6 +42,8 @@ const install = function(Vue) {
   // Vue.component('bl' + DatetimePicker.name, DatetimePicker);
   Vue.component('bl' + Modal.name, Modal);
   Vue.component('bl' + Slide.name, Slide);
+  Vue.component('bl' + Swipeout.name, Swipeout);
+  Vue.component('bl' + SwipeoutItem.name, SwipeoutItem);
 
   Vue.$toast = Vue.prototype.$toast = Toast;
   Vue.$modal = Vue.prototype.$modal = ModalJs;

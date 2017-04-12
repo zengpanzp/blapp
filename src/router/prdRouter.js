@@ -40,5 +40,23 @@ export const prdRouter = [
       title: '领券中心'
     },
     component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
+  },
+  /* 陈鹏 礼品卡首页 */
+  {
+    path: '/giftCardHome',
+    meta: {
+      title: '礼品卡',
+      class: 'giftcard-home'
+    },
+    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-home')), 'giftCardHome')
+  },
+  /* 陈鹏 礼品卡分类页 */
+  {
+    path: '/giftCardTheme',
+    meta: {
+      title: '主题',
+      class: 'giftcard-theme'
+    },
+    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-theme')), 'giftCardTheme')
   }
 ]

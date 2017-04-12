@@ -1,0 +1,186 @@
+@charset "utf-8";
+@import "tobe/function";
+.ecard-order {
+    position: relative;
+    padding-top: rem(88);
+    .order-box {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: rem(88);
+        padding: 0 rem(30);
+        background: #FFFFFF;
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(space-between);
+        font-size: rem(24);
+        z-index: 1000;
+        .label-box {
+            span {
+                color: #999999;
+            }
+        }
+    }
+}
+.card-list{
+    overflow: hidden;
+}
+.swipe-contain {
+    background: #FFFFFF;
+    position: relative;
+    width: auto;
+    .swiper-left {
+        padding: 0 rem(30);
+        @include display(flex);
+        @include align-items(center);
+        .card-box {
+            @include flex(1);
+        }
+        .card-num {
+            height: rem(152);
+            @include hair(bottom,#e7e7e7);
+            @include display(flex);
+            @include align-items(center);
+            width: 100%;
+        }
+        .card-statu {
+            height: rem(88);
+            @include display(flex);
+            @include align-items(center);
+            width: 100%;
+            font-size: rem(24);
+        }
+        .suit-box {
+            @include flex(1);
+            line-height: rem(48);
+            font-size:rem(24);
+        }
+    }
+    .swiper-right {
+        width: rem(260);
+        height: rem(240);
+        text-align: center;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        padding-left: rem(20);
+        overflow: hidden;
+        .show-pass {
+            height: 100%;
+            width: rem(120);
+            @include display(flex);
+            @include align-items(center);
+            @include justify-content(center);
+            float: left;
+            background: #F13149;
+            color: #FFFFFF;
+        }
+        .link-card {
+            height: 100%;
+            width: rem(120);
+            @include display(flex);
+            @include align-items(center);
+            @include justify-content(center);
+            float: left;
+            background: #CCCCCC;
+            color: #FFFFFF;
+        }
+    }
+}
+.select-box {
+    width: 0;
+    height: rem(200);
+    @include display(flex);
+    @include align-items(center);
+    overflow: hidden;
+    transition: width ease .2s;
+    .circle-select{
+        width: rem(30);
+        height: rem(30);
+        position: relative;
+        z-index: 10;
+        @include full-line(#bbbbbb,transparent,100%);
+    }
+    .checked{
+        background: url(i/gift-card/checked.png) no-repeat center center;
+        background-size: 100%;
+    }
+    .checked:after{
+        display: none;
+    }
+}
+.residue-box {
+    width: rem(285);
+    line-height: rem(48);
+    transition: width ease .2s;
+}
+.red-font {
+    color: #F13149;
+}
+.ash-font {
+    color: #999999;
+}
+.link-statu {
+    color: #0077D7;
+    margin-left: rem(14);
+}
+.margin-b {
+    margin-bottom: rem(20);
+}
+.manage-button {
+    position: relative;
+    padding-top: rem(100);
+    .button-box {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        right: 0;
+        height: rem(100);
+        @include display(flex);
+        @include align-items(center);
+        transition: bottom ease 0.2s;
+    }
+    .show-pass {
+        border: none;
+        background: #F13149;
+        color: #FFFFFF;
+        font-size: rem(34);
+        width: 46.6%;
+        height: 100%;
+        outline: none;
+    }
+    .link-card {
+        border: none;
+        background: #FFFFFF;
+        color: #F13149;
+        font-size: rem(34);
+        width: 53.3%;
+        height: 100%;
+        outline: none;
+    }
+}
+.manage {
+    .back {
+        display: none;
+    }
+    .manage-exit {
+        display: none;
+    }
+    .cancel,
+    .all {
+        display: block;
+    }
+    .manage-button {
+        .button-box {
+            bottom: 0;
+        }
+    }
+    .residue-box {
+        width: rem(255);
+        line-height: rem(48);
+    }
+    .select-box{
+        width: rem(90);
+    }
+}

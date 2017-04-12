@@ -1,0 +1,175 @@
+/* creat by chenpeng */
+@import "tobe/function";
+
+.card-title{
+  position: relative;
+  height: rem(2.75*32);
+  background-color: #ffffff;
+  .card-inner{
+    background-color: #ffffff;
+    position: absolute;
+    right: rem(2.75*32);
+    left: 0;
+    z-index: 99;
+    height: rem(88);
+    font-size: 0;
+  }
+  &.open {
+    .scrollspy{
+      display: table;
+    }
+    .card-inner{
+      right: 0;
+      .ovfs{
+        white-space: normal;
+        padding: rem(0.25*32) rem(0.625*32);
+        border-bottom: 1px solid #cccccc;
+      }
+      .ovfs-item{
+        width: 25%;
+        float: left;
+      }
+    }
+  }
+  .ovfs-item{
+    width: rem(4.375*32);
+    line-height: 1.6;
+    font-size: rem(0.875*32);
+    border-right: none;
+    text-align: center;
+    padding: rem(0.625*32) rem(0.4*32);
+    background-color: #ffffff;
+    float: inherit;
+    &.active .card-word{
+      border-bottom: 2px solid #E6133C;
+      color: #ea395b;
+    }
+  }
+  .right-down{
+    position: absolute;
+    z-index: 999;
+    right: 0;
+    top: 0;
+    width: rem(2.75*32);
+    height: rem(2.75*32);
+    color: #999999;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    background: inline-image("base64/giftcard/cicon-down.png") no-repeat center center;
+    background-size: 40%;
+    &:before{
+      content: '';
+      background-image: linear-gradient(to left,rgba(255,255,255,.8) 0,rgba(255,255,255,0.1) 55%);
+      position: absolute;
+      right: rem(88);
+      top: 0;
+      width: rem(60);
+      height: rem(88);
+    }
+    &.active{
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+  .card-word{
+    color: #666666;
+    border-bottom: 2px solid transparent;
+    @include ellipsis;
+  }
+
+}
+
+.card-wrap{
+  padding: 0 rem(0.625*32);
+  .cwrap-title{
+    font-size: rem(0.75*32);
+    color: #666666;
+    padding: rem(0.625*32) 0;
+  }
+}
+@include pic-list(cwrap-content, 2, #ffffff, rem(20));
+.cwrap-content ul li{
+  float: left;
+}
+.bgfs{
+  background-color: #F6F6F6;
+}
+.cwrap-name{
+  background-color: #ffffff;
+  padding: rem(0.25*32) rem(0.75*32);
+  font-size: rem(0.875*32);
+  color: #666666;
+  line-height: 1.5;
+  height: rem(3.125*32);
+  display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.cwrap-price{
+  background-color: #ffffff;
+  padding: 0 rem(0.75*32) rem(0.5*32) rem(0.75*32);
+  color: #333333;
+  font-size: rem(28);
+}
+.cwrap-price .small-rmb{
+  color: #333333;
+}
+
+.card-shop{
+  float: right;
+  width: rem(1*32);
+  height: rem(1*32);
+  background: #ffffff inline-image("base64/giftcard/buycar.png") no-repeat center center;
+  background-size: contain;
+  display: inline-block;
+  &.nogod{
+    background-image: inline-image("base64/giftcard/nocar.png");
+  }
+}
+.cwrap-img{
+  background-color: #ffffff;
+  > a{
+    display: block;
+    position: relative;
+    img{
+      padding: rem(0.5*32);
+    }
+  }
+  .cwrap-lowg{
+    position: absolute;
+    bottom: rem(3.125*32);
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    padding: rem(0.5625*32) rem(0.3125*32);
+    font-size: rem(0.875*32);
+    background-color: rgba(0,0,0, 0.8);
+  }
+}
+
+.mart{
+  padding-top: rem(1.0*32);
+}
+.scrollspy-text{
+  font-size: rem(0.875*32);
+  color: #666666;
+  background: inline-image("base64/giftcard/changefloor.png") no-repeat left center;
+  background-size: rem(0.9375*32) rem(0.9375*32);
+  padding-left: rem(1.25*32);
+  display: table-cell;
+  vertical-align: middle;
+}
+.scrollspy{
+  padding: 0 rem(0.9375*32);
+  background-color: #F8F8F8;
+  height: rem(2.8125*32);
+  display: table;
+  width: 100%;
+  display: none;
+}

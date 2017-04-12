@@ -56,7 +56,6 @@
       height: 100%;
       color: #000000;
 
-      min-width: 1.875rem;
       max-width: 80%;
       overflow: hidden;
 

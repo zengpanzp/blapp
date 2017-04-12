@@ -1,7 +1,8 @@
 <template>
   <div id="index">
     <h2>iBaiappVue项目 页面索引</h2>
-    <p><a href="/#/ui/guide">test</a></p>
+    <a href="/#/ui/ecardList">电子卡详情</a>
+    <a href="/#/ui/eleCard">电子卡</a>
   </div>
 </template>
 
@@ -15,7 +16,7 @@ export default {
 
     };
   },
-  created() {
+  activated() {
     this.$loading.close()
   }
 };
@@ -28,7 +29,10 @@ export default {
   h2 {
     margin: 0 0 rem(10)
   }
-  p {
+  a {
+    display: block;
+    background-color: #fff;
+    margin-bottom: 10px;
     padding: rem(15);
     font-size: rem(28)
   }
