@@ -1,7 +1,7 @@
 <template>
   <transition name="actionsheet-float">
     <div class="actionsheet" v-show="currentValue" @touchmove.prevent>
-      <ul class="actionsheet-list" :style="{ 'margin-bottom': cancelText ? '5px' : '0' }">
+      <ul class="actionsheet-list" :style="{ 'margin-bottom': cancelText ? '0.13rem' : '0' }">
         <li class="actionsheet-listitem" v-for="item in actions" @click="itemClick(item)">{{ item.name }}</li>
       </ul>
       <a class="actionsheet-button" @click="currentValue = false" v-if="cancelText">{{ cancelText }}</a>
@@ -35,9 +35,8 @@
     .actionsheet-listitem, .actionsheet-button {
       display: block;
       width: 100%;
-      height: 45px;
-      line-height: 45px;
-      font-size: 18px;
+      line-height: rem(90);
+      font-size: rem(36);
       color: #333;
       background-color: #fff;
       &:active {

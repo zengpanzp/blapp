@@ -19,7 +19,7 @@
     data() {
       return {
         show: process.env.NODE_ENV === 'development',
-        toggle: process.env.NODE_ENV === 'development'
+        toggle: process.env.NODE_ENV !== 'development'
       }
     },
     methods: {
