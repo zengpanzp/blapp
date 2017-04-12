@@ -2,10 +2,10 @@
   <div id="index">
     <h2>iBaiappVue项目 页面索引</h2>
     <h3 class="second-title">ui路由</h3>
-    <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in auiRouter">{{ item.meta.title }}</router-link>
+    <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in auiRouter">{{ index  }}: {{ item.meta.title }}</router-link>
 
     <h3 class="second-title">prd路由</h3>
-    <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in aprdRouter">{{ item.meta.title }}</router-link>
+    <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
   </div>
 </template>
 
