@@ -5,7 +5,6 @@
  */
 import Vue from 'vue'
 import VueResource from 'vue-resource'
-import urlConfig from 'src/urlConfig'
 
 Vue.use(VueResource)
 Vue.http.options.xhr = { withCredentials: true }
@@ -22,9 +21,8 @@ Vue.http.interceptors.push((request, next) => {
 
 // 测试
 // const baseUrl = '/api'
-// mock
-// baseUrl = '/mockapi'
-const baseUrl = process.env.NODE_ENV !== 'production' ? '/api' : urlConfig.SERVICE_BASE_URL
+
+const baseUrl = process.env.NODE_ENV !== 'production' ? '/mockapi' : '/h5_gateway'
 export default {
   // 红卡卡密查询（HCT004）
   payRed: params => {
