@@ -109,7 +109,7 @@
     height:rem(70);
     text-align:center;
     color:#fff;
-    background:#ec5743;
+    background:#ea7566;
     border-radius: rem(8);
     line-height:rem(70);
     font-size:rem(32);
@@ -137,6 +137,7 @@
     font-size:rem(28);
     color:#666;
   }
+
 }
 .discount-itemicon {
   position: absolute;
@@ -179,7 +180,7 @@
 
 .money-int {
   float: left;
-  font-size: rem(120);
+  font-size: rem(105);
   font-family: Impact, Arial, Helvetica, sans-serif;
   font-weight: bold;
   margin-right: 0;
@@ -426,3 +427,273 @@
   font-size: rem(60);
 }
 
+
+
+.discount-show {
+    height: rem(96);
+    width: rem(488);
+    position: fixed;
+    left: 50%;
+    margin-left: rem(-244);
+    top: 50%;
+    margin-top: rem(-48);
+    border-radius: rem(8);
+    background: rgba(0, 0, 0, 0.8);
+    text-align: center;
+    padding: rem(20);
+    font-size: rem(28);
+    color: #fff;
+    line-height: rem(56);
+}
+.coupon-button button:nth-child(2n) {
+    margin-right: 0;
+}
+.coupons {
+    text-align: center;
+    padding: rem(280) 0 rem(50);
+}
+.coupons img {
+    width: rem(292);
+    height: rem(120);
+    background-size: rem(292);
+}
+.coupons-font {
+    font-size: rem(28);
+    text-align: center;
+    color: #333333;
+    line-height: rem(32);
+}
+ul,
+ol,
+dl,
+dd,
+dt,
+li {
+    margin: 0;
+    list-style: none;
+    padding: 0;
+}
+.main-font-title {
+    height: rem(88);
+    border-bottom: 1px solid #eaeaea;
+    background: #fff;
+}
+.main-font-title ul li.on {
+    font-weight: bold;
+}
+.main-font-title ul li.on a:link,
+.main-font-title ul li.on a:visited {
+    color: #e6133c;
+}
+.main-font-title ul li {
+    float: left;
+    width: 33.33%;
+    font-size: rem(28);
+    line-height: rem(40);
+    text-align: center;
+    padding: rem(24) 0;
+    color: #333333;
+}
+.main-font-title ul li a:link,
+.main-font-title ul li a:visited {
+    display: block;
+    height: rem(40);
+    border-right: 1px solid #e7e7e7;
+    color: #333333;
+}
+.main-font-title ul li.on span {
+    display: inline-block;
+    border-bottom: 1px solid #e6133c;
+    padding: 0 rem(40) rem(20);
+}
+.main-font-title ul li:last-child a:link,
+.main-font-title ul li:last-child a:visited {
+    border: 0;
+}
+.coupons-bottom {
+    background: #fff;
+    height: 2.2rem;
+    line-height: 2.2rem;
+    text-align: center;
+    color: #666666;
+    font-size: 0.7rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.coupons-bottom i {
+    font-size: 1rem;
+    line-height: 2.2rem;
+}
+.stores-show {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0 rem(100);
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+}
+.stores-show-font {
+    position: relative;
+    background: #f8f8f8;
+    border-radius: rem(12);
+    overflow: hidden;
+    top: 30%;
+    margin-top: rem(-120);
+    max-height: rem(700);
+    overflow-y: auto;
+}
+.stores-show-font::-webkit-scrollbar{
+    width: 0;
+}
+.stores-show-font .chacha img {
+    position: absolute;
+    right: rem(20);
+    top: rem(26);
+    height: rem(40);
+    line-height: rem(92);
+    width: rem(40);
+    background-size: rem(40);
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    font-family: "iconfont";
+    font-size: rem(32);
+}
+.stores-show-title {
+    height: rem(96);
+    border-bottom: 1px dashed #e7e7e7;
+    text-align: center;
+    line-height: rem(96);
+    font-weight: bold;
+    color: #333333;
+    font-size: rem(36);
+}
+.stores-show-info {
+    padding: rem(20) rem(25);
+    line-height: rem(40);
+    color: #363636;
+    font-size: rem(24);
+    background: #eeeded;
+}
+.stores-show-font .yuan-1 {
+    height: rem(20);
+    width: rem(20);
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    top: rem(84);
+    left: rem(-12);
+    background: rgba(0, 0, 0, 0.7);
+}
+.stores-show-font .yuan-2 {
+    height: rem(20);
+    width: rem(20);
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    top: rem(84);
+    right: rem(-12);
+    background: rgba(0, 0, 0, 0.7);
+}
+.ewm {
+    text-align: center;
+    padding: rem(20) 0;
+}
+.ewm img {
+    width: rem(290);
+    height: rem(290);
+    background-size: rem(290);
+}
+.ewm2 {
+    text-align: center;
+    padding: rem(20) 0 rem(60);
+}
+.ewm2 img {
+    width: rem(430);
+    height: rem(360);
+    background-size: rem(430);
+}
+/* 加抵扣券 END */
+// 新增更新样式
+.gx {
+    font-size: rem(24);
+    text-align: center;
+    padding-bottom: rem(20);
+    a {
+        color: #999999;
+        i {
+            img {
+                width: rem(24);
+                height: rem(24);
+                background-size: rem(24);
+                display: inline-block;
+                margin-top: rem(-3);
+                margin-right: rem(6);
+            }
+        }
+    }
+}
+.ygx {
+    font-size: rem(24);
+    text-align: center;
+    padding-bottom: rem(20);
+    a {
+        color: #5b6f99;
+        i {
+            img {
+                width: rem(24);
+                height: rem(24);
+                background-size: rem(24);
+                display: inline-block;
+                margin-top: rem(-3);
+                margin-right: rem(6);
+            }
+        }
+    }
+}
+.suit-door {
+    padding: 0 rem(25);
+    background: #eeeded;
+}
+.suit-title {
+    padding: rem(20) 0;
+    font-size: rem(24);
+    font-weight: 700;
+    border-top: 1px solid #d4d4d4;
+}
+.discount-ul .door-list {
+    li {
+        height: rem(100);
+        border: 1px solid #dedede;
+        border-radius: rem(8);
+        background: #FFFFFF;
+        margin-bottom: rem(10);
+    }
+    .door-box {
+        border-left: rem(10) solid #71C1FF;
+        height: 100%;
+        padding: 0 rem(20);
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(space-between);
+    }
+    .door-address {
+        p {
+            line-height: rem(38);
+            font-size: rem(24);
+            max-width: rem(400);
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color:#333;
+        }
+    }
+    .arrow-back {
+        @include transform(rotate(180deg));
+        font-size: rem(24);
+        color: #999999;
+    }
+}

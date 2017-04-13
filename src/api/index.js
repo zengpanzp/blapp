@@ -30,8 +30,13 @@ export default {
   payRed: params => {
     return Vue.http.post(baseUrl + '/blpay/red.htm', params)
   },
+  // CMS优惠券里面的获取券详情
   getCouponDetail: params => {
     return Vue.http.post(baseUrl + '/coupon/queryCouponTemplateDetail.htm', params)
+  },
+  // CMS优惠券领取优惠券
+  getCoupon: params => {
+    return Vue.http.post(baseUrl + '/coupon/getCoupon.htm', params);
   }
 
 }

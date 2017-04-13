@@ -6,6 +6,7 @@
 
     <h3 class="second-title">prd路由</h3>
     <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
+    <router-link :to="{ path: '/banknote/11461' }">测试</router-link>
   </div>
 </template>
 
