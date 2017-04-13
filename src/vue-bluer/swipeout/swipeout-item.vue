@@ -52,8 +52,9 @@ export default {
       const list = this.$slots[`${direction}-menu`][0].children.filter(one => one.tag)
       let width = 0
       list.forEach(one => {
-        const propsData = one.componentOptions ? one.componentOptions.propsData : {}
-        width += propsData.width || 80
+        // console.log($(one.elm).width())
+        // const propsData = one.componentOptions ? one.componentOptions.propsData : {}
+        width += $(one.elm).width() || 80
       })
       this[`${direction}MenuWidth`] = width
     },

@@ -8,10 +8,9 @@
       </div>
       <div class="card-list">
         <bl-swipeout>
-          <bl-swipeout-item class="swipe-contain margin-b" v-for="item in cardList">
-            <div slot="right-menu" class="swiper-right">
-              <div class="show-pass">显示<br>密码</div>
-              <div class="link-card">绑定<br>电子卡</div>
+          <bl-swipeout-item class="swipe-contain margin-b" transition-mode="follow" v-for="(item, index) in cardList">
+            <div slot="right-menu">
+              <button class="vux-swipeout-button show-pass" @click="transPass(item.cardPin, index)">显示<br>密码</button>
             </div>
             <div slot="content" class="swiper-left">
               <div class="select-box">
@@ -25,8 +24,7 @@
                   </div>
                   <div class="suit-box">
                     <div>卡序号：{{ item.cardNo | limitLength(12) }}</div>
-                    <div>卡密码：••• ••• ••• ••• </div>
-                    <!-- <div>卡密码：{{ item.cardPin | limitLength(16) }}</div> -->
+                    <div>卡密码：{{ item.pheredText }}</div>
                   </div>
                 </div>
                 <div class="card-statu">
@@ -45,7 +43,6 @@
       <div class="manage-button">
         <div class="button-box">
           <button class="show-pass">显示密码</button>
-          <button class="link-card">绑定电子卡</button>
         </div>
       </div>
     </div>
@@ -75,7 +72,10 @@ export default {
     }).then(data => {
       this.$loading.close()
       let resData = JSON.parse(data.body.obj)
-      console.log(resData);
+      resData.body.cardList.forEach((item) => {
+        item.showPass = false
+        item.pheredText = '•••• •••• •••• ••••'
+      })
       this.cardList = resData.body.cardList
     }, err => {
       console.log(err)
@@ -88,6 +88,28 @@ export default {
     fnStatus(val) {
       let aStatus = ['', '在仓', '已领用', '已提卡', '已激活', '已作废', '已冻结', '已过期']
       return aStatus[parseInt(val)]
+    },
+    transPass(val, index) {
+      if (!this.cardList[index].showPass) {
+        window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {'cypherText': val}, {
+          success: res => {
+            let resData = JSON.parse(res)
+            let t = ''
+            let l = resData.decypheredText
+            for (let i = 0; i < l.length; i++) {
+              t += l[i] + ((i + 1) % 4 == 0 && i + 1 != l.length ? " " : "");
+            }
+            this.cardList[index].pheredText = t
+            this.cardList[index].showPass = true
+          },
+          fail: err => {
+            console.log(err)
+          },
+          progress: err => {
+            console.log(err)
+          }
+        })
+      }
     }
   }
 };
