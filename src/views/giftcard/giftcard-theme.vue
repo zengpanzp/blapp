@@ -102,9 +102,9 @@ export default {
     fnSelect(index) {
       console.log(index)
       if (index) {
-        this.load = false
-      } else {
         this.load = true
+      } else {
+        this.load = false
       }
     },
     con: function() {
