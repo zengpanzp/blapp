@@ -23,11 +23,13 @@ Vue.http.interceptors.push((request, next) => {
 // const baseUrl = '/api'
 
 const baseUrl = process.env.NODE_ENV !== 'production' ? '/mockapi' : '/h5_gateway'
-
 export default {
   // 红卡卡密查询（HCT004）
   payRed: params => {
     return Vue.http.post(baseUrl + '/blpay/red.htm', params)
+  },
+  getCouponDetail: params => {
+    return Vue.http.post(baseUrl + '/coupon/queryCouponTemplateDetail.htm', params)
   }
 
 }

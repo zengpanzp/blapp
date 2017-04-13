@@ -75,6 +75,7 @@ export default {
     }).then(data => {
       this.$loading.close()
       let resData = JSON.parse(data.body.obj)
+      console.log(resData);
       this.cardList = resData.body.cardList
     }, err => {
       console.log(err)

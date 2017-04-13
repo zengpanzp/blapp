@@ -120,7 +120,7 @@ export default {
   },
   mounted() {
     window.$$vue = this;
-    let memberID = '100000004236751';
+    let memberID = 100000004236751;
     this.$loading.close();
     var couponID = this.$route.params.cid;
     console.log(couponID);
@@ -141,18 +141,18 @@ export default {
       });
     }, 400);
     // 请求数据
-    service.getCouponList({url: '/h5_gateway/coupon/queryCouponTemplateDetail.htm',
-      data: {
-        channelId: 3,
-        couponTemplateId: couponID,
-        memberId: memberID
-      }
+    service.getCouponDetail({
+      channelId: 3 + '',
+      couponTemplateId: couponID,
+      memberId: memberID
     }).then(resove => {
+      // resove = JSON.parse(resove.body);
       console.log(resove.body);
-      debugger;
-      resove.body.enableTimeFrom = resove.body.enableTimeFrom.toString().substring(0, 10);
-      resove.body.enableTimeTo = resove.body.enableTimeTo.toString().substring(0, 10);
-      this.detail = resove.body;
+      let Obj = JSON.parse(resove.body.obj);
+      console.log(Obj);
+      // resove.body.enableTimeFrom = resove.body.enableTimeFrom.toString().substring(0, 10);
+      // resove.body.enableTimeTo = resove.body.enableTimeTo.toString().substring(0, 10);
+      // this.detail = resove.body;
     }, err => {
       console.log(err);
     })
