@@ -67,5 +67,14 @@ export const prdRouter = [
       class: 'ecardList'
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
+  },
+  /* 曾攀 自定义电子卡页面 */
+  {
+    path: '/eleCard',
+    meta: {
+      title: '电子卡',
+      class: 'eleCard'
+    },
+    component: r => require.ensure([], () => r(require('../views/E-card/eleCard')), 'eleCard')
   }
 ]

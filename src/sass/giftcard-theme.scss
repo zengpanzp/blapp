@@ -40,7 +40,7 @@
     padding: rem(0.625*32) rem(0.4*32);
     background-color: #ffffff;
     float: inherit;
-    &.active .card-word{
+    &.is-selected .card-word{
       border-bottom: 2px solid #E6133C;
       color: #ea395b;
     }
