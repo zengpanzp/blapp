@@ -1,5 +1,6 @@
+<style lang="scss" src="src/sass/_eleCard.scss" scoped></style>
 <template>
-  <div  >
+  <div>
       <div class="">
         <div class="card-rate">
             <div class="card-fonts">

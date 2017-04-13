@@ -75,6 +75,6 @@ export const prdRouter = [
       title: '电子卡',
       class: 'eleCard'
     },
-    component: r => require.ensure([], () => r(require('../views/E-card/eleCard')), 'dianzikaindex')
+    component: r => require.ensure([], () => r(require('../views/E-card/eleCard')), 'eleCard')
   }
 ]

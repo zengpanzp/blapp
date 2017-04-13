@@ -30,6 +30,9 @@ export default {
   },
   getCouponDetail: params => {
     return Vue.http.post(baseUrl + '/coupon/queryCouponTemplateDetail.htm', params)
+  },
+  getGoods: params => {
+    return Vue.http.post(baseUrl + '/goodSearch/keyWordSearchGood.htm', params)
   }
 
 }
