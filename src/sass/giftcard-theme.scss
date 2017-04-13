@@ -32,7 +32,7 @@
     }
   }
   .ovfs-item{
-    width: rem(4.375*32);
+    // width: rem(4.375*32);
     line-height: 1.6;
     font-size: rem(0.875*32);
     border-right: none;
@@ -172,4 +172,39 @@
   display: table;
   width: 100%;
   display: none;
+}
+.file-show {
+    position: fixed;
+    bottom: rem(16);
+    left: 0;
+    padding-left: rem(20);
+    .file-top {
+        a{
+          @include display(flex);
+          @include align-items(center);
+          @include justify-content(center);
+          i{
+            img{
+              width: rem(10);
+              height: rem(10);
+              text-align: center;
+              display: inline-block;
+              right: rem(19);
+              bottom: rem(24);
+              position: absolute;
+              font-style: normal;
+              z-index: 9;
+            }
+          }
+          img{
+            width: rem(88);
+            height: rem(88);
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            font-size: 0;
+          }
+
+        }
+    }
 }

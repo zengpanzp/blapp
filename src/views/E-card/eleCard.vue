@@ -2,12 +2,6 @@
 <template>
   <div>
       <div class="">
-        <div class="card-rate">
-            <div class="card-fonts">
-                <div class="fl-fonts">卡内余额</div>
-                <div class="ri-fonts f26">￥3500</div>
-            </div>
-        </div>
         <div class="card-custom">
             <div class="card-title">自定义面值卡</div>
             <div class="card-img">
