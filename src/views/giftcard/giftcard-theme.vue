@@ -15,7 +15,7 @@
     </div>
     <ele-card v-if="load"></ele-card>
     <div v-show="!load" class="card-wrap">
-      <h5 class="cwrap-title">感恩答谢</h5>
+      <h5 class="cwrap-title">定额卡</h5>
       <div class="cwrap-content">
         <ul>
           <li v-for="item in list">
@@ -64,6 +64,11 @@
         </ul>
       </div>
     </div>
+    <div class="file-show">
+    <div class="file-top">
+      <a href="#"><i><img src="./i/dot.png"></i><img src="./i/cart.png"></a>
+    </div>
+  </div>
   </div>
 </template>
 <script>
@@ -81,7 +86,7 @@ export default {
       load: false,
       list: [],
       tabsModel: 0,
-      aTab: ['全球购', '上线纪念']
+      aTab: ['定额卡', '自定义面额卡']
     };
   },
   created() {
@@ -100,7 +105,6 @@ export default {
   },
   methods: {
     fnSelect(index) {
-      console.log(index)
       if (index) {
         this.load = true
       } else {
@@ -111,7 +115,6 @@ export default {
       $('.right-down').on('click', function() {
         $(this).toggleClass('active');
         $('.card-title').toggleClass('open');
-        $('.ovfs').scrollLeft($('.ovfs .ovfs-item.active')[0].offsetLeft.offset().left);
       });
     }
   }
