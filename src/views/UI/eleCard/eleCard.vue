@@ -1,3 +1,4 @@
+<style lang="scss" src="src/sass/_eleCard.scss" scoped></style>
 <template>
   <div  >
       <div class="">
