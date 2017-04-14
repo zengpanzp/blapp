@@ -76,7 +76,7 @@ export default {
       api.payRed({
         body: {
           pageSize: "10",
-          currentPage: this.currentPage ++
+          currentPage: String(this.currentPage ++)
         },
         header: {
           merOrderNo: "llTest20170117110500"

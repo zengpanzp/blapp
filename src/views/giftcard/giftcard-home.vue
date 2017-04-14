@@ -247,13 +247,19 @@
     </div>
 
     <div class="arrive-bottom"><div>·</div>到底啦<div>·</div></div>
+    <bl-shop-card></bl-shop-card>
   </div>
 </template>
 
 <script>
+import api from 'src/api'
 export default {
 
   name: 'giftcard-home',
+
+  components: {
+    'blShopCard': () => System.import('src/components/iBailianApp/shopCard')
+  },
 
   data () {
     return {
@@ -261,7 +267,17 @@ export default {
     };
   },
   created() {
-    this.$loading.close()
+    // this.$loading.close()
+    api.queryAdDeploy({
+      otherresource: {
+        resourceId: "3040031,3040032,3040033"
+      }
+    }).then(data => {
+      let resData = JSON.parse(data.body.obj)
+      console.log(resData)
+    }, err => {
+      console.log(err)
+    })
   }
 };
 </script>

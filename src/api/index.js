@@ -35,5 +35,9 @@ export default {
   // CMS优惠券领取优惠券
   getCoupon: params => {
     return Vue.http.post(baseUrl + '/coupon/getCoupon.htm', params);
+  },
+  // 查询资源位
+  queryAdDeploy: params => {
+    return Vue.http.post(baseUrl + '/site/queryAdDeploy.htm', params);
   }
 }
