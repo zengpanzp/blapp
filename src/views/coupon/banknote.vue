@@ -5,7 +5,7 @@
     <bl-navbar class="header-class" v-model="headerTab">
       <bl-tab-item class="header-item" v-for="(item, index) in headerCon" :id="index">{{ item }}</bl-tab-item>
     </bl-navbar>
-    <bl-scroll class="coupon-scroll" :enableRefresh="true" :onRefresh="onRefresh" :enableInfinite="false">
+    <bl>
       <div class="discount-ul">
         <ul>
           <li class="no-2" v-model="detail" :id="detail.couponTemplateId">
@@ -27,7 +27,7 @@
               <div class="coupon-name">{{detail.couponName}}
                 <br>{{detail.couponDesc}}</div>
               <div class="coupon-button">
-                <button type="button" class="but-1">门店扫码</button>
+                <button @click="showRules" type="button" class="but-1">门店扫码</button>
                 <button type="button">适用商品</button>
               </div>
             </div>
@@ -38,7 +38,7 @@
             <em class="yuan-1"></em>
             <em class="yuan-2"></em>
             <i class="chacha" @click="closeRules"><img :src="imgs['close']"></i>
-            <div class="stores-show-title">供门店扫码使用</div>
+            <div class="stores-show-title">使用规则</div>
             <div class="ewm"><img :src="imgs['two']"></div>
             <div class="gx-ewm">
               <div class="qr-code gx">
@@ -111,7 +111,7 @@
           </div>
         </div>
       </div>
-    </bl-scroll>
+    </bl>
   </div>
 </template>
 
@@ -138,7 +138,6 @@ export default {
       tipShow: false, // 领取消息提示默认隐藏
       couponId: 0,    // 券id
       headerTab: 0,
-      headerCon: ['全部', '美食保健', '箱包配饰', '家居个护', '服装鞋靴', '服装鞋靴'],
       detail: {
         msg: '123'
       },  // 券详情

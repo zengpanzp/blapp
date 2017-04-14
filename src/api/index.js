@@ -17,7 +17,7 @@ Vue.http.interceptors.push((request, next) => {
   });
 })
 
-const baseUrl = process.env.NODE_ENV !== 'production' ? '/mockapi' : SERVICE_BASE_URL
+const baseUrl = process.env.NODE_ENV !== 'production' ? '/api' : SERVICE_BASE_URL
 
 export default {
   // 红卡卡密查询（HCT004）
@@ -36,5 +36,4 @@ export default {
   getCoupon: params => {
     return Vue.http.post(baseUrl + '/coupon/getCoupon.htm', params);
   }
-
 }
