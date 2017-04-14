@@ -228,7 +228,6 @@ export default {
     },
     // 开始领券
     getCouponEvent(event) {
-      debugger;
       api.getCoupon({
         "acquireChannel": 1,  // 领取渠道 1APP 2微信应用3 B2C网站5电子屏 6手推车APP
         "couponTemplateId": this.couponID,
