@@ -68,7 +68,7 @@
   </div>
 </template>
 <script>
-import urlConfig from 'src/urlConfig'
+import urlConfig from 'src/default-urlConfig'
 import ScrollTo from 'scroll'
 
 let fnScroll = (el) => {

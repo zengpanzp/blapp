@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import urlConfig from 'src/urlConfig'
+import urlConfig from 'src/default-urlConfig'
 export default {
   name: 'productsListView',
   data() {
