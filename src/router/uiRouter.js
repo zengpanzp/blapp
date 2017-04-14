@@ -29,8 +29,7 @@ export const uiRouter = [
   {
     path: '/ui/eleCard',
     meta: {
-      title: '电子卡',
-      class: 'eleCard'
+      title: '电子卡'
     },
     component: r => require.ensure([], () => r(require('../views/UI/eleCard/eleCard')), 'eleCard')
   }

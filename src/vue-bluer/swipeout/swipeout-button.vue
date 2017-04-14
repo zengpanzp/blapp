@@ -7,13 +7,13 @@
 
 <script>
 export default {
+  name: 'SwipeoutButton',
   props: {
     text: String,
     backgroundColor: String,
     type: String,
     width: {
-      type: Number,
-      default: 80
+      type: Number
     }
   },
   methods: {

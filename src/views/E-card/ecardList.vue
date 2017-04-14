@@ -10,11 +10,9 @@
           <bl-swipeout-item class="swipe-contain margin-b" :disabled="swipeoutDisabled" transition-mode="follow" v-for="(item, index) in cardList">
             <div slot="right-menu">
               <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</bl-swipeout-button>
-              <!-- <button class="vux-swipeout-button show-pass" @click="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</button> -->
             </div>
             <div slot="content" class="swiper-left">
               <label class="select-box">
-                <!-- <div class="circle-select"></div> -->
                 <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
               </label>
               <div class="card-box">
@@ -24,8 +22,8 @@
                     <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
                   </div>
                   <div class="suit-box">
-                    <div>卡序号：{{ item.cardNo | limitLength(12) }}</div>
-                    <div>卡密码：{{ item.pheredText }}</div>
+                    <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
+                    <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
                   </div>
                 </div>
                 <div class="card-statu">
@@ -44,7 +42,7 @@
     </bl-scroll>
     <div class="manage-button">
       <div class="button-box">
-        <button class="show-pass" @click="[cancleSelect(), showAllPass()]">显示密码</button>
+        <button class="show-pass" @click="[cancleSelect(), showAllPass()]" :disabled="selectData.length === 0">显示密码</button>
       </div>
     </div>
   </div>
@@ -94,6 +92,11 @@ export default {
         if (this.cardList.length < 10) {
           this.isLoading = false
         }
+        if (this.cardList.length < 1) {
+          window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
+        } else {
+          window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
+        }
         if (done) {
           done()
         }
@@ -106,17 +109,11 @@ export default {
       return aStatus[parseInt(val)]
     },
     transPass(val, index) {
-      console.log(this.$parent.$options)
       if (!this.cardList[index].showPass) {
-        window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {'cypherText': val}, {
+        window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val}, {
           success: res => {
             let resData = JSON.parse(res)
-            let t = ''
-            let l = resData.decypheredText
-            for (let i = 0; i < l.length; i++) {
-              t += l[i] + ((i + 1) % 4 == 0 && i + 1 != l.length ? " " : "");
-            }
-            this.cardList[index].pheredText = t
+            this.cardList[index].pheredText = resData.decypheredText
             this.cardList[index].showPass = true
           },
           fail: err => {
@@ -130,21 +127,29 @@ export default {
     },
     showAllPass() {
       this.selectData.forEach(item => {
-        this.transPass(this.cardList[item].cardPin, item)
+        if (this.cardList[item].cardStatus !== '06') {
+          this.transPass(this.cardList[item].cardPin, item)
+        }
       })
     },
     // 下面方法给native调用
     fullSelect() {
-      $('.select-box .circle-select').prop("checked", "checked")
+      this.selectData = []
+      for (let i = 0; i < this.cardList.length; i++) {
+        this.selectData.push(i)
+      }
     },
     cancleSelect() {
       this.more = true
       this.swipeoutDisabled = false
-      console.log(this.selectData)
+      window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
     },
     manageSelect() {
+      this.selectData.splice(0)
       this.swipeoutDisabled = true
       this.more = false
+
+      window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 2})
     },
   },
   mounted() {

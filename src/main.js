@@ -32,6 +32,14 @@ Vue.filter('limitFixed', function (value, num) {
 Vue.filter('limitLength', function (value, num) {
   return String(value).slice(0, num)
 })
+Vue.filter('stringSpace', function (value, num = 4) {
+  let t = ''
+  let l = String(value)
+  for (let i = 0; i < l.length; i++) {
+    t += l[i] + ((i + 1) % num == 0 && i + 1 != l.length ? " " : "");
+  }
+  return t
+})
 
 Vue.directive('scroll-fixed', function(el) {
   let u = navigator.userAgent;
