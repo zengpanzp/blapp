@@ -1,5 +1,14 @@
 <style lang="scss" src="src/sass/_icons.scss" scoped></style>
 <style lang="scss" src="src/sass/_banknote.scss" scoped></style>
+<style type="text/css" scoped>
+  .fade-enter-active, .fade-leave-active{
+    transition: opacity .5s ease
+  }
+  .fade-enter, .fade-leave-active{
+    opacity: 0
+  }
+
+</style>
 <template>
   <div class="banknote">
     <bl-navbar class="header-class" v-model="headerTab">
@@ -25,77 +34,53 @@
             <div class="discount-item-right">
               <div @click="showRules" class="discount-itemicon">使用规则</div>
               <div class="coupon-name">{{detail.couponName}}
-                <br>{{detail.couponDesc}}</div>
+                <!-- <br>{{detail.couponDesc}} --></div>
               <div class="coupon-button">
-                <button @click="showRules" type="button" class="but-1">门店扫码</button>
-                <button type="button">适用商品</button>
+                <button type="button" v-show="detail.couponChannelType==1||detail.couponChannelType==''" class="but-1">门店扫码</button>
+                <button v-show="detail.couponChannelType==0||detail.couponChannelType==''" type="button">适用商品</button>
               </div>
             </div>
           </li>
         </ul>
-        <div class="stores-show" v-show="shouldShow">
-          <div class="stores-show-font">
-            <em class="yuan-1"></em>
-            <em class="yuan-2"></em>
-            <i class="chacha" @click="closeRules"><img :src="imgs['close']"></i>
-            <div class="stores-show-title">使用规则</div>
-            <div class="ewm"><img :src="imgs['two']"></div>
-            <div class="gx-ewm">
-              <div class="qr-code gx">
-                <a href="#"><i><img :src="imgs['three']"></i>每2分钟自动更新，券码仅限门店现场使用</a>
-              </div>
-              <div class="qr-code ygx" style="display:none">
-                <a href="#"><i><img :src="imgs['four']"></i>已更新</a>
-              </div>
-            </div>
-            <div class="stores-show-info">使用规则：百联到家满60减15元抵用券，适用于百联到家频道（限购商品除外），请在移动端使用，每笔订单金额满60减15元，不兑现，不找零，不可转让，百联到家服务仅支持已开通百联到家的门店周边3公里范围。</div>
-            <div class="suit-door">
-                <div class="suit-title">
-                      适用门店
+        <transition name="fade">
+          <div class="stores-show" v-if="shouldShow">
+            <div class="stores-show-font">
+              <em class="yuan-1"></em>
+              <em class="yuan-2"></em>
+              <i class="chacha" @click="closeRules"><img :src="imgs['close']"></i>
+              <div class="stores-show-title">使用规则</div>
+              <!-- <div class="ewm"><img :src="detail.erCode"></div> -->
+              <div class="gx-ewm">
+                
+                <div class="qr-code ygx" style="display:none">
+                  <a href="#"><i><img :src="imgs['four']"></i>已更新</a>
                 </div>
-                <div class="door-list">
-                  <ul>
-                    <li>
-                      <div class="door-box">
-                        <div class="door-address">
-                            <p>世纪联华吴淞店</p>
-                            <p>水产路1234号</p>
-                        </div>
-                        <div class="iconfont arrow-back"></div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="door-box">
-                        <div class="door-address">
-                            <p>世纪联华吴淞店</p>
-                            <p>水产路1234号</p>
-                        </div>
-                        <div class="iconfont arrow-back"></div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="door-box">
-                        <div class="door-address">
-                            <p>世纪联华吴淞店</p>
-                            <p>水产路1234号</p>
-                        </div>
-                        <div class="iconfont arrow-back"></div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="door-box">
-                        <div class="door-address">
-                            <p>世纪联华吴淞店</p>
-                            <p>水产路1234号</p>
-                        </div>
-                        <div class="iconfont arrow-back"></div>
-                      </div>
-                    </li>
-                  </ul>
+              </div>
+              <div class="stores-show-info">使用规则：{{detail.couponDesc}}</div>
+              <div class="stores-show-info padding">
+                  <a href="javascript:;">有效时间: {{detail.enableTimeFrom}}-{{detail.enableTimeTo}}</a>
                 </div>
+              <div class="suit-door" v-show="detail.siteStore&&detail.siteStore.length>0">
+                  <div class="suit-title">
+                        适用门店
+                  </div>
+                  <div class="door-list">
+                    <ul>
+                      <li v-for="sitem in detail.siteStore" >
+                        <div class="door-box">
+                          <div class="door-address">
+                              <p>{{sitem.storeName}}</p>
+                              <p>{{sitem.add}}</p>
+                          </div>
+                          <div class="iconfont arrow-back"></div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
             </div>
           </div>
-        </div>
+        </transition>
         <div class="getCoupon" @click="getCouponEvent" transition="hideTrans" v-show="btnShow">
           立即领取
         </div>
@@ -170,6 +155,10 @@ export default {
       Obj.enableTimeTo = Obj.enableTimeTo.toString().substring(0, 10);
       let idays = $$vue.$options.dateDiff(Obj.enableTimeFrom, Obj.enableTimeTo);
       $$vue.detail = Obj;
+      // 线上使用这个字段
+      if (Obj.couponChannelType == 0) {
+        $$vue.imgs.two = Obj.couponCode;
+      }
       $$vue.idays = idays;
       console.log(idays);
     }, err => {
