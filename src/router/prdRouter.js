@@ -33,13 +33,21 @@ export const prdRouter = [
     path: '/rankSortPage/:blackId',
     component: r => require.ensure([], () => r(require('../views/rank/sortView')), 'rankSortView')
   },
-  /* 陈鹏 领券中心 cid 为优惠券id */
+  /* 神马 领券中心 cid 为优惠券id */
   {
     path: '/banknote/:cid',
     meta: {
       title: '领券中心'
     },
     component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
+  },
+  /* 神马 百联财礼 */
+  {
+    path: '/blgift',
+    meta: {
+      title: '百联财礼'
+    },
+    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift')
   },
   /* 陈鹏 礼品卡首页 */
   {
