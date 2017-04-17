@@ -1,5 +1,5 @@
 /* creat by chenpeng */
-@import "tobe/function";
+@import "src/sass/tobe/function";
 .head-search {
   padding: rem(12) rem(30);
   background: #FFFFFF;
@@ -14,7 +14,7 @@
       top: 0;
       left: 0;
       bottom: 0;
-      background: no-repeat inline-image("base64/giftcard/search.png") center center;
+      background: no-repeat url("../i/search.png") center center;
       background-size: rem(28);
     }
   }
@@ -40,15 +40,16 @@
     display: none;
   }
   .class-detail {
-    display: inline-block;
-    width: 20%;
+    // display: inline-block;
+    // width: 20%;
     text-align: center;
     line-height: 1;
+    @include flex(1);
     .class-img0 {
       display: inline-block;
       width: rem(66);
       height: rem(66);
-      background: no-repeat inline-image("base64/giftcard/menu0.png") center center;
+      background: no-repeat url("../i/menu0.png") center center;
       background-size: rem(60);
       margin-bottom: rem(4);
     }
@@ -56,7 +57,7 @@
       display: inline-block;
       width: rem(66);
       height: rem(66);
-      background: no-repeat inline-image("base64/giftcard/menu1.png") center center;
+      background: no-repeat url("../i/menu1.png") center center;
       background-size: rem(60);
       margin-bottom: rem(4);
     }
@@ -64,7 +65,7 @@
       display: inline-block;
       width: rem(66);
       height: rem(66);
-      background: no-repeat inline-image("base64/giftcard/menu2.png") center center;
+      background: no-repeat url("../i/menu2.png") center center;
       background-size: rem(60);
       margin-bottom: rem(4);
     }
@@ -72,7 +73,7 @@
       display: inline-block;
       width: rem(66);
       height: rem(66);
-      background: no-repeat inline-image("base64/giftcard/menu3.png") center center;
+      background: no-repeat url("../i/menu3.png") center center;
       background-size: rem(60);
       margin-bottom: rem(4);
     }
@@ -80,7 +81,7 @@
       display: inline-block;
       width: rem(66);
       height: rem(66);
-      background: no-repeat inline-image("base64/giftcard/menu4.png") center center;
+      background: no-repeat url("../i/menu4.png") center center;
       background-size: rem(60);
       margin-bottom: rem(4);
     }
@@ -185,13 +186,13 @@
     .pay-log {
       width: 50%;
       height: rem(38);
-      background: no-repeat inline-image("base64/giftcard/buycar.png") right center;
+      background: no-repeat url("../i/buycar.png") right center;
       background-size: rem(26);
     }
     .pay-log-no {
       width: 50%;
       height: rem(38);
-      background: no-repeat inline-image("base64/giftcard/nocar.png") right center;
+      background: no-repeat url("../i/nocar.png") right center;
       background-size: rem(26);
     }
   }
@@ -288,4 +289,17 @@
   margin: 0px;
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%);
+}
+.giftcard-swipe{
+  height: rem(280);
+  .swiper-slide:after {
+    padding-top: rem(280);
+  }
+  .swiper-pagination li {
+    width: rem(12);
+    height: rem(12);
+    &.on {
+      background-color: #ec4b6a;
+    }
+  }
 }

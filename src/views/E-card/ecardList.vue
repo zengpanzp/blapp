@@ -1,45 +1,48 @@
+<style lang="scss" src="./css/_ecardList.scss" scoped></style>
 <template>
-  <div :class="{manage:!more}" >
+  <div :class="{manage:!more}" v-infinite-scroll="fetchCardList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="order-box">
       <div class="label-box"><span>订单编号：</span>BPE20150931052095</div>
       <div class="label-box"><span>下单时间：</span>2017-03-01</div>
     </div>
-    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-fixed>
-      <div class="card-list">
-        <bl-swipeout>
-          <bl-swipeout-item class="swipe-contain margin-b" :disabled="swipeoutDisabled" transition-mode="follow" v-for="(item, index) in cardList">
-            <div slot="right-menu">
-              <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</bl-swipeout-button>
-            </div>
-            <div slot="content" class="swiper-left">
-              <label class="select-box">
-                <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
-              </label>
-              <div class="card-box">
-                <div class="card-num">
-                  <div class="residue-box">
-                    <div>面值：¥{{ item.cardValue }}</div>
-                    <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
-                  </div>
-                  <div class="suit-box">
-                    <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
-                    <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
-                  </div>
+    <div class="card-list">
+      <bl-swipeout>
+        <bl-swipeout-item class="swipe-contain margin-b" :disabled="swipeoutDisabled" transition-mode="follow" v-for="(item, index) in cardList">
+          <div slot="right-menu">
+            <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</bl-swipeout-button>
+          </div>
+          <div slot="content" class="swiper-left">
+            <label class="select-box">
+              <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
+            </label>
+            <div class="card-box">
+              <div class="card-num">
+                <div class="residue-box">
+                  <div>面值：¥{{ item.cardValue }}</div>
+                  <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
                 </div>
-                <div class="card-statu">
-                  <div class="residue-box">
-                    <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
-                  </div>
-                  <div class="suit-box">
-                    <div><span  class="ash-font">状态：</span>{{ fnStatus(item.cardStatus) }}</div>
-                  </div>
+                <div class="suit-box">
+                  <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
+                  <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
+                </div>
+              </div>
+              <div class="card-statu">
+                <div class="residue-box">
+                  <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
+                </div>
+                <div class="suit-box">
+                  <div><span  class="ash-font">状态：</span>{{ fnStatus(item.cardStatus) }}</div>
                 </div>
               </div>
             </div>
-          </bl-swipeout-item>
-        </bl-swipeout>
+          </div>
+        </bl-swipeout-item>
+      </bl-swipeout>
+      <div class="infinite-layer" v-if="!busy">
+        <div class="infinite-preloader"></div>
+        <div>加载中...</div>
       </div>
-    </bl-scroll>
+    </div>
     <div class="manage-button">
       <div class="button-box">
         <button class="show-pass" @click="[cancleSelect(), showAllPass()]" :disabled="selectData.length === 0">显示密码</button>
@@ -57,7 +60,7 @@ export default {
   data () {
     return {
       more: true,
-      isLoading: true,
+      busy: true,
       swipeoutDisabled: false,
 
       currentPage: 1,
@@ -66,13 +69,10 @@ export default {
     };
   },
   created() {
-    this.fetchCardList()
+    this.fetchCardList(0)
   },
   methods: {
-    onInfinite(done) {
-      this.fetchCardList(done)
-    },
-    fetchCardList(done) {
+    fetchCardList(once) {
       api.payRed({
         body: {
           pageSize: "10",
@@ -88,17 +88,20 @@ export default {
           item.showPass = false
           item.pheredText = '•••• •••• •••• ••••'
         })
-        this.cardList = this.cardList.concat(resData.body.cardList)
-        if (this.cardList.length < 10) {
-          this.isLoading = false
+        if (resData.body.cardList.length) {
+          this.cardList = this.cardList.concat(resData.body.cardList)
         }
+        if (resData.body.cardList && resData.body.cardList.length >= 10) {
+          this.busy = false
+        } else {
+          this.busy = true
+          once !== 0 && this.$toast('没有了~')
+        }
+        this.$loading.close()
         if (this.cardList.length < 1) {
           window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
         } else {
           window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
-        }
-        if (done) {
-          done()
         }
       }, err => {
         console.log(err)

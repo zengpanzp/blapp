@@ -45,36 +45,34 @@ export const prdRouter = [
   {
     path: '/giftCardHome',
     meta: {
-      title: '礼品卡',
-      class: 'giftcard-home'
+      title: '礼品卡'
     },
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-home')), 'giftCardHome')
   },
   /* 陈鹏 礼品卡分类页 */
   {
-    path: '/giftCardTheme',
-    meta: {
-      title: '主题',
-      class: 'giftcard-theme'
-    },
+    path: '/giftCardTheme/:jumpId/:themeName',
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-theme')), 'giftCardTheme')
   },
-  /* 陈鹏 电子卡详情 */
+  /* 陈鹏 礼品卡查看更多 */
   {
-    path: '/eCardList',
-    meta: {
-      title: '电子卡详情',
-      class: 'ecardList'
-    },
-    component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
+    path: '/giftCardMore/:jumpId/:themeName',
+    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-more')), 'giftCardMore')
   },
   /* 曾攀 自定义电子卡页面 */
   {
     path: '/eleCard',
     meta: {
-      title: '电子卡',
-      class: 'eleCard'
+      title: '电子卡'
     },
-    component: r => require.ensure([], () => r(require('../views/E-card/eleCard')), 'eleCard')
+    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-eleCard')), 'eleCard')
+  },
+  /* 陈鹏 电子卡详情 */
+  {
+    path: '/eCardList',
+    meta: {
+      title: '电子卡详情'
+    },
+    component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   }
 ]

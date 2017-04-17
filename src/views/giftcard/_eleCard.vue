@@ -1,11 +1,11 @@
-<style lang="scss" src="src/sass/_eleCard.scss" scoped></style>
+<style lang="scss" src="./css/_eleCard.scss" scoped></style>
 <template>
   <div>
       <div class="">
         <div class="card-custom">
             <div class="card-title">自定义面值卡</div>
             <div class="card-img">
-                <div class="card-top-img"><img src="./i/cardImg.png" alt=""></div>
+                <div class="card-top-img"><img src="./i/cardImg.jpg" alt=""></div>
                 <div class="card-bottom-fonts">百联卡－自定义面值</div>
             </div>
         </div>
@@ -34,11 +34,6 @@
         </div>
         <div class="card-button">
             <button type="button">加入购物车</button>
-        </div>
-    </div>
-    <div class="file-show">
-        <div class="file-top">
-            <a href="#"><i><img src="./i/dot.png"></i><img src="./i/cart.png"></a>
         </div>
     </div>
   </div>

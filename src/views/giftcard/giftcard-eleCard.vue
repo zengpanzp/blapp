@@ -17,7 +17,7 @@
     <ele-card v-if="load"></ele-card>
     <div v-show="!load" class="card-wrap">
       <h5 class="cwrap-title">定额卡</h5>
-      <bl-card-list :jumpId="$route.params.jumpId"></bl-card-list>
+      <bl-card-list :jumpId="161228"></bl-card-list>
     </div>
     <bl-shop-card></bl-shop-card>
   </div>
@@ -43,8 +43,6 @@ export default {
     };
   },
   created() {
-    document.title = this.$route.params.themeName
-    window.CTJSBridge && window.CTJSBridge._setNativeTitle(this.$route.params.themeName)
   },
   methods: {
     fnSelect(index) {

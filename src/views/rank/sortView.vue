@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/_rankSortMain.scss" scoped></style>
+<style lang="scss" src="./css/_rankSortMain.scss" scoped></style>
 <template>
   <div class="main">
     <div class="floor-head" v-if="!$route.query.more" v-scroll-top.window>
@@ -7,7 +7,7 @@
       </bl-navbar>
     </div>
     <div class="rank-space">
-      <img :src="require('src/assets/rank/rank-head.png')">
+      <img :src="require('./i/rank-head.png')">
     </div>
     <bl-list-view :data="aPrd"></bl-list-view>
     <div class="rank-space" v-if="showToggle">已经看完啦～</div>

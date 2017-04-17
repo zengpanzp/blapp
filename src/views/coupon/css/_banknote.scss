@@ -1,5 +1,5 @@
 /* creat by chenpeng */
-@import "tobe/function";
+@import "src/sass/tobe/function";
 
 .coupon-scroll{
   background-color: #eee;
@@ -90,7 +90,7 @@
         color: #f77362;
         transform: rotate(-45deg);
       }
-      background: url('../assets/coupon/diyong-statusbg.png') no-repeat;
+      background: url('../i/diyong-statusbg.png') no-repeat;
       background-size: contain;
     }
     &.received{
@@ -98,7 +98,7 @@
         color: #48a5ed;
         transform: rotate(-45deg);
       }
-      background: url('../assets/coupon/parking-statusbg.png') no-repeat;
+      background: url('../i/parking-statusbg.png') no-repeat;
       background-size: contain;
     }
   }
@@ -233,7 +233,7 @@
 /* 现金券 */
 
 .discount-ul ul li.no-1 {
-  background: #ffbe71 url("../assets/coupon/discount-bg-1.png") repeat-y 45% center;
+  background: #ffbe71 url("../i/discount-bg-1.png") repeat-y 45% center;
 }
 
 .no-1 button {
@@ -259,7 +259,7 @@
 /* 2 */
 
 .discount-ul ul li.no-2 {
-  background: #fba89d url("../assets/coupon/discount-bg-2.png") repeat-y 45% center;
+  background: #fba89d url("../i/discount-bg-2.png") repeat-y 45% center;
 }
 
 .no-2 button {
@@ -286,7 +286,7 @@
 /**/
 
 .discount-ul ul li.no-3 {
-  background: #71c1ff url("../assets/coupon/discount-bg-3.png") repeat-y 45% center;
+  background: #71c1ff url("../i/discount-bg-3.png") repeat-y 45% center;
 }
 
 .no-3 button {
@@ -337,7 +337,7 @@
 /**/
 
 .discount-ul ul li.no-4 {
-  background: #9f92ff url("../assets/coupon/discount-bg-4.png") repeat-y 45% center;
+  background: #9f92ff url("../i/discount-bg-4.png") repeat-y 45% center;
 }
 
 .no-4 button {
@@ -384,7 +384,7 @@
 /**/
 
 .discount-ul ul li.no-5 {
-  background: #b3d986 url("../assets/coupon/discount-bg-5.png") repeat-y 45% center;
+  background: #b3d986 url("../i/discount-bg-5.png") repeat-y 45% center;
 }
 
 .no-5 button {

@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/_rankMain.scss"></style>
+<style lang="scss" src="./css/_rankMain.scss"></style>
 <template>
   <div class="new" v-scroll-top.window>
     <div class="rank-main">
@@ -9,12 +9,12 @@
         </bl-navbar>
       </div>
       <div class="rank-space">
-        <img :src="require('src/assets/rank/rank-head.png')">
+        <img :src="require('./i/rank-head.png')">
       </div>
       <bl-list-view :data="aPrd"></bl-list-view>
       <router-link tag="div" :to="{ path: '/rankSortPage/' + rankId, query: { more: 1 } }" class="rank-space">显示全部 ></router-link>
       <div class="rank-space" id="srotView">
-        <img :src="require('src/assets/rank/rank-sort.png')">
+        <img :src="require('./i/rank-sort.png')">
       </div>
       <div class="rank-sort">
         <ul>

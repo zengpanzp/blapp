@@ -32,7 +32,7 @@ export default {
     bottom: rem(16);
     width: rem(88);
     height: rem(88);
-    border-radius: rem(4);
+    border-radius: rem(6);
     background-color: #fff;
     border: 1px solid #ccc;
     z-index: 100;

@@ -1,5 +1,5 @@
-<style lang="scss" src="src/sass/_icons.scss" scoped></style>
-<style lang="scss" src="src/sass/_banknote.scss" scoped></style>
+<!-- <style lang="scss" src="src/sass/_icons.scss" scoped></style> -->
+<style lang="scss" src="./css/_banknote.scss" scoped></style>
 <style type="text/css" scoped>
   .fade-enter-active, .fade-leave-active{
     transition: opacity .5s ease
@@ -14,98 +14,96 @@
     <bl-navbar class="header-class" v-model="headerTab">
       <bl-tab-item class="header-item" v-for="(item, index) in headerCon" :id="index">{{ item }}</bl-tab-item>
     </bl-navbar>
-    <bl>
-      <div class="discount-ul">
-        <ul>
-          <li class="no-2" v-model="detail" :id="detail.couponTemplateId">
-            <i class="i-top"></i>
-            <i class="i-bottom"></i>
-            <div class="coupon-status empty" attr-status="已领取" v-show="hasGet"></div>
-            <div class="discount-item-left">
-              <div class="discount-item-left-info">
-                <div class="money-int">{{detail.offsetAmount}}</div>
-                <div class="money-info">
-                  <div class="money-info-element">元</div>
-                  <div class="money-info-coupon">{{detail.couponType}}</div>
-                </div>
-              </div>
-              <div class="coupon-time">领券后{{idays}}天内有效</div>
-            </div>
-            <div class="discount-item-right">
-              <div @click="showRules" class="discount-itemicon">使用规则</div>
-              <div class="coupon-name">{{detail.couponName}}
-                <!-- <br>{{detail.couponDesc}} --></div>
-              <div class="coupon-button">
-                <button type="button" v-show="detail.couponChannelType==1||detail.couponChannelType==''" class="but-1">门店扫码</button>
-                <button v-show="detail.couponChannelType==0||detail.couponChannelType==''" type="button">适用商品</button>
+    <div class="discount-ul">
+      <ul>
+        <li class="no-2" v-model="detail" :id="detail.couponTemplateId">
+          <i class="i-top"></i>
+          <i class="i-bottom"></i>
+          <div class="coupon-status empty" attr-status="已领取" v-show="hasGet"></div>
+          <div class="discount-item-left">
+            <div class="discount-item-left-info">
+              <div class="money-int">{{detail.offsetAmount}}</div>
+              <div class="money-info">
+                <div class="money-info-element">元</div>
+                <div class="money-info-coupon">{{detail.couponType}}</div>
               </div>
             </div>
-          </li>
-        </ul>
-        <transition name="fade">
-          <div class="stores-show" v-if="shouldShow">
-            <div class="stores-show-font">
-              <em class="yuan-1"></em>
-              <em class="yuan-2"></em>
-              <i class="chacha" @click="closeRules"><img :src="imgs['close']"></i>
-              <div class="stores-show-title">使用规则</div>
-              <!-- <div class="ewm"><img :src="detail.erCode"></div> -->
-              <div class="gx-ewm">
-                
-                <div class="qr-code ygx" style="display:none">
-                  <a href="#"><i><img :src="imgs['four']"></i>已更新</a>
-                </div>
+            <div class="coupon-time">领券后{{idays}}天内有效</div>
+          </div>
+          <div class="discount-item-right">
+            <div @click="showRules" class="discount-itemicon">使用规则</div>
+            <div class="coupon-name">{{detail.couponName}}
+              <!-- <br>{{detail.couponDesc}} --></div>
+            <div class="coupon-button">
+              <button type="button" v-show="detail.couponChannelType==1||detail.couponChannelType==''" class="but-1">门店扫码</button>
+              <button v-show="detail.couponChannelType==0||detail.couponChannelType==''" type="button">适用商品</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <transition name="fade">
+        <div class="stores-show" v-if="shouldShow">
+          <div class="stores-show-font">
+            <em class="yuan-1"></em>
+            <em class="yuan-2"></em>
+            <i class="chacha" @click="closeRules"><img :src="imgs['close']"></i>
+            <div class="stores-show-title">使用规则</div>
+            <!-- <div class="ewm"><img :src="detail.erCode"></div> -->
+            <div class="gx-ewm">
+
+              <div class="qr-code ygx" style="display:none">
+                <a href="#"><i><img :src="imgs['four']"></i>已更新</a>
               </div>
-              <div class="stores-show-info">使用规则：{{detail.couponDesc}}</div>
-              <div class="stores-show-info padding">
-                  <a href="javascript:;">有效时间: {{detail.enableTimeFrom}}-{{detail.enableTimeTo}}</a>
+            </div>
+            <div class="stores-show-info">使用规则：{{detail.couponDesc}}</div>
+            <div class="stores-show-info padding">
+                <a href="javascript:;">有效时间: {{detail.enableTimeFrom}}-{{detail.enableTimeTo}}</a>
+              </div>
+            <div class="suit-door" v-show="detail.siteStore&&detail.siteStore.length>0">
+                <div class="suit-title">
+                      适用门店
                 </div>
-              <div class="suit-door" v-show="detail.siteStore&&detail.siteStore.length>0">
-                  <div class="suit-title">
-                        适用门店
-                  </div>
-                  <div class="door-list">
-                    <ul>
-                      <li v-for="sitem in detail.siteStore" >
-                        <div class="door-box">
-                          <div class="door-address">
-                              <p>{{sitem.storeName}}</p>
-                              <p>{{sitem.add}}</p>
-                          </div>
-                          <div class="iconfont arrow-back"></div>
+                <div class="door-list">
+                  <ul>
+                    <li v-for="sitem in detail.siteStore" >
+                      <div class="door-box">
+                        <div class="door-address">
+                            <p>{{sitem.storeName}}</p>
+                            <p>{{sitem.add}}</p>
                         </div>
-                      </li>
-                    </ul>
-                  </div>
-              </div>
+                        <div class="iconfont arrow-back"></div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
             </div>
           </div>
-        </transition>
-        <div class="getCoupon" @click="getCouponEvent" transition="hideTrans" v-show="btnShow">
-          立即领取
         </div>
-        <div class="getTips" v-show="tipShow" transition="showTrans">
-          <div>
-            恭喜您，领券成功
-          </div>
-          <div>
-            优惠券正在飞来的路上，请耐心等候~
-          </div>
-          <div>
-            <label v-model="timeleft">{{timeleft}}</label>S后返回活动页面
-          </div>
+      </transition>
+      <div class="getCoupon" @click="getCouponEvent" transition="hideTrans" v-show="btnShow">
+        立即领取
+      </div>
+      <div class="getTips" v-show="tipShow" transition="showTrans">
+        <div>
+          恭喜您，领券成功
+        </div>
+        <div>
+          优惠券正在飞来的路上，请耐心等候~
+        </div>
+        <div>
+          <label v-model="timeleft">{{timeleft}}</label>S后返回活动页面
         </div>
       </div>
-    </bl>
+    </div>
   </div>
 </template>
 
 <script>
 import api from 'src/api/index'
-import close from 'src/assets/coupon/h5chacha.png'
-import two from 'src/assets/coupon/h5ewm.png'
-import three from 'src/assets/coupon/gx2.png'
-import four from 'src/assets/coupon/ygx2.png'
+import close from './i/h5chacha.png'
+import two from './i/h5ewm.png'
+import three from './i/gx2.png'
+import four from './i/ygx2.png'
 export default {
 
   name: 'banknote',

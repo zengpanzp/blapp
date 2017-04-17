@@ -1,9 +1,9 @@
-<style lang="scss" src="src/sass/_flashSales.scss" scoped></style>
+<style lang="scss" src="./css/_flashSales.scss" scoped></style>
 <template>
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record v-scroll-fixed>
       <!-- 轮播图 -->
-      <bl-slide class="flash-swipe" v-show="allSlides && allSlides.length" :slides="allSlides" :autoPlay="true"></bl-slide>
+      <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
       <!-- 分类 -->
       <div class="navigation">
