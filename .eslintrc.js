@@ -39,6 +39,8 @@ module.exports = {
     // 定义字符串穿插正则
     'no-useless-escape': 0,
     // ===
-    'eqeqeq': 0
+    'eqeqeq': 0,
+    // 'indent': 0,
+    // 'no-tabs': 0
   }
 }

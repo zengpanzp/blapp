@@ -359,7 +359,7 @@ export default {
   methods: {
     onRefresh(done) {
       setTimeout(() => {
-        done()
+		done()
       }, 2000)
     }
   }
