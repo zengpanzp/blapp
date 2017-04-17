@@ -49,14 +49,21 @@ export default {
       if (items.length == 0) {
         this.show = false
       }
+      console.log(items.length);
       if (items.length > 1) {
         this.reInitPages()
       }
     }
   },
+  created() {
+    if (this.slides.length > 0) {
+      this.reInitPages();
+    }
+  },
   methods: {
     /* init */
     reInitPages() {
+      console.log(1);
       this.$nextTick(() => {
         TouchSlide({
           slideCell: this.$refs.slide,
@@ -154,5 +161,6 @@ export default {
       }
     }
   }
+
 
 </style>
