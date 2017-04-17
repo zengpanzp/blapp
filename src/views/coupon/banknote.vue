@@ -133,47 +133,7 @@ export default {
       idays: 0   // 券的有效天数
     };
   },
-  // 获得优惠券
-  getCouponDetail($$vue) {
-    // 请求数据
-    api.getCouponDetail({
-      channelId: "3",
-      couponTemplateId: $$vue.couponID,
-      memberId: $$vue.memberID
-    }).then(resove => {
-      // resove = JSON.parse(resove.body);
-      console.log(resove.body);
-      let Obj = JSON.parse(resove.body.obj);
-      // 已经被领取
-      if (Obj.canAcquireCoupon !== "Y") {
-        $$vue.btnShow = false;
-        $$vue.tipShow = false;
-        $$vue.hasGet = true;
-      }
-      console.log(Obj);
-      Obj.enableTimeFrom = Obj.enableTimeFrom.toString().substring(0, 10);
-      Obj.enableTimeTo = Obj.enableTimeTo.toString().substring(0, 10);
-      let idays = $$vue.$options.dateDiff(Obj.enableTimeFrom, Obj.enableTimeTo);
-      $$vue.detail = Obj;
-      // 线上使用这个字段
-      if (Obj.couponChannelType == 0) {
-        $$vue.imgs.two = Obj.couponCode;
-      }
-      $$vue.idays = idays;
-      console.log(idays);
-    }, err => {
-      console.log(err);
-    })
-  },
-  dateDiff(sDate1, sDate2) {    // sDate1和sDate2是2006-12-18格式
-    let oDate1, oDate2, iDays;
-    oDate1 = new Date(sDate1.replace(/-/g, '/'));    // 转换为12-18-2006格式
-    oDate2 = new Date(sDate2.replace(/-/g, '/'));
-    iDays = parseInt(Math.abs(oDate2 - oDate1) / 1000 / 60 / 60 / 24)    // 把相差的毫秒数转换为天数
-    return iDays;
-  },
   mounted() {
-    let $$vue = this;
     this.$loading.close();
     // 券id
     this.couponID = this.$route.params.cid;
@@ -183,27 +143,64 @@ export default {
         message: '未获取到优惠券ID信息'
       })
     }
-    setTimeout(function() {
-      // 获得登录的用户id
-      window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
-        success: res => {
-          // alert(res);
-          let userInfo = JSON.parse(res);
-          console.log(userInfo)
-          // memberId
-          $$vue.memberID = userInfo.member_id;
-          // userToken
-          $$vue.userToken = userInfo.member_token;
-          $$vue.$options.getCouponDetail($$vue);
-        },
-        fail: res => {
-        }
-      });
-    }, 400);
+    // 获得登录的用户id
+    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
+      success: res => {
+        // alert(res);
+        let userInfo = JSON.parse(res);
+        console.log(userInfo)
+        // memberId
+        this.memberID = userInfo.member_id;
+        // userToken
+        this.userToken = userInfo.member_token;
+        this.getCouponDetail();
+      },
+      fail: res => {
+      }
+    });
   },
   created() {
   },
   methods: {
+    dateDiff(sDate1, sDate2) {    // sDate1和sDate2是2006-12-18格式
+      let oDate1, oDate2, iDays;
+      oDate1 = new Date(sDate1.replace(/-/g, '/'));    // 转换为12-18-2006格式
+      oDate2 = new Date(sDate2.replace(/-/g, '/'));
+      iDays = parseInt(Math.abs(oDate2 - oDate1) / 1000 / 60 / 60 / 24)    // 把相差的毫秒数转换为天数
+      return iDays;
+    },
+    // 获得优惠券
+    getCouponDetail() {
+      // 请求数据
+      api.getCouponDetail({
+        channelId: "3",
+        couponTemplateId: this.couponID,
+        memberId: this.memberID
+      }).then(resove => {
+        // resove = JSON.parse(resove.body);
+        console.log(resove.body);
+        let Obj = JSON.parse(resove.body.obj);
+        // 已经被领取
+        if (Obj.canAcquireCoupon !== "Y") {
+          this.btnShow = false;
+          this.tipShow = false;
+          this.hasGet = true;
+        }
+        console.log(Obj);
+        Obj.enableTimeFrom = Obj.enableTimeFrom.toString().substring(0, 10);
+        Obj.enableTimeTo = Obj.enableTimeTo.toString().substring(0, 10);
+        let idays = this.dateDiff(Obj.enableTimeFrom, Obj.enableTimeTo);
+        this.detail = Obj;
+        // 线上使用这个字段
+        if (Obj.couponChannelType == 0) {
+          this.imgs.two = Obj.couponCode;
+        }
+        this.idays = idays;
+        console.log(idays);
+      }, err => {
+        console.log(err);
+      })
+    },
     onRefresh(done) {
       setTimeout(() => {
         done()
