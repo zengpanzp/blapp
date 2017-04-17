@@ -17,6 +17,7 @@
     "fastclick": "^1.0.6",
     "scroll": "^2.0.0",
     "vue": "^2.1.10",
+    "vue-infinite-scroll": "^2.0.1",
     "vue-lazyload": "0.8.0",
     "vue-popup": "^0.2.14",
     "vue-resource": "^1.2.1",

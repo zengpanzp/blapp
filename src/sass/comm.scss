@@ -135,9 +135,3 @@ body{
 .lazy-box{
   @extend %lazy-box;
 }
-img.lazyload[lazy=loading]{
-  width: rem(80) !important;
-  height: 100%;
-  margin: auto;
-  display: block;
-}

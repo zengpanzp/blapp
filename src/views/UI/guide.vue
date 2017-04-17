@@ -2,10 +2,10 @@
   <div id="index">
     <h2>iBaiappVue项目 页面索引</h2>
     <h3 class="second-title">ui路由</h3>
-    <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in auiRouter">{{ index  }}: {{ item.meta.title }}</router-link>
+    <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.title" v-for="(item, index) in auiRouter">{{ index }}: {{ item.meta.title }}</router-link>
 
     <h3 class="second-title">prd路由</h3>
-    <router-link :to="{ path: item.path }" v-if="item.meta" v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
+    <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.title" v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
     <router-link :to="{ path: '/banknote/11461' }">测试</router-link>
   </div>
 </template>
@@ -42,13 +42,13 @@ export default {
   a {
     display: block;
     background-color: #fff;
-    margin-bottom: 10px;
+    margin-bottom: rem(10);
     padding: rem(15);
     font-size: rem(28)
   }
 }
 .second-title{
   text-align: center;
-  margin: 20px 0;
+  margin: rem(20) 0;
 }
 </style>

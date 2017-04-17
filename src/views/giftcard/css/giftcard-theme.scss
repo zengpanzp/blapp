@@ -1,0 +1,148 @@
+/* creat by chenpeng */
+@import "src/sass/tobe/function";
+
+.card-title{
+  position: relative;
+  height: rem(2.75*32);
+  background-color: #ffffff;
+  .card-inner{
+    background-color: #ffffff;
+    position: absolute;
+    right: rem(2.75*32);
+    left: 0;
+    z-index: 99;
+    height: rem(88);
+    font-size: 0;
+  }
+  &.open {
+    .scrollspy{
+      display: table;
+    }
+    .card-inner{
+      right: 0;
+      .ovfs{
+        white-space: normal;
+        padding: rem(0.25*32) rem(0.625*32);
+        border-bottom: 1px solid #cccccc;
+      }
+      .ovfs-item{
+        width: 25%;
+        float: left;
+      }
+    }
+  }
+  .ovfs-item{
+    // width: rem(4.375*32);
+    line-height: 1.6;
+    font-size: rem(0.875*32);
+    border-right: none;
+    text-align: center;
+    padding: rem(0.625*32) rem(0.4*32);
+    background-color: #ffffff;
+    float: inherit;
+    &.is-selected .card-word{
+      border-bottom: 2px solid #E6133C;
+      color: #ea395b;
+    }
+  }
+  .right-down{
+    position: absolute;
+    z-index: 999;
+    right: 0;
+    top: 0;
+    width: rem(2.75*32);
+    height: rem(2.75*32);
+    color: #999999;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    background: url("../i/cicon-down.png") no-repeat center center;
+    background-size: 40%;
+    &:before{
+      content: '';
+      background-image: linear-gradient(to left,rgba(255,255,255,.8) 0,rgba(255,255,255,0.1) 55%);
+      position: absolute;
+      right: rem(88);
+      top: 0;
+      width: rem(60);
+      height: rem(88);
+    }
+    &.active{
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+  .card-word{
+    color: #666666;
+    border-bottom: 2px solid transparent;
+    @include ellipsis;
+  }
+
+}
+
+.card-wrap{
+  padding: 0 rem(0.625*32);
+  .cwrap-title{
+    font-size: rem(0.75*32);
+    color: #666666;
+    padding: rem(0.625*32) 0;
+  }
+}
+
+
+.scrollspy-text{
+  font-size: rem(0.875*32);
+  color: #666666;
+  background: url("../i/changefloor.png") no-repeat left center;
+  background-size: rem(0.9375*32) rem(0.9375*32);
+  padding-left: rem(1.25*32);
+  display: table-cell;
+  vertical-align: middle;
+}
+.scrollspy{
+  padding: 0 rem(0.9375*32);
+  background-color: #F8F8F8;
+  height: rem(2.8125*32);
+  display: table;
+  width: 100%;
+  display: none;
+}
+.file-show {
+    position: fixed;
+    bottom: rem(16);
+    left: 0;
+    padding-left: rem(20);
+    .file-top {
+        a{
+          @include display(flex);
+          @include align-items(center);
+          @include justify-content(center);
+          i{
+            img{
+              width: rem(10);
+              height: rem(10);
+              text-align: center;
+              display: inline-block;
+              right: rem(19);
+              bottom: rem(24);
+              position: absolute;
+              font-style: normal;
+              z-index: 9;
+            }
+          }
+          img{
+            width: rem(88);
+            height: rem(88);
+            display: inline-block;
+            text-align: center;
+            position: relative;
+            font-size: 0;
+          }
+
+        }
+    }
+}

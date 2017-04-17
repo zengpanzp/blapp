@@ -8,6 +8,8 @@ import VueLazyload from 'vue-lazyload'
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
+import infiniteScroll from 'vue-infinite-scroll'
+Vue.use(infiniteScroll)
 
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
@@ -20,13 +22,14 @@ if ('addEventListener' in document) {
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
-  loading: './static/img/loading-spin.svg',
+  loading: require('src/assets/loading-pic.png'),
+  error: require('src/assets/loading-pic.png'),
   try: 3 // default 1
 })
 
 Vue.use(bluer)
 
-Vue.filter('limitFixed', function (value, num) {
+Vue.filter('limitFixed', function (value, num = 0) {
   return parseFloat(value).toFixed(num)
 })
 Vue.filter('limitLength', function (value, num) {
@@ -207,34 +210,32 @@ router.beforeEach(({ meta, path }, from, next) => {
     })
   }
   jsBridgeReady(() => {
-    if (isiBailianApp) {
-      // 资源位埋点
-      window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
-        success: res => {
-          let userInfo = JSON.parse(res)
-          window.sa.register({
-            platform: userInfo.platform,
-            memberId: userInfo.memberId,
-            resourceId: userInfo.resourceId,
-            resourceType: userInfo.resourceType,
-            deployId: userInfo.deployId,
-            mmc: userInfo.mmc
-          })
-        },
-        fail: err => {
-          console.log(err)
-        },
-        progress: data => {}
-      })
-    }
-    meta.title ? document.title = meta.title : null
-    if (meta.title && isiBailianApp) {
+    // 资源位埋点
+    isiBailianApp && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+      success: res => {
+        let userInfo = JSON.parse(res)
+        window.sa.register({
+          platform: userInfo.platform,
+          memberId: userInfo.memberId,
+          resourceId: userInfo.resourceId,
+          resourceType: userInfo.resourceType,
+          deployId: userInfo.deployId,
+          mmc: userInfo.mmc
+        })
+      },
+      fail: err => {
+        console.log(err)
+      },
+      progress: data => {}
+    })
+    if (meta.title) {
+      document.title = meta.title
       if (window.isiOS) {
         setTimeout(() => {
-          window.CTJSBridge._setNativeTitle(meta.title)
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
         }, 400)
       } else {
-        window.CTJSBridge._setNativeTitle(meta.title)
+        window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
       }
     }
     if (meta.class) {

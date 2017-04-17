@@ -1,0 +1,63 @@
+/* creat by chenpeng */
+@import "src/sass/tobe/function";
+
+@include pic-list(cwrap-content, 2, #ffffff, rem(20));
+.cwrap-content ul li{
+  float: left;
+}
+.bgfs{
+  background-color: #F6F6F6;
+}
+.cwrap-name{
+  background-color: #ffffff;
+  padding: rem(0.25*32) rem(0.75*32);
+  font-size: rem(0.875*32);
+  color: #666666;
+  line-height: 1.5;
+  height: rem(3*32);
+  display: -webkit-box;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.cwrap-price{
+  background-color: #ffffff;
+  padding: 0 rem(0.75*32) rem(0.5*32) rem(0.75*32);
+  color: #333333;
+  font-size: rem(28);
+}
+.cwrap-price .small-rmb{
+  color: #333333;
+}
+
+.card-shop{
+  float: right;
+  width: rem(1*32);
+  height: rem(1*32);
+  background: #ffffff url("../i/buycar.png") no-repeat center center;
+  background-size: contain;
+  display: inline-block;
+  &.nogod{
+    background-image: url("../i/nocar.png");
+  }
+}
+.cwrap-img{
+  background-color: #ffffff;
+  > a{
+    display: block;
+    position: relative;
+    img{
+      padding: rem(0.5*32);
+    }
+  }
+  .cwrap-lowg{
+    position: absolute;
+    bottom: rem(3.125*32);
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    padding: rem(0.5625*32) rem(0.3125*32);
+    font-size: rem(0.875*32);
+    background-color: rgba(0,0,0, 0.8);
+  }
+}

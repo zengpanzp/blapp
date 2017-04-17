@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/_productsListView.scss" scoped></style>
+<style lang="scss" src="./css/_productsListView.scss" scoped></style>
 <template>
   <div class="flash-list new">
     <bl-scroll :enableRefresh="false" :onInfinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-fixed>
