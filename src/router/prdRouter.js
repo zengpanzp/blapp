@@ -72,8 +72,7 @@ export const prdRouter = [
   {
     path: '/eleCard',
     meta: {
-      title: '电子卡',
-      class: 'eleCard'
+      title: '电子卡'
     },
     component: r => require.ensure([], () => r(require('../views/E-card/eleCard')), 'eleCard')
   }

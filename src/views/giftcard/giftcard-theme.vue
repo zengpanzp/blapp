@@ -11,7 +11,7 @@
           </bl-tab-item>
         </bl-navbar>
       </div>
-      <div class="right-down" @click="con()"></div>
+      <div class="right-down" @click="con"></div>
     </div>
     <ele-card v-if="load"></ele-card>
     <div v-show="!load" class="card-wrap">
@@ -22,45 +22,18 @@
             <div class="cwrap-img">
               <a href="javascript:;" title="">
                 <div class="lazy-box">
-                  <!-- <img class="lazy" src="{{item.goodsImgPath}}" alt=""> -->
+                  <img class="lazy" v-lazy="item.goodsImgPath" alt="">
                 </div>
                 <div class="cwrap-name">{{item.productName}}</div>
-                <div class="cwrap-lowg">无货</div>
+                <div class="cwrap-lowg" v-if="item.isAvailable === '0'">无货</div>
               </a>
             </div>
             <div class="cwrap-price">
               <span class="small-rmb">¥</span>{{item.goodsPrice}}
-              <a href="javascript:;" class="card-shop"></a>
+              <a href="javascript:;" class="card-shop" v-if="item.isAvailable === '1'" @click="addCard(item.goodsId)"></a>
+              <a href="javascript:;" class="card-shop nogod" v-else="item.isAvailable === '0'"></a>
             </div>
           </li>
-          <!-- <li>
-            <div class="cwrap-img">
-              <a href="javascript:;" title="">
-                <div class="lazy-box">
-                  <img class="lazy" src="http://10.201.128.236/h5/prd/images/giftcard-theme/group.png" alt="">
-                </div>
-                <div class="cwrap-name">百联财理全球购 588型(电子卡)</div>
-              </a>
-            </div>
-            <div class="cwrap-price">
-              <span class="small-rmb">¥</span>199.0
-              <a href="javascript:;" class="card-shop nogod"></a>
-            </div>
-          </li>
-          <li>
-            <div class="cwrap-img">
-              <a href="javascript:;" title="">
-                <div class="lazy-box">
-                  <img class="lazy" src="http://10.201.128.236/h5/prd/images/giftcard-theme/group.png" alt="">
-                </div>
-                <div class="cwrap-name">百联财理全球购 588型(电子卡)</div>
-              </a>
-            </div>
-            <div class="cwrap-price">
-              <span class="small-rmb">¥</span>199.0
-              <a href="javascript:;" class="card-shop"></a>
-            </div>
-          </li> -->
         </ul>
       </div>
     </div>
@@ -86,22 +59,33 @@ export default {
       load: false,
       list: [],
       tabsModel: 0,
-      aTab: ['定额卡', '自定义面额卡']
+      aTab: ['定额卡', '自定义面额卡'],
+      memberId: 100000000043755,
+      member_token: ''
     };
   },
+  mounted() {
+    let $$vue = this;
+    this.$loading.close();
+    setTimeout(function() {
+      // 获得登录的用户id
+      window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
+        success: res => {
+          // alert(res);
+          let userInfo = JSON.parse(res);
+          console.log(userInfo)
+          // memberId
+          $$vue.memberId = userInfo.member_id;
+          // userToken
+          $$vue.member_token = userInfo.member_token;
+        },
+        fail: res => {
+        }
+      });
+    }, 400);
+  },
   created() {
-    api.getGoods({
-      clientIp: "127.0.0.1",
-      systemNo: "06",
-      requestData: "{'channelSid':'1','c':'9999161228','searchInfo':{'pageModel':{'pageNo':'1','pageSize':'10'}}}"
-    }).then(data => {
-      this.$loading.close()
-      let resData = JSON.parse(data.body.obj)
-      console.log(data.body)
-      this.list = resData.resultInfo.pageModel.rows
-    }, err => {
-      console.log(err)
-    })
+    this.getGood()
   },
   methods: {
     fnSelect(index) {
@@ -111,11 +95,52 @@ export default {
         this.load = false
       }
     },
-    con: function() {
+    con() {
       $('.right-down').on('click', function() {
         $(this).toggleClass('active');
         $('.card-title').toggleClass('open');
       });
+    },
+    getGood(done) {
+      api.getGoods({
+        clientIp: "127.0.0.1",
+        systemNo: "06",
+        requestData: "{'channelSid':'1','c':'9999159972','searchInfo':{'pageModel':{'pageNo':'1','pageSize':'10'}}}"
+      }).then(data => {
+        this.$loading.close()
+        console.log(data)
+        let resData = JSON.parse(data.body.obj)
+        this.list = resData.resultInfo.pageModel.rows
+        if (done) {
+          done()
+        }
+      }, err => {
+        console.log(err)
+      })
+    },
+    addCard(goodId) {
+      api.addCart({
+        memberId: this.memberId,
+        member_token: this.member_token,
+        orderSourceCode: "1",
+        goodsList: [
+          {
+            goodsId: goodId,
+            goodsNumber: "1",
+            type: "10",
+          }
+        ]
+      }).then(data => {
+        this.$loading.close()
+        console.log(data)
+        let resData = JSON.parse(data.body.obj)
+        this.$toast({
+          position: 'bottom',
+          message: resData.resultMsg
+        });
+      }, err => {
+        console.log(err)
+      })
     }
   }
 };
