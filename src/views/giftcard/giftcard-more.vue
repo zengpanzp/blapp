@@ -14,7 +14,7 @@
     },
     created() {
       document.title = this.$route.params.themeName
-      window.CTJSBridge && window.CTJSBridge._setNativeTitle(this.$route.params.themeName)
+      window.CTJSBridge && window.CTJSBridge._setNativeTitle(decodeURI(this.$route.params.themeName))
     }
   }
 </script>

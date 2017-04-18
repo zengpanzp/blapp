@@ -11,7 +11,7 @@
 
     <div class="giftcard-class">
       <div class="class-container flex">
-        <router-link :to="{ path: '/giftCardTheme/' + item.jumpId + '/' + item.jumpUrl.replace(item.jumpId, '') }" class="class-detail" v-for="(item, index) in themeIcon">
+        <router-link :to="{ path: '/giftCardTheme/' + item.jumpId + '/' + encodeURI(item.jumpUrl.replace(item.jumpId, '')) }" class="class-detail" v-for="(item, index) in themeIcon">
           <div :class="'class-img' + index"></div>
           <p>{{ (item.jumpUrl).replace(item.jumpId, "") }}</p>
         </router-link>
@@ -37,7 +37,7 @@
               <div class="pay-log" v-else></div>
             </div>
           </div>
-          <router-link tag="div" :to="{ path: '/giftCardMore/' + item.jumpId + '/' + item.themeName }" class="get-more">
+          <router-link tag="div" :to="{ path: '/giftCardMore/' + item.jumpId + '/' + encodeURI(item.themeName) }" class="get-more">
             <div class="get-more-e">MORE</div>
             <div class="get-more-c">查看更多</div>
           </router-link>
@@ -67,16 +67,7 @@ export default {
       allSlides: [], // 轮播图
       themeIcon: [], // 主题icon
       cardTheme: [], // 卡主题
-      allCards: [ // 所有卡
-        {
-          themeName: '',
-          rows: []
-        },
-        {
-          themeName: '',
-          rows: []
-        }
-      ]
+      allCards: [] // 所有卡
     };
   },
   created() {
@@ -97,9 +88,7 @@ export default {
           this.cardTheme = item.advList
         }
       }
-      for (let [index, item] of this.cardTheme.entries()) {
-        this.allCards[index].themeName = item.jumpUrl.replace(item.jumpId, "")
-        this.allCards[index].jumpId = item.jumpId
+      for (let item of this.cardTheme) {
         let requestData = {
           "requestData": JSON.stringify({
             channelSid: "1",
@@ -118,16 +107,20 @@ export default {
           let resData = JSON.parse(res.body.obj)
           let resRows = resData.resultInfo.pageModel.rows
           if (resRows) {
-            this.allCards[index].rows = resRows.splice(0, 5)
+            this.allCards.push({
+              themeName: item.jumpUrl.replace(item.jumpId, ""),
+              jumpId: item.jumpId,
+              rows: resRows.splice(0, 5)
+            })
           }
+          this.$nextTick(() => {
+            this.$loading.close()
+          })
         }, err => {
           console.log(err)
         })
       }
       this.loaded = true
-      this.$nextTick(() => {
-        this.$loading.close()
-      })
     }, err => {
       console.log(err)
     })

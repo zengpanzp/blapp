@@ -2,7 +2,7 @@
 <template>
   <div class="cwrap-content" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <ul>
-      <li v-for="item in list">
+      <li v-for="item in list" :key="item.goodsId">
         <div class="cwrap-img">
           <a href="javascript:;" v-go-native-goods-detail="item">
             <div class="lazy-box">
@@ -15,7 +15,7 @@
         <div class="cwrap-price">
           <span class="small-rmb">¥</span>{{ item.goodsPrice }}
           <div class="card-shop nogod" v-if="item.isAvailable == 0"></div>
-          <div class="card-shop" v-else></div>
+          <div class="card-shop" v-else @click="addCard(item.goodsId)"></div>
         </div>
       </li>
     </ul>
@@ -36,7 +36,9 @@ export default {
     return {
       busy: true,
       pageNum: 1,
-      list: []
+      list: [],
+      memberId: '',
+      member_token: ''
     };
   },
   props: ['jumpId'],
@@ -51,7 +53,7 @@ export default {
           c: "9999" + this.jumpId,
           searchInfo: {
             pageModel: {
-              pageNo: this.pageNum ++,
+              pageNo: this.pageNum,
               pageSize: "10"
             }
           }
@@ -60,19 +62,53 @@ export default {
         let resData = JSON.parse(data.body.obj)
         if (resData.resultInfo.pageModel.rows) {
           this.list = this.list.concat(resData.resultInfo.pageModel.rows)
+          this.pageNum ++
         }
         this.$nextTick(() => {
+          this.$emit('finish')
           if (resData.resultInfo.pageModel.rows && resData.resultInfo.pageModel.rows.length >= 10) {
             this.busy = false
           } else {
             this.busy = true
-            once !== 0 && this.$toast('没有了~')
+            once !== 0 && this.$toast({
+              position: 'bottom',
+              message: '没有了~'
+            })
           }
           this.$loading.close()
         });
       }, err => {
         console.log(err)
       })
+    },
+    addCard(goodId) {
+      api.addCart({
+        memberId: this.memberId,
+        member_token: this.member_token,
+        orderSourceCode: "1",
+        goodsList: [
+          {
+            goodsId: goodId,
+            goodsNumber: "1",
+            type: "10",
+          }
+        ]
+      }).then(data => {
+        let resData = JSON.parse(data.body.obj)
+        this.$toast({
+          position: 'bottom',
+          message: resData.resultMsg
+        });
+      }, err => {
+        console.log(err)
+      })
+    }
+  },
+  watch: {
+    'jumpId'(val) {
+      this.pageNum = 1
+      this.list = []
+      this.loadMore(0)
     }
   }
 };

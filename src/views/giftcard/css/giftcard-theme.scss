@@ -2,7 +2,10 @@
 @import "src/sass/tobe/function";
 
 .card-title{
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
   height: rem(2.75*32);
   background-color: #ffffff;
   .card-inner{
@@ -86,6 +89,7 @@
 
 .card-wrap{
   padding: 0 rem(0.625*32);
+  margin-top: rem(2.75*32);
   .cwrap-title{
     font-size: rem(0.75*32);
     color: #666666;
