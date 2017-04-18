@@ -40,9 +40,14 @@ module.exports = {
     'no-useless-escape': 0,
     // ===
     'eqeqeq': 0,
+<<<<<<< HEAD
     'no-mixed-spaces-and-tabs': 0,
     'no-tabs': 0,
     'indent': 0,
     // 'no-tabs': 0
+=======
+    'indent': 0,
+    'no-tabs': 0
+>>>>>>> 53eebea0555d437fa6998038cf31c6b1f259085e
   }
 }

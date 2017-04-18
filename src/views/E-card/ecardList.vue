@@ -99,9 +99,9 @@ export default {
         }
         this.$loading.close()
         if (this.cardList.length < 1) {
-          window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
         } else {
-          window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
         }
       }, err => {
         console.log(err)
@@ -113,7 +113,7 @@ export default {
     },
     transPass(val, index) {
       if (!this.cardList[index].showPass) {
-        window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val}, {
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val}, {
           success: res => {
             let resData = JSON.parse(res)
             this.cardList[index].pheredText = resData.decypheredText
