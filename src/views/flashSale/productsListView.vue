@@ -89,6 +89,7 @@
 </template>
 <script>
 import urlConfig from 'src/default-urlConfig'
+import utils from 'src/utils'
 export default {
   name: 'productsListView',
   data() {
@@ -129,8 +130,7 @@ export default {
       flashId: this.$route.params.flashId
     }, {
       success: res => {
-        // let resData = window.JSON.parse(res)
-        let resData = eval("(" + res + ")")
+        let resData = utils.transData(res)
         this.flashSalesGoods = resData
         setTimeout(() => {
           window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)
@@ -153,7 +153,7 @@ export default {
         }
       },
       fail: err => {
-        let errs = eval("(" + err + ")")
+        let errs = utils.transData(err)
         if (errs.result === 'fail') {
           this.$modal({
             content: '找不到该闪购商品',
@@ -275,7 +275,7 @@ export default {
 
       window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", this.requestData, {
         success: res => {
-          let resData = eval("(" + res + ")")
+          let resData = utils.transData(res)
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail' || resData.resultInfo.pageModel === null) {
             this.noGoods = true
@@ -295,7 +295,7 @@ export default {
           }
         },
         fail: res => {
-          let resData = eval("(" + res + ")")
+          let resData = utils.transData(res)
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail') {
             this.noGoods = true

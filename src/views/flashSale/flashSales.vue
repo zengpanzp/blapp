@@ -70,6 +70,7 @@
 <script>
 import urlConfig from 'src/default-urlConfig'
 import ScrollTo from 'scroll'
+import utils from 'src/utils'
 
 let fnScroll = (el) => {
   return el.offsetLeft - (document.body.clientWidth / 2 - el.clientWidth / 2)
@@ -104,7 +105,8 @@ export default {
     /* 获取轮播图 */
     window.CTJSBridge.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {resourceId: 500}, {
       success: res => {
-        let resData = eval("(" + res + ")")
+        // let resData = window.JSON.parse(res.replace(/[\r\n\\]/g, "").replace(/[\s]/g, " "))
+        let resData = utils.transData(res)
         this.allSlides = resData.otherResource[0].advList
       },
       fail: err => console.log(err),
@@ -113,12 +115,12 @@ export default {
     /* 获取分类 */
     window.CTJSBridge.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", {channelld: 1}, {
       success: res => {
-        let resData = eval("(" + res + ")")
+        let resData = utils.transData(res)
         this.queryCate = resData.list
         this.loaded = true
         this.$loading.close()
       },
-      fail: err => this.$toast(JSON.parse(err.result)),
+      fail: err => console.log(err),
       progress: data => {}
     })
     this.getList()
@@ -175,8 +177,7 @@ export default {
           if (this.inlineLoading) {
             this.inlineLoading.close()
           }
-          // let resData = window.JSON.parse(res.replace(/[\r\n\\]/g, "").replace(/[\s]/g, " "))
-          let resData = eval("(" + res + ")")
+          let resData = utils.transData(res)
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail') {
             this.showNo = true
@@ -194,6 +195,7 @@ export default {
           } else {
             this.isLoading = true
           }
+          console.log(this.isLoading)
           if (done) {
             done()
           }
@@ -203,7 +205,7 @@ export default {
             this.inlineLoading.close()
           }
           /* 没数据了 */
-          let resData = eval("(" + res + ")")
+          let resData = utils.transData(res)
           if (resData.count === 0 || resData.result === 'fail') {
             this.showNo = true
             this.isLoading = false

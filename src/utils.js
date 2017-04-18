@@ -33,9 +33,18 @@ const getRect = (ele = document.body) => {
   return rect;
 }
 
+const transData = (data) => {
+  if (typeof data == 'string') {
+    return JSON.parse(data.replace(/[\r\n\\]/g, "").replace(/[\s]/g, " "))
+  } else {
+    return data
+  }
+}
+
 export default {
   dbGet,
   dbSet,
   dbRemove,
-  getRect
+  getRect,
+  transData
 }

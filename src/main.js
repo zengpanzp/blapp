@@ -187,11 +187,11 @@ const cssReady = (fn, link) => {
   })();
 }
 
-// const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
-// window.isiBailianApp = isiBailianApp
+const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
+window.isiBailianApp = isiBailianApp
 
 const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge) {
+  if (window.CTJSBridge || !isiBailianApp) {
     return calback()
   } else {
     document.addEventListener('BLBridgeReady', calback, false)
