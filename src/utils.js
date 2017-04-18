@@ -32,10 +32,58 @@ const getRect = (ele = document.body) => {
   rect.isBottom = rect.bottom - inHeight <= 0;
   return rect;
 }
+/**
+ * 针对字符串替换功能  尤其是返回的json字符串替换
+ * @神马
+ * @param  {[type]} str [字符串]
+ * @return {[type]}     [string]
+ */
+const transSpecialChar = (str) => {
+  if (str) {
+    str = str.replace(/\r/g, '\\r');
+    str = str.replace(/\n/g, '\\n');
+    str = str.replace(/\t/g, '\\t');
+    str = str.replace(/\\/g, '\\\\');
+    str = str.replace(/("")+/g, '"');
+    str = str.replace(/\'/g, '&#39;');
+    str = str.replace(/ /g, '&nbsp;');
+    str = str.replace(/</g, '&glt;');
+    str = str.replace(/>/g, '&gt;');
+  }
+  return str;
+}
+/**
+ * 日期格式化
+ * @param  {[type]} format  yyyy-MM-dd hh:mm:ss
+ * @return {[type]}        [description]
+ */
 
+const dateFormat = (format) => {
+    let dt = new Date();
+    var date = {
+        "M+": dt.getMonth() + 1,
+        "d+": dt.getDate(),
+        "h+": dt.getHours(),
+        "m+": dt.getMinutes(),
+        "s+": dt.getSeconds(),
+        "q+": Math.floor((dt.getMonth() + 3) / 3),
+        "S+": dt.getMilliseconds()
+    };
+    if (/(y+)/i.test(format)) {
+        format = format.replace(RegExp.$1, (dt.getFullYear() + "").substr(4 - RegExp.$1.length))
+    }
+    for (var k in date) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k] : ("00" + date[k]).substr(("" + date[k]).length))
+        }
+    }
+    return format
+};
 export default {
   dbGet,
   dbSet,
   dbRemove,
-  getRect
+  getRect,
+  transSpecialChar,
+  dateFormat
 }
