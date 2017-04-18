@@ -130,7 +130,7 @@ export default {
     }, {
       success: res => {
         // let resData = window.JSON.parse(res)
-        let resData = window.JSON.parse(res.replace(/[\r\n]/g, "").replace(/[\s]/g, " "))
+        let resData = eval("(" + res + ")")
         this.flashSalesGoods = resData
         setTimeout(() => {
           window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)
@@ -153,7 +153,7 @@ export default {
         }
       },
       fail: err => {
-        let errs = JSON.parse(err)
+        let errs = eval("(" + err + ")")
         if (errs.result === 'fail') {
           this.$modal({
             content: '找不到该闪购商品',
@@ -275,7 +275,7 @@ export default {
 
       window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", this.requestData, {
         success: res => {
-          let resData = window.JSON.parse(res.replace(/[\r\n]/g, "").replace(/[\s]/g, " "))
+          let resData = eval("(" + res + ")")
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail' || resData.resultInfo.pageModel === null) {
             this.noGoods = true
@@ -295,7 +295,7 @@ export default {
           }
         },
         fail: res => {
-          let resData = window.JSON.parse(res)
+          let resData = eval("(" + res + ")")
           /* 没数据了 */
           if (resData.count === 0 || resData.result === 'fail') {
             this.noGoods = true

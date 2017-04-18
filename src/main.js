@@ -187,11 +187,11 @@ const cssReady = (fn, link) => {
   })();
 }
 
-const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
-window.isiBailianApp = isiBailianApp
+// const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
+// window.isiBailianApp = isiBailianApp
 
 const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge || !isiBailianApp) {
+  if (window.CTJSBridge) {
     return calback()
   } else {
     document.addEventListener('BLBridgeReady', calback, false)
@@ -211,23 +211,23 @@ router.beforeEach(({ meta, path }, from, next) => {
   }
   jsBridgeReady(() => {
     // 资源位埋点
-    isiBailianApp && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
-      success: res => {
-        let userInfo = JSON.parse(res)
-        window.sa.register({
-          platform: userInfo.platform,
-          memberId: userInfo.memberId,
-          resourceId: userInfo.resourceId,
-          resourceType: userInfo.resourceType,
-          deployId: userInfo.deployId,
-          mmc: userInfo.mmc
-        })
-      },
-      fail: err => {
-        console.log(err)
-      },
-      progress: data => {}
-    })
+    // isiBailianApp && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+    //   success: res => {
+    //     let userInfo = JSON.parse(res)
+    //     window.sa.register({
+    //       platform: userInfo.platform,
+    //       memberId: userInfo.memberId,
+    //       resourceId: userInfo.resourceId,
+    //       resourceType: userInfo.resourceType,
+    //       deployId: userInfo.deployId,
+    //       mmc: userInfo.mmc
+    //     })
+    //   },
+    //   fail: err => {
+    //     console.log(err)
+    //   },
+    //   progress: data => {}
+    // })
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
