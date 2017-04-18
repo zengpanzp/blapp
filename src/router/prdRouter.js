@@ -33,7 +33,7 @@ export const prdRouter = [
     path: '/rankSortPage/:blackId',
     component: r => require.ensure([], () => r(require('../views/rank/sortView')), 'rankSortView')
   },
-  /* 陈鹏 领券中心 cid 为优惠券id */
+  /* 神马 领券中心 cid 为优惠券id */
   {
     path: '/banknote/:cid',
     meta: {
@@ -41,32 +41,31 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
   },
+  /* 神马 百联财礼 */
+  {
+    path: '/blgift',
+    meta: {
+      title: '百联财礼'
+    },
+    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift')
+  },
   /* 陈鹏 礼品卡首页 */
   {
     path: '/giftCardHome',
     meta: {
-      title: '礼品卡',
-      class: 'giftcard-home'
+      title: '礼品卡'
     },
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-home')), 'giftCardHome')
   },
   /* 陈鹏 礼品卡分类页 */
   {
-    path: '/giftCardTheme',
-    meta: {
-      title: '主题',
-      class: 'giftcard-theme'
-    },
+    path: '/giftCardTheme/:jumpId/:themeName',
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-theme')), 'giftCardTheme')
   },
-  /* 陈鹏 电子卡详情 */
+  /* 陈鹏 礼品卡查看更多 */
   {
-    path: '/eCardList',
-    meta: {
-      title: '电子卡详情',
-      class: 'ecardList'
-    },
-    component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
+    path: '/giftCardMore/:jumpId/:themeName',
+    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-more')), 'giftCardMore')
   },
   /* 曾攀 自定义电子卡页面 */
   {
@@ -74,6 +73,14 @@ export const prdRouter = [
     meta: {
       title: '电子卡'
     },
-    component: r => require.ensure([], () => r(require('../views/E-card/eleCard')), 'eleCard')
+    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-eleCard')), 'eleCard')
+  },
+  /* 陈鹏 电子卡详情 */
+  {
+    path: '/eCardList',
+    meta: {
+      title: '电子卡详情'
+    },
+    component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   }
 ]

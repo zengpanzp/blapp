@@ -22,6 +22,7 @@ import ModalJs from './modal'
 import Slide from './slide'
 import Swipeout from './swipeout/swipeout'
 import SwipeoutItem from './swipeout/swipeout-item'
+import SwipeoutButton from './swipeout/swipeout-button'
 
 import scrollRecord from './route-data/scroll-record'
 
@@ -44,6 +45,7 @@ const install = function(Vue) {
   Vue.component('bl' + Slide.name, Slide);
   Vue.component('bl' + Swipeout.name, Swipeout);
   Vue.component('bl' + SwipeoutItem.name, SwipeoutItem);
+  Vue.component('bl' + SwipeoutButton.name, SwipeoutButton);
 
   Vue.$toast = Vue.prototype.$toast = Toast;
   Vue.$modal = Vue.prototype.$modal = ModalJs;

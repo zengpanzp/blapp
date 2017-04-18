@@ -5,6 +5,8 @@
  */
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import URL from '../default-urlConfig'
+import { DEV_SERVICE } from './dev-urlConfig'
 
 Vue.use(VueResource)
 Vue.http.options.xhr = { withCredentials: true }
@@ -16,13 +18,8 @@ Vue.http.interceptors.push((request, next) => {
   });
 })
 
-// 生产
-// const baseUrl = 'http://10.201.128.216:24080'
+const baseUrl = process.env.NODE_ENV !== 'production' ? DEV_SERVICE : URL.SERVICE_BASE_URL
 
-// 测试
-// const baseUrl = '/api'
-
-const baseUrl = process.env.NODE_ENV !== 'production' ? '/mockapi' : '/h5_gateway'
 export default {
   // 红卡卡密查询（HCT004）
   payRed: params => {
@@ -42,6 +39,13 @@ export default {
   // CMS优惠券领取优惠券
   getCoupon: params => {
     return Vue.http.post(baseUrl + '/coupon/getCoupon.htm', params);
+  },
+  // 查询资源位
+  queryAdDeploy: params => {
+    return Vue.http.post(baseUrl + '/site/queryAdDeploy.htm', params);
+  },
+  // 查询二级目录
+  queryCategory: params => {
+    return Vue.http.get(baseUrl + '/productSearch/doCategoryByLevOne.htm', params);
   }
-
 }

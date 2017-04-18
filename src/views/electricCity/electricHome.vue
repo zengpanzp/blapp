@@ -1,4 +1,4 @@
-<style lang="scss" src="src/sass/_electricHome.scss" scoped></style>
+<style lang="scss" src="./css/_electricHome.scss" scoped></style>
 <template>
   <div class="new" v-scroll-top.window>
     <form id="searchForm" v-on:submit.prevent="search">
@@ -126,22 +126,22 @@ export default {
       loaded: false,
       listHead: [
         {
-          imgUrl: require('src/assets/electricHome/phone-communication.png'),
+          imgUrl: require('./i/phone-communication.png'),
           text: '手机通讯',
           id: '268220'
         },
         {
-          imgUrl: require('src/assets/electricHome/computer-digital.png'),
+          imgUrl: require('./i/computer-digital.png'),
           text: '电脑数码',
           id: '268237'
         },
         {
-          imgUrl: require('src/assets/electricHome/household-electric-appliances.png'),
+          imgUrl: require('./i/household-electric-appliances.png'),
           text: '家用电器',
           id: '268238'
         },
         {
-          imgUrl: require('src/assets/electricHome/tide-discovery.png'),
+          imgUrl: require('./i/tide-discovery.png'),
           text: '潮发现',
           id: 'fashion'
         }

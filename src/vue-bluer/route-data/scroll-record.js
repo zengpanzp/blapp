@@ -3,6 +3,9 @@ import RouterStore from './store'
 const store = new RouterStore()
 
 const scrollTop = (el, value) => {
+  if (el === document) {
+    el = document.body
+  }
   const hasScrollTop = 'scrollTop' in el
   if (value === undefined) return hasScrollTop ? el.scrollTop : el.pageYOffset
   if (hasScrollTop) {
@@ -21,6 +24,9 @@ const scroll = () => { // 监听滚动条改变事件
 }
 export default {
   inserted(el, binding, vnode) {
+    if (binding.modifiers.window) {
+      el = document
+    }
     const init = (to) => {
       var __url = el.__url = store.getUrl(to) // 保存当前关联的url
       el.addEventListener('scroll', scroll, false) // 绑定滚动事件
