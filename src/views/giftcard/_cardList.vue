@@ -64,7 +64,6 @@ export default {
           this.list = this.list.concat(resData.resultInfo.pageModel.rows)
           this.pageNum ++
         }
-        console.log(resData)
         this.$nextTick(() => {
           this.$emit('finish')
           if (resData.resultInfo.pageModel.rows && resData.resultInfo.pageModel.rows.length >= 10) {

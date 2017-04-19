@@ -7,14 +7,14 @@
       </div>
       <div class="card-inner">
         <bl-navbar class="ovfs hide-scrollbar" v-model="tabsModel">
-          <bl-tab-item class="ovfs-item" v-for="(item, index) in aTab" :id="index" @click.native="[fnSelect(index, item.categoryId, item.categoryName), isOpen = false]">
+          <bl-tab-item class="ovfs-item" v-for="(item, index) in aTab" :id="index" @click.native="[fnSelect(index, item), isOpen = false]">
             <div class="card-word">{{ item.categoryName }}</div>
           </bl-tab-item>
         </bl-navbar>
       </div>
       <div class="right-down" :class="{ active: isOpen }" @click="isOpen = !isOpen"></div>
     </div>
-    <ele-card class="card-margin" v-if="load"></ele-card>
+    <ele-card class="card-margin" :item="eItem" v-if="load"></ele-card>
     <div v-show="!load" class="card-wrap">
       <h5 class="cwrap-title">{{ cwrapTitle }}</h5>
       <bl-card-list v-if="jumpId" :jumpId="jumpId" @finish="inlineLoading && inlineLoading.close()"></bl-card-list>
@@ -46,6 +46,7 @@ export default {
       isOpen: false,
 
       jumpId: null,
+      eItem: null,
       cwrapTitle: '',
       list: [],
       tabsModel: 0,
@@ -71,13 +72,14 @@ export default {
     })
   },
   methods: {
-    fnSelect(index, jumpId, categoryName) {
-      if (jumpId === '9999162882') {
+    fnSelect(index, item) {
+      if (item.categoryId === '9999162882') {
+        this.eItem = item
         this.load = true
       } else {
         this.load = false
-        this.jumpId = jumpId.replace('9999', '');
-        this.cwrapTitle = categoryName
+        this.jumpId = item.categoryId.replace('9999', '');
+        this.cwrapTitle = item.categoryName
       }
     }
   },

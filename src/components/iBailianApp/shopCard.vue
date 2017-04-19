@@ -1,10 +1,11 @@
 <template>
-  <div class="shop-card flex-c-m" :class="{ 'circle-red': showRed }">
+  <div class="shop-card flex-c-m" :class="{ 'circle-red': showRed }" @click="goShopCar">
     <svg class="icon"><use xlink:href="#icon-gouwuche"></use></svg>
   </div>
 </template>
 
 <script>
+import utils from 'src/utils'
 export default {
 
   name: 'shopCard',
@@ -20,6 +21,20 @@ export default {
     return {
 
     };
+  },
+  methods: {
+    goShopCar() {
+      let memberId = utils.ssdbGet('member_id')
+      let memberToken = utils.ssdbGet('member_token')
+      if (!memberId && !memberToken) {
+        utils.goLogin()
+      } else {
+        console.log('已经登录')
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'shoppingcart2'
+        })
+      }
+    }
   }
 };
 </script>
