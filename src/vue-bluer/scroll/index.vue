@@ -112,7 +112,6 @@ export default {
     refresh () {
       this.state = 2
       this.top = this.offset
-      debugger;
       this.onRefresh(this.refreshDone)
     },
     refreshDone () {

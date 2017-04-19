@@ -172,7 +172,6 @@ export default {
 		}
 		console.log(resList);
 		console.log(typeList);
-		debugger;
 		// 有礼头部banner
 		this.banner = resList[1];
 		// 送礼的类别
