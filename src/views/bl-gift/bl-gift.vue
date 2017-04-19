@@ -1,93 +1,91 @@
 <style lang="scss" src="./css/_bl-gift.scss" scoped></style>
 <template>
 	  <div class="new blgift">
-         <bl-scroll :enableRefresh="true" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record v-scroll-fixed>
-			<!-- content Start -->
-			<!-- 轮播 Start -->
-			<bl-slide class="blgift-swipe" :slides="fillAllSlides" :autoPlay="true" :showShadow="true"></bl-slide>
-			<!-- 轮播 End -->
-			<!-- 送礼对象 Start -->
-			<div class="gift-main">
-				<div class="gift-title">
-					<div style="background:#e6133c;"></div>
-					送礼对象
-				</div>
-				<div class="gift-ul">
-					<ul>
-						<li v-for="item in sendType">
-							<a href="#">
-								<span><img :src="item.mediaUrl"></span>
-								<span class="gift-name">{{item.deployName}}</span>
-							</a>
-						</li>
-					</ul>
-				</div>
+		<!-- content Start -->
+		<!-- 轮播 Start -->
+		<bl-slide class="blgift-swipe" :slides="fillAllSlides" :autoPlay="true" :showShadow="true"></bl-slide>
+		<!-- 轮播 End -->
+		<!-- 送礼对象 Start -->
+		<div class="gift-main">
+			<div class="gift-title">
+				<div style="background:#e6133c;"></div>
+				送礼对象
 			</div>
-			<!-- 送礼对象 End -->
-
-			<!-- 当季热销 Start -->
-			<div class="recommend-main" v-for="item,index in hotType">
-				<div class="gift-title">
-					<div style="background:#c77c10;"></div>
-					当季热推
-				</div>
-				<div class="recommend-info">
-					<div class="recommend-info-banner">
-						<div class="gift-benfont">#{{item.deployName}}#参与即得10积分</div>
-						<div class="banner-box"></div><img :src="item.mediaUrl">
-					</div>
-					<div class="recommend-show">
-						<div class="recommend-ul">
-							<ul>
-								<li v-for="goodsItem in goodsList[index]">
-									<div>
-										<a href="#"><img :src="goodsItem[0].goodsImgPath?goodsItem[0].goodsImgPath:'http://img23.st.iblimg.com/market-1/images/content/743528369.png'"></a>
-									</div>
-									<div class="recommend-name">
-										<a href="#">{{goodsItem[0].productName}}</a>
-									</div>
-									<div class="recommend-money"><i>￥</i>{{goodsItem[0].marketPrice}}</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 当季热销 End -->
-			<!-- 礼物分类 Start -->
-			<div class="title-hot">
-				<div class="title-hot-top">
-					<div class="title-hot-font">
-						<div class="title-box"><img :src="hotIcon">礼物分类</div>
-					</div>
-
-				</div>
-			</div>
-			<div class="bl-class">
+			<div class="gift-ul">
 				<ul>
-					<li v-for="item in goodType">
-						<div>
-							<a href="#"><img :src="item.mediaUrl"></a>
-						</div>
+					<li v-for="item in sendType">
+						<a href="#">
+							<span><img :src="item.mediaUrl"></span>
+							<span class="gift-name">{{item.deployName}}</span>
+						</a>
 					</li>
 				</ul>
 			</div>
-			<!-- 礼物分类 End -->
-			<!-- bottom Start -->
-			<div class="file-show">
-				<div class="file-lshow">
-					<div class="file-ltop">
-						<a href="#"><i>18</i><img src="css/i/give-gift/l-icon-1.png"></a>
-					</div>
-					<div class="file-ltop">
-						<a href="#"><img src="css/i/give-gift/l-icon-2.png"></a>
-					</div>
-					<div class="file-top">
-						<a href="javascript:;"><img src="css/i/give-gift/top-icon.png"></a>
+		</div>
+		<!-- 送礼对象 End -->
+
+		<!-- 当季热销 Start -->
+		<div class="recommend-main" v-for="item,index in hotType">
+			<div class="gift-title">
+				<div style="background:#c77c10;"></div>
+				当季热推
+			</div>
+			<div class="recommend-info">
+				<div class="recommend-info-banner" v-go-native-resource="item">
+					<div class="gift-benfont">#{{item.deployName}}#参与即得10积分</div>
+					<div class="banner-box"></div><img :src="item.mediaUrl">
+				</div>
+				<div class="recommend-show">
+					<div class="recommend-ul">
+						<ul>
+							<li v-for="goodsItem in goodsList[index]" v-go-native-goods-detail="goodsItem">
+								<div>
+									<a href="javascript:;"><img :src="goodsItem[0].goodsImgPath?goodsItem[0].goodsImgPath:'http://img23.st.iblimg.com/market-1/images/content/743528369.png'"></a>
+								</div>
+								<div class="recommend-name">
+									<a href="#">{{goodsItem[0].productName}}</a>
+								</div>
+								<div class="recommend-money"><i>￥</i>{{goodsItem[0].marketPrice||0}}</div>
+							</li>
+						</ul>
 					</div>
 				</div>
 			</div>
-		</bl-scroll>
+		</div>
+		<!-- 当季热销 End -->
+		<!-- 礼物分类 Start -->
+		<div class="title-hot">
+			<div class="title-hot-top">
+				<div class="title-hot-font">
+					<div class="title-box"><img :src="hotIcon">礼物分类</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="bl-class">
+			<ul>
+				<li v-for="item in goodType">
+					<div>
+						<a href="#"><img :src="item.mediaUrl"></a>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<!-- 礼物分类 End -->
+		<!-- bottom Start -->
+		<div class="file-show">
+			<div class="file-lshow">
+				<div class="file-ltop">
+					<a href="#"><i>18</i><img src="css/i/give-gift/l-icon-1.png"></a>
+				</div>
+				<div class="file-ltop">
+					<a href="#"><img src="css/i/give-gift/l-icon-2.png"></a>
+				</div>
+				<div class="file-top">
+					<a href="javascript:;"><img src="css/i/give-gift/top-icon.png"></a>
+				</div>
+			</div>
+		</div>
 	</div>
 	<!-- bottom End -->
 
@@ -121,7 +119,6 @@ export default {
     }
   },
   created() {
-    debugger;
   	window.$$vue = this;
     this.$loading.close();
     api.blgift.queryAdDeploy({
@@ -217,6 +214,7 @@ export default {
             	console.log(data);
             	let json = JSON.parse(data.body.obj);
             	this.goodsList.push(json.resultInfo.pageModel.rows);
+                console.log(json)
 			});
 		}
 		this.$el.querySelector('.infinite-layer').hide();

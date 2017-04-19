@@ -40,14 +40,12 @@ const getRect = (ele = document.body) => {
  */
 const transSpecialChar = (str) => {
   if (str) {
-    str = str.replace(/\r/g, '\\r');
-    str = str.replace(/\n/g, '\\n');
-    str = str.replace(/\t/g, '\\t');
+    str = str.replace(/\r/g, ' ');
+    str = str.replace(/\n/g, ' ');
+    str = str.replace(/\t/g, ' ');
+    str = str.replace(/\f/g, ' ');
     str = str.replace(/\\/g, '\\\\');
-    str = str.replace(/\'/g, '&#39;');
-    str = str.replace(/ /g, '&nbsp;');
-    str = str.replace(/</g, '&glt;');
-    str = str.replace(/>/g, '&gt;');
+    str = str.replace(/[\s]/g, " ");
   }
   return str;
 }
