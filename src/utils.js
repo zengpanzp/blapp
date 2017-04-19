@@ -44,7 +44,6 @@ const transSpecialChar = (str) => {
     str = str.replace(/\n/g, '\\n');
     str = str.replace(/\t/g, '\\t');
     str = str.replace(/\\/g, '\\\\');
-    str = str.replace(/("")+/g, '"');
     str = str.replace(/\'/g, '&#39;');
     str = str.replace(/ /g, '&nbsp;');
     str = str.replace(/</g, '&glt;');
