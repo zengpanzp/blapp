@@ -58,7 +58,6 @@ const transSpecialChar = (str) => {
  * @return {[type]}        [description]
  */
 
-<<<<<<< HEAD
 const dateFormat = (format) => {
     let dt = new Date();
     var date = {
@@ -79,26 +78,22 @@ const dateFormat = (format) => {
         }
     }
     return format
-};
-=======
+}
+
 const transData = (data) => {
   if (typeof data == 'string') {
-    return JSON.parse(data.replace(/[\r\n\\]/g, "").replace(/[\s]/g, " "))
+    return JSON.parse(transSpecialChar(data))
   } else {
     return data
   }
 }
 
->>>>>>> 53eebea0555d437fa6998038cf31c6b1f259085e
 export default {
   dbGet,
   dbSet,
   dbRemove,
   getRect,
-<<<<<<< HEAD
   transSpecialChar,
-  dateFormat
-=======
+  dateFormat,
   transData
->>>>>>> 53eebea0555d437fa6998038cf31c6b1f259085e
 }
