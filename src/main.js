@@ -253,6 +253,7 @@ router.beforeEach(({ meta, path }, from, next) => {
 new Vue({
   el: '#app',
   router,
+  mode: 'history',
   template: '<App/>',
   components: { App }
 })

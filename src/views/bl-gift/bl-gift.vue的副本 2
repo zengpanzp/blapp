@@ -217,7 +217,7 @@ export default {
                 console.log(json)
 			});
 		}
-		// this.$el.querySelector('.infinite-layer').hide();
+		this.$el.querySelector('.infinite-layer').hide();
     });
   },
   methods: {

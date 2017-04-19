@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "blfont";
-	src: url('./blfont.ttf') format('truetype');
+	src: require('./blfont.ttf') format('truetype');
 }
 
 .iconfont {
