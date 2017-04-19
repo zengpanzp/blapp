@@ -14,7 +14,7 @@
       </div>
       <div class="right-down" :class="{ active: isOpen }" @click="isOpen = !isOpen"></div>
     </div>
-    <ele-card class="card-wrap" v-if="load"></ele-card>
+    <ele-card class="card-margin" v-if="load"></ele-card>
     <div v-show="!load" class="card-wrap">
       <h5 class="cwrap-title">{{ cwrapTitle }}</h5>
       <bl-card-list v-if="jumpId" :jumpId="jumpId" @finish="inlineLoading && inlineLoading.close()"></bl-card-list>
