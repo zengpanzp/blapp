@@ -131,7 +131,6 @@ export default {
     }, {
       success: res => {
         let resData = utils.transData(res)
-        console.log(resData)
         this.flashSalesGoods = resData
         setTimeout(() => {
           window.CTJSBridge._setNativeTitle(this.flashSalesGoods.flashName)

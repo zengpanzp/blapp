@@ -28,6 +28,7 @@
 
 <script>
 import api from 'src/api'
+import utils from 'src/utils'
 export default {
 
   name: '_cardList',
@@ -82,26 +83,34 @@ export default {
       })
     },
     addCard(goodId) {
-      api.addCart({
-        memberId: this.memberId,
-        member_token: this.member_token,
-        orderSourceCode: "1",
-        goodsList: [
-          {
-            goodsId: goodId,
-            goodsNumber: "1",
-            type: "10",
-          }
-        ]
-      }).then(data => {
-        let resData = JSON.parse(data.body.obj)
-        this.$toast({
-          position: 'bottom',
-          message: resData.resultMsg
-        });
-      }, err => {
-        console.log(err)
-      })
+      let memberId = utils.ssdbGet('member_id')
+      let memberToken = utils.ssdbGet('member_token')
+      if (!memberId && !memberToken) {
+        utils.goLogin()
+      } else {
+        console.log('已经登录')
+        api.addCart({
+          memberId: memberId,
+          member_token: memberToken,
+          orderSourceCode: "1",
+          goodsList: [
+            {
+              goodsId: goodId,
+              goodsNumber: "1",
+              type: "10",
+            }
+          ]
+        }).then(data => {
+          console.log(data)
+          let resData = JSON.parse(data.body.obj)
+          this.$toast({
+            position: 'bottom',
+            message: resData.resultMsg
+          });
+        }, err => {
+          console.log(err)
+        })
+      }
     }
   },
   watch: {
