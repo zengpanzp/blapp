@@ -14,7 +14,7 @@
       </div>
       <div class="right-down" :class="{ active: isOpen }" @click="isOpen = !isOpen"></div>
     </div>
-    <ele-card v-if="load"></ele-card>
+    <ele-card class="card-margin" v-if="load"></ele-card>
     <div v-show="!load" class="card-wrap">
       <h5 class="cwrap-title">{{ cwrapTitle }}</h5>
       <bl-card-list v-if="jumpId" :jumpId="jumpId" @finish="inlineLoading && inlineLoading.close()"></bl-card-list>
@@ -72,8 +72,13 @@ export default {
   },
   methods: {
     fnSelect(index, jumpId, categoryName) {
-      this.jumpId = jumpId.replace('9999', '');
-      this.cwrapTitle = categoryName
+      if (jumpId === '9999162882') {
+        this.load = true
+      } else {
+        this.load = false
+        this.jumpId = jumpId.replace('9999', '');
+        this.cwrapTitle = categoryName
+      }
     }
   },
   watch: {
