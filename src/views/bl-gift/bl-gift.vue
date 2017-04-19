@@ -121,6 +121,7 @@ export default {
     }
   },
   created() {
+    debugger;
   	window.$$vue = this;
     this.$loading.close();
     api.blgift.queryAdDeploy({
