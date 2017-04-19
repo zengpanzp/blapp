@@ -5,7 +5,7 @@
         <div class="card-custom">
             <div class="card-title">自定义面值卡</div>
             <div class="card-img">
-                <div class="card-top-img"><img src="./i/cardImg.jpg" alt=""></div>
+                <div class="card-top-img"><img :src="item.urls[0]" alt=""></div>
                 <div class="card-bottom-fonts">百联卡－自定义面值</div>
             </div>
         </div>
@@ -15,7 +15,7 @@
                 <div class="item-left">
                     <div class="word-text">¥ </div>
                     <div class="word-input">
-                        <input class="j-phone" type="number" name="" value="" placeholder="10" maxlength="11">
+                        <input class="j-phone" type="tel" v-model="inputData" placeholder="10" maxlength="4">
                     </div>
                 </div>
             </div>
@@ -23,11 +23,11 @@
                 <div class="item-left">
                     <div class="word-text number">数量 </div>
                     <div class="fright dw-show-1">
-                        <div class="sicon-1" style="display:block;">-</div>
+                        <div class="sicon-1" style="display:block;" @click="sup">-</div>
                         <div class="fl-input" style="display:block;">
-                            <input type="tel" value="1">
+                            <input type="number" v-model="numValue">
                         </div>
-                        <div class="sicon-2" style="display: block;">+</div>
+                        <div class="sicon-2" style="display: block;" @click="sub">+</div>
                     </div>
                 </div>
             </div>
@@ -44,9 +44,14 @@ export default {
 
   name: 'eleCard',
 
+  props: ['item'],
+
   data () {
     return {
       more: true,
+
+      numValue: 1,
+      inputData: undefined,
       memberId: 100000000043755,
       member_token: ''
     };
@@ -74,6 +79,16 @@ export default {
   created() {
     this.$loading.close()
   },
+  watch: {
+    'inputData'(val, oldValue) {
+      var reg = /^[0-9]*[1-9][0-9]*$/;
+      if (reg.test(val)) {
+        this.inputData = val
+      } else {
+        this.inputData = oldValue
+      }
+    }
+  },
   methods: {
     addCard(num) {
       api.addCart({
@@ -97,6 +112,20 @@ export default {
       }, err => {
         console.log(err)
       })
+    },
+    sup() {
+      if (this.numValue <= 1) {
+        this.numValue = 1
+      } else {
+        this.numValue --
+      }
+    },
+    sub() {
+      if (this.numValue >= 99) {
+        this.numValue = 99
+      } else {
+        this.numValue ++
+      }
     }
   }
 };

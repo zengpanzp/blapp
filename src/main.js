@@ -4,11 +4,13 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import ScrollTo from 'scroll'
 import VueLazyload from 'vue-lazyload'
+import infiniteScroll from 'vue-infinite-scroll'
 
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
-import infiniteScroll from 'vue-infinite-scroll'
+import utils from 'src/utils'
+
 Vue.use(infiniteScroll)
 
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
@@ -197,6 +199,26 @@ const jsBridgeReady = (calback) => {
     document.addEventListener('BLBridgeReady', calback, false)
   }
 }
+// 保存用户信息到sessionStorage
+jsBridgeReady(() => {
+  setTimeout(() => {
+    console.log('fetchLoginInfo')
+    window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
+      success: res => {
+        let resData = utils.transData(res)
+        if (resData.member_id) {
+          utils.ssdbSet('member_id', resData.member_id)
+          utils.ssdbSet('member_token', resData.member_token)
+        } else {
+          utils.ssdbRemove('member_id')
+          utils.ssdbRemove('member_token')
+        }
+      },
+      fail: () => {},
+      progress: () => {}
+    })
+  }, 1000)
+})
 
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截

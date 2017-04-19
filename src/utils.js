@@ -1,9 +1,7 @@
 /**
- * 浏览器的sessionStorage
+ * 浏览器的localStorage
  * @type {[Function]}
  */
-const localStorage = window.localStorage
-const JSON = window.JSON
 const dbGet = (name) => {
   let value = localStorage.getItem(name)
   if (/^\{.*\}$/.test(value)) value = JSON.parse(value)
@@ -17,6 +15,25 @@ const dbSet = (name, value) => {
 
 const dbRemove = (name) => {
   return localStorage.removeItem(name)
+}
+
+/**
+ * 浏览器的sessionStorage
+ * @type {[Function]}
+ */
+const ssdbGet = (name) => {
+  let value = sessionStorage.getItem(name)
+  if (/^\{.*\}$/.test(value)) value = JSON.parse(value)
+  return value
+}
+
+const ssdbSet = (name, value) => {
+  if (typeof value === typeof {}) value = JSON.stringify(value)
+  return sessionStorage.setItem(name, value)
+}
+
+const ssdbRemove = (name) => {
+  return sessionStorage.removeItem(name)
 }
 
 /**
@@ -85,12 +102,27 @@ const transData = (data) => {
   }
 }
 
+const goLogin = () => {
+  window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
+    success: data => {
+      let resData = JSON.parse(data)
+      ssdbSet('member_id', resData.member_id)
+      ssdbSet('member_token', resData.member_token)
+    },
+    fail: () => {}
+  })
+}
+
 export default {
   dbGet,
   dbSet,
   dbRemove,
+  ssdbGet,
+  ssdbSet,
+  ssdbRemove,
   getRect,
   transSpecialChar,
   dateFormat,
-  transData
+  transData,
+  goLogin
 }
