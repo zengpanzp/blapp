@@ -26,7 +26,7 @@ module.exports = {
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-debugger': 0,
     // standard规范不使用的在下面添加
     // 尾逗号不允许
     'comma-dangle': 0,
