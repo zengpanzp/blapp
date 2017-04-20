@@ -1,6 +1,4 @@
 import Vue from 'vue'
-
-import api from 'api'
 /**
  * 浏览器的localStorage
  * @type {[Function]}
@@ -150,7 +148,7 @@ const addCard = (goodId) => {
   isLogin().then(() => {
     let memberId = ssdbGet('member_id')
     let memberToken = ssdbGet('member_token')
-    api.addCart({
+    window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
       memberId: memberId,
       member_token: memberToken,
       orderSourceCode: "1",
@@ -161,14 +159,16 @@ const addCard = (goodId) => {
           type: "10",
         }
       ]
-    }).then(data => {
-      let resData = JSON.parse(data.body.obj)
-      Vue.$toast({
-        position: 'bottom',
-        message: resData.resultMsg
-      });
-    }, err => {
-      console.log(err)
+    }, {
+      success: data => {
+        let resData = JSON.parse(data.body.obj)
+        Vue.$toast({
+          position: 'bottom',
+          message: resData.resultMsg
+        });
+      },
+      fail: err => { console.log(err) },
+      progress: data => { console.log(data) }
     })
   }, () => {})
 }
