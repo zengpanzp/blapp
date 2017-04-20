@@ -33,13 +33,14 @@
             </div>
         </div>
         <div class="card-button">
-            <button type="button" @click="addCart(10)">加入购物车</button>
+            <button type="button" @click="addCart(item.categoryId)">加入购物车</button>
         </div>
     </div>
   </div>
 </template>
 <script>
 import api from 'src/api'
+import utils from 'src/utils'
 export default {
 
   name: 'eleCard',
@@ -49,36 +50,22 @@ export default {
   data () {
     return {
       more: true,
-
+      inlineLoading: null,
       numValue: 1,
       inputData: undefined,
       memberId: 100000000043755,
       member_token: ''
     };
   },
-  mounted() {
-    let $$vue = this;
-    this.$loading.close();
-    setTimeout(function() {
-      // 获得登录的用户id
-      window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
-        success: res => {
-          // alert(res);
-          let userInfo = JSON.parse(res);
-          console.log(userInfo)
-          // memberId
-          $$vue.memberId = userInfo.member_id;
-          // userToken
-          $$vue.member_token = userInfo.member_token;
-        },
-        fail: res => {
-        }
-      });
-    }, 400);
-  },
+
   created() {
-    this.$loading.close()
+    this.inlineLoading = this.$toast({
+      iconClass: 'preloader white',
+      message: '加载中',
+      duration: 'loading'
+    })
   },
+
   watch: {
     'inputData'(val, oldValue) {
       var reg = /^[0-9]*[1-9][0-9]*$/;
@@ -90,28 +77,32 @@ export default {
     }
   },
   methods: {
-    addCard(num) {
-      api.addCart({
-        memberId: this.memberId,
-        member_token: this.member_token,
-        orderSourceCode: "1",
-        goodsList: [
-          {
-            goodsId: 8320,
-            goodsNumber: num,
-            type: "10",
-          }
-        ]
-      }).then(data => {
-        this.$loading.close()
-        console.log(data)
-        this.$toast({
-          position: 'bottom',
-          message: '加入购物车成功！'
-        });
-      }, err => {
-        console.log(err)
-      })
+    addCart(goodsId) {
+      utils.isLogin().then(data => {
+        api.addCart({
+          memberId: this.memberId,
+          member_token: this.member_token,
+          orderSourceCode: "1",
+          goodsList: [
+            {
+              salePrice: this.inputData,
+              goodsId: goodsId,
+              goodsNumber: this.numValue,
+              type: "10",
+            }
+          ]
+        }).then(data => {
+          this.inlineLoading.close()
+          console.log(data)
+          let resData = JSON.parse(data.body.obj)
+          this.$toast({
+            position: 'bottom',
+            message: resData.resultMsg
+          });
+        }, err => {
+          console.log(err)
+        })
+      }, () => {})
     },
     sup() {
       if (this.numValue <= 1) {
