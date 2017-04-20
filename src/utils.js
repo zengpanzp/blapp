@@ -161,7 +161,7 @@ const addCard = (goodId) => {
       ]
     }, {
       success: data => {
-        let resData = JSON.parse(data.body.obj)
+        let resData = JSON.parse(data)
         Vue.$toast({
           position: 'bottom',
           message: resData.resultMsg
