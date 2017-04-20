@@ -22,7 +22,8 @@ BLGoodsDetail | BLGoodsDetailViewController | {goodsid:'',goodsName:'',goodsPric
 SearchList | SearchList | {searchkey:''} | h5跳native搜索列表页
 BLAdvertResource | BLAdvertResourceController | {} | 资源位跳转
 BLCategory | BLCategoryViewController | { categoryId: '' } | 跳native分类
-
+打开新的webview
+NativeWebView | loadWebView  { pageUrl:”http://www.baidu.com”,pageTitle:”百度”}  
 # 其他native方法
 
 ```js

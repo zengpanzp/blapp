@@ -309,6 +309,13 @@ body {
             }
         }
     }
+    &:after {
+        display: block;
+        content: " ";
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
 }
 .file-show {
     height: rem(108);

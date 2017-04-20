@@ -1,6 +1,6 @@
 <style lang="scss" src="./css/_bl-gift.scss" scoped></style>
 <template>
-	  <div class="new blgift">
+	  <div class="new blgift" id="container" v-scroll-top.window >
 		<!-- content Start -->
 		<!-- 轮播 Start -->
 		<bl-slide class="blgift-swipe" :slides="fillAllSlides" :autoPlay="true" :showShadow="true"></bl-slide>
@@ -13,12 +13,16 @@
 			</div>
 			<div class="gift-ul">
 				<ul>
-					<li v-for="item in sendType">
-						<a href="#">
-							<span><img :src="item.mediaUrl"></span>
-							<span class="gift-name">{{item.deployName}}</span>
-						</a>
-					</li>
+                    <router-link v-for="item in sendType" :to="{ path: '/blgift/'+item.jumpId}">
+    					<li>
+    						<a href="javascript:;" >
+    							<span><img :src="item.mediaUrl"></span>
+    							<span class="gift-name">{{item.deployName}}</span>
+    						</a>
+
+    					</li>
+                    </router-link>
+                    
 				</ul>
 			</div>
 		</div>
@@ -43,7 +47,7 @@
 									<a href="javascript:;"><img :src="goodsItem[0].goodsImgPath?goodsItem[0].goodsImgPath:'http://img23.st.iblimg.com/market-1/images/content/743528369.png'"></a>
 								</div>
 								<div class="recommend-name">
-									<a href="#">{{goodsItem[0].productName}}</a>
+									<a href="javascript:;">{{goodsItem[0].productName}}</a>
 								</div>
 								<div class="recommend-money"><i>￥</i>{{goodsItem[0].marketPrice||0}}</div>
 							</li>
@@ -64,9 +68,9 @@
 		</div>
 		<div class="bl-class">
 			<ul>
-				<li v-for="item in goodType">
+				<li v-for="item in goodType" @click="goGoods(item,$event)">
 					<div>
-						<a href="#"><img :src="item.mediaUrl"></a>
+						<a href="javascript:;"><img v-lazy="item.mediaUrl"></a>
 					</div>
 				</li>
 			</ul>
@@ -76,13 +80,13 @@
 		<div class="file-show">
 			<div class="file-lshow">
 				<div class="file-ltop">
-					<a href="#"><i>18</i><img src="css/i/give-gift/l-icon-1.png"></a>
+					<a href="javascript:;"><i>18</i><img :src="require('./i/l-icon-1.png')"></a>
 				</div>
 				<div class="file-ltop">
-					<a href="#"><img src="css/i/give-gift/l-icon-2.png"></a>
+					<a href="javascript:;"><img :src="require('./i/l-icon-2.png')"></a>
 				</div>
 				<div class="file-top">
-					<a href="javascript:;"><img src="css/i/give-gift/top-icon.png"></a>
+					<a href="javascript:;"><img :src="require('./i/top-icon.png')"></a>
 				</div>
 			</div>
 		</div>
@@ -100,6 +104,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       hotIcon: require('./i/hot-icon-1.png'),
       // 广告资源位
       banner: [],
@@ -119,16 +124,13 @@ export default {
     }
   },
   created() {
-  	window.$$vue = this;
     this.$loading.close();
-    api.blgift.queryAdDeploy({
+    api.queryAdDeploy({
       'otherresource': {
         'resourceId': "1604,1605,1606,1607,1608,1609,1610,1611,1612,1613,1614,1615,1616,1617,1618,1619,1620,1621,1624"
       },
     }).then(data => {
-    	console.log(data);
     	let obj = JSON.parse(data.body.obj);
-    	console.log(obj);
     	let resList = [];
     	let typeList = [];
     	obj = obj.obj
@@ -156,7 +158,6 @@ export default {
 		    	if (obj.otherResource[i] && obj.otherResource[i].advList) {
 		    		for (var j = 0; j < obj.otherResource[i].advList.length; j++) {
 		                // window.setAdvertRoute(obj.otherResource[i].advList[j]);
-		                console.log(obj.otherResource[i].advList[j])
 		                if (parseInt(obj.otherResource[i].advList[j].jumpType) == 2) {
 		                    obj.otherResource[i].advList[j].routeurl = "#BLPresentGoodListPage/0/" + encodeURIComponent(JSON.stringify(obj.otherResource[i].advList[j]));
 		                }
@@ -168,8 +169,6 @@ export default {
 		        }
 		    }
 		}
-		console.log(resList);
-		console.log(typeList);
 		// 有礼头部banner
 		this.banner = resList[1];
 		// 送礼的类别
@@ -183,13 +182,13 @@ export default {
 		for (let i = 8; i < typeList.length; i++) {
 			goodTag.push(typeList[i]);
 		}
-		console.log(goodTag)
 		this.goodType = goodTag;
+        console.log(goodTag)
 		// 商品类别
 		this.hotType = resList[0];
 		for (let i = 0; i < this.hotType.length; i++) {
 			// 根据jumpId获得商品列表
-			api.blgift.searchByKeyWord({
+			api.getGoods({
                 "clientIp": "127.0.0.1",
                 "clientRequestTime": utils.dateFormat("yyyyMMddhhmm"),
                 "requestData": JSON.stringify({
@@ -211,10 +210,8 @@ export default {
 	            }),
                 "systemNo": "06"
             }).then(data => {
-            	console.log(data);
             	let json = JSON.parse(data.body.obj);
             	this.goodsList.push(json.resultInfo.pageModel.rows);
-                console.log(json)
 			});
 		}
 		// this.$el.querySelector('.infinite-layer').hide();
@@ -225,6 +222,26 @@ export default {
       setTimeout(() => {
         done()
       }, 2000)
+    },
+    // 跳转到商品列表页
+    goGoods(item, event) {
+      console.log(item.jumpType);
+      // 新打开webview 打开cms地址
+      if (item.jumpType == 14) {
+        // 获得登录的用户id
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLDefaultWebView', 'defaultWebViewController', {
+            url: "http://www.baidu.com",
+            title: "百度"
+        }, {
+          success: res => {
+            alert("成功!");
+          },
+          fail: res => {
+          }
+        });
+      } else {
+        this.$router.push({path: '/blgift/' + item.jumpId});
+      }
     }
   }
 };

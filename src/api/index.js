@@ -42,14 +42,6 @@ export default {
   },
   // 百联财礼 百联有礼
   blgift: {
-    // 根据关键字搜索商品
-    searchByKeyWord: params => {
-      return Vue.http.post(baseUrl + '/goodSearch/keyWordSearchGood.htm', params);
-    },
-    // 查询资源位
-    queryAdDeploy: params => {
-      return Vue.http.post(baseUrl + '/site/queryAdDeploy.htm', params);
-    },
     // 取消订单
     cancelOrderByNo: params => {
       return Vue.http.post(baseUrl + '/order/cancelOrderByParentNo.htm', params);

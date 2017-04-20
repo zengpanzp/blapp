@@ -85,10 +85,10 @@
       </div>
       <div class="getTips" v-show="tipShow" transition="showTrans">
         <div>
-          恭喜您，领券成功
+          恭喜您，领券成功！
         </div>
         <div>
-          优惠券正在飞来的路上，请耐心等候~
+          可稍候至个人券中心查看
         </div>
         <div>
           <label v-model="timeleft">{{timeleft}}</label>S后返回活动页面
@@ -104,6 +104,7 @@ import close from './i/h5chacha.png'
 import two from './i/h5ewm.png'
 import three from './i/gx2.png'
 import four from './i/ygx2.png'
+import utils from 'src/utils'
 export default {
 
   name: 'banknote',
@@ -123,7 +124,7 @@ export default {
       headerTab: 0,
       detail: {},  // 券详情
       hasGet: false,  // 是否领取了
-      timeleft: 5,
+      timeleft: 3,
       memberID: 100000004236751,
       userToken: '',
       idays: 0   // 券的有效天数
@@ -145,7 +146,8 @@ export default {
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
       success: res => {
         // alert(res);
-        let userInfo = JSON.parse(res);
+        res = utils.transData(res);
+        let userInfo = res;
         console.log(userInfo)
         // memberId
         this.memberID = userInfo.member_id;
@@ -218,7 +220,7 @@ export default {
         let code = data.body.resCode;
         if (code == "00100000") { // 操作成功
           // 定时器的时间
-          let timeleft = 5;
+          let timeleft = 3;
           console.log(data);
           // 领取成功后 显示提示信息
           this.hasGet = true;  // 已领取
