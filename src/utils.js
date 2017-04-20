@@ -1,3 +1,6 @@
+import Vue from 'vue'
+
+import api from 'api'
 /**
  * 浏览器的localStorage
  * @type {[Function]}
@@ -143,6 +146,33 @@ const isLogin = (loginStatus = 1) => {
   })
 }
 
+const addCard = (goodId) => {
+  isLogin().then(() => {
+    let memberId = ssdbGet('member_id')
+    let memberToken = ssdbGet('member_token')
+    api.addCart({
+      memberId: memberId,
+      member_token: memberToken,
+      orderSourceCode: "1",
+      goodsList: [
+        {
+          goodsId: goodId,
+          goodsNumber: "1",
+          type: "10",
+        }
+      ]
+    }).then(data => {
+      let resData = JSON.parse(data.body.obj)
+      Vue.$toast({
+        position: 'bottom',
+        message: resData.resultMsg
+      });
+    }, err => {
+      console.log(err)
+    })
+  }, () => {})
+}
+
 export default {
   dbGet,
   dbSet,
@@ -154,5 +184,6 @@ export default {
   transSpecialChar,
   dateFormat,
   transData,
-  isLogin
+  isLogin,
+  addCard
 }

@@ -34,7 +34,7 @@
             <div class="list-pay">
               <div class="paynum"><span>¥</span>{{ row[0].marketPrice }}</div>
               <div class="pay-log-no" v-if="row.isAvailable == 0"></div>
-              <div class="pay-log" v-else></div>
+              <div class="pay-log" v-else @click="addCard(row[0].goodsId)"></div>
             </div>
           </div>
           <router-link tag="div" :to="{ path: '/giftCardMore/' + item.jumpId + '/' + encodeURI(item.themeName) }" class="get-more">
@@ -52,6 +52,7 @@
 
 <script>
 import api from 'src/api'
+import utils from 'src/utils'
 export default {
 
   name: 'keepgiftcard-home',
@@ -128,6 +129,11 @@ export default {
   activated() {
     if (this.loaded) {
       this.$loading.close()
+    }
+  },
+  methods: {
+    addCard(goodId) {
+      utils.addCard(goodId)
     }
   }
 };
