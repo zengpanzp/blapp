@@ -93,7 +93,13 @@ const dateFormat = (format) => {
     }
     return format
 }
-
+/**
+ * 判断参数类型,统一返回JSON
+ * @chenpeng
+ * @DateTime 2017-04-20T12:49:54+0800
+ * @param    {[String,Object]}
+ * @return   {[Object]}
+ */
 const transData = (data) => {
   if (typeof data == 'string') {
     return JSON.parse(transSpecialChar(data))
@@ -102,14 +108,38 @@ const transData = (data) => {
   }
 }
 
-const goLogin = () => {
-  window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
-    success: data => {
-      let resData = JSON.parse(data)
-      ssdbSet('member_id', resData.member_id)
-      ssdbSet('member_token', resData.member_token)
-    },
-    fail: () => {}
+/**
+ * 判断是否登录
+ * @chenpeng
+ * @DateTime 2017-04-20T12:51:10+0800
+ * @param    {[number]} loginStatus [0:失效 1:正常]
+ * @return   {[obj]}    [Promise]
+ */
+const isLogin = (loginStatus = 1) => {
+  let memberId = null
+  let memberToken = null
+  if (loginStatus) {
+    memberId = ssdbGet('member_id')
+    memberToken = ssdbGet('member_token')
+  }
+  return new Promise((resolve, reject) => {
+    if (!memberId && !memberToken) {
+      console.log('没有登录')
+      window.CTJSBridge && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
+        success: data => {
+          let resData = transData(data)
+          ssdbSet('member_id', resData.member_id)
+          ssdbSet('member_token', resData.member_token)
+          resolve()
+        },
+        fail: () => {
+          reject && reject()
+        }
+      })
+    } else {
+      console.log('已经登录')
+      resolve()
+    }
   })
 }
 
@@ -124,5 +154,5 @@ export default {
   transSpecialChar,
   dateFormat,
   transData,
-  goLogin
+  isLogin
 }

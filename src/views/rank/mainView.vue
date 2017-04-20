@@ -72,7 +72,8 @@ export default {
     fetchGoods(GoodId) {
       window.CTJSBridge.LoadAPI('BLQueryProductListAPIManager', { fkRankid: GoodId }, {
         success: data => {
-          let parseData = JSON.parse(data)
+          // let parseData = JSON.parse(data)
+          let parseData = utils.transData(data)
           this.aPrd = parseData.obj
           this.loaded = true
           this.$loading.close()
@@ -84,7 +85,8 @@ export default {
     fetchSort(id) {
       window.CTJSBridge.LoadAPI('BLQueryRankListAPIManager', { rankType: id }, {
         success: data => {
-          let parseData = JSON.parse(data)
+          // let parseData = JSON.parse(data)
+          let parseData = utils.transData(data)
           if (id === '0') {
             this.rankId = parseData.obj[0].id
             this.fetchGoods(parseData.obj[0].id)

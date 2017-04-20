@@ -83,12 +83,9 @@ export default {
       })
     },
     addCard(goodId) {
-      let memberId = utils.ssdbGet('member_id')
-      let memberToken = utils.ssdbGet('member_token')
-      if (!memberId && !memberToken) {
-        utils.goLogin()
-      } else {
-        console.log('已经登录')
+      utils.isLogin().then(() => {
+        let memberId = utils.ssdbGet('member_id')
+        let memberToken = utils.ssdbGet('member_token')
         api.addCart({
           memberId: memberId,
           member_token: memberToken,
@@ -101,7 +98,6 @@ export default {
             }
           ]
         }).then(data => {
-          console.log(data)
           let resData = JSON.parse(data.body.obj)
           this.$toast({
             position: 'bottom',
@@ -110,7 +106,7 @@ export default {
         }, err => {
           console.log(err)
         })
-      }
+      }, () => {})
     }
   },
   watch: {

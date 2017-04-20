@@ -114,6 +114,7 @@
   </div>
 </template>
 <script>
+import utils from 'src/utils'
 export default {
 
   name: 'keepElectricHome',
@@ -188,7 +189,8 @@ export default {
       resourceId: "237300,237301,237302,237304,237306,237307,237310,237311,237320"
     }, {
       success: function(res) {
-        let resData = window.JSON.parse(res).otherResource
+        // let resData = window.JSON.parse(res).otherResource
+        let resData = utils.transData(res).otherResource
         self.hotBrands = resData[1].advList[0]
         self.allSlides = resData[2].advList
         debugger;
@@ -251,7 +253,8 @@ export default {
       /* 获取商品 */
       window.CTJSBridge.LoadAPI("BLSearchByKeyWordAPIManager", resquestData, {
         success: function(res) {
-          let resData = window.JSON.parse(res)
+          // let resData = window.JSON.parse(res)
+          let resData = utils.transData(res)
           if (cateId === '268862') {
             if (resData.resultInfo.pageModel.rows) {
               self.listRows = resData.resultInfo.pageModel.rows

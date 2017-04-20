@@ -53,6 +53,7 @@
 
 <script>
 import api from 'src/api'
+import utils from 'src/utils'
 export default {
 
   name: 'ecardList',
@@ -115,7 +116,7 @@ export default {
       if (!this.cardList[index].showPass) {
         window.CTJSBridge && window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val}, {
           success: res => {
-            let resData = JSON.parse(res)
+            let resData = utils.transData(res)
             this.cardList[index].pheredText = resData.decypheredText
             this.cardList[index].showPass = true
           },

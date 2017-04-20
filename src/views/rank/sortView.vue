@@ -45,7 +45,8 @@ export default {
     } else {
       window.CTJSBridge.LoadAPI('BLQueryRankListAPIManager', { rankType: '1' }, {
         success: data => {
-          let parseData = JSON.parse(data)
+          // let parseData = JSON.parse(data)
+          let parseData = utils.transData(data)
           this.aSort = parseData.obj
           utils.dbSet('rankSort', parseData.obj)
         },
@@ -68,7 +69,8 @@ export default {
       document.body.scrollTop = 0
       window.CTJSBridge.LoadAPI('BLQueryProductListAPIManager', { fkRankid: rankId }, {
         success: data => {
-          let parseData = JSON.parse(data)
+          // let parseData = JSON.parse(data)
+          let parseData = utils.transData(data)
           this.aPrd = parseData.obj
           this.showToggle = true
           this.inlineLoading.close()
