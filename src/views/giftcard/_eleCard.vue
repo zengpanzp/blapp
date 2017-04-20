@@ -50,20 +50,9 @@ export default {
   data () {
     return {
       more: true,
-      inlineLoading: null,
       numValue: 1,
-      inputData: undefined,
-      memberId: 100000000043755,
-      member_token: ''
+      inputData: undefined
     };
-  },
-
-  created() {
-    this.inlineLoading = this.$toast({
-      iconClass: 'preloader white',
-      message: '加载中',
-      duration: 'loading'
-    })
   },
 
   watch: {
@@ -78,31 +67,36 @@ export default {
   },
   methods: {
     addCart(goodsId) {
-      utils.isLogin().then(data => {
-        api.addCart({
-          memberId: this.memberId,
-          member_token: this.member_token,
-          orderSourceCode: "1",
-          goodsList: [
-            {
-              salePrice: this.inputData,
-              goodsId: goodsId,
-              goodsNumber: this.numValue,
-              type: "10",
-            }
-          ]
-        }).then(data => {
-          this.inlineLoading.close()
-          console.log(data)
-          let resData = JSON.parse(data.body.obj)
-          this.$toast({
-            position: 'bottom',
-            message: resData.resultMsg
-          });
-        }, err => {
-          console.log(err)
-        })
-      }, () => {})
+      if (this.inputData) {
+        utils.isLogin().then(data => {
+          let memberId = utils.ssdbGet('member_id')
+          let memberToken = utils.ssdbGet('member_token')
+          api.addCart({
+            memberId: memberId,
+            member_token: memberToken,
+            orderSourceCode: "1",
+            goodsList: [
+              {
+                salePrice: this.inputData,
+                goodsId: goodsId,
+                goodsNumber: this.numValue,
+                type: "10",
+              }
+            ]
+          }).then(data => {
+            console.log(data)
+            let resData = JSON.parse(data.body.obj)
+            this.$toast({
+              position: 'bottom',
+              message: resData.resultMsg
+            });
+          }, err => {
+            console.log(err)
+          })
+        }, () => {})
+      } else {
+        this.$toast('面额不能为空!')
+      }
     },
     sup() {
       if (this.numValue <= 1) {
