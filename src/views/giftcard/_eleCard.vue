@@ -5,7 +5,7 @@
         <div class="card-custom">
             <div class="card-title">自定义面值卡</div>
             <div class="card-img">
-                <div class="card-top-img"><img :src="item.urls[0]" alt=""></div>
+                <div class="card-top-img"><img src="./i/cardImg.jpgs" alt=""/></div>
                 <div class="card-bottom-fonts">百联卡－自定义面值</div>
             </div>
         </div>
@@ -33,13 +33,12 @@
             </div>
         </div>
         <div class="card-button">
-            <button type="button" @click="addCart(item.categoryId)">加入购物车</button>
+            <button type="button" @click="addCart">加入购物车</button>
         </div>
     </div>
   </div>
 </template>
 <script>
-import api from 'src/api'
 import utils from 'src/utils'
 export default {
 
@@ -57,41 +56,42 @@ export default {
 
   watch: {
     'inputData'(val, oldValue) {
-      var reg = /^[0-9]*[1-9][0-9]*$/;
+      let reg = /^[0-9]*[1-9][0-9]*$/;
       if (reg.test(val)) {
         this.inputData = val
       } else {
-        this.inputData = oldValue
+        this.inutData = oldValue
       }
     }
   },
   methods: {
-    addCart(goodsId) {
+    addCart() {
       if (this.inputData) {
         utils.isLogin().then(data => {
           let memberId = utils.ssdbGet('member_id')
           let memberToken = utils.ssdbGet('member_token')
-          api.addCart({
+          window.CTJSBridge && window.CTJSBridge.LoadApi('BLDJAddCartAPIManager', {
             memberId: memberId,
             member_token: memberToken,
-            orderSourceCode: "1",
+            orderSourceCode: '1',
             goodsList: [
               {
                 salePrice: this.inputData,
-                goodsId: goodsId,
+                goodsId: '1042900',
                 goodsNumber: this.numValue,
-                type: "10",
+                type: '10'
               }
             ]
-          }).then(data => {
-            console.log(data)
-            let resData = JSON.parse(data.body.obj)
-            this.$toast({
-              position: 'bottom',
-              message: resData.resultMsg
-            });
-          }, err => {
-            console.log(err)
+          }, {
+            success: data => {
+              let resData = JSON.parse(data)
+              this.$toast({
+                position: 'bottom',
+                message: resData.resultMsg
+              });
+            },
+            fail: err => { console.log(err) },
+            progress: data => { console.log(data) }
           })
         }, () => {})
       } else {
