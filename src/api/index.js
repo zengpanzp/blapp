@@ -46,6 +46,14 @@ export default {
     // 取消订单
     cancelOrderByNo: params => {
       return Vue.http.post(baseUrl + '/order/cancelOrderByParentNo.htm', params);
+    },
+    // 获取收到的礼物的数据
+    getGiftOrderListByReceiver: params => {
+      return Vue.http.post(baseUrl + '/order/getGiftOrderListByReceiver.htm', params);
+    },
+    // 获取我发出去的礼物的数据
+    getGiftOrderListBySender: params => {
+      return Vue.http.post(baseUrl + '/order/getGiftOrderListBySender.htm', params);
     }
   },
   // 查询资源位

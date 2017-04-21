@@ -1,9 +1,9 @@
-<style lang="scss" src="./css/_goods.scss" scoped></style>
+<style lang="scss" src="./css/_bl-goods.scss" scoped></style>
 <template>
   <div class="blgift-goods" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="pic-list">
       <ul>
-        <li v-for="item in goodsList">
+        <li v-for="item in goodsList" v-go-native-goods-detail.isGiftGoods="item[0]">
           <div class="list-bg">
             <a href="javascript:;" title="">
               <div class="lazy-box">

@@ -13,7 +13,7 @@
 			</div>
 			<div class="gift-ul">
 				<ul>
-                    <router-link v-for="item in sendType" :to="{ path: '/blgift/'+item.jumpId}">
+                    <router-link v-for="item in sendType" :to="{ path: '/blgift/goods/'+item.jumpId}">
     					<li>
     						<a href="javascript:;" >
     							<span><img :src="item.mediaUrl"></span>
@@ -42,7 +42,7 @@
 				<div class="recommend-show">
 					<div class="recommend-ul">
 						<ul>
-							<li v-for="goodsItem in goodsList[index]" v-go-native-goods-detail="goodsItem">
+							<li v-for="goodsItem in goodsList[index]" v-go-native-goods-detail.isGiftGoods="goodsItem[0]">
 								<div>
 									<a href="javascript:;"><img :src="goodsItem[0].goodsImgPath?goodsItem[0].goodsImgPath:'http://img23.st.iblimg.com/market-1/images/content/743528369.png'"></a>
 								</div>
@@ -79,14 +79,11 @@
 		<!-- bottom Start -->
 		<div class="file-show">
 			<div class="file-lshow">
-				<div class="file-ltop">
+				<!-- <div class="file-ltop">
 					<a href="javascript:;"><i>18</i><img :src="require('./i/l-icon-1.png')"></a>
-				</div>
-				<div class="file-ltop">
+				</div> -->
+				<div class="file-ltop" @click.prevent="showMyGift">
 					<a href="javascript:;"><img :src="require('./i/l-icon-2.png')"></a>
-				</div>
-				<div class="file-top">
-					<a href="javascript:;"><img :src="require('./i/top-icon.png')"></a>
 				</div>
 			</div>
 		</div>
@@ -212,6 +209,7 @@ export default {
             }).then(data => {
             	let json = JSON.parse(data.body.obj);
             	this.goodsList.push(json.resultInfo.pageModel.rows);
+                console.log(this.goodsList);
 			});
 		}
 		// this.$el.querySelector('.infinite-layer').hide();
@@ -223,24 +221,35 @@ export default {
         done()
       }, 2000)
     },
+    // 跳转到我的礼物
+    showMyGift() {
+        utils.isLogin().then(data => {
+          // let memberId = utils.ssdbGet('member_id')
+          // let memberToken = utils.ssdbGet('member_token')
+          // 跳转到我的礼物页面
+          alert(2)
+          this.$router.push({path: '/blgift/mygift/'});
+        }, err => {
+            console.log(err)
+        })
+    },
     // 跳转到商品列表页
     goGoods(item, event) {
-      console.log(item.jumpType);
+      console.log(item);
       // 新打开webview 打开cms地址
       if (item.jumpType == 14) {
         // 获得登录的用户id
         window.CTJSBridge && window.CTJSBridge.LoadMethod('BLDefaultWebView', 'defaultWebViewController', {
-            url: "http://www.baidu.com",
-            title: "百度"
+            url: item.jumpUrl,
+            title: item.deployName
         }, {
           success: res => {
-            alert("成功!");
           },
           fail: res => {
           }
         });
       } else {
-        this.$router.push({path: '/blgift/' + item.jumpId});
+        this.$router.push({path: '/blgift/goods/' + item.jumpId});
       }
     }
   }
