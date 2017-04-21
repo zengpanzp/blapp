@@ -6,7 +6,7 @@
         <div class="cwrap-img">
           <a href="javascript:;" v-go-native-goods-detail="item">
             <div class="lazy-box">
-              <img class="lazy" v-lazy="{ url: item.goodsImgPath, loading: require('src/assets/loading-pic.png'), error: require('src/assets/loading-pic.png') }" alt="">
+              <img class="lazy" v-lazy="item.goodsImgPath" alt="">
             </div>
             <div class="cwrap-name">{{ item.productName }}</div>
             <div class="cwrap-lowg" v-if="item.isAvailable == 0">无货</div>
@@ -83,34 +83,7 @@ export default {
       })
     },
     addCard(goodId) {
-      let memberId = utils.ssdbGet('member_id')
-      let memberToken = utils.ssdbGet('member_token')
-      if (!memberId && !memberToken) {
-        utils.goLogin()
-      } else {
-        console.log('已经登录')
-        api.addCart({
-          memberId: memberId,
-          member_token: memberToken,
-          orderSourceCode: "1",
-          goodsList: [
-            {
-              goodsId: goodId,
-              goodsNumber: "1",
-              type: "10",
-            }
-          ]
-        }).then(data => {
-          console.log(data)
-          let resData = JSON.parse(data.body.obj)
-          this.$toast({
-            position: 'bottom',
-            message: resData.resultMsg
-          });
-        }, err => {
-          console.log(err)
-        })
-      }
+      utils.addCard(goodId)
     }
   },
   watch: {

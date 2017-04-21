@@ -24,16 +24,13 @@ export default {
   },
   methods: {
     goShopCar() {
-      let memberId = utils.ssdbGet('member_id')
-      let memberToken = utils.ssdbGet('member_token')
-      if (!memberId && !memberToken) {
-        utils.goLogin()
-      } else {
-        console.log('已经登录')
+      utils.isLogin().then(data => {
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
           pageId: 'shoppingcart2'
         })
-      }
+      }, () => {
+        console.log('取消登录')
+      })
     }
   }
 };

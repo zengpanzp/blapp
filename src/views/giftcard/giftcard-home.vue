@@ -25,16 +25,16 @@
       </div>
       <div class="scroll-list" ref="container">
         <div class="scroll-ul">
-          <div class="list-contain" v-for="row in item.rows" v-go-native-goods-detail="row">
-            <div class="list-img">
+          <div class="list-contain" v-for="row in item.rows">
+            <div class="list-img" v-go-native-goods-detail="row">
               <img class="lazy" v-lazy.container="row[0].goodsImgPath" />
               <div class="no-pro" v-if="row.isAvailable == 0">无&nbsp;&nbsp;&nbsp;货</div>
             </div>
-            <div class="list-text">{{ row[0].productName }}</div>
+            <div class="list-text" v-go-native-goods-detail="row">{{ row[0].productName }}</div>
             <div class="list-pay">
               <div class="paynum"><span>¥</span>{{ row[0].marketPrice }}</div>
               <div class="pay-log-no" v-if="row.isAvailable == 0"></div>
-              <div class="pay-log" v-else></div>
+              <div class="pay-log" v-else @click="addCard(row[0].goodsId)"></div>
             </div>
           </div>
           <router-link tag="div" :to="{ path: '/giftCardMore/' + item.jumpId + '/' + encodeURI(item.themeName) }" class="get-more">
@@ -52,6 +52,7 @@
 
 <script>
 import api from 'src/api'
+import utils from 'src/utils'
 export default {
 
   name: 'keepgiftcard-home',
@@ -128,6 +129,11 @@ export default {
   activated() {
     if (this.loaded) {
       this.$loading.close()
+    }
+  },
+  methods: {
+    addCard(goodId) {
+      utils.addCard(goodId)
     }
   }
 };

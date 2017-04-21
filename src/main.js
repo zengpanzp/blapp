@@ -9,7 +9,7 @@ import infiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
-import utils from 'src/utils'
+// import utils from 'src/utils'
 
 Vue.use(infiniteScroll)
 
@@ -25,7 +25,7 @@ if ('addEventListener' in document) {
 Vue.use(VueLazyload, {
   preLoad: 1.3,
   loading: require('src/assets/loading-pic.png'),
-  error: require('src/assets/loading-pic.png'),
+  error: require('src/assets/error-pic.png'),
   try: 3 // default 1
 })
 
@@ -200,25 +200,26 @@ const jsBridgeReady = (calback) => {
   }
 }
 // 保存用户信息到sessionStorage
-jsBridgeReady(() => {
-  setTimeout(() => {
-    console.log('fetchLoginInfo')
-    window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
-      success: res => {
-        let resData = utils.transData(res)
-        if (resData.member_id) {
-          utils.ssdbSet('member_id', resData.member_id)
-          utils.ssdbSet('member_token', resData.member_token)
-        } else {
-          utils.ssdbRemove('member_id')
-          utils.ssdbRemove('member_token')
-        }
-      },
-      fail: () => {},
-      progress: () => {}
-    })
-  }, 1000)
-})
+// jsBridgeReady(() => {
+//   setTimeout(() => {
+//     console.log('fetchLoginInfo')
+//     !utils.ssdbGet('member_id') && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
+//       success: res => {
+//         let resData = utils.transData(res)
+//         console.log(resData)
+//         if (resData.member_id) {
+//           utils.ssdbSet('member_id', resData.member_id)
+//           utils.ssdbSet('member_token', resData.member_token)
+//         } else {
+//           utils.ssdbRemove('member_id')
+//           utils.ssdbRemove('member_token')
+//         }
+//       },
+//       fail: () => {},
+//       progress: () => {}
+//     })
+//   }, 500)
+// })
 
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截

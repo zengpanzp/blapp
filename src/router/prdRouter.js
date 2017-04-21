@@ -73,14 +73,6 @@ export const prdRouter = [
     path: '/giftCardMore/:jumpId/:themeName',
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-more')), 'giftCardMore')
   },
-  /* 曾攀 自定义电子卡页面 */
-  {
-    path: '/eleCard',
-    meta: {
-      title: '电子卡'
-    },
-    component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-eleCard')), 'eleCard')
-  },
   /* 陈鹏 电子卡详情 */
   {
     path: '/eCardList',

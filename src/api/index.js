@@ -33,6 +33,7 @@ export default {
   getGoods: params => {
     return Vue.http.post(baseUrl + '/goodSearch/keyWordSearchGood.htm', params)
   },
+  // 加入购物车
   addCart: params => {
     return Vue.http.post(baseUrl + '/search/addCartV3.htm', params)
   },

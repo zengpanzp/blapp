@@ -33,13 +33,14 @@
             </div>
         </div>
         <div class="card-button">
-            <button type="button" @click="addCart(10)">加入购物车</button>
+            <button type="button" @click="addCart(item.categoryId)">加入购物车</button>
         </div>
     </div>
   </div>
 </template>
 <script>
 import api from 'src/api'
+import utils from 'src/utils'
 export default {
 
   name: 'eleCard',
@@ -49,36 +50,11 @@ export default {
   data () {
     return {
       more: true,
-
       numValue: 1,
-      inputData: undefined,
-      memberId: 100000000043755,
-      member_token: ''
+      inputData: undefined
     };
   },
-  mounted() {
-    let $$vue = this;
-    this.$loading.close();
-    setTimeout(function() {
-      // 获得登录的用户id
-      window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
-        success: res => {
-          // alert(res);
-          let userInfo = JSON.parse(res);
-          console.log(userInfo)
-          // memberId
-          $$vue.memberId = userInfo.member_id;
-          // userToken
-          $$vue.member_token = userInfo.member_token;
-        },
-        fail: res => {
-        }
-      });
-    }, 400);
-  },
-  created() {
-    this.$loading.close()
-  },
+
   watch: {
     'inputData'(val, oldValue) {
       var reg = /^[0-9]*[1-9][0-9]*$/;
@@ -90,28 +66,37 @@ export default {
     }
   },
   methods: {
-    addCard(num) {
-      api.addCart({
-        memberId: this.memberId,
-        member_token: this.member_token,
-        orderSourceCode: "1",
-        goodsList: [
-          {
-            goodsId: 8320,
-            goodsNumber: num,
-            type: "10",
-          }
-        ]
-      }).then(data => {
-        this.$loading.close()
-        console.log(data)
-        this.$toast({
-          position: 'bottom',
-          message: '加入购物车成功！'
-        });
-      }, err => {
-        console.log(err)
-      })
+    addCart(goodsId) {
+      if (this.inputData) {
+        utils.isLogin().then(data => {
+          let memberId = utils.ssdbGet('member_id')
+          let memberToken = utils.ssdbGet('member_token')
+          api.addCart({
+            memberId: memberId,
+            member_token: memberToken,
+            orderSourceCode: "1",
+            goodsList: [
+              {
+                salePrice: this.inputData,
+                goodsId: goodsId,
+                goodsNumber: this.numValue,
+                type: "10",
+              }
+            ]
+          }).then(data => {
+            console.log(data)
+            let resData = JSON.parse(data.body.obj)
+            this.$toast({
+              position: 'bottom',
+              message: resData.resultMsg
+            });
+          }, err => {
+            console.log(err)
+          })
+        }, () => {})
+      } else {
+        this.$toast('面额不能为空!')
+      }
     },
     sup() {
       if (this.numValue <= 1) {
