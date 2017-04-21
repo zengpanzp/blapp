@@ -5,7 +5,7 @@
         <div class="card-custom">
             <div class="card-title">自定义面值卡</div>
             <div class="card-img">
-                <div class="card-top-img"><img src="./i/cardImg.jpgs" alt=""/></div>
+                <div class="card-top-img"><img src="./i/cardImg.jpg" alt=""/></div>
                 <div class="card-bottom-fonts">百联卡－自定义面值</div>
             </div>
         </div>
