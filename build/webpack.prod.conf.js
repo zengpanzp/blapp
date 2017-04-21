@@ -52,6 +52,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.build.index,
+      production: process.env.NODE_ENV,
       template: 'index.html',
       inject: true,
       minify: {

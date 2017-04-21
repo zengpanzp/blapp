@@ -47,23 +47,12 @@ export const prdRouter = [
     meta: {
       title: '百联财礼'
     },
-    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift'),
-    children: [
-      {
-        path: 'goods',
-        meta: {
-          title: '百联财礼'
-        },
-        component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods'),
-      }
-    ]
+    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift')
   },
   /* 神马 百联财礼 */
   {
+
     path: '/blgift/:jumpId',
-    meta: {
-      title: '百联财礼'
-    },
     component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
   },
   /* 陈鹏 礼品卡首页 */
