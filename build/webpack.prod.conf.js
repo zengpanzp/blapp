@@ -58,7 +58,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: isTesting
         ? 'index.html'
         : config.build.index,
-      production: isTesting?"default":"production", 
+      production: isTesting?"default":"production",
       template: 'index.html',
       inject: true,
       minify: {

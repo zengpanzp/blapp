@@ -1,5 +1,5 @@
 @charset "utf-8";//cp
-@import "src/sass/tobe/base";
+@import "src/sass/tobe/function";
 body {
     background-color: #f7f7f7;
 }
@@ -340,7 +340,7 @@ body {
             text-align: center;
             position: relative;
             font-size: 0;
-            a { 
+            a {
                 width: rem(84);
                 height: rem(84);
                 @include display(flex);
@@ -348,7 +348,7 @@ body {
                 @include justify-content(center);
             }
             div{
-               
+
             }
             i {
                 height: rem(26);
