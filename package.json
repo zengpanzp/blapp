@@ -8,8 +8,7 @@
     "dev": "node build/dev-server.js",
     "vendor": "rm -rf static/js/lib/vendor && cross-env NODE_ENV=production webpack --config build/webpack.dll.js",
     "build": "node build/build.js",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "test": "npm run unit",
+    "test": "npm run build --env testing",
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
