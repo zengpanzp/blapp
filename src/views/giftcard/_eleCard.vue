@@ -44,8 +44,6 @@ export default {
 
   name: 'eleCard',
 
-  props: ['item'],
-
   data () {
     return {
       more: true,
@@ -55,12 +53,12 @@ export default {
   },
 
   watch: {
-    'inputData'(val, oldValue) {
-      let reg = /^[0-9]*[1-9][0-9]*$/;
-      if (reg.test(val)) {
+    'inputData'(val) {
+      let mathReg = /^(10|[1-9]\d\d?|1000)$/;
+      if (mathReg.test(val)) {
         this.inputData = val
       } else {
-        this.inutData = oldValue
+        this.$toast('请输入10到1000的整数!')
       }
     }
   },

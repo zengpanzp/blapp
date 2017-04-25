@@ -47,24 +47,18 @@ export const prdRouter = [
     meta: {
       title: '百联财礼'
     },
-    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift'),
-    children: [
-      {
-        path: 'goods',
-        meta: {
-          title: '百联财礼'
-        },
-        component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods'),
-      }
-    ]
+    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift')
   },
   /* 神马 百联财礼 */
   {
-    path: '/blgift/:jumpId',
-    meta: {
-      title: '百联财礼'
-    },
+
+    path: '/blgift/goods/:jumpId/',
     component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
+  },
+  /* 神马 百联财礼  我的礼物中心 */
+  {
+    path: '/blgift/mygift',
+    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-mygift')), 'blmygift')
   },
   /* 陈鹏 礼品卡首页 */
   {

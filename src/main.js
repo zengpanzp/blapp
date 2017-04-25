@@ -106,7 +106,7 @@ Vue.directive('scroll-top', {
     let oEl = binding.modifiers.window ? document.body : el
     let fnToggleShow = () => {
       let thisScrollTop = oEl.scrollTop
-      if (thisScrollTop > winHeight) {
+      if (thisScrollTop > winHeight - 50) {
         ducDiv.style.display = 'block'
       } else {
         ducDiv.style.display = 'none'

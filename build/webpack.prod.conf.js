@@ -7,10 +7,16 @@ var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
-var env = process.env.NODE_ENV === 'testing'
+
+// 通过  npm run build --env testing 来确认为测试版
+var argv = require('yargs').argv;
+console.log(argv)
+// 是否为测试版
+var isTesting=(argv["_"][0])==="testing";
+console.log(isTesting)
+var env = isTesting
   ? require('../config/test.env')
   : config.build.env
-
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -49,9 +55,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: process.env.NODE_ENV === 'testing'
+      filename: isTesting
         ? 'index.html'
         : config.build.index,
+      production: isTesting?"default":"production",
       template: 'index.html',
       inject: true,
       minify: {
