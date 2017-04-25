@@ -9,7 +9,6 @@ import infiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
-// import utils from 'src/utils'
 
 Vue.use(infiniteScroll)
 
@@ -189,37 +188,45 @@ const cssReady = (fn, link) => {
   })();
 }
 
-const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
-window.isiBailianApp = isiBailianApp
+// const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
+// window.isiBailianApp = isiBailianApp
 
 const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge || !isiBailianApp) {
+  if (window.CTJSBridge) {
     return calback()
   } else {
     document.addEventListener('BLBridgeReady', calback, false)
   }
 }
-// 保存用户信息到sessionStorage
-// jsBridgeReady(() => {
-//   setTimeout(() => {
-//     console.log('fetchLoginInfo')
-//     !utils.ssdbGet('member_id') && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
-//       success: res => {
-//         let resData = utils.transData(res)
-//         console.log(resData)
-//         if (resData.member_id) {
-//           utils.ssdbSet('member_id', resData.member_id)
-//           utils.ssdbSet('member_token', resData.member_token)
-//         } else {
-//           utils.ssdbRemove('member_id')
-//           utils.ssdbRemove('member_token')
-//         }
-//       },
-//       fail: () => {},
-//       progress: () => {}
-//     })
-//   }, 500)
-// })
+
+jsBridgeReady(() => {
+  try {
+    // 资源位埋点
+    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+      success: res => {
+        let userInfo = JSON.parse(res)
+        console.log(userInfo)
+        if (userInfo.distinctId) {
+          sa.identify(userInfo.distinctId)
+        }
+        sa.register({
+          platform: userInfo.platform,
+          memberId: userInfo.memberId,
+          resourceId: userInfo.resourceId,
+          resourceType: userInfo.resourceType,
+          deployId: userInfo.deployId,
+          mmc: userInfo.mmc
+        })
+      },
+      fail: err => {
+        console.log(err)
+      },
+      progress: data => {}
+    })
+  } catch (err) {
+    console.log('sa error => ' + err)
+  }
+})
 
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
@@ -233,24 +240,6 @@ router.beforeEach(({ meta, path }, from, next) => {
     })
   }
   jsBridgeReady(() => {
-    // 资源位埋点
-    // isiBailianApp && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
-    //   success: res => {
-    //     let userInfo = JSON.parse(res)
-    //     window.sa.register({
-    //       platform: userInfo.platform,
-    //       memberId: userInfo.memberId,
-    //       resourceId: userInfo.resourceId,
-    //       resourceType: userInfo.resourceType,
-    //       deployId: userInfo.deployId,
-    //       mmc: userInfo.mmc
-    //     })
-    //   },
-    //   fail: err => {
-    //     console.log(err)
-    //   },
-    //   progress: data => {}
-    // })
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
@@ -276,7 +265,6 @@ router.beforeEach(({ meta, path }, from, next) => {
 new Vue({
   el: '#app',
   router,
-  mode: 'history',
   template: '<App/>',
   components: { App }
 })

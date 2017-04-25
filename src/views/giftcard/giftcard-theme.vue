@@ -63,10 +63,19 @@ export default {
         parentId: "9999" + this.$route.params.jumpId
       })
     }).then(res => {
+      console.log(res)
+      if (res.body.msg) {
+        return this.$toast({
+          position: 'bottom',
+          message: res.body.msg
+        })
+      }
       let resData = utils.transData(res.body.obj)
-      this.aTab = resData.resultInfo.categorys
-      this.jumpId = this.aTab[0].categoryId.replace('9999', '')
-      this.cwrapTitle = this.aTab[0].categoryName
+      if (resData) {
+        this.aTab = resData.resultInfo.categorys
+        this.jumpId = this.aTab[0].categoryId.replace('9999', '')
+        this.cwrapTitle = this.aTab[0].categoryName
+      }
     }, err => {
       console.log(err)
     })
