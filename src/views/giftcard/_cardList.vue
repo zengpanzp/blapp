@@ -6,7 +6,7 @@
         <div class="cwrap-img">
           <a href="javascript:;" v-go-native-goods-detail="item">
             <div class="lazy-box">
-              <img class="lazy" v-lazy="item.goodsImgPath" alt="">
+              <img class="lazy" v-lazy="{ src: item.goodsImgPath }" alt="">
             </div>
             <div class="cwrap-name">{{ item.productName }}</div>
             <div class="cwrap-lowg" v-if="item.isAvailable == 0">无货</div>
