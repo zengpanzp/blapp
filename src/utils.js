@@ -117,30 +117,59 @@ const transData = (data) => {
  * @return   {[obj]}    [Promise]
  */
 const isLogin = (loginStatus = 1) => {
-  let memberId = null
-  let memberToken = null
-  if (loginStatus) {
-    memberId = ssdbGet('member_id')
-    memberToken = ssdbGet('member_token')
-  }
+  // let memberId = null
+  // let memberToken = null
+  // if (loginStatus) {
+  //   memberId = ssdbGet('member_id')
+  //   memberToken = ssdbGet('member_token')
+  // }
   return new Promise((resolve, reject) => {
-    if (!memberId && !memberToken) {
-      console.log('没有登录')
-      window.CTJSBridge && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
-        success: data => {
-          let resData = transData(data)
+    window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
+      success: res => {
+        let resData = transData(res)
+        console.log(resData)
+        if (resData.member_id && resData.member_token) {
           ssdbSet('member_id', resData.member_id)
           ssdbSet('member_token', resData.member_token)
-          resolve()
-        },
-        fail: () => {
-          reject && reject()
+          console.log('已经登录')
+          resolve(resData)
+        } else {
+          ssdbRemove('member_id')
+          ssdbRemove('member_token')
+          console.log('没有登录')
+          window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
+            success: data => {
+              let resData = transData(data)
+              ssdbSet('member_id', resData.member_id)
+              ssdbSet('member_token', resData.member_token)
+              resolve(resData)
+            },
+            fail: () => {
+              reject()
+            }
+          })
         }
-      })
-    } else {
-      console.log('已经登录')
-      resolve()
-    }
+      },
+      fail: () => {},
+      progress: () => {}
+    })
+    // if (!memberId && !memberToken) {
+    //   console.log('没有登录')
+    //   window.CTJSBridge && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
+    //     success: data => {
+    //       let resData = transData(data)
+    //       ssdbSet('member_id', resData.member_id)
+    //       ssdbSet('member_token', resData.member_token)
+    //       resolve()
+    //     },
+    //     fail: () => {
+    //       reject && reject()
+    //     }
+    //   })
+    // } else {
+    //   console.log('已经登录')
+    //   resolve()
+    // }
   })
 }
 
@@ -152,6 +181,7 @@ const addCard = (goodId) => {
       memberId: memberId,
       member_token: memberToken,
       orderSourceCode: "1",
+      shoppingCartType: "1",
       goodsList: [
         {
           goodsId: goodId,
@@ -185,5 +215,5 @@ export default {
   dateFormat,
   transData,
   isLogin,
-  addCard
+  addCard,
 }
