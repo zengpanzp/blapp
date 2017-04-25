@@ -42,6 +42,6 @@ module.exports = {
     'eqeqeq': 0,
     'no-mixed-spaces-and-tabs': 0,
     'no-tabs': 0,
-    'indent': 0
+    'indent': 0,
   }
 }
