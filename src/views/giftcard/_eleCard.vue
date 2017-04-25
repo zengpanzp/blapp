@@ -88,6 +88,8 @@ export default {
                 message: resData.resultMsg
               });
             },
+
+          
             fail: err => { console.log(err) },
             progress: data => { console.log(data) }
           })

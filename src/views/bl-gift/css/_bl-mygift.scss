@@ -1,19 +1,21 @@
 @charset "utf-8";
-@import "src/sass/tobe/base";
 @import "src/sass/tobe/function";
 #gift-bill {
     .content {
         padding-top: rem(88);
         position: relative;
     }
+    .sendList,.receiveList{
+        padding-top: rem(88);
+    }
     .menu-box {
         position: relative;
-        padding-top: rem(88);
+        // padding-top: rem(88);
     }
     .bill-menu {
         background: #ffffff;
         position: fixed;
-        top: rem(88);
+        // top: rem(88);
         left: 0;
         right: 0;
         height: rem(88);
@@ -40,6 +42,13 @@
         background: #ffffff;
         padding: 0 rem(30);
         margin-bottom: rem(20);
+        .special{
+            overflow-x:scroll;
+        }
+        ul {
+            overflow-x:scroll;
+            overflow:hidden;
+        }
         li {
             border-bottom: 1px solid #e7e7e7;
         }
@@ -62,12 +71,13 @@
             width: rem(36);
             height: rem(36);
             margin-right: rem(12);
-            background: url("../i/sold-out.png") no-repeat;
+            background: url("../i/giftico.png") no-repeat;
             background-size: 100% 100%;
         }
         .bill-gift {
             padding: rem(20) 0;
             overflow: hidden;
+            width: auto;
             .img-box {
                 width: rem(120);
                 height: rem(120);
@@ -75,15 +85,17 @@
                 border-radius: rem(8);
                 margin-right: rem(20);
                 overflow: hidden;
+                display: inline-block;
             }
         }
         .much-gift {
             overflow: hidden;
-            overflow-x: scroll;
+            overflow-x: auto;
+            white-space: nowrap;
             .bill-gift {
                 white-space: nowrap;
                 overflow: auto;
-                .img-box {
+                .img-box,.newBox {
                     float: none;
                     display: inline-block;
                 }
