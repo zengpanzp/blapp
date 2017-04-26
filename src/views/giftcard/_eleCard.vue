@@ -68,10 +68,11 @@ export default {
         utils.isLogin().then(data => {
           let memberId = utils.ssdbGet('member_id')
           let memberToken = utils.ssdbGet('member_token')
-          window.CTJSBridge && window.CTJSBridge.LoadApi('BLDJAddCartAPIManager', {
+          window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
             memberId: memberId,
             member_token: memberToken,
             orderSourceCode: '1',
+            shoppingCartType: "1",
             goodsList: [
               {
                 salePrice: this.inputData,
