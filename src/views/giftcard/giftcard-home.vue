@@ -27,7 +27,7 @@
         <div class="scroll-ul">
           <div class="list-contain" v-for="row in item.rows">
             <div class="list-img" v-go-native-goods-detail="row">
-              <img class="lazy" v-lazy.container="row[0].goodsImgPath" />
+              <img class="lazy" v-lazy.container="{ src: row[0].goodsImgPath }" />
               <div class="no-pro" v-if="row.isAvailable == 0">无&nbsp;&nbsp;&nbsp;货</div>
             </div>
             <div class="list-text" v-go-native-goods-detail="row">{{ row[0].productName }}</div>

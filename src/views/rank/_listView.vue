@@ -23,19 +23,13 @@ export default {
   props: {
     data: Array
   },
-
-  data () {
-    return {
-
-    };
-  },
   methods: {
     tran(item) {
       return {
-        goodsid: item.productId,
-        goodsName: '',
+        goodsId: String(item.productId),
+        goodsMsg: item.productName,
         goodsPrice: item.salePrice,
-        goodsImageUrl: item.picUrlList[0].pictureUrl,
+        goodsImgPath: item.picUrlList[0].pictureUrl,
         isGiftGoods: false
       }
     }

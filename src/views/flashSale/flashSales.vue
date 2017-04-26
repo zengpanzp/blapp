@@ -39,7 +39,7 @@
               <div class="D" v-if="isActive === 'z'" v-text="timeCoundDown(item.effectiveEnd)"></div>
               <div class="D" v-else-if="isActive === 'p'" v-text="timeCoundNotice(item.effectiveStart)"></div>
               <div class="bottom-todynew">
-                <div class="le-fonts"><img v-lazy="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
+                <div class="le-fonts"><img v-lazy="{ src: item.brandList[0].brandLogo }" :alt="item.brandList[0].brandNameCN"></div>
                 <div class="dd-fonts">
                   <div class="le2-fonts" v-text="item.flashName"></div>
                   <div class="tian-number" v-if="isActive === 'p' || isActive === 'z'"></div>

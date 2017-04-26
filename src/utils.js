@@ -113,16 +113,9 @@ const transData = (data) => {
  * 判断是否登录
  * @chenpeng
  * @DateTime 2017-04-20T12:51:10+0800
- * @param    {[number]} loginStatus [0:失效 1:正常]
  * @return   {[obj]}    [Promise]
  */
-const isLogin = (loginStatus = 1) => {
-  // let memberId = null
-  // let memberToken = null
-  // if (loginStatus) {
-  //   memberId = ssdbGet('member_id')
-  //   memberToken = ssdbGet('member_token')
-  // }
+const isLogin = () => {
   return new Promise((resolve, reject) => {
     window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
       success: res => {
@@ -150,36 +143,17 @@ const isLogin = (loginStatus = 1) => {
           })
         }
       },
-      fail: () => {},
+      fail: () => { reject() },
       progress: () => {}
     })
-    // if (!memberId && !memberToken) {
-    //   console.log('没有登录')
-    //   window.CTJSBridge && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
-    //     success: data => {
-    //       let resData = transData(data)
-    //       ssdbSet('member_id', resData.member_id)
-    //       ssdbSet('member_token', resData.member_token)
-    //       resolve()
-    //     },
-    //     fail: () => {
-    //       reject && reject()
-    //     }
-    //   })
-    // } else {
-    //   console.log('已经登录')
-    //   resolve()
-    // }
   })
 }
 
 const addCard = (goodId) => {
-  isLogin().then(() => {
-    let memberId = ssdbGet('member_id')
-    let memberToken = ssdbGet('member_token')
+  isLogin().then((data) => {
     window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
-      memberId: memberId,
-      member_token: memberToken,
+      memberId: data.member_id,
+      member_token: data.member_token,
       orderSourceCode: "1",
       shoppingCartType: "1",
       goodsList: [

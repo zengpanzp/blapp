@@ -193,7 +193,6 @@ export default {
         let resData = utils.transData(res).otherResource
         self.hotBrands = resData[1].advList[0]
         self.allSlides = resData[2].advList
-        debugger;
         self.hotTwoBrands = resData[3].advList[0]
         self.asideOne = resData[4].advList[0]
         self.promotion = resData[5].advList
