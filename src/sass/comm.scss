@@ -135,3 +135,8 @@ body{
 .lazy-box{
   @extend %lazy-box;
 }
+
+img[lazy="loading"], img[lazy="error"] {
+  width: rem(50) !important;
+  padding: 0 !important;
+}

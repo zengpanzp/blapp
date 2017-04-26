@@ -242,8 +242,16 @@
     position: relative;
     a{
       display: block;
-      img{
-        height: rem(227*2);
+      height: rem(227*2);
+      background-color: #fff;
+      img[lazy="loading"], img[lazy="error"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: rem(50) !important;
       }
     }
   }
