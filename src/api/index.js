@@ -18,7 +18,7 @@ Vue.http.interceptors.push((request, next) => {
   });
 })
 
-const baseUrl = process.env.NODE_ENV !== 'production' ? DEV_SERVICE : URL.SERVICE_BASE_URL
+const baseUrl = URL.SERVICE_BASE_URL
 
 export default {
   // 红卡卡密查询（HCT004）
