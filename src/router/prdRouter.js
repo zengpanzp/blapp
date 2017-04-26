@@ -35,7 +35,7 @@ export const prdRouter = [
   },
   /* 神马 领券中心 cid 为优惠券id */
   {
-    path: '/banknote/:cid',
+    path: '/banknote',
     meta: {
       title: '领券中心'
     },

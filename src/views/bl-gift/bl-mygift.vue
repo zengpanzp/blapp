@@ -19,8 +19,19 @@
         </div>
         <div class="sendList" v-show="tabShow">
             <div class="bill-list" v-for="sendItem in sendOrders">
+                <ul v-if="sendItem.orderList.length==0">
+                    <li>
+                         <div id="empty" class="empty orderEmpty" style="display: none">
+                            <div id="text">
+                                还没有订单哦，快去逛逛吧
+                            </div>
+                            <p>可以去看看那些想看的</p>
+                            <a href="" id="btn">去逛逛</a>
+                        </div>
+                    </li>
+                </ul>
                 <!--发出去的礼物列表-->
-                <ul v-if="sendItem.orderList.length<=1">
+                <ul v-if="sendItem.orderList.length==1">
                     <li>
                         <div class="state">
                             <div class="logo-box">
@@ -28,7 +39,7 @@
                                 百联财礼
                             </div>
                             <div class="state-detail"> 
-                                待付款
+                              {{getMessage(sendItem.orderList[0].orderStatus)}}
                             </div>
                         </div>
                     </li>
@@ -53,11 +64,12 @@
                     <li>
                         <div class="bill-pay">
                             <div class="pay-num">
-                                共1件 实付：<label>¥2500.00</label>
+                                共1件 实付：<label>¥{{sendItem.orderList[0].needMoney}}</label>
                             </div>
                             <div class="pay-button">
-                                <button>取消订单</button>
-                                <button class="red-button">立即支付</button>
+                                <button @click="cancelOrder(sendItem.orderList[0].parentOrderNo)" v-show="sendItem.orderList[0].orderStatus=='1001'">取消订单</button>
+                                <button class="red-button" v-show="sendItem.orderList[0].orderStatus=='1001'">立即支付</button>
+                                <button class="red-button" v-show="sendItem.orderList[0].orderStatus=='1034'">去赠送</button>
                             </div>
                         </div>
                     </li>
@@ -70,7 +82,7 @@
                                 百联财礼
                             </div>
                             <div class="state-detail"> 
-                                待付款
+                                {{sendItem.orderList[0].orderStatusDesc}}
                             </div>
                         </div>
                     </li>
@@ -99,7 +111,18 @@
         </div>
         <div class="receiveList" v-show="!tabShow">
             <div class="bill-list" v-for="receiveItem in receiveOrders">
-                <!--发出去的礼物列表-->
+                <ul v-if="receiveItem.orderList.length==0">
+                    <li>
+                         <div id="empty" class="empty orderEmpty" style="display: none">
+                            <div id="text">
+                                还没有订单哦，快去逛逛吧
+                            </div>
+                            <p>可以去看看那些想看的</p>
+                            <a href="" id="btn">去逛逛</a>
+                        </div>
+                    </li>
+                </ul>
+                <!--收到的礼物列表-->
                 <ul v-if="receiveItem.orderList.length<=1">
                     <li>
                         <div class="state">
@@ -108,7 +131,7 @@
                                 百联财礼
                             </div>
                             <div class="state-detail"> 
-                                待付款
+                                {{receiveItem.orderList[0].orderStatusDesc}}
                             </div>
                         </div>
                     </li>
@@ -150,7 +173,7 @@
                                 百联财礼
                             </div>
                             <div class="state-detail"> 
-                                待付款
+                                {{receiveItem.orderList[0].orderStatusDesc}}
                             </div>
                         </div>
                     </li>
@@ -217,6 +240,30 @@ export default {
     });
   },
   methods: {
+    getMessage(status) {
+        let message = ''
+        if (status == "1001") {
+            message = '待支付';
+        }
+        if (status == "1034") {
+            message = '已支付';
+        }
+        if (status == "1029") {
+            message = '已取消';
+        }
+        return message;
+    },
+    // 待付款状态的取消订单
+    cancelOrder(orderNo) {
+        api.blgift.cancelOrderByNo({
+            memberId: this.memberId,
+            parentNo: orderNo
+        }).then(data => {
+            if (data.body.resCode == "00100000") {
+                alert("取消成功!");
+            }
+        });
+    },
     // 切换tab
     tabSelect(type, $event) {
         console.log(type);
@@ -258,9 +305,9 @@ export default {
             memberId: this.memberId,
             giftOrderType: this.sendType
         }).then(data => {
-            console.log(data);
             if (data.body.resCode == "00100000") {
                 let json = JSON.parse(data.body.obj);
+                 console.log(json);
                 if (this.sendType == 1) {
                     // 总页数 我发出去的礼物
                     this.sendAllPage = json.pages;
