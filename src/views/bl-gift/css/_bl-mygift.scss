@@ -92,6 +92,7 @@
             overflow: hidden;
             overflow-x: auto;
             white-space: nowrap;
+            -webkit-overflow-scrolling : touch;  
             .bill-gift {
                 white-space: nowrap;
                 overflow: auto;

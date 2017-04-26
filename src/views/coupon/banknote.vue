@@ -133,9 +133,8 @@ export default {
   mounted() {
   },
   created() {
-    this.$loading.close();
     // 券id
-    this.couponID = this.$route.params.cid;
+    this.couponID = this.$route.query.cid;
     if (!this.couponID) {
       this.$toast({
         position: 'bottom',
@@ -175,6 +174,7 @@ export default {
         couponTemplateId: this.couponID,
         memberId: this.memberID
       }).then(resove => {
+        this.$loading.close();
         // resove = JSON.parse(resove.body);
         console.log(resove.body);
         let Obj = JSON.parse(resove.body.obj);
