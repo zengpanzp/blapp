@@ -38,36 +38,6 @@ const ssdbRemove = (name) => {
 }
 
 /**
- * 判断是否到达底部
- * @chenpeng
- * @DateTime 2017-03-28T16:34:10+0800
- */
-const getRect = (ele = document.body) => {
-  let inHeight = window.innerHeight
-  let rect = ele.getBoundingClientRect()
-
-  rect.isVisible = rect.top - inHeight < 0; // 是否在可视区域
-  rect.isBottom = rect.bottom - inHeight <= 0;
-  return rect;
-}
-/**
- * 针对字符串替换功能  尤其是返回的json字符串替换
- * @神马
- * @param  {[type]} str [字符串]
- * @return {[type]}     [string]
- */
-const transSpecialChar = (str) => {
-  if (str) {
-    str = str.replace(/\r/g, ' ');
-    str = str.replace(/\n/g, ' ');
-    str = str.replace(/\t/g, ' ');
-    str = str.replace(/\f/g, ' ');
-    str = str.replace(/\\/g, '\\\\');
-    str = str.replace(/[\s]/g, " ");
-  }
-  return str;
-}
-/**
  * 日期格式化
  * @param  {[type]} format  yyyy-MM-dd hh:mm:ss
  * @return {[type]}        [description]
@@ -103,7 +73,7 @@ const dateFormat = (format) => {
  */
 const transData = (data) => {
   if (typeof data == 'string') {
-    return JSON.parse(transSpecialChar(data))
+    return JSON.parse(data.replace(/[\r\n\t\f\\]/g, "").replace(/[\s]/g, " "))
   } else {
     return data
   }
@@ -219,8 +189,6 @@ export default {
   ssdbGet,
   ssdbSet,
   ssdbRemove,
-  getRect,
-  transSpecialChar,
   dateFormat,
   transData,
   isLogin,

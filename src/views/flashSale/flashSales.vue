@@ -89,6 +89,7 @@ export default {
       inlineLoading: null,
 
       /* 活动列表 */
+      allSlides: [],
       pages: 0, // 总页数
       getFlashDetailData: [], // 商品列表数据
       requestData: {
@@ -230,10 +231,14 @@ export default {
         duration: 'loading'
       })
       this.isLoading = true
-      this.requestData.flashCategories = parseInt(index)
+      this.requestData.flashCategories = parseInt(index) || ''
       this.isActive = key
       if (index === undefined) {
-        this.requestData.type = parseInt(key)
+        if (key === 'z') {
+          this.requestData.type = 2
+        } else if (key === 'p') {
+          this.requestData.type = 3
+        }
       } else {
         this.requestData.type = 1
       }
