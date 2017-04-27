@@ -238,6 +238,8 @@ export default {
           this.requestData.type = 2
         } else if (key === 'p') {
           this.requestData.type = 3
+        } else if (key === 'j') {
+          this.requestData.type = 1
         }
       } else {
         this.requestData.type = 1
