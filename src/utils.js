@@ -149,6 +149,12 @@ const isLogin = () => {
   })
 }
 
+/**
+ * native加入购物车
+ * @chenpeng
+ * @DateTime 2017-04-27T12:51:49+0800
+ * @param    {[string, number]}        goodId [商品id]
+ */
 const addCard = (goodId) => {
   isLogin().then((data) => {
     window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
@@ -177,6 +183,35 @@ const addCard = (goodId) => {
   }, () => {})
 }
 
+/**
+ * 数组对象排序,默认升序
+ * @chenpeng
+ * @DateTime 2017-04-27T12:47:07+0800
+ * @param    {[array]}               arrs [需要排序的数组]
+ * @param    {[all]}                 prop [数组属性]
+ * @return   {[array]}               [排序后的数组]
+ */
+const orderBy = (arrs, prop, sort = 1) => {
+  return arrs.sort(function(obj1, obj2) {
+    let val1 = obj1[prop];
+    let val2 = obj2[prop];
+    if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+      val1 = Number(val1);
+      val2 = Number(val2);
+      if (!sort) {
+        [val1, val2] = [val2, val1]
+      }
+    }
+    if (val1 < val2) {
+      return -1;
+    } else if (val1 > val2) {
+      return 1;
+    } else {
+      return 0;
+    }
+  })
+}
+
 export default {
   dbGet,
   dbSet,
@@ -190,4 +225,5 @@ export default {
   transData,
   isLogin,
   addCard,
+  orderBy
 }

@@ -82,11 +82,12 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-size: rem(176);
       z-index: 10;
+      img[lazy="loading"], img[lazy="error"] {
+        width: rem(60);
+      }
       img {
         width: 100%;
-        background-size: rem(176);
       }
     }
     .jian {
@@ -130,7 +131,9 @@
       width: rem(115);
       background-size: rem(115) rem(41);
       margin: 0 rem(23) 0 0;
+      text-align: center;
       img{
+        width: auto;
         height: rem(31.14*2);
         border: 0;
       }
@@ -251,7 +254,7 @@
         right: 0;
         bottom: 0;
         margin: auto;
-        width: rem(50) !important;
+        width: rem(70) !important;
       }
     }
   }

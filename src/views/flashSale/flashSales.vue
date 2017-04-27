@@ -29,7 +29,7 @@
           <div class="todynew" v-for="item in filterGetFlashDetailData">
             <div class="todynew-img">
               <div class="wumengcen" v-if="item.pictures">
-                <div class="small-bg" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
+                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
                 <router-link @click.native="sensorAnalytics(item.flashId)" :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
                   <img v-lazy.container="{ src: picturesUrl, error: require('src/assets/icon_banner_loading.png') }" alt="">
                   <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>

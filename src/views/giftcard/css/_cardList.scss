@@ -46,7 +46,7 @@
   > a{
     display: block;
     position: relative;
-    img{
+    img[lazy="loaded"]{
       padding: rem(0.5*32);
     }
   }

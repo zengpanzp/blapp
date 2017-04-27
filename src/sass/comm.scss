@@ -134,9 +134,23 @@ body{
 /* 懒加载 */
 .lazy-box{
   @extend %lazy-box;
+  img[lazy="loading"], img[lazy="error"] {
+    width: rem(50) !important;
+    padding: 0;
+  }
 }
 
-img[lazy="loading"], img[lazy="error"] {
-  width: rem(50) !important;
-  padding: 0 !important;
+.lazyload{
+  position: relative;
+  background-color: #fff;
+  img[lazy="loading"], img[lazy="error"] {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: rem(50);
+  }
 }
+

@@ -117,11 +117,6 @@
   position: relative
 }
 
-.hot-pro .hot-bd .bd-1of3 img {
-  width: 100%;
-  height: 100%
-}
-
 .hot-pro .hot-bd .bd-2of3 {
   height: rem(8.125*31.25);
   vertical-align: middle;
@@ -143,11 +138,6 @@
 .hot-pro .hot-bd .bd-2of3 .bd-in-1of2 a {
   display: block;
   height: 100%
-}
-
-.hot-pro .hot-bd .bd-2of3 .bd-in-1of2 .pp-title {
-  width: auto;
-  height: 100%;
 }
 
 .row-box .pro-hd {
@@ -198,7 +188,7 @@
   background-color: #fff
 }
 
-.sales-promotion div.pro-hd-list ul .col-img img {
+.sales-promotion div.pro-hd-list ul .col-img {
   width: rem(5.625*31.25);
   height: rem(6.25*31.25);
   margin-bottom: rem(.46875*31.25);
@@ -325,10 +315,6 @@
   z-index: 15;
   transform-origin: 100% 50%
 }
-.three-minor .aside-left a img {
-  width: 100%;
-  height: 100%
-}
 
 .three-minor .aside-right {
   width: 56%;
@@ -338,11 +324,6 @@
 .three-minor .aside-right .aside-section {
   width: 100%;
   height: rem(6.25*31.25)
-}
-
-.three-minor .aside-right .aside-section img {
-  width: 100%;
-  height: 100%
 }
 
 .hairline-top {
