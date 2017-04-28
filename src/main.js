@@ -23,8 +23,8 @@ if ('addEventListener' in document) {
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
-  loading: require('src/assets/loading-pic.png'),
-  error: require('src/assets/error-pic.png'),
+  loading: require('src/assets/icon_banner_loading.png'),
+  error: require('src/assets/icon_banner_loading.png'),
   try: 3 // default 1
 })
 
@@ -49,12 +49,7 @@ Vue.directive('scroll-fixed', function(el) {
   let u = navigator.userAgent;
   let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
   if (!isAndroid) {
-    let xx
-    let yy
-    let XX
-    let YY
-    let swipeX
-    let swipeY
+    let [xx, yy, XX, YY, swipeX, swipeY] = []
     let h = document.body.clientHeight || document.body.offsetHeight || window.innerHeight
     let bodyScroll = (e) => {
       e.preventDefault();

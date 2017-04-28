@@ -17,7 +17,7 @@
         </router-link>
       </div>
     </div>
-    <template v-if="item.rows.length" v-for="item in allCards">
+    <template v-if="item.rows.length" v-for="item in filterAllCards">
       <div class="list-head">
         <img src="./i/cardlogo1.png" class="left-logo">
         <div class="head-text">{{ item.themeName }}</div>
@@ -26,7 +26,7 @@
       <div class="scroll-list" ref="container">
         <div class="scroll-ul">
           <div class="list-contain" v-for="row in item.rows">
-            <div class="list-img" v-go-native-goods-detail="row">
+            <div class="list-img lazy-box" v-go-native-goods-detail="row">
               <img class="lazy" v-lazy.container="{ src: row[0].goodsImgPath }" />
               <div class="no-pro" v-if="row.isAvailable == 0">无&nbsp;&nbsp;&nbsp;货</div>
             </div>
@@ -111,7 +111,8 @@ export default {
             this.allCards.push({
               themeName: item.jumpUrl.replace(item.jumpId, ""),
               jumpId: item.jumpId,
-              rows: resRows.splice(0, 5)
+              rows: resRows.splice(0, 5),
+              priority: item.priority
             })
           }
           this.$nextTick(() => {
@@ -134,6 +135,11 @@ export default {
   methods: {
     addCard(goodId) {
       utils.addCard(goodId)
+    }
+  },
+  computed: {
+    filterAllCards() {
+      return utils.orderBy(this.allCards, 'priority')
     }
   }
 };

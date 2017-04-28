@@ -40,7 +40,7 @@
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
                 <div class="lazy-box">
-                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt="">
+                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/icon_banner_loading.png'), error: require('src/assets/icon_banner_loading.png') }" alt="">
                 </div>
                 <h3>{{ item[0].goodsMsg }}</h3>
                 <p><span class="price"><span>¥</span>{{ $route.params.isStart == 0 ? '???' : item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
