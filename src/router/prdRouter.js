@@ -80,7 +80,7 @@ export const prdRouter = [
   },
   /* 陈鹏 电子卡详情 */
   {
-    path: '/eCardList',
+    path: '/eCardList/:orderNo/:orderTime',
     meta: {
       title: '电子卡详情'
     },

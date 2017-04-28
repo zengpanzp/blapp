@@ -186,15 +186,15 @@ const cssReady = (fn, link) => {
 // const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
 // window.isiBailianApp = isiBailianApp
 
-const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge) {
+const jsBridgeReady = (isWeb = false, calback) => {
+  if (window.CTJSBridge || isWeb) {
     return calback()
   } else {
     document.addEventListener('BLBridgeReady', calback, false)
   }
 }
 
-jsBridgeReady(() => {
+jsBridgeReady(false, () => {
   try {
     // 资源位埋点
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
@@ -234,7 +234,7 @@ router.beforeEach(({ meta, path }, from, next) => {
       className: 'white-bg'
     })
   }
-  jsBridgeReady(() => {
+  jsBridgeReady(meta.isWeb, () => {
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
