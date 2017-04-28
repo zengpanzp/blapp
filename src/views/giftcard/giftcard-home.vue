@@ -1,12 +1,12 @@
 <style lang="scss" src="./css/giftcard-home.scss" scoped></style>
 <template>
   <div id="giftcard" v-scroll-top.window v-scroll-record.window>
-    <div class="head-search">
+    <router-link tag="div" :to="{ path: '/giftCardMore', query: { search: 1, themeName: encodeURI('礼品卡') } }" class="head-search">
       <div class="search-contain">
         <div class="search-logo"></div>
-        <input type="text" />
+        <input type="search" disabled="disabled">
       </div>
-    </div>
+    </router-link>
     <bl-slide class="giftcard-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
 
     <div class="giftcard-class">
@@ -37,7 +37,7 @@
               <div class="pay-log" v-else @click="addCard(row[0].goodsId)"></div>
             </div>
           </div>
-          <router-link tag="div" :to="{ path: '/giftCardMore/' + item.jumpId + '/' + encodeURI(item.themeName) }" class="get-more">
+          <router-link tag="div" :to="{ path: '/giftCardMore', query: { jumpId: item.jumpId, themeName: encodeURI(item.themeName) } }" class="get-more">
             <div class="get-more-e">MORE</div>
             <div class="get-more-c">查看更多</div>
           </router-link>
@@ -65,6 +65,7 @@ export default {
     return {
       loaded: false,
 
+      searchText: '',
       allSlides: [], // 轮播图
       themeIcon: [], // 主题icon
       cardTheme: [], // 卡主题

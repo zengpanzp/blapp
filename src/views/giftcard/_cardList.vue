@@ -19,6 +19,7 @@
         </div>
       </li>
     </ul>
+    <div style="text-align: center; margin-top: 45%; font-size: 1.2em;" v-if="noRows">结果为空!</div>
     <div class="infinite-layer" v-if="!busy">
       <div class="infinite-preloader"></div>
       <div>加载中...</div>
@@ -36,20 +37,26 @@ export default {
   data () {
     return {
       busy: true,
+      noRows: false,
       pageNum: 1,
       list: [],
       memberId: '',
       member_token: ''
     };
   },
-  props: ['jumpId'],
+  props: ['jumpId', 'searchWord'],
   created() {
-    this.loadMore(0)
+    if (this.jumpId) {
+      this.loadMore(0)
+    } else {
+      this.$loading.close()
+    }
   },
   methods: {
     loadMore(once) {
-      api.getGoods({
-        requestData: JSON.stringify({
+      let qData = {}
+      if (this.jumpId) {
+        qData = {
           channelSid: "1",
           c: "9999" + this.jumpId,
           searchInfo: {
@@ -58,26 +65,54 @@ export default {
               pageSize: "10"
             }
           }
-        })
-      }).then(data => {
-        let resData = JSON.parse(data.body.obj)
-        if (resData.resultInfo.pageModel.rows) {
-          this.list = this.list.concat(resData.resultInfo.pageModel.rows)
-          this.pageNum ++
         }
-        this.$nextTick(() => {
-          this.$emit('finish')
-          if (resData.resultInfo.pageModel.rows && resData.resultInfo.pageModel.rows.length >= 10) {
-            this.busy = false
-          } else {
-            this.busy = true
-            once !== 0 && this.$toast({
-              position: 'bottom',
-              message: '没有了~'
-            })
+      } else {
+        qData = {
+          k: this.searchWord,
+          channelSid: "1",
+          searchInfo: {
+            goodsType: "10",
+            pageModel: {
+              pageNo: this.pageNum,
+              pageSize: "8"
+            }
           }
+        }
+      }
+      api.getGoods({
+        requestData: JSON.stringify(qData)
+      }).then(data => {
+        if (data.body.obj) {
+          let resData = JSON.parse(data.body.obj)
+          if (resData.resultInfo.pageModel.rows) {
+            this.list = this.list.concat(resData.resultInfo.pageModel.rows)
+            this.pageNum ++
+          }
+          this.$nextTick(() => {
+            this.$emit('finish')
+            if (!resData.resultInfo.pageModel.rows && once == 0) {
+              this.noRows = true
+            } else {
+              this.noRows = false
+            }
+            if (resData.resultInfo.pageModel.rows && resData.resultInfo.pageModel.rows.length >= 10) {
+              this.busy = false
+            } else {
+              this.busy = true
+              once !== 0 && this.$toast({
+                position: 'bottom',
+                message: '没有了~'
+              })
+            }
+            this.$loading.close()
+          });
+        } else {
           this.$loading.close()
-        });
+          this.$toast({
+            position: 'bottom',
+            message: data.body.msg
+          })
+        }
       }, err => {
         console.log(err)
       })
@@ -88,6 +123,11 @@ export default {
   },
   watch: {
     'jumpId'(val) {
+      this.pageNum = 1
+      this.list = []
+      this.loadMore(0)
+    },
+    'searchWord'(val) {
       this.pageNum = 1
       this.list = []
       this.loadMore(0)
