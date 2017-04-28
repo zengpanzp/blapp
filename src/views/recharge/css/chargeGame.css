@@ -1,0 +1,311 @@
+/* 充值缴费  游戏充值 */
+.new .font-color-ash2 {
+  color: #999!important
+}
+
+.box-shadow-show {
+  box-shadow: 0 0 6px #ccc
+}
+
+.message-send-show {
+  margin-top: 1.25rem;
+  text-align: center
+}
+
+.message-send-show a {
+  display: inline-block;
+  padding: 1rem;
+  color: #fff;
+  background: #323232;
+  border-radius: .375rem
+}
+
+.right-input {
+  width: calc(100% - 5rem);
+  float: right;
+  height: 100%;
+  color: #000
+}
+
+.right-input::-webkit-input-placeholder {
+  color: #bbb!important
+}
+
+.right-input:-moz-placeholder,
+.right-input::-moz-placeholder {
+  color: #bbb!important
+}
+
+.edit-config-button {
+  border-radius: .375rem;
+  color: #fff;
+  background: #1e9cf1;
+  text-align: center;
+  height: 2.75rem;
+  line-height: 2.75rem;
+  font-size: 1.125rem;
+  width: 100%;
+  border: 0
+}
+
+.dummy-goods-list {
+  padding: 0 .9375rem;
+  border-bottom: 1px solid #e7e7e7;
+  border-top: 1px solid #e7e7e7;
+  background: #fff
+}
+
+.dummy-goods-list li {
+  height: 3rem;
+  line-height: 3rem;
+  border-bottom: 1px solid #e7e7e7;
+  font-size: .9375rem
+}
+
+.dummy-goods-list li:last-child {
+  border-bottom: none
+}
+
+.add-new-class {
+  font-size: .9375rem;
+  line-height: 2rem
+}
+
+.message-send-show .warn-alert {
+  padding: 1rem 1.5rem;
+  min-width: 10rem;
+  box-sizing: border-box
+}
+
+.message-send-show .warn-alert-img {
+  width: 1rem;
+  vertical-align: -.125rem;
+  margin-right: .625rem
+}
+
+.gray {
+  color: #999
+}
+
+.mobile-bor-v {
+  border-top: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
+  border-width: 1px 0
+}
+
+.btn {
+  position: relative;
+  z-index: 2;
+  border: none;
+  display: inline-block;
+  text-align: center;
+  width: 4.875rem;
+  height: 1.75rem;
+  line-height: 1.75rem;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem
+}
+
+.btn:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid #c5c5c5;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 200%;
+  height: 200%;
+  -webkit-transform: scale(.5);
+  transform: scale(.5);
+  -webkit-transform-origin: left top;
+  transform-origin: left top;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  border-radius: .5rem
+}
+
+.phoneRechargeTitle .curr a {
+  border-bottom: 2px solid #3ea2ff;
+  color: #3ea2ff
+}
+
+.phoneRechargeTitle {
+  border-bottom: 1px solid #e7e7e7
+}
+
+.phoneRechargeTitle ul {
+  padding: 0 .9375rem;
+  font-size: 0
+}
+
+.phoneRechargeTitle ul li {
+  width: 50%;
+  display: inline-block;
+  text-align: center
+}
+
+.phoneRechargeTitle ul a {
+  display: block;
+  line-height: 2.9375rem;
+  font-size: 1rem;
+  width: 100%;
+  text-align: center;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  tap-highlight-color: transparent
+}
+
+.phoneRechargeTitle .curr a {
+  border-bottom: 2px solid #3ea2ff;
+  color: #3ea2ff;
+  font-weight: 700
+}
+
+.phoneFixBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 20
+}
+
+.smallFont {
+  font-size: .75rem
+}
+
+.middleFont {
+  font-size: 1.0625rem
+}
+
+.phonePayWay {
+  background: #fff;
+  padding: .625rem .9375rem
+}
+
+.phonePayWay .payWayItem {
+  width: auto;
+  padding: 0 .5625rem;
+  margin-left: .3rem;
+  text-align: center;
+  height: 1.875rem;
+  line-height: 1.875rem
+}
+
+.phonePayWay .payWayItem.curr {
+  color: #3ea2ff;
+  background-color: #f0f8ff
+}
+
+.phonePayWay .payWayItem.curr:after {
+  border-color: #3ea2ff
+}
+
+.game-item3 {
+  border-bottom: none;
+  background: #fff
+}
+
+.game-item3 ul li {
+  width: 33.33%
+}
+
+.limit-remind {
+  padding: .625rem .9375rem
+}
+
+.limit-remind p {
+  font-size: .75rem;
+  color: #999;
+  margin-bottom: .75rem;
+  overflow: hidden
+}
+
+.limit-remind label {
+  width: calc(100% - 3.875rem);
+  float: right
+}
+
+.limit-remind img {
+  width: .875rem;
+  margin-right: .75rem;
+  float: left
+}
+
+.more-line-alert img {
+  float: left
+}
+
+.more-line-alert label {
+  float: left;
+  text-align: left;
+  overflow: hidden
+}
+
+.game-font-config ul li,
+.game-font-config ul li div,
+.game-money {
+  font-size: 1rem
+}
+
+.game-money {
+  color: #e6133c;
+  font-weight: 700;
+  margin-right: .375rem
+}
+
+.default-color {
+  color: #ccc
+}
+
+.game-buy-style {
+  display: inline-block;
+  height: 1.75rem;
+  line-height: 1.75rem;
+  padding: 0 .625rem;
+  min-width: 4.75rem;
+  text-align: center;
+  border: 1px solid #e7e7e7;
+  border-radius: .25rem;
+  color: #666;
+  margin-right: .375rem
+}
+
+.blue-buy-style {
+  border-color: #3ea2ff;
+  background: #f0f8ff;
+  color: #3ea2ff
+}
+
+.phoneRechargeTitle ul li a {
+  height: 2.9375rem;
+  box-sizing: border-box;
+  color: #000
+}
+
+.phonePayWay {
+  line-height: 1.875rem
+}
+
+.new .ar.subbtn {
+  font-size: .875rem
+}
+
+.add-new-class {
+  line-height: normal;
+  font-size: .9375rem
+}
+
+.bottom-margin-normal {
+  margin-bottom: .625rem
+}
+.dummy-goods-list li:after{display:block;content:" ";height:0;clear:both;visibility:hidden;}
+.name-box{
+  float: left;
+}
+.right-input .name-box{
+  width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,718 @@
+
+/* 充值缴费首页样式 */
+.font-color-white {
+    color: #fff !important
+}
+
+.simple-password-buttom {
+    height: 2.75rem;
+    line-height: 2.75rem;
+    font-size: 1.0625rem;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    color: #fff;
+    width: 100%;
+    border: none
+}
+
+.simple-password-buttom:last-child {
+    margin-top: .375rem
+}
+
+.right-input {
+    width: calc(100% - 5rem);
+    float: right;
+    height: 100%;
+    color: #000000
+}
+
+.right-input::-webkit-input-placeholder {
+    color: #bbbbbb !important
+}
+
+.right-input:-moz-placeholder {
+    color: #bbbbbb !important
+}
+
+.right-input::-moz-placeholder {
+    color: #bbbbbb !important
+}
+
+input[type=number] {
+    outline: none;
+    border: none
+}
+
+.dummy-goods-list {
+    padding: 0 0.9375rem;
+    border-bottom: 1px solid #e7e7e7;
+    border-top: 1px solid #e7e7e7;
+    background: #fff
+}
+
+.dummy-goods-list li {
+    height: 3rem;
+    line-height: 3rem;
+    border-bottom: 1px solid #e7e7e7;
+    font-size: .9375rem
+}
+
+.dummy-goods-list li:last-child {
+    border-bottom: none
+}
+
+.dummy-goods-list .pay-class-top {
+    height: 3.8125rem;
+    line-height: 3.8125rem;
+    font-size: 1.125rem
+}
+
+.pay-class-top img {
+    height: 1.5rem;
+    vertical-align: middle;
+    margin-right: .625rem
+}
+
+.pay-account {
+    margin-left: 1.375rem;
+    width: 65%;
+    height: 100%;
+    font-size: .9375rem
+}
+
+.pay-class-name {
+    font-size: .875rem;
+    color: #666666
+}
+
+.pay-class-name label {
+    display: inline-block
+}
+
+.pay-class-name i {
+    vertical-align: middle
+}
+
+.pay-config-button {
+    padding: 0 0.9375rem;
+    margin-top: 1.5625rem
+}
+
+.new .blue-bill-top {
+    background: #3ea3ff;
+    border: none;
+    height: 3.125rem
+}
+
+.new .blue-bill-top div.itemauto {
+    height: 3.125rem;
+    margin-right: 2.4375rem;
+    z-index: 1;
+    margin-left: .75rem
+}
+
+.new .blue-bill-top ul li {
+    height: 3rem;
+    line-height: 3rem
+}
+
+.new .blue-bill-top ul li a {
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 3rem;
+    font-weight: 500;
+    font-size: 1rem
+}
+
+.new .blue-bill-top a.bill-class-add {
+    border: none;
+    background: rgba(62, 163, 255, 0.7);
+    height: 3rem;
+    line-height: 3rem;
+    color: #fff;
+    width: 3.375rem;
+    box-shadow: none;
+    text-align: right;
+    font-size: 2rem;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    z-index: 10
+}
+
+.new .blue-bill-top ul .bill-select a {
+    border-bottom: 2px solid #fff
+}
+
+.new .blue-bill-top ul .bill-select a {
+    color: #fff
+}
+
+.bill-pay-name {
+    font-size: 0.9375rem
+}
+
+.bill-pay-name span {
+    font-size: .8125rem;
+    color: #999999
+}
+
+.pay-more-button {
+    height: 3.75rem;
+    line-height: 3.75rem;
+    background: #fff;
+    text-align: center;
+    border-bottom: 1px solid #e7e7e7;
+    color: #3ea2ff;
+    font-size: 1.125rem
+}
+
+.more-pay-list {
+    background: #fff;
+    overflow: hidden;
+    position: fixed;
+    bottom: -30rem;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #e7e7e7;
+    -webkit-transition: all .8s ease;
+    transition: all .8s ease;
+    z-index: 10005
+}
+
+.more-pay-list li {
+    width: 33.3%;
+    float: left;
+    border-left: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+    height: 6.875rem;
+    text-align: center;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    box-orient: vertical;
+    -webkit-box-direction: normal;
+    -moz-box-direction: normal;
+    box-direction: normal;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-direction: column;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -o-justify-content: center;
+    justify-content: center;
+    -ms-flex-pack: center;
+    margin-left: -1px
+}
+
+.pay-different-class {
+    margin-top: .9375rem;
+    padding: 0 0.75rem;
+    background: #fff;
+    border-bottom: 1px solid #e7e7e7;
+    border-top: 1px solid #e7e7e7
+}
+
+.pay-different-class li {
+    height: 3.125rem;
+    line-height: 3.125rem;
+    border-bottom: 1px solid #e7e7e7
+}
+
+.pay-different-class span {
+    font-size: 1rem
+}
+
+.solid-miner-circle {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-right: .5rem;
+    vertical-align: text-bottom
+}
+
+span.solid-miner-circle {
+    width: 1.125rem;
+    height: 1.125rem;
+    line-height: 1.125rem;
+    display: inline-block;
+    border: 1px solid #cccccc;
+    vertical-align: -.125rem;
+    border-radius: 50%;
+    text-align: center;
+    margin-right: .5rem
+}
+
+.blue-circle {
+    background: #3ea2ff;
+    border: 1px solid #3ea2ff
+}
+
+.pay-class-button {
+    display: block;
+    height: 100%;
+    width: 1.35rem;
+    padding: 0 0.1875rem;
+    margin-left: 1rem
+}
+
+.pay-class-button img {
+    vertical-align: middle;
+    width: 100%
+}
+
+.add-new-class {
+    font-size: .9375rem;
+    line-height: 2rem
+}
+
+.bill-histroy {
+    padding: 0 0.75rem
+}
+
+.bill-histroy li {
+    padding: 1.0625rem 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -o-justify-content: space-between;
+    justify-content: space-between;
+    -ms-flex-pack: justify;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    box-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    -ms-flex-align: center
+}
+
+.bill-histroy li i {
+    font-size: 1rem
+}
+
+.slect-pay-class li {
+    font-size: 1rem
+}
+
+.gray {
+    color: #999
+}
+
+.tac {
+    text-align: center
+}
+
+.img_icon {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-left: .1875rem;
+    vertical-align: top
+}
+
+.btn {
+    position: relative;
+    z-index: 2;
+    border: none;
+    display: inline-block;
+    text-align: center;
+    width: 4.875rem;
+    height: 1.75rem;
+    line-height: 1.75rem;
+    border-radius: .5rem
+}
+
+.btn:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #c5c5c5;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 200%;
+    height: 200%;
+    -webkit-transform: scale(0.5);
+    -ms-transform: scale(0.5);
+    transform: scale(0.5);
+    -webkit-transform-origin: left top;
+    -ms-transform-origin: left top;
+    transform-origin: left top;
+    border-radius: .5rem
+}
+
+.newFlexBox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -moz-align-items: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center
+}
+
+.newFlexBox li {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-flex-basis: 0;
+    -ms-flex-preferred-size: 0;
+    flex-basis: 0;
+    -webkit-align-self: center;
+    -moz-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center
+}
+
+.phonePayWay {
+    background: #fff;
+    padding: 0.625rem 0.9375rem
+}
+
+.phonePayWay .payWayItem {
+    width: auto;
+    padding: 0 .5625rem;
+    margin-left: .3rem;
+    text-align: center;
+    height: 1.875rem;
+    line-height: 1.875rem
+}
+
+.phonePayWay .payWayItem.curr {
+    color: #3ea2ff;
+    background-color: #f0f8ff
+}
+
+.phonePayWay .payWayItem.curr:after {
+    border-color: #3ea2ff
+}
+
+.cbill-account .swipeout-content .bill-account,
+.cbill-account .swipeout-content .iconfont {
+    vertical-align: middle
+}
+
+.bill-pay-stadius-see {
+    font-size: .8125rem;
+    line-height: 4.375rem
+}
+
+.cbill-account {
+    padding: 0;
+    background: #fff;
+    border-top: 1px solid #e7e7e7
+}
+
+.cbill-account .swipeout-content {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+    box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-justify-content: space-between;
+    -o-justify-content: space-between;
+    justify-content: space-between;
+    -ms-flex-pack: justify
+}
+
+.cbill-account .bill-pay-name {
+    -webkit-align-self: center;
+    -moz-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center
+}
+
+.cbill-account .swipeout-content {
+    padding: 0 .75rem 0 2.6875rem;
+    position: relative;
+    height: 4.375rem;
+    border-bottom: 1px solid #e7e7e7;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.cbill-account .swipeout {
+    position: relative;
+    padding-left: .75rem
+}
+
+.cbill-account .swipeout:last-child {
+    border-bottom: 0
+}
+
+.cbill-account .water-free {
+    background: url(../../images/new_store/icon-water.png) 0.25rem center no-repeat;
+    background-size: 1.375rem
+}
+
+.cbill-account .power-free {
+    background: url(../../images/new_store/icon-electric.png) 0.25rem center no-repeat;
+    background-size: 1.375rem
+}
+
+.cbill-account .air-free {
+    background: url(../../images/new_store/icon-coal.png) 0.25rem center no-repeat;
+    background-size: 1.375rem
+}
+
+.normal-ul {
+    background: #fff
+}
+
+.normal-ul li {
+    border-bottom: 1px solid #e9e9e9;
+    overflow: hidden
+}
+
+.normal-ul li:last-child {
+    border-bottom: none
+}
+
+.shopPayInfo {
+    margin: 1rem 2.5rem;
+    color: #999;
+    line-height: 1.125rem;
+    font-size: .75rem
+}
+
+.livePayTitle li img {
+    width: 2.5rem
+}
+
+.livePayTitle {
+    background-color: #3ea2ff;
+    color: #fff;
+    padding: 1.6875rem 0
+}
+
+.livePayTitle ul {
+    position: relative
+}
+
+.livePayText {
+    margin-top: .9375rem;
+    font-weight: 600
+}
+
+.plusMarkImg {
+    position: fixed;
+    top: -2.9rem;
+    left: 0;
+    bottom: 0;
+    z-index: 1001;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6)
+}
+
+.plusMarkImg .imgMark {
+    width: 21.53125rem;
+    height: 100%;
+    margin: 0 auto;
+    background-image: url(../../images/new_store/zhezhao.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 4rem
+}
+
+.plusMarkImg .iKnow {
+    position: absolute;
+    bottom: 6rem;
+    left: 50%;
+    width: 11.25rem;
+    height: 3.75rem;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    background: url(../../images/new_store/iknow.png) left top no-repeat;
+    background-size: contain
+}
+
+.plusMarkImg .billPayMark {
+    background-image: url(../../images/new_store/create_bill.png);
+    float: right;
+    width: 18rem;
+    background-position: 0 3.375rem
+}
+
+.list-block {
+    padding: 0
+}
+
+.line-tv-box ul li {
+    position: relative
+}
+
+.line-tv-box ul li .img_icon {
+    width: 1.375rem;
+    height: 1.375rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
+
+.phonePayWay {
+    line-height: 1.875rem
+}
+
+.li-pay-select {
+    padding: 0.625rem 0
+}
+.add-new-class {
+    line-height: normal;
+    font-size: .9375rem
+}
+
+.more-pay-list .clearfix .icon-img {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: 35%;
+    margin-bottom: .5rem
+}
+
+.icon-phone {
+    background: url(../../images/new_store/phone.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-wifi {
+    background: url(../../images/new_store/icon-wifi.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-tel {
+    background: url(../../images/new_store/icon-tel.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-water {
+    background: url(../../images/new_store/icon-water.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-electric {
+    background: url(../../images/new_store/icon-electric.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-coal {
+    background: url(../../images/new_store/icon-coal.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-tv-gray {
+    background: url(../../images/new_store/icon-linetv_gray.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.icon-rail-gray {
+    background: url(../../images/new_store/icon-chinarailcom_gray.png) no-repeat;
+    background-size: 100% 100%
+}
+
+.list-block .swipeout {
+    overflow: hidden;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d
+}
+
+.list-block .swipeout-content {
+    position: relative;
+    z-index: 10
+}
+
+.simple-password-buttom {
+    height: 2.75rem;
+    line-height: 2.75rem;
+    font-size: 1rem;
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    color: #fff;
+    width: 100%;
+    border: none
+}
+.icon-fuel {
+    background: url(../../images/new_store/icon-fuelcard.png) no-repeat;
+    background-size: 100% 100%
+}
+.icon-tv-gray {
+    background: url(../../images/new_store/icon-linetv_gray.png) no-repeat;
+    background-size: 100% 100%;
+}
+.icon-tv {
+    background: url(../../images/new_store/icon-linetv.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+.icon-play {
+    background: url(../../images/new_store/icon-play.png) no-repeat;
+    background-size: 100% 100%;
+}
+
+.bill-histroy {
+  padding: 0 .75rem
+}
+
+.normal-ul {
+  background: #fff
+}
+
+.right-menu {
+  position: fixed;
+  right: 0;
+  top: 15%
+}
+
+.right-menu li {
+  font-size: .75rem;
+  font-weight: 700
+}
+
+.game-name-tab,
+.normal-ul-padding {
+  padding: 0 .9375rem
+}
+
+.game-name-tab {
+  height: 1.25rem;
+  line-height: 1.25rem
+}

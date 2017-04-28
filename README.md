@@ -43,13 +43,9 @@ npm test
 
 修改完代码后执行`npm run build`,完毕后压缩的代码更新到dist文件夹下
 
-### 提交到测试环境(SIT)(URL:http://m.st.bl.com/vuetest/app/new/index.html#/)
-
-命令行指向到`dist/app`,正常git提交代码,`git add .` `git commit -m ''` `git push`,输入密码:`blpe123`,这个步骤完毕后代码就上传到服务器上了
-
-### 提交代码到生产gitlab仓库
-
 命令行指向到`dist/app/new` `git add .` `git commit -m ''` `git push`,这个步骤完毕后代码就提交到gitlab仓库里了
+
+### 测试环境访问地址（st）(URL:http://mh5.st.bl.com/#/)
 
 ### 发布到生产环境(PRD)(URL:http://mh5.bl.com/#/)
 

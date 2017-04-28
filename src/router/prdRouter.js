@@ -60,6 +60,19 @@ export const prdRouter = [
     path: '/blgift/mygift',
     component: r => require.ensure([], () => r(require('../views/bl-gift/bl-mygift')), 'blmygift')
   },
+  /* 神马 充值缴费 首页 */
+  {
+    path: '/recharge',
+    meta: {
+      title: '充值缴费'
+    },
+    component: r => require.ensure([], () => r(require('../views/recharge/index')), 'index')
+  },
+  /* 神马 充值缴费 首页 */
+  {
+    path: '/recharge/iphone',
+    component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
+  },
   /* 陈鹏 礼品卡首页 */
   {
     path: '/giftCardHome',
