@@ -142,24 +142,13 @@ export default {
         message: '未获取到优惠券ID信息'
       })
     }
-    if (window.CTJSBridge) {
-        alert(true);
-    }
-    // 获得登录的用户id
-    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
-      success: res => {
-        console.log(res);
-        res = utils.transData(res);
-        let userInfo = res;
-        console.log(userInfo)
-        // memberId
-        this.memberID = userInfo.member_id;
-        // userToken
-        this.userToken = userInfo.member_token;
+    // window.$$vue = this;
+    utils.isLogin().then(user => {
+        this.memberID = utils.ssdbGet('member_id')
+        this.userToken = utils.ssdbGet('member_token')
         this.getCouponDetail();
-      },
-      fail: res => {
-      }
+    }).then(err => {
+        console.log(err)
     });
   },
   methods: {
