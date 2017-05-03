@@ -133,6 +133,7 @@ export default {
   mounted() {
   },
   created() {
+    debugger;
     // 券id
     this.couponID = this.$route.query.cid;
     if (!this.couponID) {
@@ -144,7 +145,7 @@ export default {
     // 获得登录的用户id
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
       success: res => {
-        // alert(res);
+        alert(res);
         res = utils.transData(res);
         let userInfo = res;
         console.log(userInfo)

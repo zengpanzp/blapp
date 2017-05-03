@@ -41,7 +41,7 @@
 }
 
 .img_icon.icon_emptycon {
-  background-image: url(,./i/iphone/icon_emptycon.png);
+  background-image: url(../i/iphone/icon_emptycon.png);
   background-size: rem(1.125*31.25) rem(1.125*31.25);
   background-position: center center
 }
@@ -176,6 +176,29 @@
   border: none;
   outline: none
 }
+.phoneRechargeItem .itemContent .item-titleRow .area-code {
+  font-size: rem(.975*31.25);
+  color: #333;
+  width: rem(2*31.25);
+  border: none;
+  outline: none;
+  position:absolute;
+  left:rem(4.5*31.25);
+  top:rem(31.25*.6)
+}
+.phoneRechargeItem .itemContent .item-titleRow .fixedphone {
+  margin-left: rem(2.5*31.25);
+}
+.orderPayInfo:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: rem(-1.25*31.25);
+  width: rem(.875*31.25);
+  height: rem(.875*31.25);
+  background: url(../i/iphone/icon_czinfo.png) left center no-repeat;
+  background-size: contain;
+}
 
 .item-titleRow::-webkit-input-placeholder {
   color: #999999 !important
@@ -290,11 +313,6 @@
   line-height: rem(2.6*31.25)
 }
 
-.phoneRechargeItem .itemContent .item-titleRow input {
-  font-size: rem(1.875*31.25);
-  color: #333;
-  width: 90%
-}
 
 .item-titleRow::-webkit-input-placeholder {
   color: #e4e4e4 !important
@@ -649,9 +667,11 @@
   -webkit-align-self: center;
   align-self: center;
   width: rem(5*31.25);
+  font-size: rem(.975*31.25);
 }
 .phoneRechargeItem .pay-num{
-  padding:rem(0.6255*31.25) 0;
+  padding:rem(0.6255*31.25) rem(.9375*31.25);
+  font-size: rem(.925*31.25);
 }
 .fix-phone-item{
   margin: 0;
@@ -671,7 +691,65 @@
   left: 0;
   z-index: 21;
 }
-
+.orderPayInfo {
+  margin: rem(.5*31.25) rem(2.2*31.25);
+  color: #999;
+  line-height: rem(1.125*31.25);
+  font-size: rem(.75*31.25);
+  position: relative;
+}
+.marl {
+  margin-left: rem(2.25*31.25);
+}
+.phonePayWay {
+  line-height: rem(1.875*31.25);
+}
+.phonePayWay {
+  background: #fff;
+  padding: rem(0.625*31.25) rem(0.9375*31.25);
+}
+.mobile-bor-v {
+  border-top: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
+  border-width: 1px 0;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.phonePayWay .payWayItem.curr {
+  color: #3ea2ff;
+  background-color: #f0f8ff;
+}
+.phonePayWay .payWayItem {
+  width: auto;
+  padding: 0 rem(.5625*31.25);
+  margin-left: rem(.3*31.25);
+  text-align: center;
+  height: rem(1.875*31.25);
+  line-height: rem(1.875*31.25);
+}
+.phonePayWay .payWayItem {
+  width: auto;
+  padding: 0 rem(0.23438*31.25);
+  margin-left: rem(0.125*31.25);
+  text-align: center;
+  height: rem(0.78125*31.25);
+  line-height: rem(0.78125*31.25);
+}
+.btn, .againPayBtn {
+  position: relative;
+  z-index: 2;
+  border: none;
+  display: inline-block;
+  text-align: center;
+  width: rem(4.875*31.25);
+  height: rem(1.75*31.25);
+  line-height: rem(1.75*31.25);
+  -webkit-border-radius: rem(.5*31.25);
+}
 .phoneLink li,
 .phoneLink .emptyNumber {
   font-size: rem(1.25*31.25);

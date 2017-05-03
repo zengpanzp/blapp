@@ -12,67 +12,8 @@
         <p>付账单</p>
       </a>
     </div>
-    <div class="order-show">
-
-      <div class="order-show-icon">
-        <ul>
-          <li>
-            <a href="#">
-              <i class="icon-waitpay"></i>
-              <p class="order-font">手机充值</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-waitreceive"></i>
-              <p class="order-font">流量充值</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-waitpick"></i>
-              <p class="order-font">固话/ 宽带</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-waitassess"></i>
-              <p class="order-font">水费</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-electricity"></i>
-              <p class="order-font">电费</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-gas"></i>
-              <p class="order-font">煤气费</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-cabletv"></i>
-              <p class="order-font">有线电视</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-play"></i>
-              <p class="order-font">游戏</p>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="icon-card"></i>
-              <p class="order-font">加油卡</p>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <!--通用菜单-->
+    <bl-home-menu></bl-home-menu>
     <div class="bill-fonts">可以使用百联会员卡、积分卡缴费哦~</div>
     <div class="topbg" style="display: none">
       <div class="scan scan02"></div>
@@ -85,9 +26,10 @@
 //  import api from 'src/api/index'
 //  import utils from 'src/utils'
   export default {
-
     name: 'index',
-
+    components: {
+      'blHomeMenu': () => System.import('./_home')
+    },
     data() {
       return {
         isLoading: false,
@@ -110,6 +52,8 @@
     },
     created() {
       this.$loading.close()
+    },
+    mounted() {
     },
     methods: {
       onRefresh(done) {

@@ -68,10 +68,20 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/recharge/index')), 'index')
   },
-  /* 神马 充值缴费 首页 */
+  /* 神马 充值缴费 手机充值 */
   {
     path: '/recharge/iphone',
     component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
+  },
+  /* 神马 充值缴费 固话充值 */
+  {
+    path: '/recharge/fixedphone',
+    component: r => require.ensure([], () => r(require('../views/recharge/fixedphone')), 'fixedphone')
+  },
+  /* 神马 充值缴费 付账单 */
+  {
+    path: '/recharge/bill',
+    component: r => require.ensure([], () => r(require('../views/recharge/bill')), 'bill')
   },
   /* 陈鹏 礼品卡首页 */
   {

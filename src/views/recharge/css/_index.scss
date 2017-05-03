@@ -30,12 +30,12 @@ html {
   text-size-adjust: 100%
 }
 
-html,button,input,select,textarea {
+html,button,input,select,textarea{
   font-family: sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -moz-font-feature-settings: "liga", "kern"
+  -moz-font-feature-settings: "liga", "kern";
 }
 
 body {
@@ -557,98 +557,6 @@ label>* {
   color: #4A90E2;
   border-top: 2px solid #4A90E2
 }
-
-.product-filter {
-  zoom:1;padding: 0;
-  position: relative;
-  z-index: 10
-}
-
-.product-filter .shadow-bg {
-  height: 1rem;
-  width: .6rem;
-  position: absolute;
-  right: .72rem;
-  z-index: 1;
-  background: -webkit-linear-gradient(left, rgba(62,163,255,0), #3ea3ff);
-  background: -o-linear-gradient(right, rgba(62,163,255,0), #3ea3ff);
-  background: -moz-linear-gradient(right, rgba(62,163,255,0), #3ea3ff);
-  background: linear-gradient(to right, rgba(62,163,255,0), #3ea3ff)
-}
-
-.product-filter a.more {
-  display: block;
-  float: right
-}
-
-.product-filter div.itemauto {
-  overflow: auto;
-  overflow-y: hidden;
-  overflow-x: auto;
-  height: 1rem;
-  position: relative
-}
-
-.product-filter div.itemauto ul {
-  min-width: 100%;
-  width: 300%;
-  padding: 0
-}
-
-.product-filter div.itemauto ul li {
-  width: auto;
-  padding: 0;
-  float: left;
-  box-sizing: border-box
-}
-
-.product-filter div.itemauto ul li a {
-  display: block;
-  margin: 0 auto;
-  height: 1rem;
-  text-align: center;
-  font-size: .32rem;
-  border: none;
-  width: auto;
-  padding: 0 .48rem
-}
-
-.blue-bill-top {
-  background: #3ea3ff;
-  border: none;
-  height: 1rem
-}
-
-.blue-bill-top a.bill-class-add {
-  border: none;
-  background: #3ea3ff;
-  height: 1rem;
-  line-height: 1rem;
-  color: #fff;
-  padding: 0 .3rem;
-  box-shadow: none;
-  text-align: right;
-  font-size: .72rem
-}
-
-.blue-bill-top div.itemauto {
-  margin-right: .6rem
-}
-
-.blue-bill-top div.itemauto ul li {
-  height: 1rem;
-  line-height: 1rem
-}
-
-.blue-bill-top div.itemauto ul li a {
-  color: rgba(255,255,255,0.6);
-  line-height: 1rem
-}
-
-.blue-bill-top div.itemauto ul .bill-select {
-  border-bottom: 1px solid #fff
-}
-
 .blue-bill-center {
   background: #3ea3ff;
   text-align: center;
