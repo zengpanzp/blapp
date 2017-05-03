@@ -14,12 +14,13 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   export default {
     name: 'giftcard-more',
     data() {
       return {
         searchText: '',
-        searchWord: ''
+        searchWord: undefined
       }
     },
     directives: {
@@ -42,7 +43,17 @@
         if (this.searchText !== '') {
           console.log('search')
           this.searchWord = this.searchText
-          // this.$route.query.search && this.$refs.searchText.blur()
+          // sensor analytics
+          try {
+            console.log((new Date()).toLocaleString() + 'APP_礼品卡搜索')
+            sa.track('search', {
+              resourceType: '5',
+              cateAtt: "关键词",
+              codeAtt: String(this.searchWord)
+            });
+          } catch (err) {
+            console.log("sa error => " + err);
+          }
         } else {
           this.$toast({
             message: '~请输入关键字~',
@@ -50,6 +61,10 @@
           })
         }
       }
+    },
+    beforeRouteEnter (to, from, next) {
+      Vue.$loading.close()
+      next()
     }
   }
 </script>

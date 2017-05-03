@@ -124,8 +124,9 @@ const isLogin = () => {
  * @chenpeng
  * @DateTime 2017-04-27T12:51:49+0800
  * @param    {[string, number]}        goodId [商品id]
+ * @param    {[Object]}                item [商品信息]
  */
-const addCard = (goodId) => {
+const addCard = (goodId, item = {}) => {
   isLogin().then((data) => {
     window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
       memberId: data.member_id,
@@ -146,9 +147,24 @@ const addCard = (goodId) => {
           position: 'bottom',
           message: resData.resultMsg
         });
+        // sensor analytics - addCart
+        try {
+          console.log((new Date()).toLocaleString() + '加入购物车 埋点')
+          sa.track('addCart', {
+            productId: item.goodsId,
+            productName: item.productName,
+            productType: item.goodsType,
+            productBrand: item.brandSid,
+            originalPriceR: Number(item.marketPrice),
+            salePrice: Number(item.goodsPrice),
+            productCount: Number(item.goodsNum)
+          });
+        } catch (err) {
+          console.log("sa error => " + err);
+        }
       },
-      fail: err => { console.log(err) },
-      progress: data => { console.log(data) }
+      fail: () => {},
+      progress: () => {}
     })
   }, () => {})
 }

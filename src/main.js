@@ -9,6 +9,7 @@ import infiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
+import utils from 'src/utils'
 
 Vue.use(infiniteScroll)
 
@@ -201,6 +202,15 @@ jsBridgeReady(false, () => {
       success: res => {
         let userInfo = JSON.parse(res)
         console.log(userInfo)
+        if (userInfo.member_id && userInfo.member_token) {
+          utils.ssdbSet('member_id', userInfo.member_id)
+          utils.ssdbSet('member_token', userInfo.member_token)
+          utils.ssdbSet('resourceId', userInfo.resourceId)
+        } else {
+          utils.ssdbRemove('member_id')
+          utils.ssdbRemove('member_token')
+          utils.ssdbRemove('resourceId')
+        }
         if (userInfo.distinctId) {
           sa.identify(userInfo.distinctId)
         }
