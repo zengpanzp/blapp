@@ -26,7 +26,9 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      production: process.env.NODE_ENV,
+      production: config.dev.sence,
+      manifest: config.dev.manifest,
+      remotejs: config.dev.remotejs,
       filename: 'index.html',
       template: 'index.html',
       inject: true

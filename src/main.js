@@ -9,6 +9,7 @@ import infiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
+import utils from 'src/utils'
 
 Vue.use(infiniteScroll)
 
@@ -186,21 +187,30 @@ const cssReady = (fn, link) => {
 // const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
 // window.isiBailianApp = isiBailianApp
 
-const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge) {
+const jsBridgeReady = (isWeb = false, calback) => {
+  if (window.CTJSBridge || isWeb) {
     return calback()
   } else {
     document.addEventListener('BLBridgeReady', calback, false)
   }
 }
 
-jsBridgeReady(() => {
+jsBridgeReady(false, () => {
   try {
     // 资源位埋点
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
       success: res => {
         let userInfo = JSON.parse(res)
         console.log(userInfo)
+        if (userInfo.member_id && userInfo.member_token) {
+          utils.ssdbSet('member_id', userInfo.member_id)
+          utils.ssdbSet('member_token', userInfo.member_token)
+          utils.ssdbSet('resourceId', userInfo.resourceId)
+        } else {
+          utils.ssdbRemove('member_id')
+          utils.ssdbRemove('member_token')
+          utils.ssdbRemove('resourceId')
+        }
         if (userInfo.distinctId) {
           sa.identify(userInfo.distinctId)
         }
@@ -234,7 +244,7 @@ router.beforeEach(({ meta, path }, from, next) => {
       className: 'white-bg'
     })
   }
-  jsBridgeReady(() => {
+  jsBridgeReady(meta.isWeb, () => {
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {

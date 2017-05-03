@@ -2,8 +2,8 @@
 <template>
   <div :class="{manage:!more}" v-infinite-scroll="fetchCardList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="order-box">
-      <div class="label-box"><span>订单编号：</span>BPE20150931052095</div>
-      <div class="label-box"><span>下单时间：</span>2017-03-01</div>
+      <div class="label-box"><span>订单编号：</span>{{ decodeURIComponent($route.params.orderNo) }}</div>
+      <div class="label-box"><span>下单时间：</span>{{ decodeURIComponent($route.params.orderTime) }}</div>
     </div>
     <div class="card-list">
       <bl-swipeout>
@@ -80,7 +80,7 @@ export default {
           currentPage: String(this.currentPage ++)
         },
         header: {
-          merOrderNo: "llTest20170117110500"
+          merOrderNo: decodeURIComponent(this.$route.params.orderNo)
         }
       }).then(data => {
         this.$loading.close()

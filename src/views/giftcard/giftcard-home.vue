@@ -1,12 +1,12 @@
 <style lang="scss" src="./css/giftcard-home.scss" scoped></style>
 <template>
   <div id="giftcard" v-scroll-top.window v-scroll-record.window>
-    <div class="head-search">
+    <router-link tag="div" :to="{ path: '/giftCardMore', query: { search: 1, themeName: encodeURI('礼品卡') } }" class="head-search">
       <div class="search-contain">
         <div class="search-logo"></div>
-        <input type="text" />
+        <input type="search" disabled="disabled">
       </div>
-    </div>
+    </router-link>
     <bl-slide class="giftcard-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
 
     <div class="giftcard-class">
@@ -26,18 +26,18 @@
       <div class="scroll-list" ref="container">
         <div class="scroll-ul">
           <div class="list-contain" v-for="row in item.rows">
-            <div class="list-img lazy-box" v-go-native-goods-detail="row">
+            <div class="list-img lazy-box" v-go-native-goods-detail="row[0]">
               <img class="lazy" v-lazy.container="{ src: row[0].goodsImgPath }" />
-              <div class="no-pro" v-if="row.isAvailable == 0">无&nbsp;&nbsp;&nbsp;货</div>
+              <div class="no-pro" v-if="row[0].isAvailable == 0">无&nbsp;&nbsp;&nbsp;货</div>
             </div>
-            <div class="list-text" v-go-native-goods-detail="row">{{ row[0].productName }}</div>
+            <div class="list-text" v-go-native-goods-detail="row[0]">{{ row[0].productName }}</div>
             <div class="list-pay">
               <div class="paynum"><span>¥</span>{{ row[0].marketPrice }}</div>
               <div class="pay-log-no" v-if="row.isAvailable == 0"></div>
-              <div class="pay-log" v-else @click="addCard(row[0].goodsId)"></div>
+              <div class="pay-log" v-else @click="addCard(row[0].goodsId, row[0])"></div>
             </div>
           </div>
-          <router-link tag="div" :to="{ path: '/giftCardMore/' + item.jumpId + '/' + encodeURI(item.themeName) }" class="get-more">
+          <router-link tag="div" :to="{ path: '/giftCardMore', query: { jumpId: item.jumpId, themeName: encodeURI(item.themeName) } }" class="get-more">
             <div class="get-more-e">MORE</div>
             <div class="get-more-c">查看更多</div>
           </router-link>
@@ -65,6 +65,7 @@ export default {
     return {
       loaded: false,
 
+      searchText: '',
       allSlides: [], // 轮播图
       themeIcon: [], // 主题icon
       cardTheme: [], // 卡主题
@@ -131,10 +132,22 @@ export default {
     if (this.loaded) {
       this.$loading.close()
     }
+    // sensor analytics
+    try {
+      console.log((new Date()).toLocaleString() + 'APP_礼品卡首页')
+      sa.track('$pageview', {
+        pageId: 'APP_礼品卡首页',
+        categoryId: 'APP_Lipinka',
+        memberId: utils.ssdbGet('member_id'),
+        $title: '礼品卡首页'
+      });
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
   },
   methods: {
-    addCard(goodId) {
-      utils.addCard(goodId)
+    addCard(goodId, item) {
+      utils.addCard(goodId, item)
     }
   },
   computed: {

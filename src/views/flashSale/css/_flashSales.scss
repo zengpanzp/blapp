@@ -83,9 +83,6 @@
       top: 0;
       left: 0;
       z-index: 10;
-      img[lazy="loading"], img[lazy="error"] {
-        width: rem(60);
-      }
       img {
         width: 100%;
       }
@@ -254,7 +251,7 @@
         right: 0;
         bottom: 0;
         margin: auto;
-        width: rem(70) !important;
+        width: rem(40) !important;
       }
     }
   }

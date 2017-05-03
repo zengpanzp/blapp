@@ -58,7 +58,9 @@ var webpackConfig = merge(baseWebpackConfig, {
       filename: isTesting
         ? 'index.html'
         : config.build.index,
-      production: isTesting?"default":"production",
+      production: isTesting ? config.dev.sence : config.build.sence,
+      manifest: config.build.manifest,
+      remotejs: config.build.remotejs,
       template: 'index.html',
       inject: true,
       minify: {

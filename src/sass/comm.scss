@@ -1,6 +1,7 @@
 @charset "utf-8";
 /* base */
 @import "tobe/base";
+@import "icons";
 .icon {
   width: 1em; height: 1em;
   vertical-align: -0.15em;
@@ -135,7 +136,7 @@ body{
 .lazy-box{
   @extend %lazy-box;
   img[lazy="loading"], img[lazy="error"] {
-    width: rem(50) !important;
+    width: rem(40) !important;
     padding: 0;
   }
 }
@@ -150,7 +151,7 @@ body{
     top: 0;
     bottom: 0;
     margin: auto;
-    width: rem(50);
+    width: rem(40);
   }
 }
 
