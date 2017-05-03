@@ -142,10 +142,13 @@ export default {
         message: '未获取到优惠券ID信息'
       })
     }
+    if (window.CTJSBridge) {
+        alert(true);
+    }
     // 获得登录的用户id
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
       success: res => {
-        alert(res);
+        console.log(res);
         res = utils.transData(res);
         let userInfo = res;
         console.log(userInfo)
