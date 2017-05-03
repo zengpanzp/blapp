@@ -79,8 +79,8 @@
       <file leaf-file-name="_recharge.scss" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/views/recharge/css/_recharge.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="101">
-              <caret line="601" column="14" lean-forward="true" selection-start-line="601" selection-start-column="14" selection-end-line="601" selection-end-column="14" />
+            <state relative-caret-position="191">
+              <caret line="607" column="0" lean-forward="false" selection-start-line="607" selection-start-column="0" selection-end-line="607" selection-end-column="0" />
               <folding>
                 <element signature="e#133#1638#1" expanded="true" />
               </folding>
@@ -823,12 +823,12 @@
       <workItem from="1493274606252" duration="87000" />
       <workItem from="1493274723879" duration="4654000" />
       <workItem from="1493282376088" duration="24917000" />
-      <workItem from="1493788527784" duration="26000" />
+      <workItem from="1493788527784" duration="130000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30411000" />
+    <option name="totallyTimeSpent" value="30515000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="16" y="80" width="1245" height="681" extended-state="0" />
@@ -1252,8 +1252,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/recharge/css/_recharge.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="601" column="14" lean-forward="true" selection-start-line="601" selection-start-column="14" selection-end-line="601" selection-end-column="14" />
+        <state relative-caret-position="191">
+          <caret line="607" column="0" lean-forward="false" selection-start-line="607" selection-start-column="0" selection-end-line="607" selection-end-column="0" />
           <folding>
             <element signature="e#133#1638#1" expanded="true" />
           </folding>
