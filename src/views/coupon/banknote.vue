@@ -133,7 +133,6 @@ export default {
   mounted() {
   },
   created() {
-    debugger;
     // 券id
     this.couponID = this.$route.query.cid;
     if (!this.couponID) {
@@ -142,12 +141,9 @@ export default {
         message: '未获取到优惠券ID信息'
       })
     }
-    alert(2222);
-    alert(window.CTJSBridge);
     // window.$$vue = this;
     utils.isLogin().then(user => {
         console.log(user);
-        alert(3);
         this.memberID = utils.ssdbGet('member_id')
         this.userToken = utils.ssdbGet('member_token')
         this.getCouponDetail();
