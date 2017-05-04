@@ -8,3 +8,4 @@ test/unit/coverage
 **/.git
 .idea
 .idea/*
+*.iml
