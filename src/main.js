@@ -264,36 +264,6 @@ router.beforeEach(({ meta, path }, from, next) => {
     })
   }
   jsBridgeReady("_loginInfo", meta.isWeb, () => {
-    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
-      success: res => {
-        let userInfo = JSON.parse(res);
-        console.log(userInfo)
-        if (userInfo.member_id && userInfo.member_token) {
-          utils.ssdbSet('member_id', userInfo.member_id)
-          utils.ssdbSet('member_token', userInfo.member_token)
-          utils.ssdbSet('resourceId', userInfo.resourceId)
-        } else {
-          utils.ssdbRemove('member_id')
-          utils.ssdbRemove('member_token')
-          utils.ssdbRemove('resourceId')
-        }
-        if (userInfo.distinctId) {
-          sa.identify(userInfo.distinctId)
-        }
-        sa.register({
-          platform: userInfo.platform,
-          memberId: userInfo.memberId,
-          resourceId: userInfo.resourceId,
-          resourceType: userInfo.resourceType,
-          deployId: userInfo.deployId,
-          mmc: userInfo.mmc
-        })
-      },
-      fail: err => {
-        console.log(err)
-      },
-      progress: data => {}
-    })
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
