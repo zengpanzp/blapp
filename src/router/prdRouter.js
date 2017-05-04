@@ -68,9 +68,14 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/recharge/index')), 'index')
   },
-  /* 神马 充值缴费 手机充值 */
+  /* 神马 充值缴费 手机充值 type=1 */
   {
-    path: '/recharge/iphone',
+    path: '/recharge/iphone/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
+  },
+  /* 神马 充值缴费 流量充值 type=2 */
+  {
+    path: '/recharge/iphone/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
   },
   /* 神马 充值缴费 固话充值 */
@@ -82,6 +87,36 @@ export const prdRouter = [
   {
     path: '/recharge/bill',
     component: r => require.ensure([], () => r(require('../views/recharge/bill')), 'bill')
+  },
+  /* 神马 充值缴费 水费 type=1 */
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+  },
+  /* 神马 充值缴费 水费 type=2 */
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+  },
+  /* 神马 充值缴费 水费 type=3 */
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+  },
+  /* 神马 充值缴费 有线电视和铁通 */
+  {
+    path: '/recharge/linetv',
+    component: r => require.ensure([], () => r(require('../views/recharge/linetv')), 'linetv')
+  },
+  /* 神马 充值缴费 游戏充值 */
+  {
+    path: '/recharge/game',
+    component: r => require.ensure([], () => r(require('../views/recharge/game')), 'game')
+  },
+  /* 神马 充值缴费 加油卡 */
+  {
+    path: '/recharge/petrol',
+    component: r => require.ensure([], () => r(require('../views/recharge/petrol')), 'petrol')
   },
   /* 陈鹏 礼品卡首页 */
   {

@@ -6,7 +6,7 @@
         <img class="hd-cell-icon" src="./i/index/bill-index-icon1.png" alt="">
         <p>扫一扫</p>
       </a>
-      <a href="javascript:;" class="wallet-hd-cell">
+      <a href="#/recharge/bill" class="wallet-hd-cell">
         <span class="ss-icon">2</span>
         <img class="hd-cell-icon" src="./i/index/bill-index-icon2.png" alt="">
         <p>付账单</p>

@@ -60,17 +60,17 @@ input[type=number] {
 }
 
 .dummy-goods-list {
-    padding: 0 0.9375rem;
+    padding: 0 rem(0.9375*31.25);
     border-bottom: 1px solid #e7e7e7;
     border-top: 1px solid #e7e7e7;
     background: #fff
 }
 
 .dummy-goods-list li {
-    height: 3rem;
-    line-height: 3rem;
+    height: rem(3*31.25);
+    line-height: rem(3*31.25);
     border-bottom: 1px solid #e7e7e7;
-    font-size: .9375rem
+    font-size: rem(.9375*31.25);
 }
 
 .dummy-goods-list li:last-child {
@@ -78,26 +78,26 @@ input[type=number] {
 }
 
 .dummy-goods-list .pay-class-top {
-    height: 3.8125rem;
-    line-height: 3.8125rem;
-    font-size: 1.125rem
+    height: rem(3.8125*31.25);
+    line-height: rem(3.8125*31.25);
+    font-size: rem(1.125*31.25)
 }
 
 .pay-class-top img {
-    height: 1.5rem;
+    height: rem(1.5*31.25);
     vertical-align: middle;
-    margin-right: .625rem
+    margin-right: rem(.625*31.25)rem
 }
 
 .pay-account {
-    margin-left: 1.375rem;
+    margin-left: rem(1.375*31.25);
     width: 65%;
     height: 100%;
-    font-size: .9375rem
+    font-size: rem(.9375*31.25)
 }
 
 .pay-class-name {
-    font-size: .875rem;
+    font-size: rem(.875*31.25);
     color: #666666
 }
 
@@ -110,8 +110,8 @@ input[type=number] {
 }
 
 .pay-config-button {
-    padding: 0 0.9375rem;
-    margin-top: 1.5625rem
+    padding: 0 rem(.9375*31.25);
+    margin-top: rem(1.5625*31.25)
 }
 
 .new .blue-bill-top {
@@ -649,9 +649,9 @@ span.solid-miner-circle {
 }
 
 .simple-password-buttom {
-    height: 2.75rem;
-    line-height: 2.75rem;
-    font-size: 1rem;
+    height: rem(2.75*31.25);
+    line-height: rem(2.75*31.25);
+    font-size: rem(31.25);
     text-align: center;
     display: block;
     white-space: nowrap;
@@ -661,7 +661,7 @@ span.solid-miner-circle {
 }
 
 .bill-histroy {
-  padding: 0 .75rem
+  padding: rem(.75*31.25)
 }
 
 .normal-ul {
@@ -675,7 +675,7 @@ span.solid-miner-circle {
 }
 
 .right-menu li {
-  font-size: .75rem;
+  font-size: rem(.75*31.25);
   font-weight: 700
 }
 
