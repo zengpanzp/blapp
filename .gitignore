@@ -6,3 +6,5 @@ test/unit/coverage
 .sass-cache
 .git
 **/.git
+.idea
+.idea/*

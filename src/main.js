@@ -138,6 +138,18 @@ Vue.directive('go-native-goods-detail', {
     }
     el.addEventListener('click', function() {
       if (!el.getAttribute('disabled')) {
+        // sensor analytics商品详情埋点
+        try {
+          console.log((new Date()).toLocaleString() + ' 商品详情埋点')
+          sa.track('$pageview', {
+            pageId: 'APP_闪购商品详情页_' + binding.value.goodsId,
+            categoryId: 'APP_SpecificZone',
+            flagType: '卖场id',
+            flagValue: String(binding.value.goodsId)
+          })
+        } catch (err) {
+          console.log("sa error => " + err);
+        }
         window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
       }
     }, false)
