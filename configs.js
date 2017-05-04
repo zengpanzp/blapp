@@ -8,7 +8,6 @@ const vendor = [
   'vuex',
   'vue-resource'
 ]
-
 module.exports = {
   useVendor: true,           // 是否使用公共资源 需要先运行 npm run vendor
   vendor: vendor,

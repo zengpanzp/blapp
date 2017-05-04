@@ -133,7 +133,6 @@ export default {
   mounted() {
   },
   created() {
-    debugger;
     // 券id
     this.couponID = this.$route.query.cid;
     if (!this.couponID) {
@@ -144,6 +143,7 @@ export default {
     }
     // window.$$vue = this;
     utils.isLogin().then(user => {
+        console.log(user);
         this.memberID = utils.ssdbGet('member_id')
         this.userToken = utils.ssdbGet('member_token')
         this.getCouponDetail();

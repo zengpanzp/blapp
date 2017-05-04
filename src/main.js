@@ -198,21 +198,28 @@ const cssReady = (fn, link) => {
 
 // const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
 // window.isiBailianApp = isiBailianApp
-
-const jsBridgeReady = (isWeb = false, calback) => {
-  if (window.CTJSBridge || isWeb) {
-    return calback()
-  } else {
-    document.addEventListener('BLBridgeReady', calback, false)
-  }
+/*
+ *  @auth 神马
+ *  flag 为对应的 intervalId
+ *  避免多个jsBridgeReady的时候出现死循环
+ */
+const jsBridgeReady = (flag, isWeb = false, calback) => {
+      window[flag] = setInterval(function() {
+      if (window.CTJSBridge || isWeb) {
+        clearInterval(window[flag]);
+        return calback()
+      }
+      // } else {
+      //   document.addEventListener('BLBridgeReady', calback, false)
+      // }
+    }, 50);
 }
-
-jsBridgeReady(false, () => {
+jsBridgeReady("_maiDian", false, () => {
   try {
     // 资源位埋点
-    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
       success: res => {
-        let userInfo = JSON.parse(res)
+        let userInfo = JSON.parse(res);
         console.log(userInfo)
         if (userInfo.member_id && userInfo.member_token) {
           utils.ssdbSet('member_id', userInfo.member_id)
@@ -256,7 +263,37 @@ router.beforeEach(({ meta, path }, from, next) => {
       className: 'white-bg'
     })
   }
-  jsBridgeReady(meta.isWeb, () => {
+  jsBridgeReady("_loginInfo", meta.isWeb, () => {
+    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
+      success: res => {
+        let userInfo = JSON.parse(res);
+        console.log(userInfo)
+        if (userInfo.member_id && userInfo.member_token) {
+          utils.ssdbSet('member_id', userInfo.member_id)
+          utils.ssdbSet('member_token', userInfo.member_token)
+          utils.ssdbSet('resourceId', userInfo.resourceId)
+        } else {
+          utils.ssdbRemove('member_id')
+          utils.ssdbRemove('member_token')
+          utils.ssdbRemove('resourceId')
+        }
+        if (userInfo.distinctId) {
+          sa.identify(userInfo.distinctId)
+        }
+        sa.register({
+          platform: userInfo.platform,
+          memberId: userInfo.memberId,
+          resourceId: userInfo.resourceId,
+          resourceType: userInfo.resourceType,
+          deployId: userInfo.deployId,
+          mmc: userInfo.mmc
+        })
+      },
+      fail: err => {
+        console.log(err)
+      },
+      progress: data => {}
+    })
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
