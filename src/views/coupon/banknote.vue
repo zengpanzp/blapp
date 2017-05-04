@@ -133,6 +133,7 @@ export default {
   mounted() {
   },
   created() {
+    window.CTJSBridge && window.CTJSBridge._setNativeTitle("优惠券详情");
     // 券id
     this.couponID = this.$route.query.cid;
     if (!this.couponID) {
