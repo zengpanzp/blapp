@@ -1,10 +1,11 @@
 <style lang="scss" src="./css/_iphone.scss" scoped></style>
+<!--加油卡-->
 <template>
   <div class="phoneRechargeBox">
     <div class="phoneRechargeTitle">
-      <ul class="newFlexBox">
-        <li class=""><a href="javascript:;">充话费</a></li>
-        <li class="curr"><a href="javascript:;">充流量</a></li>
+      <ul class="newFlexBox newTitle">
+        <li class="">充话费</li>
+        <li class="curr"></li>
       </ul>
     </div>
     <div class="phoneRechargeCon">
@@ -13,7 +14,6 @@
           <div class="item-titleRow">
             <input id="number" class="item-titleRow" type="tel" placeholder="请输入充值手机号" maxlength="13">
             <i class="img_icon icon_emptycon btnHidden" style="display: none;"></i>
-            <img class="iconfont img_icon icon-icon_userphone" src="./i/iphone/icon_userphone.png">
           </div>
           <div class="item-subTitle gray" id="errorNumber">上海联通</div>
 
@@ -68,18 +68,6 @@
           </li>
 
         </ul>
-        <div class="flow-type">
-          <div class="flow-type-top">
-            <div class="flow-type-container">
-              <div></div><label>全国</label>
-            </div>
-
-            <div class="flow-type-container selected">
-              <div></div><label>本地</label>
-            </div>
-          </div>
-          <div class="flow-limit">全国可用、即时生效、每日订单金额累计不能超过550元</div>
-        </div>
         <div class="phoneFixBottom">
           <!--<div class="phonePayWay mobile-bor-v clearfix">
                       <div class="fl gray">支付方式</div>
@@ -149,3 +137,4 @@
     }
   };
 </script>
+

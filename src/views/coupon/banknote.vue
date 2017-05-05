@@ -213,6 +213,10 @@ export default {
       }).then(data => {
         let code = data.body.resCode;
         if (code == "00100000") { // 操作成功
+          this.$toast({
+            position: 'bottom',
+            message: "成功领取优惠券"
+          });
           // 定时器的时间
           let timeleft = 3;
           console.log(data);

@@ -41,6 +41,14 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
   },
+  /* 神马 签到 日签 */
+  {
+    path: '/daysign',
+      meta: {
+    title: '签到'
+  },
+    component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
+  },
   /* 神马 百联财礼 */
   {
     path: '/blgift',
@@ -116,7 +124,7 @@ export const prdRouter = [
   /* 神马 充值缴费 加油卡 */
   {
     path: '/recharge/petrol',
-    component: r => require.ensure([], () => r(require('../views/recharge/petrol')), 'petrol')
+    component: r => require.ensure([], () => r(require('../views/recharge/fuelcard')), 'fuelcard')
   },
   /* 陈鹏 礼品卡首页 */
   {

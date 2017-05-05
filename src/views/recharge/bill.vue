@@ -100,14 +100,3 @@
   };
 </script>
 
-<style>
-  /** 设置默认的body为窗口的整个高度 **/
-  *{
-    padding:0;
-    margin:0;
-    box-sizing:border-box;
-  }
-  html,body{
-    height:100%
-  }
-</style>

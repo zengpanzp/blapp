@@ -93,7 +93,11 @@
   -ms-flex-align: center;
   align-items: center
 }
-
+.newTitle {
+  width: rem(700);
+  margin: 0 auto;
+  border-bottom: rem(1.5) solid #ddd;
+}
 .newFlexBox li {
   -webkit-box-flex: 1;
   -webkit-flex: 1;
