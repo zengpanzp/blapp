@@ -8,7 +8,11 @@
         <div>线上线下都可花</div>
       </div>
       <div class="line"></div>
-      <div class="tips2">本月已获得2次抽奖</div>
+      <div class="tips2">本月已获得2次抽奖 <img src="./i/hbg.jpg" class="dateImg"></div>
+      <div class="tips2 other">我的积分 3444 （可抵现34.44元） </div>
+      <div class="btnSign">
+          签 到
+      </div>
     </section>
   </div>
 </template>

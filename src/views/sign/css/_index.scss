@@ -8,22 +8,36 @@ body {
 .daysign{
   .dheader{
      position: relative;
-     height:660px;
+     height:rem(660);
      background: url(../i/hbg.jpg);
      background-size: cover;
      background-position: center;
-    .tips{
+    .tips {
       font-family: PingFangSC-Regular;
       position: relative;
       height: rem(120);
-      top:rem(35);
+      top: rem(35);
       left: rem(30);
       font-size: rem(36);
-      color:#333;
+      color: #333;
       line-height: rem(60);
       & :first-child {
         line-height: rem(64);
       }
+    }
+    .btnSign{
+      position: absolute;
+      width: rem(320);
+      height: rem(88);
+      line-height: rem(88);
+      background: #333;
+      border-radius: rem(100);
+      font-size: rem(36);
+      color:#fff;
+      text-align: center;
+      left: 50%;
+      margin-left: rem(-160);
+      top: rem(357);
     }
     .tips2{
       position: absolute;
@@ -34,6 +48,15 @@ body {
       color: #666;
       letter-spacing: 0;
       line-height: rem(28);
+      .dateImg{
+        margin-left: rem(10);
+        width: rem(39);
+        height: rem(39);
+      }
+      &.other{
+        top:rem(279)
+      }
+
     }
     .line{
       width:rem(290);
