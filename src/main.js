@@ -137,18 +137,6 @@ Vue.directive('go-native-goods-detail', {
     }
     el.addEventListener('click', function() {
       if (!el.getAttribute('disabled')) {
-        // sensor analytics商品详情埋点
-        try {
-          console.log((new Date()).toLocaleString() + ' 商品详情埋点')
-          sa.track('$pageview', {
-            pageId: 'APP_闪购商品详情页_' + binding.value.goodsId,
-            categoryId: 'APP_SpecificZone',
-            flagType: '卖场id',
-            flagValue: String(binding.value.goodsId)
-          })
-        } catch (err) {
-          console.log("sa error => " + err);
-        }
         window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
       }
     }, false)
@@ -213,6 +201,12 @@ const jsBridgeReady = (flag, isWeb = false, calback) => {
       // }
     }, 50);
 }
+var u = navigator.userAgent;
+var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
+sa.register({
+  platform: isiOS ? 'iOS' : isAndroid ? 'Android' : ''
+})
 jsBridgeReady("_maiDian", false, () => {
   try {
     // 资源位埋点
