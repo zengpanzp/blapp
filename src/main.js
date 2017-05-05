@@ -214,6 +214,9 @@ jsBridgeReady("_maiDian", false, () => {
       success: res => {
         let userInfo = JSON.parse(res);
         console.log(userInfo)
+        if (userInfo.memberId) {
+          userInfo.distinctId = userInfo.memberId
+        }
         if (userInfo.distinctId) {
           sa.identify(userInfo.distinctId)
         }

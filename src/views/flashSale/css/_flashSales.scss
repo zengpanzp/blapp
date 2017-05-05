@@ -112,6 +112,7 @@
   }
   .todynew-img {
     .bottom-todynew {
+      overflow: hidden;
       .le2-fonts {
         display: inline-block;
         font-size: rem(24);
@@ -244,6 +245,7 @@
       display: block;
       height: rem(227*2);
       background-color: #fff;
+      overflow: hidden;
       img[lazy="loading"], img[lazy="error"] {
         position: absolute;
         left: 0;
