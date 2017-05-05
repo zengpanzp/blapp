@@ -117,9 +117,11 @@ export default {
     window.CTJSBridge.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", {channelld: 1}, {
       success: res => {
         let resData = utils.transData(res)
-        this.queryCate = resData.list
-        this.loaded = true
-        this.$loading.close()
+        this.$nextTick(() => {
+          this.queryCate = resData.list
+          this.loaded = true
+          this.$loading.close()
+        });
         if (this.$route.query.flashCategories && parseFloat(this.$route.query.flashCategories).toString() !== "NaN") {
           setTimeout(() => {
             this.navTab = parseInt(this.$route.query.flashCategories) + 1
