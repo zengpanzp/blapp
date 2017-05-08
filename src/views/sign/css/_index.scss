@@ -1,0 +1,48 @@
+@charset "utf-8";//cp
+@import "src/sass/tobe/function";
+body {
+    background-color: #f7f7f7;
+}
+// 日签
+
+.daysign{
+  .dheader{
+     position: relative;
+     height:660px;
+     background: url(../i/hbg.jpg);
+     background-size: cover;
+     background-position: center;
+    .tips{
+      font-family: PingFangSC-Regular;
+      position: relative;
+      height: rem(120);
+      top:rem(35);
+      left: rem(30);
+      font-size: rem(36);
+      color:#333;
+      line-height: rem(60);
+      & :first-child {
+        line-height: rem(64);
+      }
+    }
+    .tips2{
+      position: absolute;
+      left: rem(30);
+      top:rem(221);
+      font-family: PingFangSC-Regular;
+      font-size: rem(28);
+      color: #666;
+      letter-spacing: 0;
+      line-height: rem(28);
+    }
+    .line{
+      width:rem(290);
+      height: rem(2);
+      position: absolute;
+      left: rem(30);
+      top:rem(185);
+      opacity: 0.45;
+      background: #999;
+    }
+  }
+}

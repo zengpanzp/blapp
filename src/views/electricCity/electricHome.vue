@@ -25,7 +25,7 @@
         <ul id="content">
           <li v-for="item in filterListRows">
             <a href="javascript:;" v-go-native-goods-detail="item">
-              <div class="col-img col lazy-box"><img class="lazy" v-lazy.content="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
+              <div class="col-img col lazy-box"><img class="lazy" v-lazy.content="{ src: item.goodsImgPath }" alt=""></div>
               <div class="pro-text">{{ item.productName }}</div>
               <div class="pro-price red"><span class="small-price">￥</span>{{ item.goodsPrice }}</div>
             </a>
@@ -35,19 +35,19 @@
     </div>
     <div class="three-minor">
       <div class="aside-left col" v-if="hotTwoBrands && hotTwoBrands.mediaUrl">
-        <a href="javascript:;" v-go-native-resource="hotTwoBrands">
-          <img class="lazyload" v-lazy="hotTwoBrands.mediaUrl" :alt="hotTwoBrands.deployName" />
+        <a href="javascript:;" class="lazyload" v-go-native-resource="hotTwoBrands">
+          <img v-lazy="{ src: hotTwoBrands.mediaUrl }" :alt="hotTwoBrands.deployName" />
         </a>
       </div>
       <div class="aside-right col">
-        <div class="aside-section hairline-top" v-if="asideTwo && asideTwo.mediaUrl">
+        <div class="aside-section hairline-top lazyload" v-if="asideTwo && asideTwo.mediaUrl">
           <a href="javascript:;" v-go-native-resource="asideTwo">
-            <img class="lazyload" v-lazy="asideTwo.mediaUrl" :alt="asideTwo.deployName" />
+            <img v-lazy="{ src: asideTwo.mediaUrl }" :alt="asideTwo.deployName" />
           </a>
         </div>
-        <div class="aside-section" v-if="asideOne && asideOne.mediaUrl">
+        <div class="aside-section lazyload" v-if="asideOne && asideOne.mediaUrl">
           <a href="javascript:;" v-go-native-resource="asideOne">
-            <img class="lazyload" v-lazy="asideOne.mediaUrl" :alt="asideOne.deployName" />
+            <img v-lazy="{ src: asideOne.mediaUrl }" :alt="asideOne.deployName" />
           </a>
         </div>
       </div>
@@ -58,10 +58,10 @@
       </div>
       <div class="pro-hd-list">
         <ul>
-          <li v-for="item in filterPromotion" v-go-native-resource="item">
+          <li class="lazyload" v-for="item in filterPromotion" v-go-native-resource="item">
             <a href="javascript:;">
               <div class="sub-title">{{ item.deployName }}</div>
-              <div class="col-img"><img class="lazyload" v-lazy="item.mediaUrl" :alt="item.deployName"></div>
+              <div class="col-img"><img v-lazy="{ src: item.mediaUrl }" :alt="item.deployName"></div>
             </a>
             <div class="sup-con">{{ item.picDesc1 }}</div>
           </li>
@@ -73,15 +73,15 @@
         <div class="hotbrand-img"></div>
       </div>
       <div class="hot-bd">
-        <div class="bd-1of3 col" v-if="hotBrands && hotBrands.mediaUrl">
+        <div class="bd-1of3 col lazyload" v-if="hotBrands && hotBrands.mediaUrl">
           <a :href="hotBrands.jumpUrl">
-            <img class="lazyload" v-lazy="hotBrands.mediaUrl" :alt="hotBrands.deployName" />
+            <img v-lazy="{ src: hotBrands.mediaUrl }" :alt="hotBrands.deployName" />
           </a>
         </div>
         <div class="bd-2of3 col">
           <div class="clearfix">
             <div class="bd-in-1of2" v-for="item in filterBrands" v-go-native-resource="item">
-              <a href="javascript:;"><img class="pp-title lazyload" v-lazy="item.mediaUrl"></a>
+              <a href="javascript:;" class="lazyload"><img class="pp-title" v-lazy="{ src: item.mediaUrl }"></a>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
       <div class="tab-content">
         <div class="tab-c-item">
           <a class="item-href" href="javascript:;" v-for="item in filterTabRows" :key="item.goodsId" v-go-native-goods-detail="item">
-            <div class="col c-item-img"><img v-lazy="{ src: item.goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt=""></div>
+            <div class="col c-item-img lazy-box"><img class="lazy" v-lazy="{ src: item.goodsImgPath }" alt=""></div>
             <div class="col c-item-text">
               <div class="item-text1">{{ item.productName }}</div>
               <div class="item-text2">{{ item.goodsMsg }}</div>
@@ -193,7 +193,6 @@ export default {
         let resData = utils.transData(res).otherResource
         self.hotBrands = resData[1].advList[0]
         self.allSlides = resData[2].advList
-        debugger;
         self.hotTwoBrands = resData[3].advList[0]
         self.asideOne = resData[4].advList[0]
         self.promotion = resData[5].advList

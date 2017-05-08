@@ -8,16 +8,16 @@
       <!-- 分类 -->
       <div class="navigation">
         <ul class="ovfs hide-scrollbar flash-ovfs">
-          <li class="ovfs-item" :class="{ active: isActive === '1' }" @click="selectCate('1', undefined, '今日上新')">
+          <li class="ovfs-item" :class="{ active: isActive == 'j' }" @click="selectCate('j', undefined, '今日上新')">
             <p>今日上新</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === flashCategories}" v-if="flashCategoriesName != '闪购首页'" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories, flashCategoriesName)">
+          <li class="ovfs-item" :class="{ active: isActive == flashCategories}" v-if="flashCategoriesName != '闪购首页'" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories, flashCategoriesName)">
             <p v-text="flashCategoriesName"></p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === '2' }" @click="selectCate('2', undefined, '最后疯抢')">
+          <li class="ovfs-item" :class="{ active: isActive == 'z' }" @click="selectCate('z', undefined, '最后疯抢')">
             <p>最后疯抢</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive === '3' }" @click="selectCate('3', undefined, 品牌预告)">
+          <li class="ovfs-item" :class="{ active: isActive == 'p' }" @click="selectCate('p', undefined, 品牌预告)">
             <p>品牌预告</p>
           </li>
         </ul>
@@ -29,20 +29,20 @@
           <div class="todynew" v-for="item in filterGetFlashDetailData">
             <div class="todynew-img">
               <div class="wumengcen" v-if="item.pictures">
-                <div class="small-bg" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img v-lazy="picturesUrl"></div>
+                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="picturesUrl"></div>
                 <router-link @click.native="sensorAnalytics(item.flashId)" :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                  <img v-lazy.container="{ src: picturesUrl, loading: require('src/assets/loading.png') }" alt="">
-                  <div class="mengcen-bg" v-if="isActive === '3' || isActive === '2'"></div>
+                  <img v-lazy.container="{ src: picturesUrl, error: require('src/assets/icon_banner_loading.png') }" alt="">
+                  <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
                 </router-link>
                 <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
               </div>
-              <div class="D" v-if="isActive === '2'" v-text="timeCoundDown(item.effectiveEnd)"></div>
-              <div class="D" v-else-if="isActive === '3'" v-text="timeCoundNotice(item.effectiveStart)"></div>
+              <div class="D" v-if="isActive === 'z'" v-text="timeCoundDown(item.effectiveEnd)"></div>
+              <div class="D" v-else-if="isActive === 'p'" v-text="timeCoundNotice(item.effectiveStart)"></div>
               <div class="bottom-todynew">
-                <div class="le-fonts"><img v-lazy="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
+                <div class="le-fonts"><img :src="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
                 <div class="dd-fonts">
                   <div class="le2-fonts" v-text="item.flashName"></div>
-                  <div class="tian-number" v-if="isActive === '3' || isActive === '2'"></div>
+                  <div class="tian-number" v-if="isActive === 'p' || isActive === 'z'"></div>
                   <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
                 </div>
                 <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
@@ -85,10 +85,11 @@ export default {
       isLoading: true,
       showNo: false,
       loaded: false,
-      isActive: '1',
+      isActive: this.$route.query.flashCategories ? String(this.$route.query.flashCategories) : 'j',
       inlineLoading: null,
 
       /* 活动列表 */
+      allSlides: [],
       pages: 0, // 总页数
       getFlashDetailData: [], // 商品列表数据
       requestData: {
@@ -97,7 +98,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         parameter: 0,
-        flashCategories: ''
+        flashCategories: parseFloat(this.$route.query.flashCategories).toString() !== "NaN" ? String(this.$route.query.flashCategories) : ''
       }
     }
   },
@@ -116,9 +117,16 @@ export default {
     window.CTJSBridge.LoadAPI("BLPromotionQueryFlashCategoryAPIManager", {channelld: 1}, {
       success: res => {
         let resData = utils.transData(res)
-        this.queryCate = resData.list
-        this.loaded = true
-        this.$loading.close()
+        this.$nextTick(() => {
+          this.queryCate = resData.list
+          this.loaded = true
+          this.$loading.close()
+        });
+        if (this.$route.query.flashCategories && parseFloat(this.$route.query.flashCategories).toString() !== "NaN") {
+          setTimeout(() => {
+            this.navTab = parseInt(this.$route.query.flashCategories) + 1
+          }, 100)
+        }
       },
       fail: err => console.log(err),
       progress: data => {}
@@ -195,7 +203,6 @@ export default {
           } else {
             this.isLoading = true
           }
-          console.log(this.isLoading)
           if (done) {
             done()
           }
@@ -226,10 +233,16 @@ export default {
         duration: 'loading'
       })
       this.isLoading = true
-      this.requestData.flashCategories = parseInt(index)
+      this.requestData.flashCategories = parseInt(index) || ''
       this.isActive = key
       if (index === undefined) {
-        this.requestData.type = parseInt(key)
+        if (key === 'z') {
+          this.requestData.type = 2
+        } else if (key === 'p') {
+          this.requestData.type = 3
+        } else if (key === 'j') {
+          this.requestData.type = 1
+        }
       } else {
         this.requestData.type = 1
       }

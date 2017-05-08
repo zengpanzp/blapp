@@ -63,10 +63,30 @@ export default {
         parentId: "9999" + this.$route.params.jumpId
       })
     }).then(res => {
+      this.$loading.close()
+      if (res.body.msg) {
+        return this.$toast({
+          position: 'bottom',
+          message: res.body.msg
+        })
+      }
       let resData = utils.transData(res.body.obj)
-      this.aTab = resData.resultInfo.categorys
-      this.jumpId = this.aTab[0].categoryId.replace('9999', '')
-      this.cwrapTitle = this.aTab[0].categoryName
+      if (resData) {
+        this.aTab = resData.resultInfo.categorys
+        this.jumpId = this.aTab[0].categoryId.replace('9999', '')
+        this.cwrapTitle = this.aTab[0].categoryName
+        // sensor analytics
+        try {
+          console.log((new Date()).toLocaleString() + 'APP_礼品卡分类' + this.cwrapTitle)
+          sa.track('$pageview', {
+            pageId: 'APP_礼品卡_' + this.cwrapTitle,
+            categoryId: 'APP_Lipinka',
+            $title: 'APP_礼品卡_' + this.cwrapTitle
+          });
+        } catch (err) {
+          console.log("sa error => " + err);
+        }
+      }
     }, err => {
       console.log(err)
     })
@@ -81,16 +101,20 @@ export default {
         this.jumpId = item.categoryId.replace('9999', '');
         this.cwrapTitle = item.categoryName
       }
+      // sensor analytics
+      try {
+        console.log((new Date()).toLocaleString() + 'APP_礼品卡分类' + this.cwrapTitle)
+        sa.track('$pageview', {
+          pageId: 'APP_礼品卡_' + this.cwrapTitle,
+          categoryId: 'APP_Lipinka',
+          $title: 'APP_礼品卡_' + this.cwrapTitle
+        });
+      } catch (err) {
+        console.log("sa error => " + err);
+      }
     }
   },
   watch: {
-    'jumpId'(val) {
-      this.inlineLoading = this.$toast({
-        iconClass: 'preloader white',
-        message: '加载中',
-        duration: 'loading'
-      })
-    },
     'tabsModel'(val) {
       this.$nextTick(() => {
         ScrollTo.left($('.ovfs')[0], fnScroll($('.ovfs .ovfs-item').eq(val)[0]))

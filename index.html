@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="static/manifest.appcache">
+<html manifest="<%= htmlWebpackPlugin.options.manifest %>">
   <head>
     <meta charset="utf-8">
     <link rel="dns-prefetch" href="//img.iblimg.com">
@@ -27,16 +27,25 @@
     <link rel="stylesheet" type="text/css" id="classLink">
     <script type="text/javascript" src="static/js/iconfont.js"></script>
   </head>
-  <body>
+  <body ontouchstart>
     <div id="app"></div>
     <script type="text/javascript">window.Promise||document.write('<script src="//github.elemecdn.com/jakearchibald/es6-promise/v3.0.2/dist/es6-promise.min.js"><\/script>')</script>
     <!--公共资源库-->
-    <!-- <script>window.isiOS||document.write('<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>')</script> -->
+     <%= htmlWebpackPlugin.options.remotejs %>
     <script type="text/javascript" src="static/js/jq.min.js"></script>
     <script src="<%= htmlWebpackPlugin.options.path %>static/js/lib/vendor/vendor.common.js"></script>
-    <script type="text/javascript"> (function(para) {window['sensorsDataAnalytic201505'] = para.name; window[para.name] = {para: para }; })({name: 'sa',  /*server_url: 'https://sensorsdata.bl.com/sa?project=default'*/ /*测试环境*/  server_url: 'https://sensorsdata.bl.com/sa?project=<%= htmlWebpackPlugin.options.production %>' /* 生产环境 */ }); </script>
+    <script type="text/javascript">
+      var statusProductions = window.location.host == 'mh5.bl.com' ? 'production' : 'default';
+      (function(para) {
+        window['sensorsDataAnalytic201505'] = para.name;
+        window[para.name] = { para: para };
+        console.log(para.server_url)
+      })({
+        name: 'sa',
+        server_url: 'https://sensorsdata.bl.com/sa?project=' + statusProductions
+      });
+    </script>
     <script type="text/javascript" src="static/js/sensorsdata.min.js"></script>
-    <script type="text/javascript">sa.quick('autoTrack');</script>
     <!-- built files will be auto injected -->
   </body>
 </html>

@@ -36,11 +36,11 @@
       <div id="flashProductsList">
         <ul class="index-productlist">
           <template v-for="item in filterlistGoodsData">
-            <li v-go-native-goods-detail="item[0]" :disabled="$route.params.isStart == 0">
+            <li v-go-native-goods-detail="item[0]" :disabled="$route.params.isStart == 0" @click="sensorGoods(item[0], $route.params.isStart)">
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
                 <div class="lazy-box">
-                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/loading-pic.png') }" alt="">
+                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/icon_banner_loading.png'), error: require('src/assets/icon_banner_loading.png') }" alt="">
                 </div>
                 <h3>{{ item[0].goodsMsg }}</h3>
                 <p><span class="price"><span>¥</span>{{ $route.params.isStart == 0 ? '???' : item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
@@ -308,6 +308,22 @@ export default {
         },
         progress: function(data) {}
       });
+    },
+    sensorGoods(item, isStart) {
+      if (isStart != 0) {
+        // sensor analytics商品详情埋点
+        try {
+          console.log((new Date()).toLocaleString() + ' 闪购商品详情埋点')
+          sa.track('$pageview', {
+            pageId: 'APP_闪购商品详情页_' + item.goodsId,
+            categoryId: 'APP_SpecificZone',
+            flagType: '卖场id',
+            flagValue: String(item.goodsId)
+          })
+        } catch (err) {
+          console.log("sa error => " + err);
+        }
+      }
     }
   }
 }

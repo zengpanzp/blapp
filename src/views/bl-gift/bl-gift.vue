@@ -227,7 +227,7 @@ export default {
           // let memberId = utils.ssdbGet('member_id')
           // let memberToken = utils.ssdbGet('member_token')
           // 跳转到我的礼物页面
-          alert(2)
+          // console.log(memberId + memberToken)
           this.$router.push({path: '/blgift/mygift/'});
         }, err => {
             console.log(err)

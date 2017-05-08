@@ -1,6 +1,7 @@
 @charset "utf-8";
 /* base */
 @import "tobe/base";
+@import "icons";
 .icon {
   width: 1em; height: 1em;
   vertical-align: -0.15em;
@@ -10,6 +11,7 @@
 body{
   background-color: #F8F8F8;
   position: relative;
+  height: 100%;
 }
 
 /* 全屏空白div */
@@ -134,4 +136,23 @@ body{
 /* 懒加载 */
 .lazy-box{
   @extend %lazy-box;
+  img[lazy="loading"], img[lazy="error"] {
+    width: rem(40) !important;
+    padding: 0;
+  }
 }
+
+.lazyload{
+  position: relative;
+  background-color: #fff;
+  img[lazy="loading"], img[lazy="error"] {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    width: rem(40);
+  }
+}
+
