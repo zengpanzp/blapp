@@ -1,6 +1,7 @@
 <style lang="scss" src="./css/_index.scss" scoped></style>
 <!--日签-->
 <template>
+
   <div class="daysign">
     <div class="overlay" v-show="showOverlay"></div>
     <section class="dheader">
@@ -71,50 +72,22 @@
       <li>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
-          <div class="name money"><label>￥</label>280</div>
-        </div>
-      </li>
-    </ul>
-    <!--推荐的商品-->
-    <ul class="recommend">
-      <li>
-        <img src="./i/hbg.jpg" class="dateImg">
-      </li>
-      <li>
-        <div class="goods">
-          <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
-          <div class="name money"><label>￥</label>280</div>
-        </div>
-        <div class="goods">
-          <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
-          <div class="name money"><label>￥</label>280</div>
-        </div>
-        <div class="goods">
-          <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
-          <div class="name money"><label>￥</label>280</div>
-        </div>
-        <div class="goods">
-          <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
       </li>
@@ -127,22 +100,50 @@
       <li>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
         <div class="goods">
           <img src="./i/hbg.jpg" class="dateImg">
-          <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+          <div class="name">完成任意1次消费即可获得签到资格</div>
+          <div class="name money"><label>￥</label>280</div>
+        </div>
+      </li>
+    </ul>
+    <!--推荐的商品-->
+    <ul class="recommend">
+      <li>
+        <img src="./i/hbg.jpg" class="dateImg">
+      </li>
+      <li>
+        <div class="goods">
+          <img src="./i/hbg.jpg" class="dateImg">
+          <div class="name">完成任意1次消费即可获得签到资格</div>
+          <div class="name money"><label>￥</label>280</div>
+        </div>
+        <div class="goods">
+          <img src="./i/hbg.jpg" class="dateImg">
+          <div class="name">完成任意1次消费即可获得签到资格</div>
+          <div class="name money"><label>￥</label>280</div>
+        </div>
+        <div class="goods">
+          <img src="./i/hbg.jpg" class="dateImg">
+          <div class="name">完成任意1次消费即可获得签到资格</div>
+          <div class="name money"><label>￥</label>280</div>
+        </div>
+        <div class="goods">
+          <img src="./i/hbg.jpg" class="dateImg">
+          <div class="name">完成任意1次消费即可获得签到资格</div>
           <div class="name money"><label>￥</label>280</div>
         </div>
       </li>
@@ -152,22 +153,22 @@
     <ul class="goodsList">
       <li>
         <div class="pic"><img src="./i/hbg.jpg" class="dateImg"></div>
-        <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+        <div class="name">完成任意1次消费即可获得签到资格</div>
         <div class="name money"><label>￥</label>280</div>
       </li>
       <li class="spe">
         <div class="pic"><img src="./i/hbg.jpg" class="dateImg"></div>
-        <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+        <div class="name">完成任意1次消费即可获得签到资格</div>
         <div class="name money"><label>￥</label>280</div>
       </li>
       <li>
         <div class="pic"><img src="./i/hbg.jpg" class="dateImg"></div>
-        <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+        <div class="name">完成任意1次消费即可获得签到资格</div>
         <div class="name money"><label>￥</label>280</div>
       </li>
       <li class="spe">
         <div class="pic"><img src="./i/hbg.jpg" class="dateImg"></div>
-        <div class="name">吉林省；打飞机双方都；就；来看水电费</div>
+        <div class="name">完成任意1次消费即可获得签到资格</div>
         <div class="name money"><label>￥</label>280</div>
       </li>
     </ul>
