@@ -4,7 +4,6 @@ body {
     background-color: #f7f7f7;
 }
 // 日签
-
 .daysign{
   .dheader{
      position: relative;
@@ -56,7 +55,14 @@ body {
       &.other{
         top:rem(279)
       }
-
+      &.other2{
+        font-size: rem(24);
+        letter-spacing: 0;
+        top:rem(465);
+        width: rem(360);
+        left: 50%;
+        margin-left: rem(-180);
+      }
     }
     .line{
       width:rem(290);
@@ -66,6 +72,29 @@ body {
       top:rem(185);
       opacity: 0.45;
       background: #999;
+    }
+    .menu{
+      display:-webkit-box;
+      display:flex;
+      display:-webkit-flex;
+      flex-flow:row;
+      -webkit-flex-flow:row;
+      justify-content:space-around;
+      position: absolute;
+      top:rem(513);
+      width: 100%;
+      li{
+        box-flex:1;
+        -webkit-box-flex:1;
+        font-size: rem(24);
+        color:#666;
+        text-align: center;
+        img{
+          width: rem(90);
+          height: rem(90);
+          border-radius: 50%;
+        }
+      }
     }
   }
 }

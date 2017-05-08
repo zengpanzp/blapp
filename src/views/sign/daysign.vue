@@ -13,6 +13,29 @@
       <div class="btnSign">
           签 到
       </div>
+      <div class="tips2 other2">没有省不下的钱，只有不坚持的签</div>
+      <ul class="menu">
+        <li>
+          <img src="./i/hbg.jpg">
+          <div>游戏中心</div>
+        </li>
+        <li>
+          <img src="./i/hbg.jpg">
+          <div>特权汇</div>
+        </li>
+        <li>
+          <img src="./i/hbg.jpg">
+          <div>积分商城</div>
+        </li>
+        <li>
+          <img src="./i/hbg.jpg">
+          <div>全球购</div>
+        </li>
+        <li>
+          <img src="./i/hbg.jpg">
+          <div>免费领</div>
+        </li>
+      </ul>
     </section>
   </div>
 </template>
