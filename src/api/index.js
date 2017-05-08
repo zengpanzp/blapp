@@ -63,5 +63,9 @@ export default {
   // 查询二级目录
   queryCategory: params => {
     return Vue.resource(baseUrl + '/productSearch/doCategoryByLevOne.htm').get(params)
+  },
+  // 查询消息类型
+  loadMsgType: params => {
+    return Vue.http.post(baseUrl + '/dict/listByTypes.htm', params);
   }
 }
