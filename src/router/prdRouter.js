@@ -36,9 +36,9 @@ export const prdRouter = [
   /* 神马 领券中心 cid 为优惠券id */
   {
     path: '/banknote',
-    meta: {
-      title: '领券中心'
-    },
+    // meta: {
+    //   title: '领券中心'
+    // },
     component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
   },
   /* 神马 签到 日签 */
