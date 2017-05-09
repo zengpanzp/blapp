@@ -85,5 +85,13 @@ export const prdRouter = [
       title: '电子卡详情'
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
+  },
+  /* 曾攀 待评价 */
+  {
+    path: '/myComment',
+    meta: {
+      title: '我的评价'
+    },
+    component: r => require.ensure([], () => r(require('../views/appraise/myComment')), 'myComment')
   }
 ]
