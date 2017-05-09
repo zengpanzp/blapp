@@ -10,8 +10,8 @@ import Button from './button'
 // import Actionsheet from './actionsheet'
 import Navbar from './navbar'
 import TabItem from './tab-item'
-// import TabContainer from './tab-container'
-// import TabContainerItem from './tab-container-item'
+import TabContainer from './tab-container'
+import TabContainerItem from './tab-container-item'
 import Scroll from './scroll'
 import Popup from './popup'
 // import Picker from './picker/picker'
@@ -35,8 +35,8 @@ const install = function(Vue) {
   // Vue.component('bl' + Actionsheet.name, Actionsheet);
   Vue.component('bl' + Navbar.name, Navbar);
   Vue.component('bl' + TabItem.name, TabItem);
-  // Vue.component('bl' + TabContainer.name, TabContainer);
-  // Vue.component('bl' + TabContainerItem.name, TabContainerItem);
+  Vue.component('bl' + TabContainer.name, TabContainer);
+  Vue.component('bl' + TabContainerItem.name, TabContainerItem);
   Vue.component('bl' + Scroll.name, Scroll);
   Vue.component('bl' + Popup.name, Popup);
   // Vue.component('bl' + Picker.name, Picker);

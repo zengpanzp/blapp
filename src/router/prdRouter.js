@@ -51,7 +51,6 @@ export const prdRouter = [
   },
   /* 神马 百联财礼 */
   {
-
     path: '/blgift/goods/:jumpId/',
     component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
   },
@@ -85,5 +84,13 @@ export const prdRouter = [
       title: '电子卡详情'
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
+  },
+  /* Jeanne 我的收藏 */
+  {
+    path: '/MyStoreAddrCollectionView',
+    meta: {
+      title: '我的收藏'
+    },
+    component: r => require.ensure([], () => r(require('../views/collection/collection')), 'MyStoreAddrCollectionView')
   }
 ]
