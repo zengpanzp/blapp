@@ -50,7 +50,29 @@
   margin-top: rem(20);
   text-align: right;
 }
-.bl-button-inline.outlineMain{
+.small.outlineMain{
   line-height: rem(54);
   padding: 0 rem(20);
 }
+
+.goods-no{
+  text-align: center;
+  width: 80%;
+  margin: 35% auto;
+  .no-text{
+    font-size: rem(32);
+    color: #606060;
+  }
+  .no-des{
+    font-size: rem(28);
+    color: #a6a6a6;
+    margin: rem(10) 0 rem(26);
+  }
+  .outlineMain{
+    font-size: rem(28);
+    line-height: rem(60);
+    padding: 0 rem(50);
+    background-color: transparent;
+  }
+}
+

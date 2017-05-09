@@ -44,6 +44,11 @@
         </div>
       </div>
     </div>
+    <div class="goods-no">
+      <div class="no-text">评价晒单最多可获得30积分,积分可抵现哦!</div>
+      <div class="no-des">可以去看看哪些想看的</div>
+      <bl-button type="outlineMain" inline size="small">去逛逛</bl-button>
+    </div>
   </div>
 </template>
 
