@@ -32,6 +32,10 @@ body{
 .flex{
   @extend %display-flex;
 }
+.flex-item{
+  @include flex(1);
+  width: 0;
+}
 .flex-c-m{
   @extend %display-flex;
   @include align-items(center);
