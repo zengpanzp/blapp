@@ -13,7 +13,8 @@ export const uiRouter = [
   {
     path: '/ui/guide',
     meta: {
-      title: '引导页'
+      title: '引导页',
+      isWeb: true
     },
     component: r => require.ensure([], () => r(require('../views/UI/guide.vue')), 'guide')
   }

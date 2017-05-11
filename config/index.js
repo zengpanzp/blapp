@@ -19,7 +19,10 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report,
+    manifest: 'static/manifest.appcache',
+    sence: 'production',
+    remotejs: ''
   },
   dev: {
     env: require('./dev.env'),
@@ -29,7 +32,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://mh5.st.bl.com/h5_gateway',
+        target: 'https://mh5.st.bl.com/h5_gateway',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -41,6 +44,9 @@ module.exports = {
     // (https://github.com/webpack/css-loader#sourcemaps)
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
-    cssSourceMap: false
+    cssSourceMap: false,
+    manifest: '',
+    sence: 'default',
+    remotejs: '<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>'
   }
 }

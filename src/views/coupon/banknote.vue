@@ -133,30 +133,23 @@ export default {
   mounted() {
   },
   created() {
-    this.$loading.close();
+    window.CTJSBridge && window.CTJSBridge._setNativeTitle("优惠券详情");
     // 券id
-    this.couponID = this.$route.params.cid;
+    this.couponID = this.$route.query.cid;
     if (!this.couponID) {
       this.$toast({
         position: 'bottom',
         message: '未获取到优惠券ID信息'
       })
     }
-    // 获得登录的用户id
-    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', '', {
-      success: res => {
-        // alert(res);
-        res = utils.transData(res);
-        let userInfo = res;
-        console.log(userInfo)
-        // memberId
-        this.memberID = userInfo.member_id;
-        // userToken
-        this.userToken = userInfo.member_token;
+    // window.$$vue = this;
+    utils.isLogin().then(user => {
+        console.log(user);
+        this.memberID = utils.ssdbGet('member_id')
+        this.userToken = utils.ssdbGet('member_token')
         this.getCouponDetail();
-      },
-      fail: res => {
-      }
+    }).then(err => {
+        console.log(err)
     });
   },
   methods: {
@@ -175,6 +168,7 @@ export default {
         couponTemplateId: this.couponID,
         memberId: this.memberID
       }).then(resove => {
+        this.$loading.close();
         // resove = JSON.parse(resove.body);
         console.log(resove.body);
         let Obj = JSON.parse(resove.body.obj);
@@ -219,6 +213,10 @@ export default {
       }).then(data => {
         let code = data.body.resCode;
         if (code == "00100000") { // 操作成功
+          this.$toast({
+            position: 'bottom',
+            message: "成功领取优惠券"
+          });
           // 定时器的时间
           let timeleft = 3;
           console.log(data);

@@ -38,36 +38,6 @@ const ssdbRemove = (name) => {
 }
 
 /**
- * 判断是否到达底部
- * @chenpeng
- * @DateTime 2017-03-28T16:34:10+0800
- */
-const getRect = (ele = document.body) => {
-  let inHeight = window.innerHeight
-  let rect = ele.getBoundingClientRect()
-
-  rect.isVisible = rect.top - inHeight < 0; // 是否在可视区域
-  rect.isBottom = rect.bottom - inHeight <= 0;
-  return rect;
-}
-/**
- * 针对字符串替换功能  尤其是返回的json字符串替换
- * @神马
- * @param  {[type]} str [字符串]
- * @return {[type]}     [string]
- */
-const transSpecialChar = (str) => {
-  if (str) {
-    str = str.replace(/\r/g, ' ');
-    str = str.replace(/\n/g, ' ');
-    str = str.replace(/\t/g, ' ');
-    str = str.replace(/\f/g, ' ');
-    str = str.replace(/\\/g, '\\\\');
-    str = str.replace(/[\s]/g, " ");
-  }
-  return str;
-}
-/**
  * 日期格式化
  * @param  {[type]} format  yyyy-MM-dd hh:mm:ss
  * @return {[type]}        [description]
@@ -103,7 +73,7 @@ const dateFormat = (format) => {
  */
 const transData = (data) => {
   if (typeof data == 'string') {
-    return JSON.parse(transSpecialChar(data))
+    return JSON.parse(data.replace(/[\r\n\t\f\\]/g, "").replace(/[\s]/g, " "))
   } else {
     return data
   }
@@ -149,7 +119,14 @@ const isLogin = () => {
   })
 }
 
-const addCard = (goodId) => {
+/**
+ * native加入购物车
+ * @chenpeng
+ * @DateTime 2017-04-27T12:51:49+0800
+ * @param    {[string, number]}        goodId [商品id]
+ * @param    {[Object]}                item [商品信息]
+ */
+const addCard = (goodId, item = {}) => {
   isLogin().then((data) => {
     window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
       memberId: data.member_id,
@@ -170,11 +147,55 @@ const addCard = (goodId) => {
           position: 'bottom',
           message: resData.resultMsg
         });
+        // sensor analytics - addCart
+        try {
+          console.log((new Date()).toLocaleString() + '加入购物车 埋点')
+          sa.track('addCart', {
+            productId: item.goodsId,
+            productName: item.productName,
+            productType: item.goodsType,
+            productBrand: item.brandSid,
+            originalPriceR: Number(item.marketPrice),
+            salePrice: Number(item.goodsPrice),
+            productCount: Number(item.goodsNum)
+          });
+        } catch (err) {
+          console.log("sa error => " + err);
+        }
       },
-      fail: err => { console.log(err) },
-      progress: data => { console.log(data) }
+      fail: () => {},
+      progress: () => {}
     })
   }, () => {})
+}
+
+/**
+ * 数组对象排序,默认升序
+ * @chenpeng
+ * @DateTime 2017-04-27T12:47:07+0800
+ * @param    {[array]}               arrs [需要排序的数组]
+ * @param    {[all]}                 prop [数组属性]
+ * @return   {[array]}               [排序后的数组]
+ */
+const orderBy = (arrs, prop, sort = 1) => {
+  return arrs.sort(function(obj1, obj2) {
+    let val1 = obj1[prop];
+    let val2 = obj2[prop];
+    if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+      val1 = Number(val1);
+      val2 = Number(val2);
+      if (!sort) {
+        [val1, val2] = [val2, val1]
+      }
+    }
+    if (val1 < val2) {
+      return -1;
+    } else if (val1 > val2) {
+      return 1;
+    } else {
+      return 0;
+    }
+  })
 }
 
 export default {
@@ -184,10 +205,9 @@ export default {
   ssdbGet,
   ssdbSet,
   ssdbRemove,
-  getRect,
-  transSpecialChar,
   dateFormat,
   transData,
   isLogin,
   addCard,
+  orderBy
 }

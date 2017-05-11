@@ -1,7 +1,7 @@
 <template>
   <div class="bl-navbar-item"
     @click="$parent.$emit('input', id)"
-    :class="{ 'is-selected': $parent.value === id }">
+    :class="{ 'is-selected': $parent.value == id }">
     <slot></slot>
   </div>
 </template>
