@@ -151,5 +151,21 @@ export const prdRouter = [
       title: '电子卡详情'
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
+  },
+  /* 陈鹏 我的收藏 */
+  {
+    path: '/myCollection',
+    meta: {
+      title: '我的收藏'
+    },
+    component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
+  },
+  /* 陈鹏 我的评价 */
+  {
+    path: '/myEvaluation',
+    meta: {
+      title: '我的评价'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
   }
 ]
