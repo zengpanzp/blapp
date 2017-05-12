@@ -3,7 +3,7 @@
 <template>
     <div class="gameWrap">
       <!--通讯录组件模式-->
-      <bl-sortListView v-bind:model="list" v-if="selectItem" @click="selectItemName"></bl-sortListView>
+      <!--<bl-sortListView v-bind:model="list" v-if="selectItem" @click="selectItemName"></bl-sortListView>-->
       <div class="headMenu">
         <ul>
           <li :class="shows[0]?'selected':''" @click.preventDefault="tabShow(0, $event)">盛大充值</li>

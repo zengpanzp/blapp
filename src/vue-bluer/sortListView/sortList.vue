@@ -25,16 +25,12 @@
       model: Array,
       value: {}
     },
-
     data() {
       return {
         show: true
       };
     },
     created() {
-        debugger;
-      console.log(this.value);
-      console.log(this.list);
     },
     mounted() {
       sortListView();

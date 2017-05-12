@@ -99,17 +99,26 @@ export const prdRouter = [
   /* 神马 充值缴费 水费 type=1 */
   {
     path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+    ]
   },
-  /* 神马 充值缴费 水费 type=2 */
+  /* 神马 充值缴费 电费 type=2 */
   {
     path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+    ]
   },
-  /* 神马 充值缴费 水费 type=3 */
+  /* 神马 充值缴费 煤气 type=3 */
   {
     path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+    ]
   },
   /* 神马 充值缴费 有线电视和铁通 */
   {
