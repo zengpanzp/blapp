@@ -4,7 +4,6 @@
  * Released under the MIT License.
  */
 import Bar from './bar'
-// import Loading from './loading'
 import Button from './button'
 // import Switch from './switch'
 // import Actionsheet from './actionsheet'
@@ -31,7 +30,6 @@ import sortListView from './sortListView/sortList'
 const install = function(Vue) {
   if (install.installed) return;
   Vue.component('bl' + Bar.name, Bar);
-  // Vue.component('bl' + Loading.name, Loading);
   Vue.component('bl' + Button.name, Button);
   // Vue.component('bl' + Switch.name, Switch);
   // Vue.component('bl' + Actionsheet.name, Actionsheet);
