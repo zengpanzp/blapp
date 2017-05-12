@@ -25,7 +25,9 @@ import SwipeoutItem from './swipeout/swipeout-item'
 import SwipeoutButton from './swipeout/swipeout-button'
 
 import scrollRecord from './route-data/scroll-record'
-
+import tabContainer from './tab-container/index'
+import tabContainerItem from './tab-container-item/index'
+import sortListView from './sortListView/sortList'
 const install = function(Vue) {
   if (install.installed) return;
   Vue.component('bl' + Bar.name, Bar);
@@ -46,7 +48,9 @@ const install = function(Vue) {
   Vue.component('bl' + Swipeout.name, Swipeout);
   Vue.component('bl' + SwipeoutItem.name, SwipeoutItem);
   Vue.component('bl' + SwipeoutButton.name, SwipeoutButton);
-
+  Vue.component('bl' + tabContainer.name, tabContainer);
+  Vue.component('bl' + tabContainerItem.name, tabContainerItem);
+  Vue.component('bl' + sortListView.name, sortListView);
   Vue.$toast = Vue.prototype.$toast = Toast;
   Vue.$modal = Vue.prototype.$modal = ModalJs;
 
