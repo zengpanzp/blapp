@@ -29,7 +29,7 @@
         typeName: "",  // 不同类别不同名称
         isLoading: false
       }
-    },
+    },d
     computed: {
     },
     created() {
