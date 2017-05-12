@@ -138,7 +138,6 @@ export default {
       sa.track('$pageview', {
         pageId: 'APP_礼品卡首页',
         categoryId: 'APP_Lipinka',
-        memberId: utils.ssdbGet('member_id'),
         $title: '礼品卡首页'
       });
     } catch (err) {
