@@ -76,7 +76,7 @@
         list: [],
         shows: [true, false, false]
       }
-    },d
+    },
     computed: {
     },
     created() {
