@@ -53,6 +53,7 @@ export default {
           this.show = false
         }
         if (items.length > 1) {
+          this.show = true
           this.reInitPages()
         }
       },
