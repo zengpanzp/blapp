@@ -68,10 +68,12 @@ export default {
 
   watch: {
     value(val) {
+        debugger;
       this.currentActive = val;
     },
 
     currentActive(val, oldValue) {
+        debugger;
       this.$emit('input', val);
       if (!this.swipeable) return;
       const lastIndex = arrayFindIndex(this.$children,
@@ -81,8 +83,9 @@ export default {
   },
 
   mounted() {
+      debugger;
     if (!this.swipeable) return;
-
+    this.swiping = this.swipeable;
     this.wrap = this.$refs.wrap;
     this.pageWidth = this.wrap.clientWidth;
     this.limitWidth = this.pageWidth / 4;

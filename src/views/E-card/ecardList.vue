@@ -160,6 +160,11 @@ export default {
     window.fullSelect = this.fullSelect
     window.cancleSelect = this.cancleSelect
     window.manageSelect = this.manageSelect
+  },
+  destroyed() {
+    window.fullSelect = undefined
+    window.cancleSelect = undefined
+    window.manageSelect = undefined
   }
 };
 </script>

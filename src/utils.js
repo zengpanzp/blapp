@@ -85,7 +85,7 @@ const transData = (data) => {
  * @DateTime 2017-04-20T12:51:10+0800
  * @return   {[obj]}    [Promise]
  */
-const isLogin = () => {
+const isLogin = (login = true) => {
   return new Promise((resolve, reject) => {
     window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
       success: res => {
@@ -100,7 +100,7 @@ const isLogin = () => {
           ssdbRemove('member_id')
           ssdbRemove('member_token')
           console.log('没有登录')
-          window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
+          login && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
             success: data => {
               let resData = transData(data)
               ssdbSet('member_id', resData.member_id)
