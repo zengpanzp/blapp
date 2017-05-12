@@ -47,13 +47,16 @@ export default {
     }
   },
   watch: {
-    'slides'(items) {
-      if (items.length == 0) {
-        this.show = false
-      }
-      if (items.length > 1) {
-        this.reInitPages()
-      }
+    slides: {
+      handler(items) {
+        if (items.length == 0) {
+          this.show = false
+        }
+        if (items.length > 1) {
+          this.reInitPages()
+        }
+      },
+      immediate: true
     }
   },
   created() {
