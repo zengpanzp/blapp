@@ -152,15 +152,6 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   },
-<<<<<<< HEAD
-  /* 曾攀 待评价 */
-  {
-    path: '/myComment',
-    meta: {
-      title: '我的评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/appraise/myComment')), 'myComment')
-=======
   /* 陈鹏 我的收藏 */
   {
     path: '/myCollection',
@@ -176,6 +167,5 @@ export const prdRouter = [
       title: '我的评价'
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
->>>>>>> b8aca9eb7394589e0d0413db5b34b3235cec3720
   }
 ]
