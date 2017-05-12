@@ -23,8 +23,8 @@ if ('addEventListener' in document) {
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
-  loading: require('src/assets/loading-pic.png'),
-  error: require('src/assets/error-pic.png'),
+  loading: require('src/assets/icon_banner_loading.png'),
+  error: require('src/assets/icon_banner_loading.png'),
   try: 3 // default 1
 })
 
@@ -49,12 +49,7 @@ Vue.directive('scroll-fixed', function(el) {
   let u = navigator.userAgent;
   let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
   if (!isAndroid) {
-    let xx
-    let yy
-    let XX
-    let YY
-    let swipeX
-    let swipeY
+    let [xx, yy, XX, YY, swipeX, swipeY] = []
     let h = document.body.clientHeight || document.body.offsetHeight || window.innerHeight
     let bodyScroll = (e) => {
       e.preventDefault();
@@ -190,22 +185,38 @@ const cssReady = (fn, link) => {
 
 // const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
 // window.isiBailianApp = isiBailianApp
-
-const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge) {
-    return calback()
-  } else {
-    document.addEventListener('BLBridgeReady', calback, false)
-  }
+/*
+ *  @auth 神马
+ *  flag 为对应的 intervalId
+ *  避免多个jsBridgeReady的时候出现死循环
+ */
+const jsBridgeReady = (flag, isWeb = false, calback) => {
+      window[flag] = setInterval(function() {
+      if (window.CTJSBridge || isWeb) {
+        clearInterval(window[flag]);
+        return calback()
+      }
+      // } else {
+      //   document.addEventListener('BLBridgeReady', calback, false)
+      // }
+    }, 50);
 }
-
-jsBridgeReady(() => {
+var u = navigator.userAgent;
+var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
+sa.register({
+  platform: isiOS ? 'iOS' : isAndroid ? 'Android' : ''
+})
+jsBridgeReady("_maiDian", false, () => {
   try {
     // 资源位埋点
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
       success: res => {
-        let userInfo = JSON.parse(res)
+        let userInfo = JSON.parse(res);
         console.log(userInfo)
+        if (userInfo.memberId) {
+          userInfo.distinctId = userInfo.memberId
+        }
         if (userInfo.distinctId) {
           sa.identify(userInfo.distinctId)
         }
@@ -239,7 +250,7 @@ router.beforeEach(({ meta, path }, from, next) => {
       className: 'white-bg'
     })
   }
-  jsBridgeReady(() => {
+  jsBridgeReady("_loginInfo", meta.isWeb, () => {
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {

@@ -19,7 +19,7 @@
       <div class="rank-sort">
         <ul>
           <router-link tag="li" :to="{ path: '/rankSortPage/' + item.id, query: { sortIndex: index } }" v-if="aSort && aSort.length" v-for="(item, index) in aSort">
-            <img class="rank-sort-img" v-lazy="item.imageurl">
+            <div class="rank-sort-img lazyload"><img v-lazy="item.imageurl"></div>
             <div class="sort-text">{{ item.rankName }}</div>
           </router-link>
         </ul>
