@@ -80,8 +80,6 @@
     computed: {
     },
     created() {
-      window.$$vue = this;
-      debugger;
       this.list = [{
         name: 'jack',
         img: './img/img.png',
@@ -111,14 +109,10 @@
         img: './img/img.png',
       }
       ];
-      console.log(this);
-        // 使用组件
-//        sortListView();
-        window.$$vue = this;
-        this.$loading.close();
-        // 1位水费 2为电费 3为煤气费
-        console.log(this.$route);
-//        this.fill(this.$route);
+      this.$loading.close();
+      // 1位水费 2为电费 3为煤气费
+      console.log(this.$route);
+      // this.fill(this.$route);
     },
 //    watch: {
 //      'show': 'tabShow'
