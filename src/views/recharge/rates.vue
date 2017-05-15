@@ -2,10 +2,12 @@
 <!--水电煤缴费-->
 <template>
     <div class="rates">
-      <div class="content-wrap">
+      <!--用来显示缴费分组-->
+      <router-view></router-view>
+      <div class="content-wrap" v-show="toShow">
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
-            <li>选择缴费分组
+            <li @click.preventDefault="selectCategory">选择缴费分组
               <div class="name"><label>我家</label><img class="more" src="./i/iphone/more.png"></div>
             </li>
             <!--	</ul>
@@ -39,6 +41,7 @@
 
     data() {
       return {
+        toShow: true,  // 是否显示父类组件
         typeClass: "", // 不同类别样式名称不一样
         typeName: "",  // 不同类别不同名称
         isLoading: false
@@ -62,9 +65,14 @@
           done()
         }, 2000)
       },
+      // 选择缴费分组
+      selectCategory() {
+          this.toShow = false;
+          this.$router.push({path: "/recharge/rates/" + this.rateType + "/category"});
+      },
       fill($route) {
-        debugger;
         let val = $route.params["type"];
+        this.rateType = val;  // 缴费类别 1 水费 2电费 3 煤气费
         if (val == 1) {
           this.typeClass = "icon-waitassess";
           this.typeName = "水费";

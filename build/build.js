@@ -17,7 +17,7 @@ spinner.start()
 var assetsPath = path.join(config.build.assetsRoot, config.build.assetsSubDirectory)
 shell.rm('-rf', assetsPath)
 shell.mkdir('-p', assetsPath)
-shell.config.silent = true
+shell.config.silent = true;
 shell.cp('-R', 'static/*', assetsPath)
 shell.config.silent = false
 
