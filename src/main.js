@@ -9,7 +9,6 @@ import infiniteScroll from 'vue-infinite-scroll'
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
-// import utils from 'src/utils'
 
 Vue.use(infiniteScroll)
 
@@ -24,8 +23,8 @@ if ('addEventListener' in document) {
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
-  loading: require('src/assets/loading-pic.png'),
-  error: require('src/assets/error-pic.png'),
+  loading: require('src/assets/icon_banner_loading.png'),
+  error: require('src/assets/icon_banner_loading.png'),
   try: 3 // default 1
 })
 
@@ -50,12 +49,7 @@ Vue.directive('scroll-fixed', function(el) {
   let u = navigator.userAgent;
   let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
   if (!isAndroid) {
-    let xx
-    let yy
-    let XX
-    let YY
-    let swipeX
-    let swipeY
+    let [xx, yy, XX, YY, swipeX, swipeY] = []
     let h = document.body.clientHeight || document.body.offsetHeight || window.innerHeight
     let bodyScroll = (e) => {
       e.preventDefault();
@@ -189,37 +183,61 @@ const cssReady = (fn, link) => {
   })();
 }
 
-const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
-window.isiBailianApp = isiBailianApp
-
-const jsBridgeReady = (calback) => {
-  if (window.CTJSBridge || !isiBailianApp) {
-    return calback()
-  } else {
-    document.addEventListener('BLBridgeReady', calback, false)
-  }
+// const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
+// window.isiBailianApp = isiBailianApp
+/*
+ *  @auth 神马
+ *  flag 为对应的 intervalId
+ *  避免多个jsBridgeReady的时候出现死循环
+ */
+const jsBridgeReady = (flag, isWeb = false, calback) => {
+      window[flag] = setInterval(function() {
+      if (window.CTJSBridge || isWeb) {
+        clearInterval(window[flag]);
+        return calback()
+      }
+      // } else {
+      //   document.addEventListener('BLBridgeReady', calback, false)
+      // }
+    }, 50);
 }
-// 保存用户信息到sessionStorage
-// jsBridgeReady(() => {
-//   setTimeout(() => {
-//     console.log('fetchLoginInfo')
-//     !utils.ssdbGet('member_id') && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
-//       success: res => {
-//         let resData = utils.transData(res)
-//         console.log(resData)
-//         if (resData.member_id) {
-//           utils.ssdbSet('member_id', resData.member_id)
-//           utils.ssdbSet('member_token', resData.member_token)
-//         } else {
-//           utils.ssdbRemove('member_id')
-//           utils.ssdbRemove('member_token')
-//         }
-//       },
-//       fail: () => {},
-//       progress: () => {}
-//     })
-//   }, 500)
-// })
+var u = navigator.userAgent;
+var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
+sa.register({
+  platform: isiOS ? 'iOS' : isAndroid ? 'Android' : ''
+})
+jsBridgeReady("_maiDian", false, () => {
+  try {
+    // 资源位埋点
+    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
+      success: res => {
+        let userInfo = JSON.parse(res);
+        console.log(userInfo)
+        if (userInfo.memberId) {
+          userInfo.distinctId = userInfo.memberId
+        }
+        if (userInfo.distinctId) {
+          sa.identify(userInfo.distinctId)
+        }
+        sa.register({
+          platform: userInfo.platform,
+          memberId: userInfo.memberId,
+          resourceId: userInfo.resourceId,
+          resourceType: userInfo.resourceType,
+          deployId: userInfo.deployId,
+          mmc: userInfo.mmc
+        })
+      },
+      fail: err => {
+        console.log(err)
+      },
+      progress: data => {}
+    })
+  } catch (err) {
+    console.log('sa error => ' + err)
+  }
+})
 
 let linkCssObj = document.getElementById('classLink')
 // 登录拦截
@@ -232,25 +250,7 @@ router.beforeEach(({ meta, path }, from, next) => {
       className: 'white-bg'
     })
   }
-  jsBridgeReady(() => {
-    // 资源位埋点
-    // isiBailianApp && window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
-    //   success: res => {
-    //     let userInfo = JSON.parse(res)
-    //     window.sa.register({
-    //       platform: userInfo.platform,
-    //       memberId: userInfo.memberId,
-    //       resourceId: userInfo.resourceId,
-    //       resourceType: userInfo.resourceType,
-    //       deployId: userInfo.deployId,
-    //       mmc: userInfo.mmc
-    //     })
-    //   },
-    //   fail: err => {
-    //     console.log(err)
-    //   },
-    //   progress: data => {}
-    // })
+  jsBridgeReady("_loginInfo", meta.isWeb, () => {
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
@@ -276,7 +276,6 @@ router.beforeEach(({ meta, path }, from, next) => {
 new Vue({
   el: '#app',
   router,
-  mode: 'history',
   template: '<App/>',
   components: { App }
 })

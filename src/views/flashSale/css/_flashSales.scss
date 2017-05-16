@@ -82,11 +82,9 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-size: rem(176);
       z-index: 10;
       img {
         width: 100%;
-        background-size: rem(176);
       }
     }
     .jian {
@@ -114,6 +112,7 @@
   }
   .todynew-img {
     .bottom-todynew {
+      overflow: hidden;
       .le2-fonts {
         display: inline-block;
         font-size: rem(24);
@@ -130,7 +129,9 @@
       width: rem(115);
       background-size: rem(115) rem(41);
       margin: 0 rem(23) 0 0;
+      text-align: center;
       img{
+        width: auto;
         height: rem(31.14*2);
         border: 0;
       }
@@ -242,8 +243,17 @@
     position: relative;
     a{
       display: block;
-      img{
-        height: rem(227*2);
+      height: rem(227*2);
+      background-color: #fff;
+      overflow: hidden;
+      img[lazy="loading"], img[lazy="error"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: rem(40) !important;
       }
     }
   }

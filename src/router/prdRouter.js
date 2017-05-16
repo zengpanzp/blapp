@@ -35,11 +35,19 @@ export const prdRouter = [
   },
   /* 神马 领券中心 cid 为优惠券id */
   {
-    path: '/banknote/:cid',
+    path: '/banknote',
     meta: {
       title: '领券中心'
     },
     component: r => require.ensure([], () => r(require('../views/coupon/banknote')), 'banknote')
+  },
+  /* 神马 签到 日签 */
+  {
+    path: '/daysign',
+      meta: {
+    title: '签到'
+  },
+    component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */
   {
@@ -59,6 +67,64 @@ export const prdRouter = [
     path: '/blgift/mygift',
     component: r => require.ensure([], () => r(require('../views/bl-gift/bl-mygift')), 'blmygift')
   },
+  /* 神马 充值缴费 首页 */
+  {
+    path: '/recharge',
+    meta: {
+      title: '充值缴费'
+    },
+    component: r => require.ensure([], () => r(require('../views/recharge/index')), 'index')
+  },
+  /* 神马 充值缴费 手机充值 type=1 */
+  {
+    path: '/recharge/iphone/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
+  },
+  /* 神马 充值缴费 流量充值 type=2 */
+  {
+    path: '/recharge/iphone/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
+  },
+  /* 神马 充值缴费 固话充值 */
+  {
+    path: '/recharge/fixedphone',
+    component: r => require.ensure([], () => r(require('../views/recharge/fixedphone')), 'fixedphone')
+  },
+  /* 神马 充值缴费 付账单 */
+  {
+    path: '/recharge/bill',
+    component: r => require.ensure([], () => r(require('../views/recharge/bill')), 'bill')
+  },
+  /* 神马 充值缴费 水费 type=1 */
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+  },
+  /* 神马 充值缴费 水费 type=2 */
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+  },
+  /* 神马 充值缴费 水费 type=3 */
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates')
+  },
+  /* 神马 充值缴费 有线电视和铁通 */
+  {
+    path: '/recharge/linetv',
+    component: r => require.ensure([], () => r(require('../views/recharge/linetv')), 'linetv')
+  },
+  /* 神马 充值缴费 游戏充值 */
+  {
+    path: '/recharge/game',
+    component: r => require.ensure([], () => r(require('../views/recharge/game')), 'game')
+  },
+  /* 神马 充值缴费 加油卡 */
+  {
+    path: '/recharge/petrol',
+    component: r => require.ensure([], () => r(require('../views/recharge/fuelcard')), 'fuelcard')
+  },
   /* 陈鹏 礼品卡首页 */
   {
     path: '/giftCardHome',
@@ -74,23 +140,23 @@ export const prdRouter = [
   },
   /* 陈鹏 礼品卡查看更多 */
   {
-    path: '/giftCardMore/:jumpId/:themeName',
+    path: '/giftCardMore',
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-more')), 'giftCardMore')
   },
   /* 陈鹏 电子卡详情 */
   {
-    path: '/eCardList',
+    path: '/eCardList/:orderNo/:orderTime',
     meta: {
       title: '电子卡详情'
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   },
-  /* Jeanne 我的收藏 */
+  /* 陈鹏 我的收藏 */
   {
-    path: '/MyStoreAddrCollectionView',
+    path: '/myCollection',
     meta: {
       title: '我的收藏'
     },
-    component: r => require.ensure([], () => r(require('../views/collection/collection')), 'MyStoreAddrCollectionView')
+    component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   }
 ]

@@ -1,0 +1,15 @@
+
+.edit-config-button {
+    border-radius: .375rem;
+    color: #fff;
+    background: #1e9cf1;
+    text-align: center;
+    height: 2.75rem;
+    line-height: 2.75rem;
+    font-size: 1.125rem;
+    width: 100%;
+    border: 0
+}
+.middleFont {
+    font-size: 1.0625rem
+}
