@@ -106,6 +106,11 @@ export const prdRouter = [
     path: '/recharge/billempty',
       component: r => require.ensure([], () => r(require('../views/recharge/billempty')), 'billempty')
   },
+  /* 神马 充值缴费 未支付账单 */
+  {
+    path: '/recharge/orderdetail',
+      component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
+  },
   /* 神马 充值缴费 水费 type=1 */
   {
     path: '/recharge/rates/:type',
