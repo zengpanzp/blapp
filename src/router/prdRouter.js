@@ -59,7 +59,6 @@ export const prdRouter = [
   },
   /* 神马 百联财礼 */
   {
-
     path: '/blgift/goods/:jumpId/',
     component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
   },

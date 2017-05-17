@@ -25,11 +25,8 @@
     @include display(flex);
     @include align-items(center);
     @include justify-content(center);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: rem(10);
-    padding-right: rem(10);
-    box-sizing: border-box;
+    padding: 0 rem(10);
+    margin: 0 auto;
     font-size: rem(34);
     text-align: center;
     text-decoration: none;
