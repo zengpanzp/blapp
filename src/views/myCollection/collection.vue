@@ -16,13 +16,13 @@
             </div>
           </div>
         </div>
-        <div class="infinite-layer" v-if="loading">
+        <div class="infinite-layer" v-if="goodsLoading">
           <div class="infinite-preloader"></div>
           <div>加载中...</div>
         </div>
       </bl-tab-container-item>
       <bl-tab-container-item id="1">
-        <div class="shop-box" v-if="tabsModel == '1'" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
+        <div class="shop-box" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
             <div class="shop-item flex-c-m"  v-for="item in storeList">
               <div class="shop-item-icon flex-c-m">
@@ -34,6 +34,10 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="infinite-layer" v-if="storesLoading">
+          <div class="infinite-preloader"></div>
+          <div>加载中...</div>
         </div>
       </bl-tab-container-item>
     </bl-tab-container>
@@ -51,10 +55,12 @@ export default {
     return {
       memberToken: null,
       pageNum: 1,
-      busy: false,
-      busyStore: false,
+      storePage: 1,
+      busy: true,
+      busyStore: true,
       tempArr: [],
-      loading: true,
+      goodsLoading: true,
+      storesLoading: true,
       tabsModel: '0',
       deployName: null,
       filterEleTabs: [
@@ -69,24 +75,32 @@ export default {
       storeList: []
     };
   },
-  // created() {
-      // this.busy = true
-      // this.busyStore = true
-      // utils.isLogin().then(data => {
-      //   let memberToken = data.member_token;
-      //   this.memberToken = memberToken
-      // })
-      // this.busy = false
-      // this.busyStore = false
-  // },
   mounted() {
     // alert(this.$route.query.deployName)
-    this.deployName = this.$route.params.deployName;
+    console.log(this.$route)
+    this.deployName = this.$route.query.deployName;
+    let deployName = this.$route.query.deployName
+    if (deployName) {
+      debugger
+      if (deployName == 'goods') {
+        this.tabsModel = '0'
+      } else if (deployName == 'stores') {
+        this.tabsModel = '1'
+      } else {
+        this.tabsModel = '0'
+      }
+    }
+    this.changeTab(this.tabsModel)
   },
   methods: {
     changeTab(index) {
+      this.busy = true
+      this.busyStore = true
       this.tabsModel = String(index)
-      if (index == 1) {
+      if (index == '0') {
+        this.loadGoods()
+      }
+      if (index == '1') {
         this.loadStores()
       }
     },
@@ -120,22 +134,20 @@ export default {
               requestData: JSON.stringify(request),
               systemNo: "11111111"
             }).then(data => {
-              // console.log(JSON.parse(data.body.obj))
               let resData = JSON.parse(data.body.obj)
               let rows = resData.resultInfo.rows
-              console.log(rows)
+              let check = JSON.stringify(rows)
+              console.log(check)
               if (rows) {
                 this.list = this.list.concat(rows)
                 this.busy = false
               } else {
-                this.loading = false
+                this.goodsLoading = false
               }
               this.$loading.close()
-              console.log("######rows########" + rows)
-              // console.log('######resultInfo######' + JSON.stringify(rows.resultInfo))
             })
           } else {
-            this.loading = false
+            this.goodsLoading = false
           }
         }).then(err => {
           console.log(err)
@@ -146,14 +158,30 @@ export default {
       this.busyStore = true
       utils.isLogin().then(data => {
         let memberToken = data.member_token
+        let currentPage = Number(this.storePage ++)
         api.queryShopFavorites({
-        member_token: memberToken}).then(data => {
-          this.$loading.close()
-        console.log(data)
-        let storeList = JSON.parse(data.body.obj).list
-        this.storeList = storeList
-       })
+        member_token: memberToken,
+        currentPage: currentPage
+      }).then(data => {
         this.$loading.close()
+        console.log(data)
+        this.currentPage = currentPage
+        let storeList = JSON.parse(data.body.obj).list
+        let totalPageNum = JSON.parse(data.body.obj).pages
+        // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
+        if (currentPage <= totalPageNum) {
+           if (storeList && storeList.length) {
+          this.storeList = this.storeList.concat(storeList)
+          this.busyStore = false
+          } else {
+            this.busyStore = true
+            this.storesLoading = false
+          }
+        } else {
+          this.storesLoading = false
+          this.$loading.close()
+        }
+       })
       })
     }
   },
