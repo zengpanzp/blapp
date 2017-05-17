@@ -3,7 +3,6 @@
 //     Zepto.js may be freely distributed under the MIT license.
 
 ;(function($, undefined){
-  debugger;
   var prefix = '', eventPrefix,
     vendors = { Webkit: 'webkit', Moz: '', O: 'o' },
     testEl = document.createElement('div'),
@@ -123,7 +122,6 @@
   testEl = null
 })($);
 (function ($, undefined) {
-  debugger;
   var document = window.document, docElem = document.documentElement, origShow = $.fn.show, origHide = $.fn.hide,
     origToggle = $.fn.toggle;
 
@@ -194,7 +192,6 @@
     })
   }
 })($);
-debugger;
 $.fn.scrollTo = function (options) {
   debugger
   var defaults = {

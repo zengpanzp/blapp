@@ -16,7 +16,9 @@
   background: #FFFFFF;
   padding: rem(0.625*31.25) rem(0.9375*31.25)
 }
-
+.edit-config-button:active{
+  background: #70b4f3;
+}
 .bottom-margin-normal {
   margin-bottom: rem(.625*31.25)
 }
