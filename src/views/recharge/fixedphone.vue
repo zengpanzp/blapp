@@ -24,11 +24,20 @@
       width: 100%;
       height: rem(88);
       color: #333;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      -webkit-appearance: none;
+      outline: none;
+      background: transparent;
     }
   }
   .text-node{
     min-width: rem(140);
-    margin-right: rem(10);
+    margin-right: 10px;
+  }
+  [data-dpr="1"] .text-node{
+    margin-right: 5px;
   }
   .input-phone{
     padding: rem(10) rem(30) 0;

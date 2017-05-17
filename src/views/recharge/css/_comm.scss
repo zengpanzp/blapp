@@ -52,10 +52,13 @@
 }
 
 .phoneRechargeItem .itemContent .item-titleRow input {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  -webkit-appearance: none;
   font-size: rem(58);
   color: #333;
   width: 90%;
-  border: none;
   outline: none
 }
 .phoneRechargeItem .itemContent .item-titleRow .area-code {

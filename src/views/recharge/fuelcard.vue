@@ -57,7 +57,7 @@
       <div class="phoneRechargeItem">
         <div class="itemContent">
           <div class="item-titleRow">
-            <input id="number" class="item-titleRow" type="tel" placeholder="请输入油卡号" maxlength="11" @focus="focus = true" v-model="iphoneNum">
+            <input class="item-titleRow" type="tel" placeholder="请输入油卡号" maxlength="11" @focus="focus = true" v-model="iphoneNum">
             <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="emptyPhone"></i>
           </div>
           <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">{{ !testPhoneNum() ? '请输入正确的油卡号' : phoneCheck }}</div>
