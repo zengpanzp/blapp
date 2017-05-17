@@ -82,7 +82,7 @@ export default {
 
   mounted() {
     if (!this.swipeable) return;
-
+    this.swiping = this.swipeable;
     this.wrap = this.$refs.wrap;
     this.pageWidth = this.wrap.clientWidth;
     this.limitWidth = this.pageWidth / 4;

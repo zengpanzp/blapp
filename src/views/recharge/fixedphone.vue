@@ -1,4 +1,4 @@
-<style lang="scss" src="./css/_iphone.scss" scoped></style>
+<style lang="scss" src="./css/_comm.scss"></style>
 <template>
   <div>
     <div class="phoneRechargeBox">

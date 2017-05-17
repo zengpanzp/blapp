@@ -1,0 +1,290 @@
+@import "src/sass/tobe/function";
+// 输入框
+.modal-fix{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: rgba(#000, .5);
+}
+// .phone-box{
+//   position: relative;
+//   z-index: 20;
+// }
+.phoneRechargeTitle {
+  position: relative;
+  z-index: 20;
+  background-color: #fff;
+  border-bottom: 1px solid #e7e7e7;
+  .flex {
+    padding: 0 rem(20);
+  }
+  .flex-item {
+    text-align: center;
+    line-height: rem(88);
+    font-size: rem(28);
+    &.is-selected {
+      border-bottom: rem(4) solid #3ea2ff;
+      color: #3ea2ff;
+    }
+  }
+}
+// 九宫格
+.phoneRechargeItem{
+  background-color: #fff;
+  position: relative;
+  z-index: 20;
+}
+.phoneRechargeItem .itemContent .item-titleRow {
+  position: relative;
+  height: rem(2.6*31.25);
+  line-height: rem(2.6*31.25)
+}
+
+
+.phoneRechargeItem .itemContent .item-titleRow i {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  right: 0;
+  width: rem(88);
+  height: rem(88);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%)
+}
+
+.phoneRechargeItem .itemContent .item-titleRow input {
+  font-size: rem(58);
+  color: #333;
+  width: 90%;
+  border: none;
+  outline: none
+}
+.phoneRechargeItem .itemContent .item-titleRow .area-code {
+  font-size: rem(.975*31.25);
+  color: #333;
+  width: rem(2*31.25);
+  border: none;
+  outline: none;
+  position:absolute;
+  left:rem(4.5*31.25);
+  top:rem(31.25*.6)
+}
+.phoneRechargeItem .itemContent .item-titleRow .fixedphone {
+  margin-left: rem(2.5*31.25);
+}
+.txl{
+  width: rem(88);
+  height: rem(88);
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+  background: url('../i/iphone/icon_userphone.png') center right no-repeat;
+}
+.phoneRechargeItem .itemContent .item-titleRow {
+  position: relative;
+  height: rem(88);
+  line-height: rem(88)
+}
+.phonePadding {
+  padding: rem(.9375*31.25) rem(.9375*31.25) rem(.9375*31.25)
+}
+.itemContent{
+  padding: rem(20) rem(30);
+  border-bottom: 1px solid #e7e7e7;
+}
+.img_icon.icon_emptycon {
+  background-repeat: no-repeat;
+  background-image: url(../i/iphone/icon_emptycon.png);
+  background-size: rem(1.125*31.25) rem(1.125*31.25);
+  background-position: center right
+}
+.phoneMoney {
+  background-color: #fff;
+  padding: rem(.9375*31.25) rem(.625*31.25) rem(.3125*31.25);
+  overflow: hidden;
+  li {
+    display: block;
+    float: left;
+    width: 33.333333%;
+    padding: rem(.3125*31.25);
+    overflow: hidden;
+    text-align: center;
+    box-sizing: border-box;
+    margin-bottom: rem(.625*31.25);
+    a {
+      border: 1px solid #ccc;
+      border-radius: rem(.375*31.25);
+      display: block;
+      padding: rem(.375*31.25) rem(.3125*31.25);
+      color: #999;
+      h3 {
+        font-size: rem(40);
+        color: #333
+      }
+      &.curr {
+        background-color: #3ea2ff;
+        color: #fff;
+        border-color: #3ea2ff;
+        h3 {
+          color: #fff
+        }
+      }
+    }
+  }
+  &.list-disabled{
+    a, h3{
+      color: #ccc !important;
+      background-color: transparent !important;
+      border-color: #ccc !important;
+    }
+  }
+}
+.phoneMoney li a p,
+.smallFont {
+  font-size: rem(.75*31.25);
+  font-weight: bold;
+}
+// 全国或者本地
+.flow-type {
+  padding: rem(0.9375*31.25);
+  padding-left: rem(31.25);
+  margin-top: rem(-0.5*31.25);
+  background: #FFFFFF;
+}
+.flow-limit {
+  font-size: rem(0.75*31.25);
+  color: #3ea2ff
+}
+
+.flow-type-top {
+  overflow: hidden;
+  margin-bottom: rem(0.75*31.25)
+}
+
+.flow-type-container {
+  display: -webkit-box;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-align-items: center;
+  float: left;
+  margin-right: rem(2.5*31.25)
+}
+
+.flow-type-container div {
+  width: rem(0.9375*31.25);
+  height: rem(0.9375*31.25);
+  margin-right: rem(0.3125*31.25);
+  background: url(../i/iphone/unselected2.png) center center;
+  background-size: 100% 100%
+}
+
+.flow-type-container label {
+  font-size: rem(31.25);
+  color: #999999
+}
+
+.flow-type-top .selected div {
+  background: url(../i/iphone/circle.jpg) center center;
+  background-size: 100% 100%
+}
+
+.flow-type-top .selected label {
+  color: #3ea2ff
+}
+
+// 底部按钮
+.phoneFixBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 8
+}
+
+/* 手机充值 */
+.input-phone{
+  color: #999;
+  font-size: rem(28);
+  &.full-phone{
+    color: #fc4549;
+  }
+}
+.edit-config-button {
+  border-radius: rem(.375*31.25);
+  color: #fff;
+  background: #1e9cf1;
+  text-align: center;
+  height: rem(2.75*31.25);
+  line-height: rem(2.75*31.25);
+  width: 100%;
+  border: 0;
+  &:disabled{
+    background-color: #cccccc;
+  }
+}
+
+.config-button-contain {
+  background: #FFFFFF;
+  padding: rem(0.625*31.25) rem(0.9375*31.25)
+}
+
+.bottom-margin-normal {
+  margin-bottom: rem(.625*31.25)
+}
+.limit-remind {
+  padding: 0 rem(0.9375*31.25)
+}
+.limit-remind p {
+  font-size: rem(.75*31.25);
+  color: #999999;
+  margin-bottom: rem(20);
+}
+.limit-remind img {
+  width: rem(0.875*31.25);
+  margin-right: rem(.75*31.25);
+  float: left
+}
+.middleFont {
+  font-size: rem(1.0625*31.25)
+}
+
+// 充值记录
+.phoneLink{
+  margin-top: rem(20);
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 11;
+  background-color: #fff;
+  border-top: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
+  li{
+    border-bottom: 1px solid #e7e7e7;
+    line-height: rem(80);
+    font-size: rem(28);
+    .phoneNumItem{
+      position: relative;
+      margin: 0 rem(30);
+    }
+  }
+  .img_icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+    width: rem(80);
+    height: rem(80);
+  }
+  .emptyNumber{
+    text-align: center;
+    line-height: rem(80);
+    font-size: rem(28);
+    color: #3ea2ff;
+  }
+}

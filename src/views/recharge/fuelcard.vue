@@ -1,11 +1,19 @@
-<style lang="scss" src="./css/_iphone.scss" scoped></style>
+<style lang="scss" src="./css/_fuelcard.scss" scoped></style>
 <!--加油卡-->
 <template>
   <div class="phoneRechargeBox">
-    <div class="phoneRechargeTitle">
-      <ul class="newFlexBox newTitle">
-        <li class="">充话费</li>
-        <li class="curr"></li>
+    <div class="">
+      <ul class="newFlexBox feuld-ul">
+        <li class="fuel-title curr">
+          <div class="newFlexBox">
+            <img src="./i/iphone/chinashiy.jpg" alt=""><div class="feuld-name">中国石化</div>
+          </div>
+        </li>
+        <li class="fuel-title ">
+          <div class="newFlexBox">
+            <img src="./i/iphone/chinafuled.jpg" class="img-color-remove" alt=""><div class="feuld-name">中国石油</div>
+          </div>
+        </li>
       </ul>
     </div>
     <div class="phoneRechargeCon">

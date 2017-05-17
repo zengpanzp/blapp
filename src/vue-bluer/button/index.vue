@@ -25,11 +25,8 @@
     @include display(flex);
     @include align-items(center);
     @include justify-content(center);
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: rem(10);
-    padding-right: rem(10);
-    box-sizing: border-box;
+    padding: 0 rem(10);
+    margin: 0 auto;
     font-size: rem(34);
     text-align: center;
     text-decoration: none;
@@ -121,7 +118,7 @@
   $btnMulti: (primary #F13149 transparent #fff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238) (blueBtn #ccc transparent #fff);
   @include btn-multi($btnMulti);
 
-  $inlineBtnMulti: (primary #F13149 transparent #fff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238);
+  $inlineBtnMulti: (primary #F13149 transparent #fff) (disabled #dddddd #aaaaaa #999999) (secondary #ffffff #aaaaaa #263238) (other #ffffff #455A64 #263238) (outlineMain #ffffff #e31a41 #e31a41);
   @include multiInlineBtn($inlineBtnMulti);
 
 </style>
