@@ -67,5 +67,9 @@ export default {
   // 查询待评价信息
   queryCommentBytype: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentByType.htm', params)
+  },
+  // 查询评价数量
+  queryCount: params => {
+    return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
   }
 }
