@@ -5,7 +5,7 @@
     </bl-navbar>
     <bl-tab-container v-model="tabsModel">
       <bl-tab-container-item id="0">
-        <div class="goods-box" >
+        <div class="goods-box" v-infinite-scroll="loadGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="goods-item flex" v-for="item in list" v-go-native-goods-detail="item">
             <div class="goods-img lazy-box">
               <img class="lazy" v-lazy="{ src: item.goodsImgPath }">
@@ -16,35 +16,21 @@
             </div>
           </div>
         </div>
+        <div class="infinite-layer" v-if="loading">
+          <div class="infinite-preloader"></div>
+          <div>加载中...</div>
+        </div>
       </bl-tab-container-item>
       <bl-tab-container-item id="1">
-        <div class="shop-box">
+        <div class="shop-box" v-if="tabsModel == '1'" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
-            <div class="shop-item flex-c-m">
+            <div class="shop-item flex-c-m"  v-for="item in storeList">
               <div class="shop-item-icon flex-c-m">
                 <svg class="icon"><use xlink:href="#icon-aixin2"></use></svg>
               </div>
               <div class="flex-item">
-                <div class="shop-title">华阳超市罗阳店</div>
-                <div class="shop-address">莲花南路438号</div>
-              </div>
-            </div>
-            <div class="shop-item flex-c-m">
-              <div class="shop-item-icon flex-c-m">
-                <svg class="icon"><use xlink:href="#icon-aixin2"></use></svg>
-              </div>
-              <div class="flex-item">
-                <div class="shop-title">华阳超市罗阳店</div>
-                <div class="shop-address">莲花南路438号</div>
-              </div>
-            </div>
-            <div class="shop-item flex-c-m">
-              <div class="shop-item-icon flex-c-m">
-                <svg class="icon"><use xlink:href="#icon-aixin2"></use></svg>
-              </div>
-              <div class="flex-item">
-                <div class="shop-title">华阳超市罗阳店</div>
-                <div class="shop-address">莲花南路438号</div>
+                <div class="shop-title">{{ item.shopName }}</div>
+                <div class="shop-address">{{ item.addr }}</div>
               </div>
             </div>
           </div>
@@ -63,6 +49,12 @@ export default {
 
   data () {
     return {
+      memberToken: null,
+      pageNum: 1,
+      busy: false,
+      busyStore: false,
+      tempArr: [],
+      loading: true,
       tabsModel: '0',
       deployName: null,
       filterEleTabs: [
@@ -73,46 +65,20 @@ export default {
           deployName: '我收藏的门店',
         }
       ],
-      list: []
+      list: [],
+      storeList: []
     };
   },
-  created() {
-    let temp = []
-    utils.isLogin().then(data => {
-      let memberToken = data.member_token
-      api.queryFavorites({
-        member_token: memberToken
-      }).then(data => {
-        // console.log("gjgjgjjg" + JSON.stringify(data.body))
-        let resData = JSON.parse(data.body.obj)
-        let aloha = resData.list
-        console.log("hhahahhaha" + aloha)
-        for (let item of aloha) {
-          temp.push(item.productId)
-        }
-        var request = {
-           productIds: temp.join(','),
-           channel: "1",
-           pageNo: "1",
-           pageSize: "10",
-           isFilterCommons: "true"
-        }
-        api.searchProductByIds({
-          clientIp: "0:0:0:0:0:0:0:1",
-          clientRequestTime: "1435222994244",
-          requestData: JSON.stringify(request),
-          systemNo: "11111111"
-        }).then(data => {
-          // console.log(JSON.parse(data.body.obj))
-          let rows = JSON.parse(data.body.obj)
-          this.list = rows.resultInfo.rows
-          this.$loading.close()
-          console.log("hahahahhaha" + rows)
-          // console.log('######resultInfo######' + JSON.stringify(rows.resultInfo))
-        })
-    })
-    })
-  },
+  // created() {
+      // this.busy = true
+      // this.busyStore = true
+      // utils.isLogin().then(data => {
+      //   let memberToken = data.member_token;
+      //   this.memberToken = memberToken
+      // })
+      // this.busy = false
+      // this.busyStore = false
+  // },
   mounted() {
     // alert(this.$route.query.deployName)
     this.deployName = this.$route.params.deployName;
@@ -120,9 +86,78 @@ export default {
   methods: {
     changeTab(index) {
       this.tabsModel = String(index)
+      if (index == 1) {
+        this.loadStores()
+      }
+    },
+    loadGoods() {
+      this.busy = true
+      let temp = []
+      utils.isLogin().then(data => {
+        let memberToken = data.member_token
+        api.queryFavorites({
+          member_token: memberToken,
+          currentPage: Number(this.pageNum ++)
+        }).then(data => {
+          let resData = JSON.parse(data.body.obj)
+          console.log(resData)
+          let obj = resData.list
+          console.log("#######aloha########" + obj)
+          if (obj && obj.length) {
+            for (let item of obj) {
+              temp.push(item.productId)
+            }
+            let request = {
+               productIds: temp.join(','),
+               channel: "1",
+               pageNo: 1,
+               pageSize: "10",
+               isFilterCommons: "true"
+            }
+            api.searchProductByIds({
+              clientIp: "0:0:0:0:0:0:0:1",
+              clientRequestTime: "1435222994244",
+              requestData: JSON.stringify(request),
+              systemNo: "11111111"
+            }).then(data => {
+              // console.log(JSON.parse(data.body.obj))
+              let resData = JSON.parse(data.body.obj)
+              let rows = resData.resultInfo.rows
+              console.log(rows)
+              if (rows) {
+                this.list = this.list.concat(rows)
+                this.busy = false
+              } else {
+                this.loading = false
+              }
+              this.$loading.close()
+              console.log("######rows########" + rows)
+              // console.log('######resultInfo######' + JSON.stringify(rows.resultInfo))
+            })
+          } else {
+            this.loading = false
+          }
+        }).then(err => {
+          console.log(err)
+        })
+      })
+    },
+    loadStores() {
+      this.busyStore = true
+      utils.isLogin().then(data => {
+        let memberToken = data.member_token
+        api.queryShopFavorites({
+        member_token: memberToken}).then(data => {
+          this.$loading.close()
+        console.log(data)
+        let storeList = JSON.parse(data.body.obj).list
+        this.storeList = storeList
+       })
+        this.$loading.close()
+      })
     }
-  }
-};
+  },
+  };
 </script>
 
 <style lang="scss" src="./css/collection.scss" scoped></style>

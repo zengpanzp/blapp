@@ -67,5 +67,13 @@ export default {
   // 我的收藏
   queryFavorites: params => {
     return Vue.http.post(baseUrl + '/myInformation/queryFavorites.htm', params);
+  },
+  // 我的收藏 商品
+  searchProductByIds: params => {
+    return Vue.http.post(baseUrl + '/goodSearch/searchProductByIds.htm', params);
+  },
+  // 我的收藏 门店
+  queryShopFavorites: params => {
+    return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
   }
 }
