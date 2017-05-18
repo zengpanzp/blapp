@@ -24,7 +24,7 @@
       <bl-tab-container-item id="1">
         <div class="shop-box" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
-            <div class="shop-item flex-c-m"  v-for="item in storeList">
+            <div class="shop-item flex-c-m" v-for="item in storeList" @click="storesDtail(item.shopId, item.issueOrgId)">
               <div class="shop-item-icon flex-c-m">
                 <svg class="icon"><use xlink:href="#icon-aixin2"></use></svg>
               </div>
@@ -109,45 +109,49 @@ export default {
       let temp = []
       utils.isLogin().then(data => {
         let memberToken = data.member_token
-        api.queryFavorites({
+        api.userCenter.queryFavorites({
           member_token: memberToken,
           currentPage: Number(this.pageNum ++)
         }).then(data => {
-          let resData = JSON.parse(data.body.obj)
-          console.log(resData)
-          let obj = resData.list
-          console.log("#######aloha########" + obj)
-          if (obj && obj.length) {
-            for (let item of obj) {
-              temp.push(item.productId)
-            }
-            let request = {
-               productIds: temp.join(','),
-               channel: "1",
-               pageNo: 1,
-               pageSize: "10",
-               isFilterCommons: "true"
-            }
-            api.searchProductByIds({
-              clientIp: "0:0:0:0:0:0:0:1",
-              clientRequestTime: "1435222994244",
-              requestData: JSON.stringify(request),
-              systemNo: "11111111"
-            }).then(data => {
-              let resData = JSON.parse(data.body.obj)
-              let rows = resData.resultInfo.rows
-              let check = JSON.stringify(rows)
-              console.log(check)
-              if (rows) {
-                this.list = this.list.concat(rows)
-                this.busy = false
-              } else {
-                this.goodsLoading = false
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            console.log(resData)
+            let obj = resData.list
+            console.log("#######aloha########" + obj)
+            if (obj && obj.length) {
+              for (let item of obj) {
+                temp.push(item.productId)
               }
-              this.$loading.close()
-            })
+              let request = {
+                 productIds: temp.join(','),
+                 channel: "1",
+                 pageNo: 1,
+                 pageSize: "10",
+                 isFilterCommons: "true"
+              }
+              api.userCenter.searchProductByIds({
+                clientIp: "0:0:0:0:0:0:0:1",
+                clientRequestTime: "1435222994244",
+                requestData: JSON.stringify(request),
+                systemNo: "11111111"
+              }).then(data => {
+                let resData = JSON.parse(data.body.obj)
+                let rows = resData.resultInfo.rows
+                let check = JSON.stringify(rows)
+                console.log(check)
+                if (rows) {
+                  this.list = this.list.concat(rows)
+                  this.busy = false
+                } else {
+                  this.goodsLoading = false
+                }
+                this.$loading.close()
+              })
+            } else {
+              this.goodsLoading = false
+            }
           } else {
-            this.goodsLoading = false
+            this.$toast('')
           }
         }).then(err => {
           console.log(err)
@@ -159,7 +163,7 @@ export default {
       utils.isLogin().then(data => {
         let memberToken = data.member_token
         let currentPage = Number(this.storePage ++)
-        api.queryShopFavorites({
+        api.userCenter.queryShopFavorites({
         member_token: memberToken,
         currentPage: currentPage
       }).then(data => {
@@ -168,6 +172,7 @@ export default {
         this.currentPage = currentPage
         let storeList = JSON.parse(data.body.obj).list
         let totalPageNum = JSON.parse(data.body.obj).pages
+        console.log(storeList)
         // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
         if (currentPage <= totalPageNum) {
            if (storeList && storeList.length) {
@@ -183,6 +188,12 @@ export default {
         }
        })
       })
+    },
+    storesDtail(message, storeType) {
+      let params = JSON.stringify({message: message, storeType: storeType})
+      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'orselet',
+          params: params})
     }
   },
   };
