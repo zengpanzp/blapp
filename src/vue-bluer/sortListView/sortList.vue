@@ -32,6 +32,7 @@
     created() {
     },
     mounted() {
+      console.log(this.list)
       sortListView(this.list);
     },
     methods: {

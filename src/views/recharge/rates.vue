@@ -5,7 +5,7 @@
       <!--用来显示缴费分组-->
       <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
       <!--选择缴费机构-->
-      <bl-sortListView @click="getCompany" v-if="loadListView" :list="list"></bl-sortListView>
+      <bl-sortListView @click="getCompany" v-if="loadListView" :list="companyList"></bl-sortListView>
       <div class="content-wrap" v-show="toShow">
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
@@ -18,7 +18,7 @@
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
             <li @click="showListView">缴费机构
-              <div class="name"><label>{{companyName}}</label><img class="more" src="./i/iphone/more.png"></div>
+              <div class="name"><label>{{receiveCompanyItem.name}}</label><img class="more" src="./i/iphone/more.png"></div>
             </li>
             <li>
               账号类型
@@ -37,6 +37,7 @@
 <script>
     import api from 'src/api/index'
     import utils from 'src/utils'
+    import CONST from 'src/const'
   export default {
 
     name: 'rates',
@@ -47,11 +48,12 @@
         typeClass: "", // 不同类别样式名称不一样
         typeName: "",  // 不同类别不同名称
         isLoading: false,
-        receiveGroupItem: {id: 1, groupName: '我家'}, // 接收到的分组
-        companyName: "上海城投水务（集团）有限公司", // 缴费机构
+        receiveGroupItem: {id: 1, groupName: ''}, // 接收到的分组
+        receiveCompanyItem: {id: 1, name: ''}, // 缴费机构
         loadGroup: false,  // 加载缴费分组
         loadListView: false,  // 加载缴费机构
         typeChange: true, // 条形码 或者 账号,
+        companyList: [],
         typeObj: {
             1: "sf",  // 水费
             2: "dl",  // 电费
@@ -68,11 +70,14 @@
         // 查询缴费分组
         utils.isLogin().then(user => {
             console.log(user);
+            let timestamp = utils.getTimeFormatToday();
+            console.log(user.mobile)
+            let mac = utils.MD5(this.typeObj[this.ratesType] + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
             this.memberId = utils.ssdbGet('member_id')
             this.memberToken = utils.ssdbGet('member_token')
             api.recharge.queryMyGroup({
               sign: "073d3d3436b2d7660d4435a93f79411d",
-              timestamp: "20170515130314",
+              timestamp: timestamp,
               member_token: this.memberToken,
               sysid: 1101
             }).then(data => {
@@ -85,15 +90,30 @@
             });
             // 查询缴费机构
             api.recharge.queryCompanyGroup({
-              client_id: "",
+              client_id: CONST.CLIENT_ID,
               format: "json",
-              mac: "",
-              t_dz: "01",
-              timestamp: utils.dateFormat(""),
+              mac: mac,
+              t_dz: "02",
+              timestamp: timestamp,
               type: this.typeObj[this.ratesType]
             }).then(data => {
               console.log(data);
-              // let json = JSON.parse(data.body.obj);
+              let json = JSON.parse(data.body.obj);
+              this.receiveCompanyItem = {
+                  id: json.typecode[0],
+                  name: json.typename[0]
+              };
+              let list = [];
+              json.typename.forEach((item, i) => {
+                  let id = json.typecode[i];
+                  let obj = {
+                      id: id,
+                      name: item
+                  };
+                  list.push(obj)
+              })
+              this.companyList = list;
+              console.log(json);
             })
         });
         this.fill();
@@ -126,7 +146,7 @@
       },
       // 获得子组件选择的机构
       getCompany(item) {
-        this.companyName = item.name;
+        this.receiveCompanyItem = item;
         this.loadListView = false;
         debugger;
         this.toShow = true;
@@ -134,18 +154,6 @@
       },
       // 选择缴费机构
       showListView() {
-          debugger;
-        this.list = [
-          {
-              name: '惊呆了付款；是',
-          },
-          {
-            name: 'a；是',
-          },
-          {
-            name: 'b；是',
-          }
-        ]
         this.toShow = false;
         this.loadListView = true;
         this.$router.push({path: "/recharge/rates/" + this.rateType + "/company"});
@@ -158,7 +166,6 @@
       },
       // 监听路由
       fill(to, from) {
-        debugger
         if (to && to.fullPath.indexOf("category") == "-1" && to.fullPath.indexOf("company") == "-1") {
           this.toShow = true;
           this.loadGroup = false;
