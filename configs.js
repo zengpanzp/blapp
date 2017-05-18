@@ -5,8 +5,8 @@ const vendor = [
   'vue-lazyload',
   'vue-router',
   'vue-popup',
-  'vuex',
-  'vue-resource'
+  'vue-resource',
+  'vue-infinite-scroll'
 ]
 module.exports = {
   useVendor: true,           // 是否使用公共资源 需要先运行 npm run vendor
