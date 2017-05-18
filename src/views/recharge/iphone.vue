@@ -79,6 +79,8 @@
 </template>
 <script>
 import utils from 'src/utils'
+import CONST from 'src/const'
+import api from 'src/api'
 export default {
 
   name: 'iphone',
@@ -129,6 +131,11 @@ export default {
       }]
     }
   },
+  beforeRouteEnter (to, from, next) {
+    utils.isLogin().then(() => {
+      next()
+    })
+  },
   created() {
     for (let i = 0; i < this.tab.length; i++) {
       this.load.push({
@@ -140,6 +147,21 @@ export default {
 
     utils.isLogin().then(data => {
       this.iphoneNum = data.mobile
+      let timestamp = utils.getTimeFormatToday();
+      let mac = utils.MD5(data.mobile + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+      let requestData = {
+        client_id: CONST.CLIENT_ID,
+        mobile: data.mobile,
+        timestamp: timestamp,
+        format: "json",
+        t_dz: CONST.T_DZ,
+        token: utils.ssdbGet('member_token'),
+        mac: mac
+      }
+      console.log(JSON.stringify(requestData))
+      api.queryPhoneGoodsDetail(requestData).then(data => {
+        console.log(data)
+      })
     }, () => {})
     // this.$modal({
     //   content: '今天充值金额已超过上限 550 元',

@@ -75,5 +75,9 @@ export default {
   // 我的收藏 门店
   queryShopFavorites: params => {
     return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
-  }
+  },
+  // 虚拟充值 可充值产品查询接口
+  queryPhoneGoodsDetail: params => {
+    return Vue.resource(baseUrl + '/kmgm/goods_detail').get(params)
+  },
 }
