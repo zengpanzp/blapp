@@ -80,11 +80,6 @@ export const prdRouter = [
     path: '/recharge/iphone/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
   },
-  /* 神马 充值缴费 流量充值 type=2 */
-  {
-    path: '/recharge/iphone/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
-  },
   /* 神马 充值缴费 固话充值 */
   {
     path: '/recharge/fixedphone',
@@ -111,24 +106,6 @@ export const prdRouter = [
       component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
   },
   /* 神马 充值缴费 水费 type=1 */
-  {
-    path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
-    children: [
-      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
-      {path: 'company'}
-    ]
-  },
-  /* 神马 充值缴费 电费 type=2 */
-  {
-    path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
-    children: [
-      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
-      {path: 'company'}
-    ]
-  },
-  /* 神马 充值缴费 煤气 type=3 */
   {
     path: '/recharge/rates/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
