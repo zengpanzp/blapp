@@ -45,20 +45,16 @@
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
               <li v-for="(item, index) in flowList" @click="flowSelectPrice(index)">
                 <a :class="{ 'curr': flowListModel == index }" href="javascript:;">
-                  <h3>{{ item.mainPrice }}元</h3>
+                  <h3>{{ item.mainPrice }}M</h3>
                   <p>售价{{ item.salePrice }}元</p>
                 </a>
               </li>
             </ul>
             <div class="flow-type">
               <div class="flow-type-top">
-                <div class="flow-type-container">
-                  <div></div>
-                  <label>全国</label>
-                </div>
                 <div class="flow-type-container selected">
                   <div></div>
-                  <label>本地</label>
+                  <label>全国</label>
                 </div>
               </div>
               <div class="flow-limit">全国可用、即时生效、每日订单金额累计不能超过550元</div>
@@ -72,7 +68,7 @@
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
       <div class="config-button-contain">
-        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥499.90 <span class="smallFont">（服务费￥1.00）</span></button>
+        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥{{ currentPay }} <span class="smallFont"><!-- （服务费￥1.00） --></span></button>
       </div>
     </div>
   </div>
@@ -87,48 +83,25 @@ export default {
 
   data() {
     return {
+      inlineLoading: null,
+
       tabsModel: 0,
       historyNum: [],
       focus: false,
-      phoneCheck: '江西抚州',
+      phoneCheck: '',
       tab: ['充话费', '充流量'],
+      phoneGsd: '',
 
-      iphoneNum: '',
-
-      load: [],
+      iphoneNum: '', // 手机号码
+      currentPay: '', // 支付金额
+      currentItem: '', // 货号
+      currentSku: '', // 面值
 
       moneyListModel: 0,
-      moneyList: [{
-        mainPrice: '10',
-        salePrice: '2.85'
-      }, {
-        mainPrice: '20',
-        salePrice: '10'
-      }, {
-        mainPrice: '100',
-        salePrice: '100'
-      }, {
-        mainPrice: '200',
-        salePrice: '200'
-      }],
+      moneyList: [],
 
       flowListModel: 0,
-      flowList: [{
-        mainPrice: '10',
-        salePrice: '2.85'
-      }, {
-        mainPrice: '20',
-        salePrice: '10'
-      }, {
-        mainPrice: '100',
-        salePrice: '100'
-      }, {
-        mainPrice: '200',
-        salePrice: '200'
-      }, {
-        mainPrice: '400',
-        salePrice: '400'
-      }]
+      flowList: []
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -137,53 +110,135 @@ export default {
     })
   },
   created() {
-    for (let i = 0; i < this.tab.length; i++) {
-      this.load.push({
-        load: false
-      })
-    }
-    this.changeTab(Number(this.$route.params.type))
+    this.$loading.close()
     this.getHistoryNum()
+    this.tabsModel = Number(this.$route.params.type)
 
     utils.isLogin().then(data => {
       this.iphoneNum = data.mobile
+    }, () => {})
+  },
+  methods: {
+    getPhoneInfo(phoneNum) {
+      this.inlineLoading = this.$toast({
+        iconClass: 'preloader white',
+        message: '加载中',
+        duration: 'loading'
+      })
       let timestamp = utils.getTimeFormatToday();
-      let mac = utils.MD5(data.mobile + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+      let mac = utils.MD5(phoneNum + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
       let requestData = {
         client_id: CONST.CLIENT_ID,
-        mobile: data.mobile,
+        mobile: phoneNum,
         timestamp: timestamp,
         format: "json",
         t_dz: CONST.T_DZ,
         token: utils.ssdbGet('member_token'),
         mac: mac
       }
-      console.log(JSON.stringify(requestData))
-      api.queryPhoneGoodsDetail(requestData).then(data => {
-        console.log(data)
-      })
-    }, () => {})
-    // this.$modal({
-    //   content: '今天充值金额已超过上限 550 元',
-    //   buttons: [{
-    //     text: '充值记录',
-    //     onClick: function() {}
-    //   }, {
-    //     text: '确定',
-    //     onClick: function() {}
-    //   }]
-    // })
-    this.$loading.close()
-  },
-  methods: {
-    getPhoneInfo(phoneNum, type) {
+      api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
+        let resData = data.body
+        let list = []
+        for (let [index, val] of resData.sku.entries()) {
+          list.push({
+            mainPrice: val,
+            salePrice: resData.price2[index],
+            item: resData.item[index]
+          })
+        }
+        this.moneyList = list
+        this.currentPay = this.moneyList[0].salePrice
+        this.currentItem = this.moneyList[0].item
+        this.currentSku = this.moneyList[0].mainPrice
 
+        let msg = resData.msg.split("|")[1]
+        if (this.tabsModel == '0') {
+          this.phoneCheck = resData.msg
+        }
+        switch (msg) {
+          case '联通':
+            this.phoneGsd = 'ltll'
+            break;
+          case '移动':
+            this.phoneGsd = 'ydll'
+            break;
+          case '电信':
+            this.phoneGsd = 'dxll'
+            break;
+          default:
+            this.phoneGsd = ''
+        }
+        if (this.tabsModel == '0') {
+          this.inlineLoading.close()
+        }
+
+        if (this.phoneGsd && this.tabsModel == '1') {
+          this.getPhoneLlInfo(this.phoneGsd)
+        }
+      })
     },
-    changeTab(index) {
-      this.tabsModel = index
-      if (!this.load[index].load) {
-        this.load[index].load = true
+    getPhoneLlInfo(type) {
+      let timestamp = utils.getTimeFormatToday();
+      let mac = utils.MD5(type + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+      let requestData = {
+        client_id: CONST.CLIENT_ID,
+        mobile: type,
+        timestamp: timestamp,
+        format: "json",
+        t_dz: CONST.T_DZ,
+        token: utils.ssdbGet('member_token'),
+        mac: mac
       }
+      api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
+        this.inlineLoading.close()
+        let resData = data.body
+        this.phoneCheck = resData.msg
+        if (resData.sku) {
+          let list = []
+          for (let [index, val] of resData.sku.entries()) {
+            list.push({
+              mainPrice: val,
+              salePrice: resData.price2[index],
+              item: resData.item[index]
+            })
+          }
+          this.flowList = list
+          this.currentPay = this.flowList[0].salePrice
+          this.currentItem = this.flowList[0].item
+          this.currentSku = this.flowList[0].mainPrice
+        } else {
+          this.currentPay = 0
+          this.flowList = []
+        }
+      })
+    },
+    // 生成订单
+    genOrder() {
+      let timestamp = utils.getTimeFormatToday();
+      let useName = '陈鹏'; // 顾客姓名 base64_encode(顾客姓名) mac中使用编码值
+      let mac = utils.MD5(this.iphoneNum + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+      let requestData = {
+        client_id: CONST.CLIENT_ID,
+        token: utils.ssdbGet('member_token'),
+        mobile: this.iphoneNum,
+        sku: this.currentSku,
+        item: this.currentItem,
+        dkhxm: useName, // 顾客姓名 base64_encode(顾客姓名) mac中使用编码值
+        dkhdh: this.iphoneNum,
+        dkhzh: '', // 顾客登录id AES(dkhzh,8位密钥(client_secret后4位+ timestamp后 4位))   （* mac 用加密前的dkhzh）
+        dxtype: '02',
+        num: 1,
+        timestamp: timestamp,
+        format: "json",
+        t_dz: CONST.T_DZ,
+        mac: mac,
+        dlx: '01'
+      }
+      console.log(requestData)
+    },
+    changeTab(index, once) {
+      this.tabsModel = index
+      this.getPhoneInfo(this.iphoneNum)
     },
     // 手机号码正则匹配
     testPhoneNum() {
@@ -220,11 +275,13 @@ export default {
     },
     // 选择金额
     selectPrice(index) {
+      this.currentPay = this.moneyList[index].salePrice
       if (this.testPhoneNum()) {
         this.moneyListModel = index
       }
     },
     flowSelectPrice(index) {
+      this.currentPay = this.flowList[index].salePrice
       if (this.testPhoneNum()) {
         this.flowListModel = index
       }
@@ -257,14 +314,18 @@ export default {
       this.iphoneNum = ''
       this.focus = false
       $('#number')[0].focus()
-    }
+    },
   },
   watch: {
     // 监听输入号码的值,当长度等于11的时候黑框隐藏
     iphoneNum(val) {
-      if (val.length >= 11) {
+      if (this.testPhoneNum()) {
         this.focus = false
         $('#number')[0].blur()
+
+        this.moneyListModel = 0
+        this.flowListModel = 0
+        this.getPhoneInfo(this.iphoneNum)
       }
     },
     // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏
