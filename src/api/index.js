@@ -75,5 +75,16 @@ export default {
   // 我的收藏 门店
   queryShopFavorites: params => {
     return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
+  },
+  // 虚拟充值缴费的所有接口
+  recharge: {
+    // 查询我的缴费分组
+    queryMyGroup: params => {
+      return Vue.http.post(baseUrl + 'myInformation/queryPaySubGroup.htm', params);
+    },
+    // 水电煤的缴费机构
+    queryCompanyGroup: params => {
+      return Vue.http.post(baseUrl + 'gyjf/type_detail.htm', params);
+    }
   }
 }

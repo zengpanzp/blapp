@@ -35,8 +35,8 @@
     </div>
 </template>
 <script>
-  //  import api from 'src/api/index'
-  //  import utils from 'src/utils'
+    import api from 'src/api/index'
+    import utils from 'src/utils'
   export default {
 
     name: 'rates',
@@ -51,7 +51,12 @@
         companyName: "上海城投水务（集团）有限公司", // 缴费机构
         loadGroup: false,  // 加载缴费分组
         loadListView: false,  // 加载缴费机构
-        typeChange: true // 条形码 或者 账号
+        typeChange: true, // 条形码 或者 账号,
+        typeObj: {
+            1: "sf",  // 水费
+            2: "dl",  // 电费
+            3: "mq"   // 煤气
+        }
       }
     },
     computed: {
@@ -60,6 +65,37 @@
         window.$$vue = this;
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
+        // 查询缴费分组
+        utils.isLogin().then(user => {
+            console.log(user);
+            this.memberId = utils.ssdbGet('member_id')
+            this.memberToken = utils.ssdbGet('member_token')
+            api.recharge.queryMyGroup({
+              sign: "073d3d3436b2d7660d4435a93f79411d",
+              timestamp: "20170515130314",
+              member_token: this.memberToken,
+              sysid: 1101
+            }).then(data => {
+                console.log(data);
+                let json = JSON.parse(data.body.obj);
+                this.receiveGroupItem = json.list[0];
+                debugger
+                // 子组件的分组列表
+                this.groupList = json.list;
+            });
+            // 查询缴费机构
+            api.recharge.queryCompanyGroup({
+              client_id: "",
+              format: "json",
+              mac: "",
+              t_dz: "01",
+              timestamp: utils.dateFormat(""),
+              type: this.typeObj[this.ratesType]
+            }).then(data => {
+              console.log(data);
+              // let json = JSON.parse(data.body.obj);
+            })
+        });
         this.fill();
     },
     watch: {
@@ -86,8 +122,6 @@
       showCategory() {
           this.toShow = false;
           this.loadGroup = true;
-          this.groupItem = {id: 1, groupName: '我家'};
-          this.groupList = [{id: 1, groupName: '我家'}, {id: 2, groupName: '你家'}, {id: 3, groupName: '他家'}];
           this.$router.push({path: "/recharge/rates/" + this.rateType + "/category"});
       },
       // 获得子组件选择的机构
