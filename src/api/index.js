@@ -56,6 +56,7 @@ export default {
       return Vue.http.post(baseUrl + '/order/getGiftOrderListBySender.htm', params);
     }
   },
+  // 个人中心
   userCenter: {
     // 我的收藏
     queryFavorites: params => {
@@ -77,5 +78,20 @@ export default {
   // 查询二级目录
   queryCategory: params => {
     return Vue.resource(baseUrl + '/productSearch/doCategoryByLevOne.htm').get(params)
+  },
+  // 虚拟充值缴费的所有接口
+  recharge: {
+    // 虚拟充值 可充值产品查询接口
+    queryPhoneGoodsDetail: params => {
+      return Vue.resource(baseUrl + '/kmgm/goods_detail').get(params)
+    },
+    // 查询我的缴费分组
+    queryMyGroup: params => {
+      return Vue.http.post(baseUrl + 'myInformation/queryPaySubGroup.htm', params);
+    },
+    // 水电煤的缴费机构
+    queryCompanyGroup: params => {
+      return Vue.http.post(baseUrl + 'gyjf/type_detail.htm', params);
+    }
   }
 }

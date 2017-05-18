@@ -2,7 +2,7 @@
   <div class="sortListView" v-show="show">
     <div class="letter" style="display: none;"></div>
     <div class="sort_box">
-      <div class="sort_list" @click.preventDefault="selectRow(item,$event)" v-for=" item of model">
+      <div class="sort_list" @click.preventDefault="selectRow(item,$event)" v-for=" item of list">
         <div class="slot"></div>
         <div class="num_name">{{item.name}} <img src="./i/unselect.png"></div>
       </div>
@@ -22,8 +22,7 @@
   export default {
     name: 'SortListView',
     props: {
-      model: Array,
-      value: {}
+      "list": Array
     },
     data() {
       return {
@@ -33,7 +32,7 @@
     created() {
     },
     mounted() {
-      sortListView();
+      sortListView(this.list);
     },
     methods: {
       // 将数据传递到父组件
@@ -97,15 +96,17 @@
         right:rem(10);
         top:rem(20);
       }
-      height: rem(70);
-      line-height: rem(70);
+      height: rem(80);
+      line-height: rem(80);
       background:#fff;
     }
     .sort_list .num_name{
       color: #000;
       width:rem(650);
+      font-size: rem(28);
       border-bottom:rem(1.8) solid #ddd;
       position:relative;
+      color:#333;
     }
 
     .sort_letter{

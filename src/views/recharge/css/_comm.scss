@@ -8,10 +8,6 @@
   z-index: 10;
   background-color: rgba(#000, .5);
 }
-// .phone-box{
-//   position: relative;
-//   z-index: 20;
-// }
 .phoneRechargeTitle {
   position: relative;
   z-index: 20;
@@ -43,7 +39,7 @@
 }
 
 
-.phoneRechargeItem .itemContent .item-titleRow i {
+.phoneRechargeItem i {
   position: absolute;
   z-index: 10;
   top: 50%;
@@ -56,10 +52,13 @@
 }
 
 .phoneRechargeItem .itemContent .item-titleRow input {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  -webkit-appearance: none;
   font-size: rem(58);
   color: #333;
   width: 90%;
-  border: none;
   outline: none
 }
 .phoneRechargeItem .itemContent .item-titleRow .area-code {
@@ -83,6 +82,7 @@
   top: 0;
   z-index: 10;
   background: url('../i/iphone/icon_userphone.png') center right no-repeat;
+  background-size: 60%;
 }
 .phoneRechargeItem .itemContent .item-titleRow {
   position: relative;
@@ -104,17 +104,17 @@
 }
 .phoneMoney {
   background-color: #fff;
-  padding: rem(.9375*31.25) rem(.625*31.25) rem(.3125*31.25);
+  padding: rem(20) rem(20) rem(10);
   overflow: hidden;
   li {
     display: block;
     float: left;
     width: 33.333333%;
-    padding: rem(.3125*31.25);
+    padding: rem(10);
     overflow: hidden;
     text-align: center;
     box-sizing: border-box;
-    margin-bottom: rem(.625*31.25);
+    margin-bottom: rem(10);
     a {
       border: 1px solid #ccc;
       border-radius: rem(.375*31.25);
@@ -268,14 +268,16 @@
     border-bottom: 1px solid #e7e7e7;
     line-height: rem(80);
     font-size: rem(28);
+    position: relative;
     .phoneNumItem{
       position: relative;
+      z-index: 0;
       margin: 0 rem(30);
     }
   }
   .img_icon{
     position: absolute;
-    right: 0;
+    right: rem(30);
     top: 0;
     z-index: 10;
     width: rem(80);

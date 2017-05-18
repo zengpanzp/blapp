@@ -5,22 +5,22 @@
     <div class="phone-box">
       <div class="phoneRechargeTitle">
         <bl-navbar class="flex" v-model="tabsModel">
-          <bl-tab-item class="flex-item" id="1" @click.native="changeTab('1')">充话费</bl-tab-item>
-          <bl-tab-item class="flex-item" id="2" @click.native="changeTab('2')">充流量</bl-tab-item>
+          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index)">{{ item }}</bl-tab-item>
         </bl-navbar>
       </div>
       <div class="phoneRechargeItem">
         <div class="itemContent">
           <div class="item-titleRow">
             <input id="number" class="item-titleRow" type="tel" placeholder="请输入充值手机号" maxlength="11" @focus="focus = true" v-model="iphoneNum">
-            <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="[iphoneNum = '', focus = false]"></i>
-            <div class="txl" v-show="!focus" @click="nativePhone"></div>
+            <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="emptyPhone"></i>
+            <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone"></div>
           </div>
-          <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">请输入正确的手机号码</div>
+          <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">{{ !testPhoneNum() ? '请输入正确的手机号码' : phoneCheck }}</div>
           <div class="phoneLink" v-show="focus && historyNum && historyNum.length !== 0">
             <ul>
-              <li v-for="(item, index) in historyNum" @click="iphoneNum = item.number">
-                <div class="phoneNumItem">{{ item.number }}<div class="img_icon icon_emptycon" @click="removeHistoryNum(index)"></div></div>
+              <li v-for="(item, index) in historyNum">
+                <div class="phoneNumItem" @click="[iphoneNum = item.number, focus = false]">{{ item.number }}</div>
+                <div class="img_icon icon_emptycon" @click.self="removeHistoryNum(index)"></div>
               </li>
             </ul>
             <div class="emptyNumber" @click="emptyHistoryNum">清空历史充值号码</div>
@@ -28,7 +28,7 @@
         </div>
       </div>
       <bl-tab-container v-model="tabsModel">
-        <bl-tab-container-item id="1">
+        <bl-tab-container-item :id="0">
           <div class="list-sales">
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
               <li v-for="(item, index) in moneyList" @click="selectPrice(index)">
@@ -40,7 +40,7 @@
             </ul>
           </div>
         </bl-tab-container-item>
-        <bl-tab-container-item id="2">
+        <bl-tab-container-item :id="1">
           <div class="list-sales">
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
               <li v-for="(item, index) in flowList" @click="flowSelectPrice(index)">
@@ -67,14 +67,6 @@
         </bl-tab-container-item>
       </bl-tab-container>
     </div>
-    <!-- pop -->
-    <div class="modal iphone-modal modal-in" style="display: none">
-      <div class="modal-inner">今天充值金额已超过上限 550 元</div>
-      <div class="modal-buttons">
-        <button class="modal-button">充值记录</button>
-        <button class="modal-button">确定</button>
-      </div>
-    </div>
     <div class="phoneFixBottom">
       <div class="limit-remind">
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
@@ -87,15 +79,19 @@
 </template>
 <script>
 import utils from 'src/utils'
+import CONST from 'src/const'
+import api from 'src/api'
 export default {
 
   name: 'iphone',
 
   data() {
     return {
-      tabsModel: '1',
+      tabsModel: 0,
       historyNum: [],
       focus: false,
+      phoneCheck: '江西抚州',
+      tab: ['充话费', '充流量'],
 
       iphoneNum: '',
 
@@ -135,14 +131,59 @@ export default {
       }]
     }
   },
+  beforeRouteEnter (to, from, next) {
+    utils.isLogin().then(() => {
+      next()
+    })
+  },
   created() {
-    this.changeTab(this.$route.params.type)
+    for (let i = 0; i < this.tab.length; i++) {
+      this.load.push({
+        load: false
+      })
+    }
+    this.changeTab(Number(this.$route.params.type))
     this.getHistoryNum()
+
+    utils.isLogin().then(data => {
+      this.iphoneNum = data.mobile
+      let timestamp = utils.getTimeFormatToday();
+      let mac = utils.MD5(data.mobile + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+      let requestData = {
+        client_id: CONST.CLIENT_ID,
+        mobile: data.mobile,
+        timestamp: timestamp,
+        format: "json",
+        t_dz: CONST.T_DZ,
+        token: utils.ssdbGet('member_token'),
+        mac: mac
+      }
+      console.log(JSON.stringify(requestData))
+      api.queryPhoneGoodsDetail(requestData).then(data => {
+        console.log(data)
+      })
+    }, () => {})
+    // this.$modal({
+    //   content: '今天充值金额已超过上限 550 元',
+    //   buttons: [{
+    //     text: '充值记录',
+    //     onClick: function() {}
+    //   }, {
+    //     text: '确定',
+    //     onClick: function() {}
+    //   }]
+    // })
     this.$loading.close()
   },
   methods: {
+    getPhoneInfo(phoneNum, type) {
+
+    },
     changeTab(index) {
       this.tabsModel = index
+      if (!this.load[index].load) {
+        this.load[index].load = true
+      }
     },
     // 手机号码正则匹配
     testPhoneNum() {
@@ -190,25 +231,32 @@ export default {
     },
     // 去支付
     goPay() {
-      // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
-      this.historyNum.forEach((item, index) => {
-        if (item.number == this.iphoneNum) {
-          this.historyNum.splice(index, 1)
+      if (this.testPhoneNum()) {
+        // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
+        this.historyNum.forEach((item, index) => {
+          if (item.number == this.iphoneNum) {
+            this.historyNum.splice(index, 1)
+          }
+        })
+        this.historyNum.unshift({
+          number: this.iphoneNum
+        })
+        // 如果输入历史数据长度大于6则截取6条
+        if (this.historyNum.length > 6) {
+          this.historyNum = this.historyNum.slice(0, 6)
         }
-      })
-      this.historyNum.unshift({
-        number: this.iphoneNum
-      })
-      // 如果输入历史数据长度大于6则截取6条
-      if (this.historyNum.length > 6) {
-        this.historyNum = this.historyNum.slice(0, 6)
+        // 把输入历史数据保存到localStore
+        utils.dbSet('historyNum', this.historyNum)
       }
-      // 把输入历史数据保存到localStore
-      utils.dbSet('historyNum', this.historyNum)
     },
     // 给div屏幕的高度
     wrapperHeight() {
       return document.documentElement.clientHeight
+    },
+    emptyPhone() {
+      this.iphoneNum = ''
+      this.focus = false
+      $('#number')[0].focus()
     }
   },
   watch: {
@@ -216,6 +264,7 @@ export default {
     iphoneNum(val) {
       if (val.length >= 11) {
         this.focus = false
+        $('#number')[0].blur()
       }
     },
     // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏
