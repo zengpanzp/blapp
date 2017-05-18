@@ -56,6 +56,20 @@ export default {
       return Vue.http.post(baseUrl + '/order/getGiftOrderListBySender.htm', params);
     }
   },
+  userCenter: {
+    // 我的收藏
+    queryFavorites: params => {
+      return Vue.http.post(baseUrl + '/myInformation/queryFavorites.htm', params);
+    },
+    // 我的收藏 商品
+    searchProductByIds: params => {
+      return Vue.http.post(baseUrl + '/goodSearch/searchProductByIds.htm', params);
+    },
+    // 我的收藏 门店
+    queryShopFavorites: params => {
+      return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
+    }
+  },
   // 查询资源位
   queryAdDeploy: params => {
     return Vue.http.post(baseUrl + '/site/queryAdDeploy.htm', params);
@@ -63,17 +77,5 @@ export default {
   // 查询二级目录
   queryCategory: params => {
     return Vue.resource(baseUrl + '/productSearch/doCategoryByLevOne.htm').get(params)
-  },
-  // 我的收藏
-  queryFavorites: params => {
-    return Vue.http.post(baseUrl + '/myInformation/queryFavorites.htm', params);
-  },
-  // 我的收藏 商品
-  searchProductByIds: params => {
-    return Vue.http.post(baseUrl + '/goodSearch/searchProductByIds.htm', params);
-  },
-  // 我的收藏 门店
-  queryShopFavorites: params => {
-    return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
   }
 }
