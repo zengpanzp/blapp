@@ -24,7 +24,7 @@
       <bl-tab-container-item id="1">
         <div class="shop-box" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
-            <div class="shop-item flex-c-m"  v-for="item in storeList" @click="storesDtail">
+            <div class="shop-item flex-c-m" v-for="item in storeList" @click="storesDtail(item.shopId, item.issueOrgId)">
               <div class="shop-item-icon flex-c-m">
                 <svg class="icon"><use xlink:href="#icon-aixin2"></use></svg>
               </div>
@@ -189,8 +189,8 @@ export default {
        })
       })
     },
-    storesDtail() {
-      let params = JSON.stringify({message: "001104", storeType: "1010", storeId: "0"})
+    storesDtail(message, storeType) {
+      let params = JSON.stringify({message: message, storeType: storeType})
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
           pageId: 'orselet',
           params: params})
