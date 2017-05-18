@@ -32,8 +32,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        // target: 'https://mh5.st.bl.com/h5_gateway',
-        target: 'http://mapi.blemall.com',
+        target: 'https://mh5.st.bl.com/h5_gateway',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
