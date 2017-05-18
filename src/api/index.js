@@ -78,6 +78,10 @@ export default {
   },
   // 虚拟充值缴费的所有接口
   recharge: {
+    // 虚拟充值 可充值产品查询接口
+    queryPhoneGoodsDetail: params => {
+      return Vue.resource(baseUrl + '/kmgm/goods_detail').get(params)
+    },
     // 查询我的缴费分组
     queryMyGroup: params => {
       return Vue.http.post(baseUrl + 'myInformation/queryPaySubGroup.htm', params);
@@ -87,4 +91,5 @@ export default {
       return Vue.http.post(baseUrl + 'gyjf/type_detail.htm', params);
     }
   }
+
 }
