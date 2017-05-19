@@ -95,6 +95,11 @@ export default {
     },
     changeTab(index) {
       this.tabsModel = String(index)
+      this.goodsLoading = true
+      this.storesLoading = true
+      this.list = []
+      this.storeList = []
+      this.pageNum = 1
       if (index == '0') {
         this.loadGoods()
         this.$router.push({
