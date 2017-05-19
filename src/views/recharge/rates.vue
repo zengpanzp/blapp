@@ -3,6 +3,7 @@
 <template>
     <div class="rates">
       <!--用来显示缴费分组-->
+<<<<<<< HEAD
       <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
       <!--选择缴费机构-->
       <bl-sort-list-view @click="getCompany" v-if="loadListView" :list="companyList"></bl-sort-list-view>
@@ -11,6 +12,14 @@
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
             <li @click.preventDefault="showCategory">选择缴费分组
               <div class="name"><label>{{receiveGroupItem.groupName}}</label><img class="more" src="./i/iphone/more.png"></div>
+=======
+      <router-view></router-view>
+      <div class="content-wrap" v-show="toShow">
+          <ul>
+            <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
+            <li @click.preventDefault="selectCategory">选择缴费分组
+              <div class="name"><label>我家</label><img class="more" src="./i/iphone/more.png"></div>
+>>>>>>> dev
             </li>
             <!--	</ul>
             </div>-->
@@ -148,6 +157,7 @@
           this.loadGroup = true;
           this.$router.push({path: "/recharge/rates/" + this.rateType + "/category"});
       },
+<<<<<<< HEAD
       // 获得子组件选择的机构
       getCompany(item) {
         this.receiveCompanyItem = item;
@@ -176,6 +186,15 @@
           this.loadListView = false;
         }
         let val = this.$route.params["type"];
+=======
+      // 选择缴费分组
+      selectCategory() {
+          this.toShow = false;
+          this.$router.push({path: "/recharge/rates/" + this.rateType + "/category"});
+      },
+      fill($route) {
+        let val = $route.params["type"];
+>>>>>>> dev
         this.rateType = val;  // 缴费类别 1 水费 2电费 3 煤气费
         if (val == 1) {
           this.typeClass = "icon-waitassess";

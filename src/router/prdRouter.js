@@ -97,6 +97,7 @@ export const prdRouter = [
   },
   /* 神马 充值缴费 未支付账单 */
   {
+<<<<<<< HEAD
     path: '/recharge/billempty',
       component: r => require.ensure([], () => r(require('../views/recharge/billempty')), 'billempty')
   },
@@ -106,12 +107,33 @@ export const prdRouter = [
       component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
   },
   /* 神马 充值缴费 水费 type=1 */
+=======
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+    ]
+  },
+  /* 神马 充值缴费 电费 type=2 */
   {
     path: '/recharge/rates/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
     children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+    ]
+  },
+  /* 神马 充值缴费 煤气 type=3 */
+>>>>>>> dev
+  {
+    path: '/recharge/rates/:type',
+    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
+    children: [
+<<<<<<< HEAD
       {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
       {path: 'company'}
+=======
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+>>>>>>> dev
     ]
   },
   /* 神马 充值缴费 有线电视和铁通 */
@@ -155,15 +177,6 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   },
-<<<<<<< HEAD
-  /* 曾攀 待评价 */
-  {
-    path: '/myComment',
-    meta: {
-      title: '我的评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/appraise/myComment')), 'myComment')
-=======
   /* 陈鹏 我的收藏 */
   {
     path: '/myCollection',
@@ -179,6 +192,32 @@ export const prdRouter = [
       title: '我的评价'
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
->>>>>>> b8aca9eb7394589e0d0413db5b34b3235cec3720
+  },
+  /* 曾攀 查看评价 */
+  {
+    path: '/seeComment/:comId/:type/:product',
+    name: 'seeComment',
+    meta: {
+      title: '查看评价'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/seeComment')), 'seeComment')
+  },
+  /* 曾攀 商品评价 */
+  {
+    path: '/goodComment/:order/:product',
+    name: 'goodComment',
+    meta: {
+      title: '商品评价'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/goodComment')), 'goodComment')
   }
+  /* 曾攀 追加评价
+  {
+    path: '/againComment',
+    name: 'againComment',
+    meta: {
+      title: '商品评价'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/againComment')), 'againComment')
+  } */
 ]

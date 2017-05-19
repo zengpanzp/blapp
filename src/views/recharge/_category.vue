@@ -3,10 +3,33 @@
 <template>
   <div class="category-content" >
     <ul>
+<<<<<<< HEAD
       <li @click="selectGroup(item,$index)" v-for="(item, $index) in groupList ">
         <div>
           <span class="select"  :class="{'sel':item.active}"></span>
           <label>{{item.groupName}}</label>
+=======
+      <li>
+        <div>
+          <img class="select" src="./i/iphone/unselected2.png">
+          <label>我家</label>
+          <img class="del" src="./i/category/delete.png">
+          <img class="edit" src="./i/category/edit.png">
+        </div>
+      </li>
+      <li>
+        <div>
+          <img class="select" src="./i/iphone/unselected2.png">
+          <label>我家</label>
+          <img class="del" src="./i/category/delete.png">
+          <img class="edit" src="./i/category/edit.png">
+        </div>
+      </li>
+      <li>
+        <div>
+          <img class="select" src="./i/iphone/unselected2.png">
+          <label>我家</label>
+>>>>>>> dev
           <img class="del" src="./i/category/delete.png">
           <img class="edit" src="./i/category/edit.png">
         </div>
@@ -26,6 +49,7 @@
   export default {
 
     name: '_category',
+<<<<<<< HEAD
     props: {
       "groupItem": Object,
       "_groupList": Array
@@ -49,10 +73,19 @@
             that.$set(item, "active", true);
           }
         });
+=======
+
+    data() {
+      return {
+      }
+    },
+    created() {
+>>>>>>> dev
     },
     mounted() {
     },
     methods: {
+<<<<<<< HEAD
         selectGroup(item, $index) {
           let that = this;
           // 让所有的没有选中样式
@@ -67,6 +100,8 @@
           this.$parent.toShow = true;
           this.$router.push({path: "/recharge/rates/" + this.type});
         }
+=======
+>>>>>>> dev
     }
   };
 </script>
