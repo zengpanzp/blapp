@@ -61,7 +61,7 @@
               <div class="flex">
                 <div class="text-node">分账序号</div>
                 <div class="flex-item">
-                  <input class="numInput" type="tel" placeholder="请输入11位分账序号(仅限电信)" @focus="focus = true" v-model="iphoneNum">
+                  <input class="numInput" type="tel" placeholder="请输入11位分账序号(仅限电信)" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
@@ -74,7 +74,7 @@
               <div class="flex">
                 <div class="text-node">固定电话 021-</div>
                 <div class="flex-item">
-                  <input class="numInput" type="tel" placeholder="请输入固定电话" @focus="focus = true" v-model="iphoneNum">
+                  <input class="numInput" type="tel" placeholder="请输入固定电话" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
@@ -87,7 +87,7 @@
               <div class="flex">
                 <div class="text-node">小灵通号 021-</div>
                 <div class="flex-item">
-                  <input class="numInput" type="tel" placeholder="请输入小灵通号(仅限电信)" @focus="focus = true" v-model="iphoneNum">
+                  <input class="numInput" type="tel" placeholder="请输入小灵通号(仅限电信)" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
@@ -100,15 +100,15 @@
               <div class="flex">
                 <div class="text-node">账号</div>
                 <div class="flex-item">
-                  <input class="numInput" type="tel" placeholder="请输入宽带账号,8位AD编号" @focus="focus = true" v-model="iphoneNum">
+                  <input class="numInput" type="tel" placeholder="请输入宽带账号,8位AD编号" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
               <div class="flex">
                 <div class="text-node">密码</div>
                 <div class="flex-item">
-                  <input class="numInput" type="tel" placeholder="请输入宽带账号密码" @focus="focus = true" v-model="password">
-                  <i class="img_icon icon_emptycon" @click="emptyPhone($event)"></i>
+                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = false" v-model="password">
+                  <i class="img_icon icon_emptycon" v-show="password !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
             </div>
@@ -118,7 +118,7 @@
       <div class="phoneLink" v-show="focus && historyNum && historyNum.length !== 0">
         <ul>
           <li v-for="(item, index) in historyNum">
-            <div class="phoneNumItem" @click="[iphoneNum = item.number, focus = false]">{{ item.number }}</div>
+            <div class="phoneNumItem" @click="historySel(item.number)">{{ item.number }}</div>
             <div class="img_icon icon_emptycon" @click.self="removeHistoryNum(index)"></div>
           </li>
         </ul>
@@ -235,15 +235,15 @@ export default {
         if (this.tabsModel !== 0) {
           this.maxlength = 8
         }
-        $('.img_icon').hide()
+        $('.item-content .img_icon').hide()
       },
       // 手机号码正则匹配
-      testPhoneNum() {
+      testPhoneNum(num = this.iphoneNum) {
         let pattern = /^\d{11}$/; // 分账
         if (this.tabsModel !== 0) {
           pattern = /^\d{8}$/;
         }
-        return pattern.test(this.iphoneNum)
+        return pattern.test(num)
       },
       // 获取输入历史数据
       getHistoryNum() {
@@ -294,12 +294,23 @@ export default {
         return document.documentElement.clientHeight
       },
       emptyPhone(e) {
-        this.focus = false
         let inputNode = $(e.target).parent().find('input')[0]
-        this.iphoneNum = ''
-        $(e.target).hide()
+        if (inputNode.getAttribute('type') == 'password') {
+          this.password = ''
+        } else {
+          this.iphoneNum = ''
+        }
+        $(e.target).eq(0).hide()
         inputNode.focus()
       },
+      historySel(number) {
+        if (this.testPhoneNum(number)) {
+          this.iphoneNum = number
+          this.focus = false
+        } else {
+          this.$toast('请输入正确的号码')
+        }
+      }
     },
     mounted() {
       $('.numInput').on('input', function(event) {
