@@ -141,16 +141,18 @@
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
       <div class="config-button-contain">
-        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥499.90 <span class="smallFont">（服务费￥1.00）</span></button>
+        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥{{ currentPay }}</button>
       </div>
     </div>
   </div>
 </template>
 <script>
 import utils from 'src/utils'
+import CONST from 'src/const'
+import api from 'src/api'
 export default {
 
-  name: 'iphone',
+  name: 'fixedphone',
 
   data() {
     return {
@@ -158,101 +160,134 @@ export default {
       historyNum: [],
       tab: ['分账序号', '固话', '小灵通', '宽带/IPTV'],
 
-      iphoneNum: '',
-      password: '',
+      iphoneNum: '', // 输入的值
+      currentPay: '', // 支付金额
+      currentItem: '', // 货号
+      currentSku: '', // 面值
+      password: '', // 密码
 
-      load: [],
       focus: false,
 
+      historyName: 'historyGh',
+      maxlength: undefined,
+
       moneyListModel: 0,
-      moneyList: [{
-        mainPrice: '10',
-        salePrice: '2.85'
-      }, {
-        mainPrice: '20',
-        salePrice: '10'
-      }, {
-        mainPrice: '100',
-        salePrice: '100'
-      }, {
-        mainPrice: '200',
-        salePrice: '200'
-      }]
+      moneyList: []
     }
   },
     created() {
-      for (let i = 0; i < this.tab.length; i++) {
-        this.load.push({
-          load: false
-        })
-      }
       this.changeTab(0)
       this.getHistoryNum()
+      this.getPhoneInfo('dx', 1)
       this.$loading.close()
     },
     methods: {
-      getPhoneInfo(phoneNum, type) {
-
+      getPhoneInfo(type, noConfirm = 0) {
+        if (this.testPhoneNum() || noConfirm) {
+          this.inlineLoading = this.$toast({
+            iconClass: 'preloader white',
+            message: '加载中',
+            duration: 'loading'
+          })
+          let timestamp = utils.getTimeFormatToday();
+          let mac = utils.MD5(type + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+          let requestData = {
+            client_id: CONST.CLIENT_ID,
+            mobile: type,
+            timestamp: timestamp,
+            format: "json",
+            t_dz: CONST.T_DZ,
+            token: utils.ssdbGet('member_token'),
+            mac: mac
+          }
+          api.recharge.queryPhoneGoodsDetail({
+            data: JSON.stringify(requestData)
+          }).then(data => {
+            this.inlineLoading.close()
+            let resData = JSON.parse(data.body.obj)
+            this.phoneCheck = resData.msg
+            if (resData.sku) {
+              let list = []
+              for (let [index, val] of resData.sku.entries()) {
+                list.push({
+                  mainPrice: val,
+                  salePrice: resData.price2[index],
+                  item: resData.item[index]
+                })
+              }
+              this.moneyList = list
+              this.currentPay = this.moneyList[0].salePrice
+              this.currentItem = this.moneyList[0].item
+              this.currentSku = this.moneyList[0].mainPrice
+            } else {
+              this.currentPay = 0
+              this.moneyList = []
+            }
+          })
+        }
       },
       changeTab(index) {
         this.iphoneNum = ''
         this.tabsModel = index
         this.focus = false
-        $('.img_icon').hide()
-        if (!this.load[index].load) {
-          this.load[index].load = true
+
+        this.maxlength = 11
+        if (this.tabsModel !== 0) {
+          this.maxlength = 8
         }
+        $('.img_icon').hide()
       },
       // 手机号码正则匹配
       testPhoneNum() {
-        let pattern = /^1\d{10}$/;
+        let pattern = /^\d{11}$/; // 分账
+        if (this.tabsModel !== 0) {
+          pattern = /^\d{8}$/;
+        }
         return pattern.test(this.iphoneNum)
       },
       // 获取输入历史数据
       getHistoryNum() {
-        let historyNum = JSON.parse(utils.dbGet('historyGhNum'))
+        let historyNum = JSON.parse(utils.dbGet(this.historyName))
         if (historyNum && typeof historyNum == 'object') {
-          this.historyNum = JSON.parse(utils.dbGet('historyGhNum'))
+          this.historyNum = JSON.parse(utils.dbGet(this.historyName))
         }
       },
       // 清空输入历史数据
       emptyHistoryNum() {
         this.historyNum = []
-        utils.dbRemove('historyGhNum')
+        utils.dbRemove(this.historyName)
       },
       // 删除当前输入历史数据
       removeHistoryNum(index) {
         this.historyNum.splice(index, 1)
-        utils.dbSet('historyGhNum', this.historyNum)
+        utils.dbSet(this.historyName, this.historyNum)
       },
       // 选择金额
       selectPrice(index) {
         if (this.testPhoneNum()) {
           this.moneyListModel = index
-        }
-      },
-      flowSelectPrice(index) {
-        if (this.testPhoneNum()) {
-          this.flowListModel = index
+          this.currentPay = this.moneyList[index].salePrice
         }
       },
       // 去支付
       goPay() {
-        // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
-        this.historyNum.forEach((item, index) => {
-          if (item.number == this.iphoneNum) {
-            this.historyNum.splice(index, 1)
+        if (this.testPhoneNum()) {
+          // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
+          this.historyNum.forEach((item, index) => {
+            if (item.number == this.iphoneNum) {
+              this.historyNum.splice(index, 1)
+            }
+          })
+          this.historyNum.unshift({
+            number: this.iphoneNum
+          })
+          // 如果输入历史数据长度大于6则截取6条
+          if (this.historyNum.length > 6) {
+            this.historyNum = this.historyNum.slice(0, 6)
           }
-        })
-        this.historyNum.unshift({
-          number: this.iphoneNum
-        })
-        // 如果输入历史数据长度大于6则截取6条
-        if (this.historyNum.length > 6) {
-          this.historyNum = this.historyNum.slice(0, 6)
+          // 把输入历史数据保存到localStore
+          utils.dbSet(this.historyName, this.historyNum)
         }
-        // 把输入历史数据保存到localStore
-        utils.dbSet('historyGhNum', this.historyNum)
       },
       // 给div屏幕的高度
       wrapperHeight() {
@@ -274,7 +309,7 @@ export default {
     watch: {
       // 监听输入号码的值,当长度等于11的时候黑框隐藏
       iphoneNum(val) {
-        if (val.length >= 11) {
+        if (this.testPhoneNum()) {
           this.focus = false
         }
       },

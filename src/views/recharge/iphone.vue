@@ -1,9 +1,60 @@
 <style lang="scss" src="./css/_comm.scss"></style>
+<style lang="scss" scoped>
+  @import "src/sass/tobe/function";
+  .feuld-ul {
+    padding: rem(30);
+    position: relative;
+    z-index: 20;
+    background: #fff;
+    border-bottom: 1px solid #e7e7e7;
+    li:first-child {
+      margin-right: rem(40);
+    }
+    li.curr {
+      border-color: #3ea2ff;
+    }
+    li {
+      text-align: center;
+      padding: rem(20) rem(40);
+      border: 1px solid #ccc;
+      border-radius: rem(8);
+      img {
+        width: rem(70);
+        margin-right: rem(20);
+      }
+      .feuld-name {
+        font-size: rem(36);
+        line-height: 1;
+      }
+    }
+    .img-color-remove{
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      filter: grayscale(100%);
+      filter: gray;
+    }
+  }
+</style>
 <template>
   <div class="phoneRechargeBox" :style="{ 'min-height': wrapperHeight() + 'px' }">
     <div class="modal-fix" v-show="focus" @click="focus = false"></div>
     <div class="phone-box">
-      <div class="phoneRechargeTitle">
+      <ul class="flex feuld-ul" v-if="$route.query.type == 'petrol'">
+        <li class="fuel-title curr flex-item">
+          <div class="flex-c-m">
+            <img src="./i/iphone/chinashiy.jpg" alt="">
+            <div class="feuld-name">中国石化</div>
+          </div>
+        </li>
+        <li class="fuel-title flex-item">
+          <div class="flex-c-m">
+            <img src="./i/iphone/chinafuled.jpg" class="img-color-remove" alt="">
+            <div class="feuld-name">中国石油</div>
+          </div>
+        </li>
+      </ul>
+      <div class="phoneRechargeTitle" v-else>
         <bl-navbar class="flex" v-model="tabsModel">
           <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index)">{{ item }}</bl-tab-item>
         </bl-navbar>
@@ -11,11 +62,11 @@
       <div class="phoneRechargeItem">
         <div class="itemContent">
           <div class="item-titleRow">
-            <input id="number" class="item-titleRow" type="tel" placeholder="请输入充值手机号" maxlength="11" @focus="focus = true" v-model="iphoneNum">
+            <input id="number" class="item-titleRow" type="tel" :placeholder="placeholder" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
             <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="emptyPhone"></i>
-            <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone"></div>
+            <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone" v-if="$route.query.type !== 'petrol'"></div>
           </div>
-          <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">{{ !testPhoneNum() ? '请输入正确的手机号码' : phoneCheck }}</div>
+          <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">{{ !testPhoneNum() ? $route.query.type == 'petrol' ? '请输入正确的油卡号' : '请输入正确的手机号码' : phoneCheck }}</div>
           <div class="phoneLink" v-show="focus && historyNum && historyNum.length !== 0">
             <ul>
               <li v-for="(item, index) in historyNum">
@@ -68,7 +119,7 @@
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
       <div class="config-button-contain">
-        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥{{ currentPay }} <span class="smallFont"><!-- （服务费￥1.00） --></span></button>
+        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥{{ currentPay }}</button>
       </div>
     </div>
   </div>
@@ -91,6 +142,9 @@ export default {
       phoneCheck: '',
       tab: ['充话费', '充流量'],
       phoneGsd: '',
+      placeholder: '',
+      maxlength: undefined,
+      historyName: undefined,
 
       iphoneNum: '', // 手机号码
       currentPay: '', // 支付金额
@@ -104,80 +158,89 @@ export default {
       flowList: []
     }
   },
-  beforeRouteEnter (to, from, next) {
-    utils.isLogin().then(() => {
-      next()
-    })
-  },
   created() {
-    this.$loading.close()
+    if (this.$route.query.type !== 'petrol') {
+      this.maxlength = 11
+      this.placeholder = '请输入充值手机号'
+      this.historyName = 'historyNum'
+    } else {
+      this.getPhoneInfo('yk', 1)
+      this.maxlength = 19
+      this.placeholder = '请输入油卡号'
+      this.historyName = 'historyPetrol'
+    }
     this.getHistoryNum()
     this.tabsModel = Number(this.$route.params.type)
 
     utils.isLogin().then(data => {
-      this.iphoneNum = data.mobile
+      if (this.$route.query.type !== 'petrol') {
+        this.iphoneNum = data.mobile
+      }
+      this.$loading.close()
     }, () => {})
   },
   methods: {
-    getPhoneInfo(phoneNum) {
-      this.inlineLoading = this.$toast({
-        iconClass: 'preloader white',
-        message: '加载中',
-        duration: 'loading'
-      })
-      let timestamp = utils.getTimeFormatToday();
-      let mac = utils.MD5(phoneNum + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
-      let requestData = {
-        client_id: CONST.CLIENT_ID,
-        mobile: phoneNum,
-        timestamp: timestamp,
-        format: "json",
-        t_dz: CONST.T_DZ,
-        token: utils.ssdbGet('member_token'),
-        mac: mac
+    getPhoneInfo(phoneNum, noConfirm = 0) {
+      if (this.testPhoneNum() || noConfirm) {
+        this.inlineLoading = this.$toast({
+          iconClass: 'preloader white',
+          message: '加载中',
+          duration: 'loading'
+        })
+        let timestamp = utils.getTimeFormatToday();
+        let mac = utils.MD5(phoneNum + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
+        let requestData = {
+          client_id: CONST.CLIENT_ID,
+          mobile: phoneNum,
+          timestamp: timestamp,
+          format: "json",
+          t_dz: CONST.T_DZ,
+          token: utils.ssdbGet('member_token'),
+          mac: mac
+        }
+        api.recharge.queryPhoneGoodsDetail({
+          data: JSON.stringify(requestData)
+        }).then(data => {
+          let resData = JSON.parse(data.body.obj)
+          let list = []
+          for (let [index, val] of resData.sku.entries()) {
+            list.push({
+              mainPrice: val,
+              salePrice: resData.price2[index],
+              item: resData.item[index]
+            })
+          }
+          this.moneyList = list
+          this.currentPay = this.moneyList[0].salePrice
+          this.currentItem = this.moneyList[0].item
+          this.currentSku = this.moneyList[0].mainPrice
+
+          let msg = resData.msg.split("|")[1]
+          if (this.tabsModel == '0') {
+            this.phoneCheck = resData.msg
+          }
+          switch (msg) {
+            case '联通':
+              this.phoneGsd = 'ltll'
+              break;
+            case '移动':
+              this.phoneGsd = 'ydll'
+              break;
+            case '电信':
+              this.phoneGsd = 'dxll'
+              break;
+            default:
+              this.phoneGsd = ''
+          }
+          if (this.tabsModel == '0') {
+            this.inlineLoading.close()
+          }
+
+          if (this.phoneGsd && this.tabsModel == '1') {
+            this.getPhoneLlInfo(this.phoneGsd)
+          }
+        })
       }
-      api.recharge.queryPhoneGoodsDetail({
-        data: JSON.stringify(requestData)
-      }).then(data => {
-        let resData = JSON.parse(data.body.obj)
-        let list = []
-        for (let [index, val] of resData.sku.entries()) {
-          list.push({
-            mainPrice: val,
-            salePrice: resData.price2[index],
-            item: resData.item[index]
-          })
-        }
-        this.moneyList = list
-        this.currentPay = this.moneyList[0].salePrice
-        this.currentItem = this.moneyList[0].item
-        this.currentSku = this.moneyList[0].mainPrice
-
-        let msg = resData.msg.split("|")[1]
-        if (this.tabsModel == '0') {
-          this.phoneCheck = resData.msg
-        }
-        switch (msg) {
-          case '联通':
-            this.phoneGsd = 'ltll'
-            break;
-          case '移动':
-            this.phoneGsd = 'ydll'
-            break;
-          case '电信':
-            this.phoneGsd = 'dxll'
-            break;
-          default:
-            this.phoneGsd = ''
-        }
-        if (this.tabsModel == '0') {
-          this.inlineLoading.close()
-        }
-
-        if (this.phoneGsd && this.tabsModel == '1') {
-          this.getPhoneLlInfo(this.phoneGsd)
-        }
-      })
     },
     getPhoneLlInfo(type) {
       let timestamp = utils.getTimeFormatToday();
@@ -191,9 +254,11 @@ export default {
         token: utils.ssdbGet('member_token'),
         mac: mac
       }
-      api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
+      api.recharge.queryPhoneGoodsDetail({
+        data: JSON.stringify(requestData)
+      }).then(data => {
         this.inlineLoading.close()
-        let resData = data.body
+        let resData = JSON.parse(data.body.obj)
         this.phoneCheck = resData.msg
         if (resData.sku) {
           let list = []
@@ -245,6 +310,9 @@ export default {
     // 手机号码正则匹配
     testPhoneNum() {
       let pattern = /^1\d{10}$/;
+      if (this.$route.query.type == 'petrol') {
+        pattern = /^1\d{18}$/;
+      }
       return pattern.test(this.iphoneNum)
     },
     // 调native通讯录
@@ -260,32 +328,33 @@ export default {
     },
     // 获取输入历史数据
     getHistoryNum() {
-      let historyNum = JSON.parse(utils.dbGet('historyNum'))
+      console.log(this.historyName)
+      let historyNum = JSON.parse(utils.dbGet(this.historyName))
       if (historyNum && typeof historyNum == 'object') {
-        this.historyNum = JSON.parse(utils.dbGet('historyNum'))
+        this.historyNum = JSON.parse(utils.dbGet(this.historyName))
       }
     },
     // 清空输入历史数据
     emptyHistoryNum() {
       this.historyNum = []
-      utils.dbRemove('historyNum')
+      utils.dbRemove(this.historyName)
     },
     // 删除当前输入历史数据
     removeHistoryNum(index) {
       this.historyNum.splice(index, 1)
-      utils.dbSet('historyNum', this.historyNum)
+      utils.dbSet(this.historyName, this.historyNum)
     },
     // 选择金额
     selectPrice(index) {
-      this.currentPay = this.moneyList[index].salePrice
       if (this.testPhoneNum()) {
         this.moneyListModel = index
+        this.currentPay = this.moneyList[index].salePrice
       }
     },
     flowSelectPrice(index) {
-      this.currentPay = this.flowList[index].salePrice
       if (this.testPhoneNum()) {
         this.flowListModel = index
+        this.currentPay = this.flowList[index].salePrice
       }
     },
     // 去支付
@@ -305,7 +374,7 @@ export default {
           this.historyNum = this.historyNum.slice(0, 6)
         }
         // 把输入历史数据保存到localStore
-        utils.dbSet('historyNum', this.historyNum)
+        utils.dbSet(this.historyName, this.historyNum)
       }
     },
     // 给div屏幕的高度
@@ -327,7 +396,9 @@ export default {
 
         this.moneyListModel = 0
         this.flowListModel = 0
-        this.getPhoneInfo(this.iphoneNum)
+        if (this.$route.query.type !== 'petrol') {
+          this.getPhoneInfo(this.iphoneNum)
+        }
       }
     },
     // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏
