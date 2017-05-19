@@ -117,6 +117,7 @@ export default {
     pickUp: params => {
       return Vue.http.post(baseUrl + '/gyjf/pickup.htm', params);
     }
+  },
   // 查询待评价信息
   queryCommentBytype: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentByType.htm', params)
