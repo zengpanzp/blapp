@@ -1,0 +1,107 @@
+@import "src/sass/tobe/function";
+.bill-orderdetail{
+  .billstatus{
+    background: url(../i/icons/icon_redwaittime.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    background-position: right;
+    background-size: rem(28);
+    color:#e6133c;
+    top:rem(10);
+    right: rem(20);
+    padding-right:rem(38);
+    height: rem(60);
+    line-height: rem(60);
+  }
+  .billstatus.other{
+    background-image: url(../i/icons/icon_redpay.png);
+  }
+  .bill-to-pay{
+    position: fixed;
+    bottom:0;
+    height: rem(100);
+    line-height: rem(100);
+    width: 100%;
+    .next{
+      font-weight: 400;
+      width: rem(680);
+      &.selected{
+        background: #3ea2ff;
+      }
+    }
+  }
+  ul{
+    padding:0 rem(20);
+    font-size: rem(27);
+    margin-bottom: rem(20);
+    background: #fff;
+    font-weight: 200;
+    border-bottom: rem(1) solid #ddd;
+    li{
+      height: rem(80);
+      line-height: rem(80);
+      border-bottom: rem(1) solid #ddd;
+      &:last-child{
+        border: none;
+      }
+    }
+    .bill-tips{
+      height: rem(120);
+      line-height: rem(120);
+      div{
+        &:first-child{
+          height: rem(60);
+          line-height: rem(70);
+          color:#333;
+        }
+        &:last-child{
+          height: rem(60);
+          line-height: rem(40);
+          font-size: rem(24);
+          color:#999;
+        }
+      }
+    }
+    .bill-company img{
+      width: rem(35);
+      vertical-align: sub;
+      color:#333;
+      font-weight: 300;
+    }
+    .pay-bill{
+      height: rem(120);
+      line-height: rem(120);
+      font-size: rem(25);
+      position: relative;
+      span,div,p,label{
+        display: inline-block;
+        color: #e6133c;
+      }
+      p{
+        color:#666;
+      }
+      label{
+        font-size: rem(35);
+        font-weight: 600;
+      }
+      span{
+        font-weight: 600;
+        font-size: rem(50);
+      }
+      div{
+        position: absolute;
+        color:#666;
+        vertical-align: top;
+        font-size: rem(28);
+        right: rem(10);
+      }
+    }
+  }
+  .bill-bottom{
+    color:#999;
+  }
+
+
+
+
+}

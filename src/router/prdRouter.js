@@ -59,7 +59,6 @@ export const prdRouter = [
   },
   /* 神马 百联财礼 */
   {
-
     path: '/blgift/goods/:jumpId/',
     component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
   },
@@ -81,11 +80,6 @@ export const prdRouter = [
     path: '/recharge/iphone/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
   },
-  /* 神马 充值缴费 流量充值 type=2 */
-  {
-    path: '/recharge/iphone/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
-  },
   /* 神马 充值缴费 固话充值 */
   {
     path: '/recharge/fixedphone',
@@ -93,31 +87,31 @@ export const prdRouter = [
   },
   /* 神马 充值缴费 付账单 */
   {
+    path: '/recharge/orderlist',
+      component: r => require.ensure([], () => r(require('../views/recharge/orderlist.vue')), 'orderlist')
+  },
+  /* 神马 充值缴费 付账单 */
+  {
     path: '/recharge/bill',
     component: r => require.ensure([], () => r(require('../views/recharge/bill')), 'bill')
+  },
+  /* 神马 充值缴费 未支付账单 */
+  {
+    path: '/recharge/billempty',
+      component: r => require.ensure([], () => r(require('../views/recharge/billempty')), 'billempty')
+  },
+  /* 神马 充值缴费 未支付账单 */
+  {
+    path: '/recharge/orderdetail',
+      component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
   },
   /* 神马 充值缴费 水费 type=1 */
   {
     path: '/recharge/rates/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
     children: [
-      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
-    ]
-  },
-  /* 神马 充值缴费 电费 type=2 */
-  {
-    path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
-    children: [
-      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
-    ]
-  },
-  /* 神马 充值缴费 煤气 type=3 */
-  {
-    path: '/recharge/rates/:type',
-    component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
-    children: [
-      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), 'rates')}
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
+      {path: 'company'}
     ]
   },
   /* 神马 充值缴费 有线电视和铁通 */

@@ -56,6 +56,21 @@ export default {
       return Vue.http.post(baseUrl + '/order/getGiftOrderListBySender.htm', params);
     }
   },
+  // 个人中心
+  userCenter: {
+    // 我的收藏
+    queryFavorites: params => {
+      return Vue.http.post(baseUrl + '/myInformation/queryFavorites.htm', params);
+    },
+    // 我的收藏 商品
+    searchProductByIds: params => {
+      return Vue.http.post(baseUrl + '/goodSearch/searchProductByIds.htm', params);
+    },
+    // 我的收藏 门店
+    queryShopFavorites: params => {
+      return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
+    }
+  },
   // 查询资源位
   queryAdDeploy: params => {
     return Vue.http.post(baseUrl + '/site/queryAdDeploy.htm', params);
@@ -63,5 +78,44 @@ export default {
   // 查询二级目录
   queryCategory: params => {
     return Vue.resource(baseUrl + '/productSearch/doCategoryByLevOne.htm').get(params)
+  },
+  // 虚拟充值缴费的所有接口
+  recharge: {
+    // 虚拟充值 可充值产品查询接口
+    queryPhoneGoodsDetail: params => {
+      return Vue.resource(baseUrl + '/kmgm/goods_detail.htm').get(params)
+    },
+    // 查询我的缴费分组
+    queryMyGroup: params => {
+      return Vue.http.post(baseUrl + '/myInformation/queryPaySubGroup.htm', params);
+    },
+    // 水电煤的缴费机构
+    queryCompanyGroup: params => {
+      return Vue.http.post(baseUrl + '/gyjf/type_detail.htm', params);
+    },
+    // 水电煤 生成订单
+    createOrder: params => {
+      return Vue.http.post(baseUrl + '/gyjf/gen_order.htm', params);
+    },
+    // 水电煤 订单详情
+    getOrderDetail: params => {
+      return Vue.http.post(baseUrl + '/gyjf/order_search.htm', params);
+    },
+    // 水电煤 商品详情
+    getGoodsDetail: params => {
+      return Vue.http.post(baseUrl + '/gyjf/goods_detail.htm', params);
+    },
+    // 水电煤 订单状态
+    getOrderStatus: params => {
+      return Vue.http.post(baseUrl + '/gyjf/getstatus.htm', params);
+    },
+    // 水电煤 缴费凭证
+    getSignMsg: params => {
+      return Vue.http.post(baseUrl + '/gyjf/signmsg.htm', params);
+    },
+    // 水电煤 支付提货
+    pickUp: params => {
+      return Vue.http.post(baseUrl + '/gyjf/pickup.htm', params);
+    }
   }
 }

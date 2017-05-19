@@ -20,8 +20,14 @@
     }
     .select {
       width: rem(40);
+      height: rem(40);
       position: absolute;
       top: rem(25);
+      background-image: url(../i/iphone/unselected2.png);
+      background-size: rem(40) rem(40);
+    }
+    .select.sel{
+      background-image: url(../i/iphone/circle.jpg);
     }
     .del {
       width: rem(40);
