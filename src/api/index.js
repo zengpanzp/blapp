@@ -89,6 +89,24 @@ export default {
     queryMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/queryPaySubGroup.htm', params);
     },
+    // {
+    //   "member_token":"4acf40fa4a3f2a411224633d3d718bc19faf14cbb58b9d80f009873bbbd0c77b",
+    //   "groupName":"老家1",
+    //   "id":3950,
+    //   "timestamp":"20170519103614"
+    // },
+    // 修改我的分组名称
+    updateMyGroup: params => {
+      return Vue.http.post(baseUrl + '/myInformation/updatePaySubGroup.htm', params);
+    },
+    // 添加我的分组名称
+    createMyGroup: params => {
+      return Vue.http.post(baseUrl + '/myInformation/createPaySubNoGroup.htm', params);
+    },
+    // 删除我的分组
+    deleteMyGroup: params => {
+      return Vue.http.post(baseUrl + '/myInformation/deletePaySubGroup.htm', params);
+    },
     // 水电煤的缴费机构
     queryCompanyGroup: params => {
       return Vue.http.post(baseUrl + '/gyjf/type_detail.htm', params);

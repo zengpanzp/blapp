@@ -51,25 +51,26 @@
     line-height: rem(80);
     font-size: rem(30);
     border-bottom:rem(1.5) solid #e7e7e7;
-    .btn{
-      line-height: rem(60);
-      display: inline-block;
-      position:absolute;
-      padding: 0 rem(15);
-      border-radius: rem(8) ;
-      border:rem(1) solid #c3c3c3;
-      @include common;
-      width: auto;
-      &.selected{
-        color:#3ea2ff;
-        border:rem(1) solid #3ea2ff;
+    .btns{
+      float: right;
+      height: rem(60);
+      .btn{
+        min-width: rem(125);
+        text-align: center;
+        line-height: rem(60);
+        display: inline-block;
+        padding: 0 rem(15);
+        border-radius: rem(8) ;
+        border:rem(1) solid #c3c3c3;
+        @include common;
+        width: auto;
+        margin-right: rem(15);
+        &.selected{
+          color:#3ea2ff;
+          border:rem(1) solid #3ea2ff;
+          background:#ebf5ff;
+        }
       }
-    }
-    .btn:first-child{
-      right: rem(130);
-    }
-    .btn:last-child{
-      right: rem(15);
     }
     .account{
       display: inline-block;

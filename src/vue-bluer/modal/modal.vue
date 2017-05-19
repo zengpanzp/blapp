@@ -1,12 +1,13 @@
 <template>
-  <div class="modal-mask" @touchmove.prevent v-if="visible">
+  <div class="modal-mask" @touchmove.prevent v-show="showVisible">
     <div class="modal" :class="[className, effect]" :style="halfModal" ref="modal" @touchmove.prevent>
       <div class="modal-inner">
         <div class="modal-title" v-if="title !== ''">{{ title }}</div>
-        <div class="modal-text">{{ content }}<slot name="inner"></slot></div>
+        <div class="modal-text" v-show="!input">{{ content }}<slot name="inner"></slot></div>
+        <div class="modal-input" v-show="input"><!--<label>{{labelText}}</label>--><input type="text" v-model="inputValue" :placeholder="placeholder"></div>
       </div>
       <div class="modal-buttons">
-        <div class="modal-button" v-for="button in buttons" v-text="button.text" @click="[button.onClick(), close()]"></div>
+        <div class="modal-button" v-for="button in buttons" v-text="button.text" @click="[sure(), close()]"></div>
       </div>
     </div>
   </div>
@@ -99,6 +100,22 @@
       border-radius: $border-radius $border-radius 0 0;
       position: relative;
       background: $modalBgColor;
+  }
+  .modal-input{
+    margin-top: rem(20);
+    /*label{*/
+      /*font-size: rem(28);*/
+      /*margin-right:rem(20) ;*/
+    /*}*/
+    input{
+      font-size: rem(32);
+      height: rem(70);
+      line-height: rem(70);
+      /*border:rem(.8) solid #3ea2ff;*/
+      padding-left: rem(10);
+      width: 90%;
+      color:#666;
+    }
   }
   .modal-title {
       font-weight: 500;
@@ -208,18 +225,39 @@
 </style>
 
 <script>
+
 export default {
   name: 'Modal',
   data () {
     return {
       halfHeight: '',
-      visible: true
+      showVisible: this.visible
     }
   },
   props: {
     title: {
       type: String,
       default: ''
+    },
+    visible: {
+      type: Boolean,
+      default: true
+    },
+    placeholder: {
+        type: String,
+        default: ''
+    },
+    inputValue: {
+      type: String,
+      default: '    '
+    },
+    labelText: {
+        type: String,
+        default: ''
+    },
+    input: {
+        type: Boolean,
+        default: false
     },
     content: {
       type: String
@@ -247,9 +285,22 @@ export default {
       }
     }
   },
+  watch: {
+    "visible" (val) {
+      this.showVisible = val;
+    }
+  },
   methods: {
     close() {
-      this.visible = false
+      this.showVisible = false;
+      // 向父组件传递
+      this.$emit("click", false);
+    },
+    // 确定
+    sure() {
+      this.showVisible = false;
+      // 向父组件传递
+      this.$emit("click", [this.inputValue, false]);
     }
   },
   mounted() {

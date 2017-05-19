@@ -137,6 +137,11 @@ export const prdRouter = [
       {path: 'company'}
     ]
   },
+  /* 神马 充值缴费 缴费记录  type=1 水费  2 电费  3煤气 */
+  {
+    path: '/recharge/records/:type',
+      component: r => require.ensure([], () => r(require('../views/recharge/records')), 'records')
+  },
   /* 神马 充值缴费 有线电视和铁通 */
   {
     path: '/recharge/linetv',

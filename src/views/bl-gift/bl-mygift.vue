@@ -38,7 +38,7 @@
                                 <div class="caili-logo"></div>
                                 百联财礼
                             </div>
-                            <div class="state-detail"> 
+                            <div class="state-detail">
                               {{getMessage(sendItem.orderList[0].orderStatus)}}
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                                 <div class="caili-logo"></div>
                                 百联财礼
                             </div>
-                            <div class="state-detail"> 
+                            <div class="state-detail">
                                 {{sendItem.orderList[0].orderStatusDesc}}
                             </div>
                         </div>
@@ -130,7 +130,7 @@
                                 <div class="caili-logo"></div>
                                 百联财礼
                             </div>
-                            <div class="state-detail"> 
+                            <div class="state-detail">
                                 {{receiveItem.orderList[0].orderStatusDesc}}
                             </div>
                         </div>
@@ -172,7 +172,7 @@
                                 <div class="caili-logo"></div>
                                 百联财礼
                             </div>
-                            <div class="state-detail"> 
+                            <div class="state-detail">
                                 {{receiveItem.orderList[0].orderStatusDesc}}
                             </div>
                         </div>
@@ -226,7 +226,6 @@ export default {
   computed: {
   },
   created() {
-  	// window.$$vue = this;
     utils.isLogin().then(user => {
         let memberId = utils.ssdbGet('member_id')
         let memberToken = utils.ssdbGet('member_token')
