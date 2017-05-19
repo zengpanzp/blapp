@@ -83,7 +83,7 @@ export default {
   recharge: {
     // 虚拟充值 可充值产品查询接口
     queryPhoneGoodsDetail: params => {
-      return Vue.resource(baseUrl + '/kmgm/goods_detail').get(params)
+      return Vue.resource(baseUrl + '/kmgm/goods_detail.htm').get(params)
     },
     // 查询我的缴费分组
     queryMyGroup: params => {

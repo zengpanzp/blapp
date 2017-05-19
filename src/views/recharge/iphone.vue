@@ -136,8 +136,10 @@ export default {
         token: utils.ssdbGet('member_token'),
         mac: mac
       }
-      api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
-        let resData = data.body
+      api.recharge.queryPhoneGoodsDetail({
+        data: JSON.stringify(requestData)
+      }).then(data => {
+        let resData = JSON.parse(data.body.obj)
         let list = []
         for (let [index, val] of resData.sku.entries()) {
           list.push({
