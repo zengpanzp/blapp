@@ -1,7 +1,7 @@
 <template>
   <div class="collection">
     <bl-navbar class="collection-tab flex" v-model="tabsModel">
-      <bl-tab-item class="flex-item flex-c-m" v-for="({ jumpId, deployName }, index) in filterEleTabs" :id="index" @click.native="changeTab(index)"><span>{{ deployName }}</span></bl-tab-item>
+      <bl-tab-item class="flex-item flex-c-m" v-for="({ jumpId, deployName }, index) in filterEleTabs" :id="index" @click.native="changeTab(index, deployName)"><span>{{ deployName }}</span></bl-tab-item>
     </bl-navbar>
     <bl-tab-container v-model="tabsModel">
       <bl-tab-container-item id="0">
@@ -86,14 +86,24 @@ export default {
       default:
         this.tabsModel = '1'
     }
-    this.changeTab(this.tabsModel)
+    this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
     window.currentPageReload = this.currentPageReload
   },
   methods: {
     currentPageReload() {
       this.$router.go(0)
     },
-    changeTab(index) {
+    changeTab(index, deployName) {
+      // sensor analytics商品详情埋点
+      try {
+        console.log((new Date()).toLocaleString() + deployName)
+        sa.track('$pageview', {
+          pageId: 'APP_我的收藏_' + deployName,
+          categoryId: 'APP_User'
+        })
+      } catch (err) {
+        console.log("sa error => " + err);
+      }
       this.tabsModel = String(index)
       this.goodsLoading = true
       this.storesLoading = true
