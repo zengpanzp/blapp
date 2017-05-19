@@ -1,0 +1,132 @@
+@import "src/sass/tobe/function";
+/* 充值缴费首页样式 */
+.font-color-white {
+    color: #fff !important
+}
+.rates{
+  .next{
+    font-weight: 400;
+    width: rem(680);
+    margin-top: rem(50);
+    &.selected{
+      background: #3ea2ff;
+    }
+  }
+
+}
+@mixin common {
+  height: rem(60);
+  width:rem(60);
+  top:rem(10);
+}
+.content-wrap{
+  background: #fff;
+  padding: 0 rem(20);
+  margin: 0 auto;
+  font-family: arial;
+  color:#2a2a2a;
+  font-weight: 300;
+  .pay-remind {
+    height: rem(3);
+    line-height: rem(3);
+    padding: 0 rem(0.2375*31.25);
+    font-size: rem(.75*31.25);
+    color: #999;
+    margin-top: rem(50);
+    img{
+      width: rem(30);
+      vertical-align: sub;
+    }
+  }
+  .title{
+    height: rem(100);
+    line-height: rem(100);
+    font-size: rem(35);
+    padding-left: rem(70);
+  }
+  .billstatus{
+    background: url(../i/icons/icon_redwaittime.png);
+    background-repeat: no-repeat;
+    position: absolute;
+    background-position: right;
+    background-size: rem(28);
+    color:#e6133c;
+    top:rem(20);
+    right: rem(20);
+    padding-right:rem(38);
+    height: rem(60);
+    line-height: rem(60);
+  }
+  .billstatus.other{
+    background-image: url(../i/icons/icon_redpay.png);
+  }
+  .billstatus.finish{
+    color:#666;
+    background-image: url(../i/icons/icon-finish.png);
+  }
+  ul{
+    background: #fff;
+  }
+  .record-list{
+    margin-top: rem(30);
+  }
+
+  .name{
+    position: absolute;
+    right: rem(10);
+    top:0
+  }
+  li{
+    position: relative;
+    height: rem(100);
+    line-height: rem(100);
+    font-size: rem(30);
+    border-bottom:rem(1.5) solid #e7e7e7;
+    &:last-child{
+      border: none;
+    }
+    .btns{
+      float: right;
+      height: rem(60);
+      .btn{
+        min-width: rem(125);
+        text-align: center;
+        line-height: rem(60);
+        display: inline-block;
+        padding: 0 rem(15);
+        border-radius: rem(8) ;
+        border:rem(1) solid #c3c3c3;
+        @include common;
+        width: auto;
+        margin-right: rem(15);
+        &.selected{
+          color:#3ea2ff;
+          border:rem(1) solid #3ea2ff;
+          background:#ebf5ff;
+        }
+      }
+    }
+  }
+  .record-detail{
+    display: flex;
+    display: -webkit-flex;
+    span{
+      flex:1;
+      font-size: rem(28);
+      text-align: center;
+      color:#333;
+      &:first-child{
+        color:#666;
+        padding-left: rem(10);
+        text-align: left;
+      }
+      &:last-child{
+        text-align: right;
+        padding-right: rem(10);
+        color:#e6133c;
+        font-size: rem(26);
+      }
+    }
+  }
+}
+

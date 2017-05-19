@@ -273,7 +273,6 @@ export default {
     }
   },
   created() {
-  	window.$$vue = this;
     this.$loading.close();
     api.blgift.queryAdDeploy({
       'otherresource': {

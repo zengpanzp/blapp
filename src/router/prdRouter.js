@@ -105,7 +105,7 @@ export const prdRouter = [
     path: '/recharge/orderdetail',
       component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
   },
-  /* 神马 充值缴费 水费 type=1 */
+  /* 神马 充值缴费 水费 type=1 电费 2 煤气3 */
   {
     path: '/recharge/rates/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/rates')), 'rates'),
@@ -113,6 +113,11 @@ export const prdRouter = [
       {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
       {path: 'company'}
     ]
+  },
+  /* 神马 充值缴费 缴费记录  type=1 水费  2 电费  3煤气 */
+  {
+    path: '/recharge/records/:type',
+      component: r => require.ensure([], () => r(require('../views/recharge/records')), 'records')
   },
   /* 神马 充值缴费 有线电视和铁通 */
   {
@@ -155,7 +160,20 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   },
-  /* 陈鹏 我的收藏 */
+  /* 郭健 消息中心 */
+  {
+    path: '/messageCenter',
+    meta: {
+      title: '消息中心'
+    },
+    component: r => require.ensure([], () => r(require('../views/messageCenter/messageCenter')), 'messageCenter')
+  },
+  /* 郭健 消息中心 消息内容 */
+  {
+    path: '/messageList/:typeId/:title',
+    component: r => require.ensure([], () => r(require('../views/messageCenter/messageList')), 'messageList')
+  },
+  /* 薛天玲 我的收藏 */
   {
     path: '/myCollection',
     meta: {

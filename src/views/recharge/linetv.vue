@@ -35,7 +35,6 @@
     computed: {
     },
     created() {
-        window.$$vue = this;
         // 1位水费 2为电费 3为煤气费
         this.$loading.close();
     },
