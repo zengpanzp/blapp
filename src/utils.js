@@ -226,7 +226,7 @@ var hexcase = 0;
 var chrsz = 8;
 
 function md5_cmn(q, a, b, x, s, t) {
-    return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
+  return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
 }
 function md5_ff(a, b, c, d, x, s, t) {
   return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t);

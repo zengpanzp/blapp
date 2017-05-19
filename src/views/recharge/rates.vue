@@ -5,7 +5,7 @@
       <!--用来显示缴费分组-->
       <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
       <!--选择缴费机构-->
-      <bl-sortListView @click="getCompany" v-if="loadListView" :list="companyList"></bl-sortListView>
+      <bl-sort-list-view @click="getCompany" v-if="loadListView" :list="companyList"></bl-sort-list-view>
       <div class="content-wrap" v-show="toShow">
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
@@ -41,6 +41,10 @@
   export default {
 
     name: 'rates',
+
+    components: {
+      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
+    },
 
     data() {
       return {
