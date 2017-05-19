@@ -30,7 +30,7 @@
 }
 
 .new {
-	margin-top: rem(86.98);
+	// margin-top: rem(86.98);
 }
 
 .bgfa {
@@ -38,7 +38,7 @@
 }
 
 #mc div {
-    line-height: 1.5
+    line-height: 1
 }
 
 #mc a {
@@ -125,8 +125,10 @@
     background-color: #ffffff;
     padding-left: rem(9);
     overflow: hidden;
-    width: rem(694);
+    // width: rem(694);
     height: rem(166);
+    border-bottom: rem(2) solid #e9e9e9;
+    box-sizing: border-box;
 }
 
 #mc .list-block .item-content a {
@@ -166,14 +168,14 @@
 }
 
 #mc .list-block .item-content .item-media {
-    // width: 4.0625rem;
+    width: rem(117);
     -webkit-box-pack: center;
     -moz-box-pack: center;
     box-pack: center;
     -webkit-justify-content: center;
     -moz-justify-content: center;
     justify-content: center;
-    // height: 5rem;
+    height: rem(110);
     float: left;
     position: relative
 }
@@ -181,21 +183,21 @@
 #mc .list-block .item-content .item-media.red-cil:after {
     content: '';
     position: absolute;
-    top: rem(150);
-    right: 0;
+    top: rem(0);
+    right: rem(0);
     width: rem(32);
     height: rem(30);
     background-color: #E6133C;
-    border: 2px solid #FFFFFF;
+    border: 3px solid #FFFFFF;
     border-radius: 50%
 }
 
 #mc .list-block .item-content .item-media img {
-    width: rem(100)
+    width: rem(100);
 }
 
 #mc .list-block .item-content .item-inner {
-    padding: .875rem .625rem;
+    padding: rem(15) rem(20);
     overflow: hidden
 }
 
@@ -205,18 +207,19 @@
 
 #mc .list-block .item-content .item-inner .item-title-row .item-after {
     position: absolute;
-    right: 0;
+    right: rem(-15);
     top: 0;
-    font-size: .75rem;
+    font-size: rem(25);
     color: #999999;
-    line-height: 2.3
+    line-height: rem(20);
 }
 
 #mc .list-block .item-content .item-inner .item-subtitle {
     width: 100%;
-    font-size: .875rem;
+    font-size: rem(25);
+    font-family: "微软雅黑";
     color: #666666;
-    margin-top: .25rem;
+    margin-top: rem(20);
     overflow:hidden;
     text-overflow:ellipsis;
     display:-webkit-box;
@@ -225,8 +228,10 @@
 }
 
 #mc .list-block .item-content .item-inner .item-title {
-    font-size: 1.125rem;
-    color: #333333
+    font-size: rem(30);
+    color: #333333;
+    font-weight: rem(300);
+    font-family: "微软雅黑";
 }
 
 #mc .empty:before {
@@ -238,13 +243,16 @@
 }
 
 #mc .order-server-list {
-    margin: .625rem 0
+    margin: rem(18) 0
 }
 
 #mc .order-server-list .item-content {
-    margin-bottom: .6875rem;
+    margin-bottom: rem(18);
     background-color: #ffffff;
-    position: relative
+    position: relative;
+    font-family: "微软雅黑";
+    width: 100%;
+    overflow: hidden;
 }
 
 #mc .order-server-list .item-content:before {
@@ -308,36 +316,31 @@
     -webkit-justify-content: space-between;
     -moz-justify-content: space-between;
     justify-content: space-between;
-    height: 2.5rem;
-    padding: 0 .625rem
+    height: rem(70);
+    padding: 0 rem(20)
 }
 
 #mc .order-server-list .item-content .os-t-left {
-    font-size: 1rem;
+    font-size: rem(30);
     color: #333333
 }
 
 #mc .order-server-list .item-content .os-t-right {
-    font-size: .75rem;
-    color: #999999
+    font-size: rem(22);
+    color: #999999;
 }
 
 #mc .order-server-list .item-content .os-con {
-    padding: .625rem;
+    padding: rem(20);
     overflow: hidden;
     padding-top: 0
 }
 
-#mc .order-server-list .item-content .os-con.small-left .os-con-left {
-    width: 2.75rem;
-    height: 2.75rem
-}
-
 #mc .order-server-list .item-content .os-con-left {
-    width: 3.375rem;
-    height: 3.375rem;
+    width: rem(80);
+    height: rem(80);
     float: left;
-    margin-right: 1.0625rem
+    margin-right: rem(20)
 }
 
 #mc .order-server-list .item-content .os-con-left .lazy-box {
@@ -345,9 +348,10 @@
 }
 
 #mc .order-server-list .item-content .os-con-right {
-    font-size: .875rem;
+	margin-top: rem(10);
+    font-size: rem(25);
     color: #666666;
-    line-height: 1.6;
+    line-height: rem(40);
     text-overflow: ellipsis;
     word-break: break-all;
     display: -webkit-box;
@@ -357,10 +361,10 @@
 }
 
 #mc .os-detail {
-    padding: 0 .625rem;
+    padding: 0 rem(20);
     font-size: .875rem;
     color: #666666;
-    height: 2.125rem;
+    height: rem(60);
     -webkit-box-pack: justify;
     -moz-box-pack: justify;
     box-pack: justify;
@@ -368,18 +372,18 @@
     -moz-justify-content: space-between;
     justify-content: space-between;
     position: relative;
-    border: none;
+    border-top: none;
     background-image: linear-gradient(0deg, #E9E9E9, #E9E9E9 50%, transparent 50%);
     background-position: top;
     background-repeat: no-repeat;
     background-origin: content-box;
-    background-size: 100% 1px;
+    background-size: 100% rem(5);
     background-origin: content-box;
-    overflow: hidden
+    overflow: hidden;
 }
 
 #mc .os-detail a {
-    font-size: .875rem;
+    font-size: rem(24);
     color: #666666;
     display: block;
     width: 100%
@@ -395,7 +399,7 @@
 #mc .arrow-right {
     background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAABOCAYAAABmKpU2AAAABGdBTUEAALGPC/xhBQAAAbhJREFUaAXV2m2qwjAQhWHrlu4vV6euzl93Tcq0tDS0zefMmTMBUWm072MNQvB2K4zP5/8lt8I0t8NT7sxL+Pe5zJnej8ffKzff49glII1f0/gQp4DzeE7EAZCP50MkgLp4LsQGaIvnQcyAvngOxDQW74+4rwlj99/n8kGMvUvPqxW+QvvT4n8nBhfxPn59jEVsADm9znqQd8IhEkBExAEQDXEKiIS4BERBZAEREEUAO6IKwIyoBrAimgCMiGYAG6ILwIToBrAghgAMiGGAN0IF4IlQA3ghVAEeCHUAGmECQCLMACiEKQCBMAdYIyAASwQMYIWAAiwQcIA2Qml3WrJ8BvwKaO+/QgHa8XLNYQCLeBjAKh4CsIw3B1jHmwIQ8WYAVLwJABmvDkDHqwI84tUAXvEqAM/4YYB3/BCAIb4bwBLfBWCKbwawxTcBGOOrAazxVQDm+CKAPT4LiBB/CYgSfwqIFH8ARItPABHjN0DU+BkQOV4ASrvTuD+6SvR+zHujY1fBL14g2+ZuH8I3PgHIkzaEf/wBUI/giD8FlBE88ZeAawRXfBZwRPDFS2NxyMJeFndxqsuEH4tPxqbFJk0FAAAAAElFTkSuQmCC') no-repeat right center;
     background-origin: content-box;
-    background-size: auto .8125rem
+    background-size: auto rem(25)
 }
 
 #mc .arrow-right {
@@ -531,7 +535,7 @@
     color: #999 !important
 }
 
-#mc .padding-list .item-content.end .lazy-box:before {
+#mc .item-content.end .lazy-box:before {
     content: '';
     position: absolute;
     z-index: 9;
@@ -542,7 +546,7 @@
     background-color: rgba(0, 0, 0, 0.5)
 }
 
-#mc .padding-list .item-content.end .lazy-box .over-end {
+#mc .item-content.end .lazy-box .over-end {
     -webkit-box-pack: center;
     -moz-box-pack: center;
     box-pack: center;
@@ -553,37 +557,40 @@
     z-index: 999;
     left: 50%;
     top: 50%;
-    font-size: .75rem;
+    font-size: rem(25);
     color: #FFFFFF;
     text-align: center;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%)
 }
 
-#mc .padding-list .item-content.end .lazy-box .over-end h2 {
-    font-size: 1.125rem;
-    color: #ffffff
+#mc .item-content.end .lazy-box .over-end h2 {
+    font-size: rem(30);
+    color: #ffffff;
 }
 
-#mc .padding-list .item-content.end .lazy-box .over-left,
-#mc .padding-list .item-content.end .lazy-box .over-right {
-    width: 1.125rem;
-    height: 2.5rem;
-    border-width: .1875rem 0 .1875rem .1875rem;
+#mc .item-content.end .lazy-box .over-left,
+#mc .item-content.end .lazy-box .over-right {
+    width: rem(30);
+    height: rem(70);
+    border-width: rem(5) 0 rem(5) rem(5);
     border-color: #FFFFFF;
-    border-style: solid
+    border-style: solid;
+    float: left;
 }
 
-#mc .padding-list .item-content.end .lazy-box .over-right {
-    border-width: .1875rem .1875rem .1875rem 0
+#mc .item-content.end .lazy-box .over-right {
+    border-width: rem(5) rem(5) rem(5) 0
 }
 
-#mc .padding-list .item-content.end .lazy-box .over-con {
-    margin: 0 1.6875rem;
-    line-height: 1.2
+#mc .item-content.end .lazy-box .over-con {
+    margin: 0 rem(60);
+    line-height: 1.2;
+    float: left;
 }
 
 #mc .padding-list .item-content .pl-title {
+	color: red;
     height: 3.125rem;
     -webkit-box-pack: justify;
     -moz-box-pack: justify;
@@ -629,17 +636,17 @@
     right: 0;
     top: 0;
     bottom: 0;
-    -webkit-transform: translate(100%);
-    transform: translate(100%);
+    // -webkit-transform: translate(100%);
+    // transform: translate(100%);
     font-size: 0;
-    width: 8.125rem
+    width: rem(236)
 }
 
 #mc .swiper-owern .vebtn {
     height: 100%;
-    width: 4.0625rem;
+    width: rem(118);
     background-color: #CCCCCC;
-    font-size: .875rem;
+    font-size: rem(30);
     color: #FFFFFF;
     display: -webkit-inline-box;
     display: -moz-inline-box;
@@ -818,7 +825,7 @@
 
 .new .newsList {
     background: #fff;
-    border: rem(2) solid #e9e9e9
+    border: rem(2) solid #e9e9e9;
 }
 
 .new .newsList li {

@@ -152,14 +152,6 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   },
-  /* 郭健 联通专区 */
-  {
-    path: '/unicom',
-    meta: {
-      title: '联通专区'
-    },
-    component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
-  },
   /* 郭健 消息中心 */
   {
     path: '/messageCenter',
@@ -167,5 +159,10 @@ export const prdRouter = [
       title: '消息中心'
     },
     component: r => require.ensure([], () => r(require('../views/messageCenter/messageCenter')), 'messageCenter')
-  }
+  },
+  /* 郭健 消息中心 消息内容 */
+  {
+    path: '/messageList/:typeId/:title',
+    component: r => require.ensure([], () => r(require('../views/messageCenter/messageList')), 'messageList')
+  },
 ]
