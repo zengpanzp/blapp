@@ -22,11 +22,13 @@
         </div>
       </bl-tab-container-item>
       <bl-tab-container-item id="1">
-        <div class="shop-box" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
+        <div :class="{'shop-box': storeList && storeList.length}" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
-            <div class="shop-item flex-c-m"  v-for="item in storeList" @click="storesDtail">
+            <div class="shop-item flex-c-m" v-for="item in storeList" @click="storesDtail(item.shopId, item.issueOrgId)">
               <div class="shop-item-icon flex-c-m">
-                <svg class="icon"><use xlink:href="#icon-aixin2"></use></svg>
+                <svg class="icon">
+                  <use xlink:href="#icon-aixin2"></use>
+                </svg>
               </div>
               <div class="flex-item">
                 <div class="shop-title">{{ item.shopName }}</div>
@@ -43,7 +45,6 @@
     </bl-tab-container>
   </div>
 </template>
-
 <script>
 import api from 'src/api'
 import utils from 'src/utils'
@@ -51,7 +52,7 @@ export default {
 
   name: 'collection',
 
-  data () {
+  data() {
     return {
       memberToken: null,
       pageNum: 1,
@@ -62,56 +63,72 @@ export default {
       goodsLoading: true,
       storesLoading: true,
       tabsModel: '0',
-      deployName: null,
-      filterEleTabs: [
-        {
-          deployName: '我收藏的商品',
-        },
-        {
-          deployName: '我收藏的门店',
-        }
-      ],
+      filterEleTabs: [{
+        deployName: '我收藏的商品',
+        jumpId: 'goods'
+      }, {
+        deployName: '我收藏的门店',
+        jumpId: 'stores'
+      }],
       list: [],
       storeList: []
     };
   },
   mounted() {
-    // alert(this.$route.query.deployName)
-    console.log(this.$route)
-    this.deployName = this.$route.query.deployName;
     let deployName = this.$route.query.deployName
-    if (deployName) {
-      debugger
-      if (deployName == 'goods') {
+    switch (deployName) {
+      case 'goods':
         this.tabsModel = '0'
-      } else if (deployName == 'stores') {
+        break;
+      case 'stores':
         this.tabsModel = '1'
-      } else {
-        this.tabsModel = '0'
-      }
+        break;
+      default:
+        this.tabsModel = '1'
     }
     this.changeTab(this.tabsModel)
+    window.currentPageReload = this.currentPageReload
   },
   methods: {
+    currentPageReload() {
+      this.$router.go(0)
+    },
     changeTab(index) {
-      this.busy = true
-      this.busyStore = true
       this.tabsModel = String(index)
+      this.goodsLoading = true
+      this.storesLoading = true
+      this.list = []
+      this.storeList = []
+      this.pageNum = 1
+      this.storePage = 1
       if (index == '0') {
         this.loadGoods()
+        this.$router.push({
+          path: '/myCollection',
+          query: {
+            deployName: 'goods'
+          }
+        })
       }
       if (index == '1') {
         this.loadStores()
+        this.$router.push({
+          path: '/myCollection',
+          query: {
+            deployName: 'stores'
+          }
+        })
       }
     },
     loadGoods() {
+      console.log('goods')
       this.busy = true
       let temp = []
       utils.isLogin().then(data => {
         let memberToken = data.member_token
         api.userCenter.queryFavorites({
           member_token: memberToken,
-          currentPage: Number(this.pageNum ++)
+          currentPage: Number(this.pageNum++)
         }).then(data => {
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
@@ -123,11 +140,11 @@ export default {
                 temp.push(item.productId)
               }
               let request = {
-                 productIds: temp.join(','),
-                 channel: "1",
-                 pageNo: 1,
-                 pageSize: "10",
-                 isFilterCommons: "true"
+                productIds: temp.join(','),
+                channel: "1",
+                pageNo: 1,
+                pageSize: "10",
+                isFilterCommons: "true"
               }
               api.userCenter.searchProductByIds({
                 clientIp: "0:0:0:0:0:0:0:1",
@@ -148,10 +165,12 @@ export default {
                 this.$loading.close()
               })
             } else {
+              this.$loading.close()
               this.goodsLoading = false
+                // this.$toast('没有收藏的商品')
             }
           } else {
-            this.$toast('')
+            this.$loading.close()
           }
         }).then(err => {
           console.log(err)
@@ -162,41 +181,45 @@ export default {
       this.busyStore = true
       utils.isLogin().then(data => {
         let memberToken = data.member_token
-        let currentPage = Number(this.storePage ++)
+        let currentPage = Number(this.storePage++)
         api.userCenter.queryShopFavorites({
-        member_token: memberToken,
-        currentPage: currentPage
-      }).then(data => {
-        this.$loading.close()
-        console.log(data)
-        this.currentPage = currentPage
-        let storeList = JSON.parse(data.body.obj).list
-        let totalPageNum = JSON.parse(data.body.obj).pages
-        console.log(storeList)
-        // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
-        if (currentPage <= totalPageNum) {
-           if (storeList && storeList.length) {
-          this.storeList = this.storeList.concat(storeList)
-          this.busyStore = false
-          } else {
-            this.busyStore = true
-            this.storesLoading = false
-          }
-        } else {
-          this.storesLoading = false
+          member_token: memberToken,
+          currentPage: currentPage
+        }).then(data => {
           this.$loading.close()
-        }
-       })
+          console.log(data)
+          this.currentPage = currentPage
+          let storeList = JSON.parse(data.body.obj).list
+          let totalPageNum = JSON.parse(data.body.obj).pages
+          console.log(storeList)
+            // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
+          if (currentPage <= totalPageNum) {
+            if (storeList && storeList.length) {
+              this.storeList = this.storeList.concat(storeList)
+              this.busyStore = false
+            } else {
+              this.busyStore = true
+              this.storesLoading = false
+            }
+          } else {
+            this.storesLoading = false
+            this.$loading.close()
+              // this.$toast('没有收藏的门店')
+          }
+        })
       })
     },
-    storesDtail() {
-      let params = JSON.stringify({message: "001104", storeType: "1010", storeId: "0"})
+    storesDtail(message, storeType) {
+      let params = JSON.stringify({
+        message: message,
+        storeType: storeType
+      })
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'orselet',
-          params: params})
+        pageId: 'orselet',
+        params: params
+      })
     }
   },
-  };
+};
 </script>
-
 <style lang="scss" src="./css/collection.scss" scoped></style>

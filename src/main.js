@@ -12,8 +12,10 @@ import bluer from './vue-bluer'
 
 Vue.use(infiniteScroll)
 
+import 'src/utils'
+import 'src/api'
+import 'src/const'
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
-
 // FastClick 调用
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
@@ -30,13 +32,13 @@ Vue.use(VueLazyload, {
 
 Vue.use(bluer)
 
-Vue.filter('limitFixed', function (value, num = 0) {
+Vue.filter('limitFixed', function(value, num = 0) {
   return parseFloat(value).toFixed(num)
 })
-Vue.filter('limitLength', function (value, num) {
+Vue.filter('limitLength', function(value, num) {
   return String(value).slice(0, num)
 })
-Vue.filter('stringSpace', function (value, num = 4) {
+Vue.filter('stringSpace', function(value, num = 4) {
   let t = ''
   let l = String(value)
   for (let i = 0; i < l.length; i++) {
@@ -94,7 +96,7 @@ Vue.directive('scroll-fixed', function(el) {
 /* 返回顶部指令 */
 Vue.directive('scroll-top', {
 
-  bind: function (el, binding) {
+  bind: function(el, binding) {
     let ducDiv = document.createElement('div')
     let winHeight = document.documentElement.clientHeight
     let oEl = binding.modifiers.window ? document.body : el
@@ -127,7 +129,7 @@ Vue.directive('scroll-top', {
 /* 跳转到native商品详情页指令 */
 Vue.directive('go-native-goods-detail', {
 
-  bind: function (el, binding) {
+  bind: function(el, binding) {
     let args = {
       goodsid: binding.value.goodsId,
       goodsName: binding.value.goodsMsg,
@@ -147,7 +149,7 @@ Vue.directive('go-native-goods-detail', {
 /* 资源位跳转 */
 Vue.directive('go-native-resource', {
 
-  bind: function (el, binding) {
+  bind: function(el, binding) {
     el.addEventListener('click', function() {
       window.CTJSBridge.LoadMethod('BLAdvertResource', 'BLAdvertResourceController', binding.value)
     }, false)
@@ -161,7 +163,7 @@ Vue.directive('go-native-resource', {
  * @DateTime 2017-03-10T20:53:14+0800
  * @param    {Function}               fn   [加载成功的回调]
  * @param    {[Obj]}                 link  [link标签元素]
- * @return   {[Boolean]}                      [加载成功返回true，失败返回false]
+ * @return   {[Boolean]}             [加载成功返回true，失败返回false]
  */
 const cssReady = (fn, link) => {
   let d = document
@@ -171,6 +173,7 @@ const cssReady = (fn, link) => {
   let l = d.getElementsByTagName('link');
   // passed link or last link node
   link || (link = l[l.length - 1]);
+
   function check() {
     try {
       return link && link[s] && link[s][r] && link[s][r][0]
@@ -191,15 +194,15 @@ const cssReady = (fn, link) => {
  *  避免多个jsBridgeReady的时候出现死循环
  */
 const jsBridgeReady = (flag, isWeb = false, calback) => {
-      window[flag] = setInterval(function() {
-      if (window.CTJSBridge || isWeb) {
-        clearInterval(window[flag]);
-        return calback()
-      }
-      // } else {
-      //   document.addEventListener('BLBridgeReady', calback, false)
-      // }
-    }, 50);
+  window[flag] = setInterval(function() {
+    if (window.CTJSBridge || isWeb) {
+      clearInterval(window[flag]);
+      return calback()
+    }
+    // } else {
+    //   document.addEventListener('BLBridgeReady', calback, false)
+    // }
+  }, 50);
 }
 var u = navigator.userAgent;
 var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
@@ -240,7 +243,7 @@ jsBridgeReady("_maiDian", false, () => {
 })
 
 let linkCssObj = document.getElementById('classLink')
-// 登录拦截
+  // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
   if (document.querySelectorAll('.ant-transparent.white-bg').length === 0) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
@@ -271,7 +274,6 @@ router.beforeEach(({ meta, path }, from, next) => {
     }
   })
 })
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

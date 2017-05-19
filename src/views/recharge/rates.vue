@@ -5,14 +5,14 @@
       <!--用来显示缴费分组-->
       <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
       <!--选择缴费机构-->
-      <bl-sortListView @click="getCompany" v-if="loadListView" :list="companyList"></bl-sortListView>
+      <bl-sort-list-view @click="getCompany" v-if="loadListView" :list="companyList"></bl-sort-list-view>
       <div class="content-wrap" v-show="toShow">
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
             <li @click.prevent="showCategory">选择缴费分组
               <div class="name"><label>{{receiveGroupItem.groupName}}</label><img class="more" src="./i/iphone/more.png"></div>
             </li>
-            <!--	</ul>
+            <!--  </ul>
             </div>-->
             <!--<div class='pay-remind'><img src='images/new_store/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>-->
             <!--<div class='dummy-goods-list line-tv-box'>
@@ -43,6 +43,10 @@
   export default {
 
     name: 'rates',
+
+    components: {
+      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
+    },
 
     data() {
       return {
@@ -211,4 +215,3 @@
     }
   };
 </script>
-
