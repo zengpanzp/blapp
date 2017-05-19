@@ -1,0 +1,119 @@
+@import "src/sass/tobe/function";
+.content{
+    position: relative;
+    padding-top: rem(88);
+}
+.title-select{
+    width: 0;
+    height: 0;
+    border-left: rem(8) solid transparent;
+    border-right: rem(8) solid transparent;
+    border-top: rem(10) solid #000000;
+    margin-left: rem(7);
+}
+.order-list{
+    li{
+        background: #FFFFFF;
+        padding: 0 rem(30);
+        border-bottom: 1px solid #E7E7E7;
+        margin-bottom: rem(20);
+        .order-top{
+            @extend %comm-flex;
+            @include justify-content(space-between);
+            height: rem(80);
+            border-bottom: 1px solid #E7E7E7;
+            img{
+                vertical-align: top;
+            }
+        }
+        .top-detail{
+            @extend %comm-flex;
+            font-size: rem(24);
+            line-height: 1;
+        }
+        .order-logo{
+            width: rem(23);
+            margin-right: rem(12);
+        }
+        .order-handle{
+            margin-right: rem(18);
+            img{
+                width: rem(24);
+            }
+        }
+        .order-body{
+            padding: rem(20) 0;
+            overflow: hidden;
+            border-bottom: 1px solid #E7E7E7;
+        }
+        .class-logo{
+            width: rem(150);
+            height: rem(150);
+            position: relative;
+            border-radius: rem(4);
+            overflow: hidden;
+            float: left;
+            margin-right: rem(20);
+        }
+        .class-text{
+            position: absolute;
+            bottom: 0;
+            background: rgba(0,0,0,.69);
+            height: rem(40);
+            line-height: rem(40);
+            text-align: center;
+            left: 0;
+            right: 0;
+            color: #ffffff;
+            font-size: rem(24);
+        }
+        .pay-name{
+            font-size: rem(24);
+            overflow: hidden;
+            max-width: rem(500);
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin-bottom: rem(14);
+        }
+        .pay-detail{
+            overflow: hidden;
+            font-size: rem(24);
+        }
+        .order-bottom{
+            height: rem(94);
+            @extend %comm-flex;
+            @include justify-content(space-between);
+        }
+        .all-bill{
+            font-size: rem(24);
+            span{
+                font-size: rem(28);
+            }
+        }
+        .order-button{
+            button{
+                width: rem(150);
+                height: rem(54);
+                border: 1px solid #E7E7E7;
+                border-radius: rem(4);
+                background: none;
+                outline: none;
+                font-size: rem(24);
+                white-space: nowrap;
+            }
+        }
+        .red-button{
+            button{
+                border: 1px solid #F5BAC5;
+                color: #E6133C;
+            }
+        }
+        .special-name{
+            @include clamp(2);
+            height: rem(72);
+            font-size: rem(24);
+            line-height: rem(36);
+
+        }
+    }
+}

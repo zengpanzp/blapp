@@ -1,0 +1,80 @@
+@import "src/sass/tobe/function";
+/* 游戏充值 */
+
+.category-content{
+  ul{
+    margin-top: rem(20);
+    padding: 0 rem(20);
+    background: #fff;
+  }
+  li {
+    height: rem(90);
+    line-height: rem(90);
+    font-size: rem(28);
+    position: relative;
+    div {
+      border-bottom: rem(2) solid #ddd;
+    }
+    label {
+      margin-left: rem(60);
+    }
+    .select {
+      width: rem(40);
+      height: rem(40);
+      position: absolute;
+      top: rem(25);
+      background-image: url(../i/iphone/unselected2.png);
+      background-size: rem(40) rem(40);
+    }
+    .select.sel{
+      background-image: url(../i/iphone/circle.jpg);
+    }
+    .del {
+      width: rem(40);
+      position: absolute;
+      right: rem(85);
+      top: rem(25);
+    }
+    .edit {
+      width: rem(40);
+      position: absolute;
+      right: rem(10);
+      top: rem(25);
+    }
+    &.spe{
+      padding:0;
+      background:#F8F8F8;
+      height: rem(20);
+    }
+  }
+  .next{
+    font-weight: 400;
+    width: rem(680);
+    margin-top: rem(50);
+    &.selected{
+      background: #3ea2ff;
+    }
+  }
+  .addNew{
+    background: #fff;
+    display: block;
+    height: rem(90);
+    line-height: rem(90);
+    position: relative;
+    font-size: rem(28);
+    margin-top: rem(20);
+    padding:0 rem(20);
+    input{
+      margin-left: rem(25);
+      width: rem(530);
+    }
+    label {
+      margin-left: rem(60);
+    }
+    .select {
+      width: rem(40);
+      position: absolute;
+      top: rem(25);
+    }
+  }
+}

@@ -9,28 +9,24 @@
       "id": 1,
       "meta": {}
     },
-    "../node_modules/vue-lazyload/vue-lazyload.es5.js": {
+    "../node_modules/vue-infinite-scroll/vue-infinite-scroll.js": {
       "id": 2,
       "meta": {}
     },
-    "../node_modules/vue-popup/lib/index.js": {
+    "../node_modules/vue-lazyload/vue-lazyload.es5.js": {
       "id": 3,
       "meta": {}
     },
-    "../node_modules/vue-resource/dist/vue-resource.common.js": {
+    "../node_modules/vue-popup/lib/index.js": {
       "id": 4,
       "meta": {}
     },
-    "../node_modules/vue-router/dist/vue-router.common.js": {
+    "../node_modules/vue-resource/dist/vue-resource.common.js": {
       "id": 5,
       "meta": {}
     },
-    "../node_modules/vuex/dist/vuex.js": {
+    "../node_modules/vue-router/dist/vue-router.common.js": {
       "id": 6,
-      "meta": {}
-    },
-    "../node_modules/webpack/buildin/global.js": {
-      "id": 7,
       "meta": {}
     }
   }

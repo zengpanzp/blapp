@@ -46,7 +46,10 @@ module.exports = {
 	        "pointsValue": 0,
 	        "showOrder": 1,
 	        "signinAcquire": "1",
-	        "validType": "0"
+	        "validType": "0",
+	        "obj": {
+	        	"hjk": 'fghj'
+	        }
       	}
     )
   }

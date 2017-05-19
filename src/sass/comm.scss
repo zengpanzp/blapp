@@ -8,12 +8,13 @@
   fill: currentColor;
   overflow: hidden;
 }
-body{
+body,html{
   background-color: #F8F8F8;
-  position: relative;
-  height: 100%;
+  min-height: 100%;
 }
-
+#app{
+  min-height: 100%;
+}
 /* 全屏空白div */
 .ant-transparent{
   position: fixed;
@@ -31,6 +32,10 @@ body{
 }
 .flex{
   @extend %display-flex;
+}
+.flex-item{
+  @include flex(1);
+  width: 0;
 }
 .flex-c-m{
   @extend %display-flex;
