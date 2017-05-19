@@ -148,10 +148,12 @@ export default {
                 this.$loading.close()
               })
             } else {
+              this.$loading.close()
               this.goodsLoading = false
+              // this.$toast('没有收藏的商品')
             }
           } else {
-            this.$toast('')
+            this.$loading.close()
           }
         }).then(err => {
           console.log(err)
@@ -185,6 +187,7 @@ export default {
         } else {
           this.storesLoading = false
           this.$loading.close()
+          // this.$toast('没有收藏的门店')
         }
        })
       })
