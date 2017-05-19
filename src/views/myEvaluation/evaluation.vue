@@ -16,9 +16,9 @@
           <div class="goods-text" v-if="type == '00'||item.isvalid == -1">评价+晒单最多可获得30积分</div>
           <div class="goods-text" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">评价+晒单最多可获得20积分</div>
           <div class="goods-btn-group">
-            <bl-button type="outlineMain" inline size="small" v-if="type == '00'||item.isvalid == -1">评价晒单</bl-button>
-            <bl-button type="outlineMain" inline size="small" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">追加晒单</bl-button>
-            <bl-button type="outlineMain" inline size="small" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'">
+            <bl-button type="outlineMain" inline size="small" @click="$router.push({name: 'goodComment',params: { order: item.orderNo,product: item.product}})" v-if="type == '00'||item.isvalid == -1">评价晒单</bl-button>
+            <bl-button type="outlineMain" inline size="small" @click="$router.push({name: 'againComment', params: { comId: item.id,type: 'pic',product: item.product}})" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">追加晒单</bl-button>
+            <bl-button type="outlineMain" inline size="small" @click="$router.push({ name: 'seeComment', params: { comId: item.id,type: 'show',product: item.product } })" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'">
               查看评价
             </bl-button>
             <bl-button type="outlineMain" inline size="small"v-else>
@@ -46,6 +46,7 @@ export default {
   data () {
     return {
       memberId: '',
+      loginflag: true,
       noRows: false,
       loading: true,
       tabsModel: '0',
@@ -84,6 +85,7 @@ export default {
   },
   created() {
     this.memberId = utils.ssdbGet('member_id')
+    this.loginflag = true
     api.queryAdDeploy({
       otherresource: {
         resourceId: "1223,1225"
@@ -179,7 +181,8 @@ export default {
                                 productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
                                 supplyId: resRow[i].dshh,
                                 merchantName: resRow[i].shopId,
-                                tags: resRow[i].tags
+                                tags: resRow[i].tags,
+                                comment: resRow[i]
                             }).replace(/[\ud800-\udfff]/g, ''))
                         }
                         this.list = this.list.concat(good)
@@ -213,7 +216,128 @@ export default {
       }, err => {
         console.log(err)
       })
-    }
+    },
+    // 设置评论
+    getData: () => {
+            let name = "匿名用户";
+            if (this.attributes.isAnony != "01") {
+                name = this.attributes.nickName;
+                if (!name) {
+                    name = this.attributes.username;
+                    let temp = "";
+                    if (name) {
+                        if (name.length == 2) {
+                            temp = name.charAt(0).toString() + "*";
+                        } else if (name.length > 2) {
+                            temp = name.charAt(0).toString();
+                            for (let i = 1; i < name.length - 1; i++) {
+                                temp += "*";
+                            }
+                            temp += name.charAt(name.length - 1).toString()
+                        }
+                        name = temp;
+                    } else {
+                        name = this.attributes.mobile;
+                        if (name && name.length == 11) {
+                            temp = name.substring(0, 3) + "****" + name.substring(7, 11);
+                        }
+                        name = temp;
+                    }
+                }
+            }
+            let content = "此用户没有填写评论！";
+            if (this.attributes.isAuto == '01') {
+                content = "好评!";
+            }
+            if (this.attributes.comments != '') {
+                content = this.attributes.comments;
+            }
+            if (this.attributes.isAuto != '01' && !this.attributes.comments && this.attributes.tags) {
+                content = 'notShow';
+            }
+
+            let reason = [];
+            if (this.attributes.dscore <= 3) {
+                reason.push('产品质量');
+            }
+            if (this.attributes.qscore <= 3) {
+                reason.push('描述相符');
+            }
+            if (this.attributes.lscore <= 3) {
+                reason.push('物流配送');
+            }
+            if (this.attributes.sscore <= 3) {
+                reason.push('服务态度');
+            }
+
+            let hasVote = false;
+            if (this.attributes.isLike) {
+                if (this.attributes.isLike == '01') {
+                    hasVote = true;
+                }
+            } else {
+                if (this.attributes.votes_user) {
+                    for (let i = 0; i < this.attributes.votes_user.length; i++) {
+                        if (this.loginflag && this.attributes.votes_user[i] == this.memberId) {
+                            hasVote = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            let picMinURLS = [];
+            let picMaxURLS = [];
+            let allPicMinURLS = [];
+            let allPicMaxURLS = [];
+            let twoSet = false;
+            if (this.attributes.pictures) {
+                for (let i = 0; i < this.attributes.pictures.length; i++) {
+                    if (this.attributes.pictures[i].imgMin && this.attributes.pictures[i].imgMax) {
+                        allPicMinURLS.push(this.attributes.pictures[i].imgMin);
+                        allPicMaxURLS.push(this.attributes.pictures[i].imgMax);
+                        if (this.attributes.pictures[i].isvalid == "01") {
+                            picMinURLS.push(this.attributes.pictures[i].imgMin);
+                            picMaxURLS.push(this.attributes.pictures[i].imgMax);
+                        }
+                        twoSet = true;
+                    } else {
+                        allPicMinURLS.push(this.attributes.pictures[i].url);
+                        if (this.attributes.pictures[i].isvalid == "01") {
+                            picMinURLS.push(this.attributes.pictures[i].url);
+                        }
+                    }
+                }
+            }
+            if (!twoSet) {
+                allPicMaxURLS = allPicMinURLS;
+                picMaxURLS = picMinURLS;
+            }
+            return {
+                id: this.attributes.id,
+                username: name,
+                datetime: this.attributes.datetime,
+                score: parseInt(this.attributes.score),
+                reason: reason,
+                content: content,
+                votes: this.attributes.votes ? this.attributes.votes : {good: 0, bad: 0},
+                tags: this.attributes.tags,
+                hasVote: hasVote,
+                ip: this.attributes.ip,
+                isReply: this.attributes.isreply != "00",
+                reply: this.attributes.reply,
+                isAgain: this.attributes.isCanZP,
+                commentAgain: this.attributes.commentAgain,
+                headPic: this.attributes.headPic,
+                pictures: this.attributes.pictures,
+                validURLS: picMinURLS,
+                allURLS: allPicMinURLS,
+                validPicList: encodeURIComponent(JSON.stringify(picMaxURLS)),
+                allPicList: encodeURIComponent(JSON.stringify(allPicMaxURLS)),
+                isAnony: this.attributes.isAnony,
+                orderTime: this.attributes.orderTime
+            };
+        }
   },
   beforeRouteEnter (to, from, next) {
     utils.isLogin().then(user => {
