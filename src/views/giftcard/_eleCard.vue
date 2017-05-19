@@ -51,20 +51,23 @@ export default {
       inputData: undefined
     };
   },
-
   watch: {
     'inputData'(val) {
-      let mathReg = /^(10|[1-9]\d\d?|1000)$/;
-      if (mathReg.test(val)) {
-        this.inputData = val
-      } else {
-        this.$toast('请输入10到1000的整数!')
+      if (val) {
+        if (val.length == 1 && val == 0) {
+            this.inputData = String(val).replace(0, '')
+            return
+        }
+        if (val <= 10 || val >= 1000) {
+          this.$toast('请输入10-1000的整数!')
+        }
+        this.inputData = String(val).replace(/\D/g, '').replace('.', '');
       }
     }
   },
   methods: {
     addCart() {
-      if (this.inputData) {
+      if (this.inputData >= 10 && this.inputData <= 1000) {
         utils.isLogin().then(data => {
           let memberId = utils.ssdbGet('member_id')
           let memberToken = utils.ssdbGet('member_token')
@@ -94,7 +97,7 @@ export default {
           })
         }, () => {})
       } else {
-        this.$toast('面额不能为空!')
+        this.$toast('请输入10-1000的整数!')
       }
     },
     sup() {
