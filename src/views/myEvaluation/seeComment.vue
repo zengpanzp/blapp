@@ -57,12 +57,12 @@
             </div>
         </div>
         <div class="hr1"></div>
+        <footer>
+            <div class="fixedMainbtn commentSubmit">
+                <button id="submit" type="submit" class="btn-1">发表晒单</button>
+            </div>
+        </footer>
     </div>
-    <footer>
-        <div class="fixedMainbtn commentSubmit">
-            <button id="submit" type="submit" class="btn-1">发表晒单</button>
-        </div>
-    </footer>
 </template>
 
 <script>
