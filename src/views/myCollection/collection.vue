@@ -22,7 +22,7 @@
         </div>
       </bl-tab-container-item>
       <bl-tab-container-item id="1">
-        <div class="shop-box" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
+        <div :class="{'shop-box': storeList && storeList.length}" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
             <div class="shop-item flex-c-m" v-for="item in storeList" @click="storesDtail(item.shopId, item.issueOrgId)">
               <div class="shop-item-icon flex-c-m">
