@@ -100,6 +100,7 @@ export default {
       this.list = []
       this.storeList = []
       this.pageNum = 1
+      this.storePage = 1
       if (index == '0') {
         this.loadGoods()
         this.$router.push({
