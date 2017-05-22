@@ -81,20 +81,21 @@ export default {
   },
   messageCenter: {
     // 查询消息类型
-  loadMsgType: params => {
-    return Vue.http.post(baseUrl + '/dict/listByTypes.htm', params);
-  },
-  // 查询第一条消息
-  getCount: params => {
-    return Vue.http.post(baseUrl + '/send/findStationMsgByType.htm', params);
-  },
-  // 查询具体消息内容
-  getMessage: params => {
-    return Vue.http.post(baseUrl + '/send/findByPage.htm', params);
-  },
-  // 对消息进行操作
-  operateMessage: params => {
-    return Vue.http.post(baseUrl + '/send/operationMsg.htm', params);
+    loadMsgType: params => {
+      return Vue.http.post(baseUrl + '/dict/listByTypes.htm', params);
+    },
+    // 查询第一条消息
+    getCount: params => {
+      return Vue.http.post(baseUrl + '/send/findStationMsgByType.htm', params);
+    },
+    // 查询具体消息内容
+    getMessage: params => {
+      return Vue.http.post(baseUrl + '/send/findByPage.htm', params);
+    },
+    // 对消息进行操作
+    operateMessage: params => {
+      return Vue.http.post(baseUrl + '/send/operationMsg.htm', params);
+    }
   },
   // 虚拟充值缴费的所有接口
   recharge: {
@@ -142,6 +143,5 @@ export default {
   // 查询评价数量
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
->>>>>>> master
   }
 }
