@@ -65,9 +65,11 @@ export default {
       tabsModel: '0',
       filterEleTabs: [{
         deployName: '我收藏的商品',
+        saName: '商品',
         jumpId: 'goods'
       }, {
         deployName: '我收藏的门店',
+        saName: '门店',
         jumpId: 'stores'
       }],
       list: [],
@@ -94,11 +96,12 @@ export default {
       this.$router.go(0)
     },
     changeTab(index, deployName) {
+      let saName = this.filterEleTabs[this.tabsModel].saName
       // sensor analytics商品详情埋点
       try {
         console.log((new Date()).toLocaleString() + deployName)
         sa.track('$pageview', {
-          pageId: 'APP_我的收藏_' + deployName,
+          pageId: 'APP_我的收藏_' + saName,
           categoryId: 'APP_User'
         })
       } catch (err) {
