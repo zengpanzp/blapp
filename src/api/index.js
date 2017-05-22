@@ -136,6 +136,10 @@ export default {
       return Vue.http.post(baseUrl + '/gyjf/pickup.htm', params);
     }
   },
+  // 根据订单号查询评论信息
+  queryComnentByorder: params => {
+    return Vue.http.post(baseUrl + '/product/queryOrderProductComment.htm', params)
+  }
   // 查询待评价信息
   queryCommentBytype: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentByType.htm', params)
@@ -145,16 +149,5 @@ export default {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
   }
 },
-// 根据订单号查询评论信息
-queryComnentByorder: params => {
-  return Vue.http.post(baseUrl + '/product/queryOrderProductComment.htm', params)
-},
-// 查询待评价信息
-queryCommentBytype: params => {
-  return Vue.http.post(baseUrl + '/product/queryCommentByType.htm', params)
-},
-// 查询评价数量
-queryCount: params => {
-  return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
-}
-}
+
+
