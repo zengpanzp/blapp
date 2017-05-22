@@ -107,7 +107,11 @@
               </div>
             </a>
           </div>
-          <div class="tab-end">
+          <div class="infinite-layer" v-if="loading">
+            <div class="infinite-preloader"></div>
+            <div>加载中...</div>
+          </div>
+          <div class="tab-end" v-else>
             - END -
           </div>
         </div>
@@ -117,6 +121,7 @@
 </template>
 <script>
 import utils from 'src/utils'
+import api from 'src/api'
 export default {
 
   name: 'keepElectricHome',
@@ -164,7 +169,8 @@ export default {
       cateId: '',
       curPageNo: 1,
 
-      busy: true
+      busy: true,
+      loading: true
     };
   },
   computed: {
@@ -188,29 +194,26 @@ export default {
     }
   },
   created() {
-    window.CTJSBridge.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {
-      resourceId: "237300,237301,237302,237304,237306,237307,237310,237311,237320"
-    }, {
-      success: res => {
-        // let resData = window.JSON.parse(res).otherResource
-        let resData = utils.transData(res).otherResource
-        this.hotBrands = resData[1].advList[0]
-        this.allSlides = resData[2].advList
-        this.hotTwoBrands = resData[3].advList[0]
-        this.asideOne = resData[4].advList[0]
-        this.promotion = resData[5].advList
-        this.asideTwo = resData[6].advList[0]
-        this.brands = resData[7].advList
-        this.eleTabs = resData[8].advList
-        this.cateId = resData[8].advList[0].jumpId
-        this.$nextTick(() => {
-          this.busy = false
-          this.loaded = true
-          this.$loading.close()
-        });
-      },
-      fail: function(data) { console.log(data) },
-      progress: function(data) {}
+    api.queryAdDeploy({
+      otherresource: {
+        resourceId: '237300,237301,237302,237304,237306,237307,237310,237311,237320'
+      }
+    }).then(res => {
+      let resData = JSON.parse(res.body.obj).obj.otherResource
+      this.hotBrands = resData[1].advList[0] || []
+      this.allSlides = resData[2].advList || []
+      this.hotTwoBrands = resData[3].advList[0] || []
+      this.asideOne = resData[4].advList[0] || []
+      this.promotion = resData[5].advList || []
+      this.asideTwo = resData[6].advList[0] || []
+      this.brands = resData[7].advList || []
+      this.eleTabs = resData[8].advList || []
+      this.cateId = resData[8].advList[0].jumpId
+      this.$nextTick(() => {
+        this.busy = false
+        this.loaded = true
+        this.$loading.close()
+      });
     })
     this.getOnceGoods()
   },
@@ -233,10 +236,10 @@ export default {
         message: '加载中',
         duration: 'loading'
       })
-      this.tabRows = []
+      this.loading = true
       this.cateId = jumpId
       this.curPageNo = 1
-      this.loadMore()
+      this.loadMore(true)
     },
     getOnceGoods() {
       let resquestData = {
@@ -251,19 +254,16 @@ export default {
           }
         }
       }
-      window.CTJSBridge.LoadAPI("BLSearchByKeyWordAPIManager", resquestData, {
-        success: res => {
-          // let resData = window.JSON.parse(res)
-          let resData = utils.transData(res).resultInfo.pageModel.rows
-          if (resData) {
-            this.listRows = resData
-          }
-        },
-        fail: function(data) { console.log(data) },
-        progress: function(data) {}
+      api.getGoods({
+        requestData: JSON.stringify(resquestData)
+      }).then(res => {
+        let resData = utils.transData(res.body.obj).resultInfo.pageModel.rows
+        if (resData) {
+          this.listRows = resData
+        }
       })
     },
-    loadMore() {
+    loadMore(isTab = false) {
       this.busy = true
       let thatId = this.cateId
       let resquestData = {
@@ -278,22 +278,23 @@ export default {
           }
         }
       }
-      console.log(resquestData)
       /* 获取商品 */
-      window.CTJSBridge.LoadAPI("BLSearchByKeyWordAPIManager", resquestData, {
-        success: res => {
-          console.log(JSON.parse(res))
-          let resData = window.JSON.parse(res).resultInfo.pageModel.rows
-          if (resData && resData.length) {
-            this.tabRows = this.tabRows.concat(resData)
-            this.busy = false
-          }
-          if (this.inlineLoading) {
-            this.inlineLoading.close()
-          }
-        },
-        fail: function(data) { console.log(data) },
-        progress: function(data) {}
+      api.getGoods({
+        requestData: JSON.stringify(resquestData)
+      }).then(res => {
+        if (isTab) {
+          this.tabRows = []
+        }
+        let resData = window.JSON.parse(res.body.obj).resultInfo.pageModel.rows
+        if (resData && resData.length) {
+          this.tabRows = this.tabRows.concat(resData)
+          this.busy = false
+        } else {
+          this.loading = false
+        }
+        if (this.inlineLoading) {
+          this.inlineLoading.close()
+        }
       })
     },
     search() {
