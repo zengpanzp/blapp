@@ -139,7 +139,7 @@ export default {
   // 根据订单号查询评论信息
   queryComnentByorder: params => {
     return Vue.http.post(baseUrl + '/product/queryOrderProductComment.htm', params)
-  }
+  },
   // 查询待评价信息
   queryCommentBytype: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentByType.htm', params)
