@@ -38,11 +38,7 @@ Vue.http.interceptors.push((request, next) => {
 })
 
 // FastClick 调用
-if ('addEventListener' in document) {
-  document.addEventListener('DOMContentLoaded', function() {
-    FastClick.attach(document.body)
-  }, false);
-}
+FastClick.attach(document.body)
 
 Vue.filter('limitFixed', function(value, num = 0) {
   return parseFloat(value).toFixed(num)
