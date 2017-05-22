@@ -51,34 +51,40 @@ export default {
       inputData: undefined
     };
   },
-
   watch: {
     'inputData'(val) {
-      let mathReg = /^(10|[1-9]\d\d?|1000)$/;
-      if (mathReg.test(val)) {
-        this.inputData = val
-      } else {
-        this.$toast('请输入10到1000的整数!')
+      if (val) {
+        if (val.length == 1 && val == 0) {
+            this.inputData = String(val).replace(0, '')
+            return
+        }
+        if (val <= 10 || val >= 1000) {
+          this.$toast('请输入10-1000的整数!')
+        }
+        this.inputData = String(val).replace(/\D/g, '').replace('.', '');
       }
     }
   },
   methods: {
     addCart() {
-      if (this.inputData) {
+      if (this.inputData >= 10 && this.inputData <= 1000) {
         utils.isLogin().then(data => {
           let memberId = utils.ssdbGet('member_id')
           let memberToken = utils.ssdbGet('member_token')
+          let goodsId = "1042900";// SIT环境对应商品id
+          // let goodsId = "1219874"; pre环境对应商品id
+          // let goodsId = "1166100"; 生产环境对应商品id
           window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
             memberId: memberId,
             member_token: memberToken,
-            orderSourceCode: '1',
+            orderSourceCode: "1",
             shoppingCartType: "1",
             goodsList: [
               {
                 salePrice: this.inputData,
-                goodsId: '1042900',
+                goodsId: goodsId,
                 goodsNumber: this.numValue,
-                type: '10'
+                type: "10"
               }
             ]
           }, {
@@ -88,13 +94,28 @@ export default {
                 position: 'bottom',
                 message: resData.resultMsg
               });
+              // sensor analytics - addCart
+              try {
+                console.log((new Date()).toLocaleString() + '加入购物车 埋点')
+                sa.track('addCart', {
+                  productId: goodsId,
+                  productName: '自定义面值卡',
+                  productType: '电子卡自定义',
+                  productBrand: goodsId,
+                  originalPriceR: Number(this.inputData * this.numValue),
+                  salePrice: Number(this.inputData * this.numValue),
+                  productCount: this.numValue
+                });
+              } catch (err) {
+                console.log("sa error => " + err);
+              }
             },
             fail: err => { console.log(err) },
             progress: data => { console.log(data) }
           })
         }, () => {})
       } else {
-        this.$toast('面额不能为空!')
+        this.$toast('请输入10-1000的整数!')
       }
     },
     sup() {
