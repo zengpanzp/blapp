@@ -253,7 +253,7 @@ jsBridgeReady("_maiDian", false, () => {
 let linkCssObj = document.getElementById('classLink')
   // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
-  if (document.querySelectorAll('.ant-transparent.white-bg').length === 0) {
+  if (document.querySelectorAll('.ant-transparent.white-bg').length === 0 && !meta.notLoading) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
       message: '加载中',
