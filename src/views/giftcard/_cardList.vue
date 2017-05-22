@@ -75,7 +75,7 @@ export default {
             goodsType: "10",
             pageModel: {
               pageNo: this.pageNum ++,
-              pageSize: "8"
+              pageSize: "10"
             }
           }
         }
@@ -92,7 +92,7 @@ export default {
           if (resRows && resRows.length) {
             this.busy = false
             this.list = this.list.concat(resRows)
-            if (resRows.length < 8) {
+            if (resRows.length < 10) {
               this.busy = true
               this.loading = false
               if (qData.searchInfo.pageModel.pageNo > 1) {
