@@ -208,7 +208,9 @@ export default {
       this.asideTwo = resData[6].advList[0] || []
       this.brands = resData[7].advList || []
       this.eleTabs = resData[8].advList || []
-      this.cateId = resData[8].advList[0].jumpId
+      if (resData[8].advList[0]) {
+        this.cateId = resData[8].advList[0].jumpId
+      }
       this.$nextTick(() => {
         this.busy = false
         this.loaded = true
