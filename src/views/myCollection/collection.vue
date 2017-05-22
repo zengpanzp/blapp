@@ -86,7 +86,7 @@ export default {
         this.tabsModel = '1'
         break;
       default:
-        this.tabsModel = '1'
+        this.tabsModel = '0'
     }
     this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
     window.currentPageReload = this.currentPageReload
