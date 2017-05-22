@@ -75,7 +75,7 @@ export default {
             goodsType: "10",
             pageModel: {
               pageNo: this.pageNum ++,
-              pageSize: "8"
+              pageSize: "10"
             }
           }
         }
@@ -89,7 +89,7 @@ export default {
           this.pageNo = resData.resultInfo.pageModel.pageNo
           let resRows = resData.resultInfo.pageModel.rows
           this.$emit('finish')
-          if (resRows) {
+          if (resRows && resRows.length) {
             this.busy = false
             this.list = this.list.concat(resRows)
             if (resRows.length < 10) {

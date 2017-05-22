@@ -129,11 +129,6 @@ export const prdRouter = [
     path: '/recharge/game',
     component: r => require.ensure([], () => r(require('../views/recharge/game')), 'game')
   },
-  /* 神马 充值缴费 加油卡 */
-  {
-    path: '/recharge/petrol',
-    component: r => require.ensure([], () => r(require('../views/recharge/fuelcard')), 'fuelcard')
-  },
   /* 陈鹏 礼品卡首页 */
   {
     path: '/giftCardHome',
