@@ -56,7 +56,7 @@ export default {
         icon: 'icon-play',
         text: '游戏'
       }, {
-        url: 'recharge/petrol',
+        url: 'recharge/iphone/0?type=petrol',
         type: '35, ',
         icon: 'icon-card',
         text: '加油卡'
@@ -65,11 +65,11 @@ export default {
   },
   methods: {
     nativeGo(type, url) {
-      if (process.env.NODE_ENV !== 'production') {
-        this.$router.push({ path: url })
-        return
-      }
       utils.isLogin().then(data => {
+        if (process.env.NODE_ENV !== 'production') {
+          this.$router.push({ path: url })
+          return
+        }
         window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
           type: type,
           url: url

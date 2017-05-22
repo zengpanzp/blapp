@@ -5,23 +5,19 @@ import FastClick from 'fastclick'
 import ScrollTo from 'scroll'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
+import VueResource from 'vue-resource'
 
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
 
-Vue.use(infiniteScroll)
-
 import 'src/utils'
 import 'src/api'
 import 'src/const'
+
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
-// FastClick 调用
-if ('addEventListener' in document) {
-  document.addEventListener('DOMContentLoaded', function() {
-    FastClick.attach(document.body)
-  }, false);
-}
+
+Vue.use(infiniteScroll)
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
@@ -31,6 +27,18 @@ Vue.use(VueLazyload, {
 })
 
 Vue.use(bluer)
+
+Vue.use(VueResource)
+Vue.http.options.xhr = { withCredentials: true }
+Vue.http.interceptors.push((request, next) => {
+  request.headers.set('chnflg', 'h5')
+  next((response) => {
+    return response
+  });
+})
+
+// FastClick 调用
+FastClick.attach(document.body)
 
 Vue.filter('limitFixed', function(value, num = 0) {
   return parseFloat(value).toFixed(num)
