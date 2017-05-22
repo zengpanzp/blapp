@@ -145,6 +145,9 @@ export const prdRouter = [
   /* 陈鹏 礼品卡查看更多 */
   {
     path: '/giftCardMore',
+    meta: {
+      notLoading: true
+    },
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-more')), 'giftCardMore')
   },
   /* 陈鹏 电子卡详情 */
