@@ -141,7 +141,6 @@ export default {
         message: '未获取到优惠券ID信息'
       })
     }
-    // window.$$vue = this;
     utils.isLogin().then(user => {
         console.log(user);
         this.memberID = utils.ssdbGet('member_id')

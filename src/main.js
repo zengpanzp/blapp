@@ -15,9 +15,7 @@ Vue.use(infiniteScroll)
 import 'src/utils'
 import 'src/api'
 import 'src/const'
-
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
-
 // FastClick 调用
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
@@ -165,7 +163,7 @@ Vue.directive('go-native-resource', {
  * @DateTime 2017-03-10T20:53:14+0800
  * @param    {Function}               fn   [加载成功的回调]
  * @param    {[Obj]}                 link  [link标签元素]
- * @return   {[Boolean]}                      [加载成功返回true，失败返回false]
+ * @return   {[Boolean]}             [加载成功返回true，失败返回false]
  */
 const cssReady = (fn, link) => {
   let d = document
@@ -276,7 +274,6 @@ router.beforeEach(({ meta, path }, from, next) => {
     }
   })
 })
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
