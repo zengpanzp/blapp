@@ -9,7 +9,7 @@
       <div class="content-wrap" v-show="toShow">
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
-            <li @click.preventDefault="showCategory">选择缴费分组
+            <li @click.prevent="showCategory">选择缴费分组
               <div class="name"><label>{{receiveGroupItem.groupName}}</label><img class="more" src="./i/iphone/more.png"></div>
             </li>
             <!--  </ul>
@@ -22,8 +22,10 @@
             </li>
             <li>
               账号类型
-              <div class="btn" @click="changeType"  :class="typeChange?'selected':''">条形码</div>
-              <div class="btn" @click="changeType" :class="!typeChange?'selected':''">账号</div>
+              <div class="btns">
+                <div class="btn" @click="changeType" v-show="hasShow"  :class="typeChange?'selected':''">条形码</div>
+                <div class="btn" @click="changeType" v-show="hasShow2" :class="!typeChange?'selected':''">{{accountTypeName}}</div>
+              </div>
             </li>
             <li>缴费账号
               <div class="account"><input type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
@@ -48,6 +50,8 @@
 
     data() {
       return {
+        hasShow: true, // 显示条形码
+        hasShow2: true, // 显示销根号
         toShow: true,  // 是否显示父类组件
         typeClass: "", // 不同类别样式名称不一样
         typeName: "",  // 不同类别不同名称
@@ -62,13 +66,13 @@
             1: "sf",  // 水费
             2: "dl",  // 电费
             3: "mq"   // 煤气
-        }
+        },
+        accountTypeName: "肖根号"
       }
     },
     computed: {
     },
     created() {
-        window.$$vue = this;
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
         // 查询缴费分组
@@ -105,17 +109,27 @@
               let json = JSON.parse(data.body.obj);
               this.receiveCompanyItem = {
                   id: json.typecode[0],
-                  name: json.typename[0]
+                  name: json.typename[0],
+                  typezhname: json.typezhname[0]
               };
               let list = [];
               json.typename.forEach((item, i) => {
                   let id = json.typecode[i];
+                  let typezhname = json.typezhname[i];
                   let obj = {
                       id: id,
-                      name: item
+                      name: item,
+                      typezhname: typezhname
                   };
                   list.push(obj)
-              })
+              });
+              // 支持条形码 和 账号进行缴费
+              if (json.typezhname[0].length == 2) {
+                // 默认第一个的名称
+                this.accountTypeName = json.typezhname[0][1].name;
+              } else { // 只支持条码
+                this.hasShow2 = false;
+              }
               this.companyList = list;
               console.log(json);
             })
@@ -150,10 +164,19 @@
       },
       // 获得子组件选择的机构
       getCompany(item) {
+          console.log(item)
         this.receiveCompanyItem = item;
         this.loadListView = false;
-        debugger;
         this.toShow = true;
+        // 支持条形码 和 账号进行缴费
+        if (item.typezhname.length == 2) {
+          // 默认第一个的名称
+          this.accountTypeName = item.typezhname[1].name;
+          this.hasShow2 = true;
+        } else { // 只支持条码
+          this.typeChange = true;
+          this.hasShow2 = false;
+        }
         this.$router.push({path: "/recharge/rates/" + this.rateType});
       },
       // 选择缴费机构
