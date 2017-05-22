@@ -89,10 +89,10 @@ export default {
           this.pageNo = resData.resultInfo.pageModel.pageNo
           let resRows = resData.resultInfo.pageModel.rows
           this.$emit('finish')
-          if (resRows) {
+          if (resRows && resRows.length) {
             this.busy = false
             this.list = this.list.concat(resRows)
-            if (resRows.length < 10) {
+            if (resRows.length < 8) {
               this.busy = true
               this.loading = false
               if (qData.searchInfo.pageModel.pageNo > 1) {
