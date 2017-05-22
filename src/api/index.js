@@ -148,6 +148,4 @@ export default {
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
   }
-},
-
-
+}
