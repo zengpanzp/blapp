@@ -92,7 +92,33 @@
     }
 
   }
-
+  .linetvul{
+    padding:0 rem(20);
+  }
+  .headMenu{
+    border-bottom: rem(1.8) solid #ddd;
+    ul{
+      display: -webkit-flex;
+      height: rem(90);
+      line-height: rem(90);
+      background: #efeff4;
+      padding: 0 rem(30);
+      font-size: rem(35);
+      li{
+        -webkit-flex:1;
+        text-align: center;
+        border-bottom: none;
+        height: 100%;
+        line-height: rem(90);
+        font-size: rem(32);
+        &.selected{
+          border-bottom: rem(5) solid #3ea2ff;
+          color:#3ea2ff;
+          font-weight: 800;
+        }
+      }
+    }
+  }
 }
 
 .icon-waitassess {

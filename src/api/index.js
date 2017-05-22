@@ -122,6 +122,10 @@ recharge: {
   queryCompanyGroup: params => {
     return Vue.http.post(baseUrl + '/gyjf/type_detail.htm', params);
   },
+  // 有线电视和铁通机构查询
+  queryLineTVAndTieTongCompany: params => {
+    return Vue.http.post(baseUrl + '/sdm/type_detail.htm', params);
+  },
   // 水电煤 生成订单
   createOrder: params => {
     return Vue.http.post(baseUrl + '/gyjf/gen_order.htm', params);
@@ -132,7 +136,7 @@ recharge: {
   },
   // 水电煤 商品详情
   getGoodsDetail: params => {
-    return Vue.http.post(baseUrl + '/gyjf/goods_detail.htm', params);
+    return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);
   },
   // 水电煤 订单状态
   getOrderStatus: params => {

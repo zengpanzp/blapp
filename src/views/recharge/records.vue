@@ -48,6 +48,7 @@
 
     data() {
       return {
+        rateType: 1
       }
     },
     computed: {
@@ -55,6 +56,9 @@
     created() {
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
+        let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
+        localStorage.removeItem("BL_QUERY_DATA"); // 删除数据
+        console.log(queryData)
         this.fill();
     },
     watch: {
@@ -71,23 +75,8 @@
     methods: {
       // 监听路由
       fill(to, from) {
-        if (to && to.fullPath.indexOf("category") == "-1" && to.fullPath.indexOf("company") == "-1") {
-          this.toShow = true;
-          this.loadGroup = false;
-          this.loadListView = false;
-        }
         let val = this.$route.params["type"];
         this.rateType = val;  // 缴费类别 1 水费 2电费 3 煤气费
-        if (val == 1) {
-          this.typeClass = "icon-waitassess";
-          this.typeName = "水费";
-        } else if (val == 2) {
-          this.typeClass = "icon-electricity";
-          this.typeName = "电费";
-        } else if (val == 3) {
-          this.typeClass = "icon-gas";
-          this.typeName = "煤气费";
-        }
         this.$loading.close()
       }
     }

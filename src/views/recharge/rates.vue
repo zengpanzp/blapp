@@ -28,11 +28,11 @@
               </div>
             </li>
             <li>缴费账号
-              <div class="account"><input type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
+              <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
             </li>
 
           </ul>
-        <bl-button type="blueBtn next selected">下一步</bl-button>
+        <bl-button @click="next" type="blueBtn next selected">下一步</bl-button>
       </div>
     </div>
 </template>
@@ -62,6 +62,7 @@
         loadListView: false,  // 加载缴费机构
         typeChange: true, // 条形码 或者 账号,
         companyList: [],
+        account: "",  // 缴费账号
         typeObj: {
             1: "sf",  // 水费
             2: "dl",  // 电费
@@ -185,9 +186,41 @@
         this.loadListView = true;
         this.$router.push({path: "/recharge/rates/" + this.rateType + "/company"});
       },
+      // 下一步跳转到缴费记录
+      next() {
+          if (this.account == "" && this.typeChange) {
+            let msg = "!";
+            if (this.typeChange) {
+                msg = "请先扫描账单条形码!";
+            } else {
+                msg = "缴费账号不能为空!";
+            }
+            this.$toast({
+              position: 'bottom',
+              message: msg
+            });
+            return false;
+          }
+          let queryData = {
+            client_id: CONST.CLIENT_ID,
+            t_dz: "02",
+            type: this.typeObj[this.ratesType],
+            codetype: this.account.length >= 24 ? "01" : "02",
+            dkhzh: this.memberId,
+            typecode: this.receiveCompanyItem.id,
+            format: "json",
+            year: new Date().getFullYear(),
+            month: new Date().getMonth() + 1,
+            code: this.account,
+            timestamp: utils.getTimeFormatToday(),
+            acctoken: this.memberToken
+        }
+        localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData));
+        // 传递参数
+        this.$router.push({path: "/recharge/records/" + this.rateType});
+      },
       // 获得选择的分组
       getGroup(item) {
-          debugger
         this.receiveGroupItem = item;
         this.toShow = true;
       },
