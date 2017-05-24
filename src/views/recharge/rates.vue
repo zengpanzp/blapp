@@ -129,6 +129,10 @@
               } else { // 只支持条码
                 this.hasShow2 = false;
               }
+              this.receiveCompanyItem = {
+                id: json.typecode[0],
+                name: json.typename[0]
+              }
               this.companyList = list;
               console.log(json);
             })
@@ -165,6 +169,7 @@
       getCompany(item) {
           console.log(item)
         this.receiveCompanyItem = item;
+          console.log(this.receiveCompanyItem)
         this.loadListView = false;
         this.toShow = true;
         // 支持条形码 和 账号进行缴费
@@ -209,6 +214,7 @@
             codetype: this.account.length >= 24 ? "01" : "02",
             dkhzh: this.memberId,
             typecode: this.receiveCompanyItem.id,
+            companyName: this.receiveCompanyItem.name,
             format: "json",
             mac: mac,
             year: new Date().getFullYear().toString(),

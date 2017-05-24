@@ -13,11 +13,11 @@
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
             <li>缴费机构
-              <div class="name"><label>时间考虑就看见；肯定是房价</label></div>
+              <div class="name"><label>{{queryData.companyName}}</label></div>
             </li>
           </ul>
           <ul class="record-list" v-if="dataJson">
-            <li class="record-detail" v-for="(item,key) in dataJson" v-if="key==0&&item.Result_code=='200'">
+            <li class="record-detail" @click="toPay" v-for="(item,key) in dataJson" v-if="key==0&&item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
               <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
@@ -66,14 +66,21 @@
             let json = JSON.parse(data.body.obj);
             console.log(json);
             this.dataJson = json;
+            console.log(this.dataJson[0]);
             delete this.dataJson.Result_code;
-            debugger;
             for (let obj in this.dataJson) {
                 console.log(this.dataJson[obj].date)
                 if (this.dataJson[obj].date) {
                   this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
                 }
             }
+            this.queryData.canpay = this.dataJson[0].canpay[0];
+            // 条码
+            this.queryData.tiaoma = this.dataJson[0].code[0];
+            this.queryData.price = this.dataJson[0].price[0];
+            this.queryData.total = this.dataJson[0].total[0];
+            this.queryData.date = this.dataJson[0].date;
+            localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData))
           })
         });
     },
@@ -89,6 +96,9 @@
 //      });
 //    },
     methods: {
+      toPay() {
+        this.$router.push({ path: "/recharge/pay/" + this.rateType });
+      },
       // 监听路由
       fill(to, from) {
         let val = this.$route.params["type"];

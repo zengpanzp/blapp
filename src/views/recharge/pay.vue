@@ -6,7 +6,7 @@
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
             <li @click.prevent="showCategory">条码
-              <div class="name"><label>7897897979</label></div>
+              <div class="name"><label>{{queryData.tiaoma}}</label></div>
             </li>
             <!--	</ul>
             </div>-->
@@ -14,15 +14,15 @@
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
             <li>缴费账号
-              <div class="name"><label>897989080</label></div>
+              <div class="name"><label>{{queryData.code}}</label></div>
             </li>
             <li>缴费机构
-              <div class="name"><label>上海威立雅自来水有限公司</label></div>
+              <div class="name"><label>{{queryData.companyName}}</label></div>
             </li>
           </ul>
           <ul class="paylist">
             <li @click.prevent="showCategory">账期
-              <div class="name"><label>7897897979</label></div>
+              <div class="name"><label>{{queryData.date}}</label></div>
             </li>
             <!--	</ul>
             </div>-->
@@ -30,13 +30,13 @@
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
             <li>缴费金额
-              <div class="name"><label style="color:#e6133c">￥165.0</label></div>
+              <div class="name"><label style="color:#e6133c">￥{{queryData.total}}</label></div>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
         <div class="phoneFixBottom">
           <div class="config-button-contain">
-            <button class="edit-config-button middleFont" @click="goPay" :disabled="true">立即支付：￥{{ currentPay }}</button>
+            <button class="edit-config-button middleFont" @click="goPay" :disabled="queryData.canpay!='01'">立即支付：￥{{ queryData.total }}</button>
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@
 <script>
     import api from 'src/api/index'
     import utils from 'src/utils'
-//    import CONST from 'src/const'
+    import CONST from 'src/const'
   export default {
 
     name: 'records',
@@ -59,7 +59,13 @@
       return {
         currentPay: 0,
         typeName: '', // 缴费类别
-        rateType: 1
+        rateType: 1,
+        queryData: {},
+        typeObj: {
+          1: "sf",  // 水费
+          2: "dl",  // 电费
+          3: "mq"   // 煤气
+        },
       }
     },
     computed: {
@@ -68,13 +74,12 @@
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
+        this.queryData = queryData;
         console.log(queryData)
         this.fill();
         utils.isLogin().then(user => {
             console.log(user)
-          api.recharge.getGoodsDetail(queryData).then(data => {
-            console.log(data);
-          })
+            console.log(api)
         });
     },
     watch: {
@@ -91,23 +96,27 @@
     methods: {
       // 去支付
       goPay() {
-        if (this.testPhoneNum()) {
-          // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
-          this.historyNum.forEach((item, index) => {
-            if (item.number == this.iphoneNum) {
-            this.historyNum.splice(index, 1)
-          }
-        })
-          this.historyNum.unshift({
-            number: this.iphoneNum
-          })
-          // 如果输入历史数据长度大于6则截取6条
-          if (this.historyNum.length > 6) {
-            this.historyNum = this.historyNum.slice(0, 6)
-          }
-          // 把输入历史数据保存到localStore
-          utils.dbSet(this.historyName, this.historyNum)
-        }
+          // 生成订单  然后掉native的支付方法
+          utils.isLogin().then(user => {
+            console.log(user);
+            let timestamp = utils.getTimeFormatToday();
+            api.recharge.createOrder({
+              client_id: CONST.CLIENT_ID,
+              client_secret: CONST.CLIENT_SECRET,
+              format: "json",
+              dkhdh: user.mobile,
+              typecode: this.queryData.typecode,
+              t_dz: "02",
+              code: this.queryData.tiaoma,
+              dkhxm: user.member_name,
+              dkhzh: user.member_id,
+              type: this.typeObj[this.rateType],
+              timestamp: timestamp,
+              token: user.member_token
+            }).then(data => {
+                console.log(data);
+            })
+          });
       },
       // 监听路由
       fill(to, from) {
