@@ -1,6 +1,7 @@
 <style lang="scss" src="./css/_comm.scss"></style>
 <style lang="scss" scoped>
   @import "src/sass/tobe/function";
+
   .feuld-ul {
     padding: rem(30);
     position: relative;
@@ -27,7 +28,7 @@
         line-height: 1;
       }
     }
-    .img-color-remove{
+    .img-color-remove {
       -webkit-filter: grayscale(100%);
       -moz-filter: grayscale(100%);
       -o-filter: grayscale(100%);
@@ -56,17 +57,23 @@
       </ul>
       <div class="phoneRechargeTitle" v-else>
         <bl-navbar class="flex" v-model="tabsModel">
-          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index)">{{ item }}</bl-tab-item>
+          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item.type)">
+            {{ item.text }}
+          </bl-tab-item>
         </bl-navbar>
       </div>
       <div class="phoneRechargeItem">
         <div class="itemContent">
           <div class="item-titleRow">
-            <input id="number" class="item-titleRow" type="tel" :placeholder="placeholder" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
+            <input id="number" class="item-titleRow" type="tel" :placeholder="placeholder" :maxlength="maxlength"
+                   @focus="focus = true" v-model="iphoneNum">
             <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="emptyPhone"></i>
-            <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone" v-if="$route.query.type !== 'petrol'"></div>
+            <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone"
+                 v-if="$route.query.type !== 'petrol'"></div>
           </div>
-          <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">{{ !testPhoneNum() ? $route.query.type == 'petrol' ? '请输入正确的油卡号' : '请输入正确的手机号码' : phoneCheck }}</div>
+          <div class="input-phone" :class="{ 'full-phone': testPhoneNum() }">
+            {{ !testPhoneNum() ? $route.query.type == 'petrol' ? '请输入正确的油卡号' : '请输入正确的手机号码' : phoneCheck }}
+          </div>
           <div class="phoneLink" v-show="focus && historyNum && historyNum.length !== 0">
             <ul>
               <li v-for="(item, index) in historyNum">
@@ -82,7 +89,7 @@
         <bl-tab-container-item :id="0">
           <div class="list-sales">
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
-              <li v-for="(item, index) in moneyList" @click="selectPrice(index)">
+              <li v-for="(item, index) in moneyList" @click="selectPrice(index, item)">
                 <a :class="{ 'curr': moneyListModel == index }" href="javascript:;">
                   <h3>{{ item.mainPrice }}元</h3>
                   <p>售价{{ item.salePrice }}元</p>
@@ -94,7 +101,7 @@
         <bl-tab-container-item :id="1">
           <div class="list-sales">
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
-              <li v-for="(item, index) in flowList" @click="flowSelectPrice(index)">
+              <li v-for="(item, index) in flowList" @click="flowSelectPrice(index, item)">
                 <a :class="{ 'curr': flowListModel == index }" href="javascript:;">
                   <h3>{{ item.mainPrice }}M</h3>
                   <p>售价{{ item.salePrice }}元</p>
@@ -119,294 +126,450 @@
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
       <div class="config-button-contain">
-        <button class="edit-config-button middleFont" @click="goPay" :disabled="!testPhoneNum()">立即支付：￥{{ currentPay }}</button>
+        <button class="edit-config-button middleFont" @click="goPay" :disabled="!(testPhoneNum() && currentPay)">
+          立即支付：￥{{ currentPay }}
+        </button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import utils from 'src/utils'
-import CONST from 'src/const'
-import api from 'src/api'
-export default {
+  import utils from 'src/utils'
+  import CONST from 'src/const'
+  import api from 'src/api'
+  export default {
 
-  name: 'iphone',
+    name: 'iphone',
 
-  data() {
-    return {
-      inlineLoading: null,
+    data() {
+      return {
+        inlineLoading: null,
 
-      tabsModel: 0,
-      historyNum: [],
-      focus: false,
-      phoneCheck: '',
-      tab: ['充话费', '充流量'],
-      phoneGsd: '',
-      placeholder: '',
-      maxlength: undefined,
-      historyName: undefined,
+        tabsModel: 0,
+        historyNum: [],
+        focus: false,
+        phoneCheck: '',
+        tab: [{
+          text: '充话费',
+          type: 'cz'
+        }, {
+          text: '充流量',
+          type: 'll'
+        }],
+        rechargeType: '', // 充值类型
+        placeholder: '',
+        type: '', // 订单类型
+        maxlength: undefined,
+        historyName: undefined,
 
-      iphoneNum: '', // 手机号码
-      currentPay: '', // 支付金额
-      currentItem: '', // 货号
-      currentSku: '', // 面值
+        iphoneNum: '', // 手机号码
+        currentPay: '', // 页面显示的优惠金额
+        currentActivePay: '', // 真实金额
+        currentItem: '', // 货号
+        currentSku: '', // 面值
+        useName: '',
 
-      moneyListModel: 0,
-      moneyList: [],
+        moneyListModel: 0,
+        moneyList: [],
 
-      flowListModel: 0,
-      flowList: []
-    }
-  },
-  created() {
-    if (this.$route.query.type !== 'petrol') {
-      this.maxlength = 11
-      this.placeholder = '请输入充值手机号'
-      this.historyName = 'historyNum'
-    } else {
-      this.getPhoneInfo('yk', 1)
-      this.maxlength = 19
-      this.placeholder = '请输入油卡号'
-      this.historyName = 'historyPetrol'
-    }
-    this.getHistoryNum()
-    this.tabsModel = Number(this.$route.params.type)
-
-    utils.isLogin().then(data => {
-      if (this.$route.query.type !== 'petrol') {
-        this.iphoneNum = data.mobile
+        flowListModel: 0,
+        flowList: []
       }
-      this.$loading.close()
-    }, () => {})
-  },
-  methods: {
-    getPhoneInfo(phoneNum, noConfirm = 0) {
-      if (this.testPhoneNum() || noConfirm) {
-        this.inlineLoading = this.$toast({
-          iconClass: 'preloader white',
-          message: '加载中',
-          duration: 'loading'
-        })
+    },
+    created() {
+      let rechargeType = this.$route.params.type
+      if (this.$route.query.type !== 'petrol') {
+        this.maxlength = 11
+        this.placeholder = '请输入充值手机号'
+        this.historyName = 'historyNum'
+        if (rechargeType == '0') {
+          this.type = 'cz'
+        } else {
+          this.type = 'll'
+        }
+      } else {
+        this.getPhoneInfo('yk', 1)
+        this.maxlength = 19
+        this.placeholder = '请输入油卡号'
+        this.historyName = 'historyPetrol'
+        this.type = 'yk'
+      }
+      this.getHistoryNum()
+      this.tabsModel = Number(rechargeType)
+
+      utils.isLogin().then(data => {
+        if (this.$route.query.type !== 'petrol') {
+          this.iphoneNum = data.mobile
+        }
+        this.useName = data.member_name
+        this.$loading.close()
+      }, () => {})
+    },
+    methods: {
+      getPhoneInfo(phoneNum, noConfirm = 0) {
+        if (this.testPhoneNum() || noConfirm) {
+          this.inlineLoading = this.$toast({
+            iconClass: 'preloader white',
+            message: '加载中',
+            duration: 'loading'
+          })
+          let timestamp = utils.getTimeFormatToday();
+          let requestData = {
+            client_id: CONST.CLIENT_ID,
+            mobile: phoneNum,
+            timestamp: timestamp,
+            format: "json",
+            t_dz: CONST.T_DZ,
+            token: utils.ssdbGet('member_token'),
+          }
+          api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
+            let resData = JSON.parse(data.body.obj)
+            let list = []
+            for (let [index, val] of resData.sku.entries()) {
+              list.push({
+                mainPrice: val,
+                salePrice: resData.price2[index],
+                activePay: resData.price[index],
+                item: resData.item[index]
+              })
+            }
+            this.moneyList = list
+            this.currentPay = this.moneyList[0].salePrice
+            this.currentItem = this.moneyList[0].item
+            this.currentSku = this.moneyList[0].mainPrice
+            this.currentActivePay = this.moneyList[0].activePay
+
+            let msg = resData.msg.split("|")[1]
+            if (this.tabsModel == '0') {
+              this.phoneCheck = resData.msg
+            }
+            switch (msg) {
+              case '联通':
+                this.rechargeType = 'ltll'
+                break;
+              case '移动':
+                this.rechargeType = 'ydll'
+                break;
+              case '电信':
+                this.rechargeType = 'dxll'
+                break;
+              default:
+                this.rechargeType = ''
+            }
+            if (this.tabsModel == '0') {
+              this.inlineLoading.close()
+            }
+
+            if (this.rechargeType && this.tabsModel == '1') {
+              this.type = this.rechargeType
+              this.getPhoneLlInfo(this.rechargeType)
+            }
+          })
+        }
+      },
+      getPhoneLlInfo(type) {
         let timestamp = utils.getTimeFormatToday();
-        let mac = utils.MD5(phoneNum + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
         let requestData = {
           client_id: CONST.CLIENT_ID,
-          mobile: phoneNum,
+          mobile: type,
           timestamp: timestamp,
           format: "json",
           t_dz: CONST.T_DZ,
-          token: utils.ssdbGet('member_token'),
-          mac: mac
+          token: utils.ssdbGet('member_token')
         }
-        api.recharge.queryPhoneGoodsDetail({
-          data: JSON.stringify(requestData)
-        }).then(data => {
+        api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
+          this.inlineLoading.close()
           let resData = JSON.parse(data.body.obj)
-          let list = []
-          for (let [index, val] of resData.sku.entries()) {
-            list.push({
-              mainPrice: val,
-              salePrice: resData.price2[index],
-              item: resData.item[index]
-            })
-          }
-          this.moneyList = list
-          this.currentPay = this.moneyList[0].salePrice
-          this.currentItem = this.moneyList[0].item
-          this.currentSku = this.moneyList[0].mainPrice
-
-          let msg = resData.msg.split("|")[1]
-          if (this.tabsModel == '0') {
-            this.phoneCheck = resData.msg
-          }
-          switch (msg) {
-            case '联通':
-              this.phoneGsd = 'ltll'
-              break;
-            case '移动':
-              this.phoneGsd = 'ydll'
-              break;
-            case '电信':
-              this.phoneGsd = 'dxll'
-              break;
-            default:
-              this.phoneGsd = ''
-          }
-          if (this.tabsModel == '0') {
-            this.inlineLoading.close()
-          }
-
-          if (this.phoneGsd && this.tabsModel == '1') {
-            this.getPhoneLlInfo(this.phoneGsd)
+          this.phoneCheck = resData.msg
+          if (resData.sku) {
+            let list = []
+            for (let [index, val] of resData.sku.entries()) {
+              list.push({
+                mainPrice: val,
+                salePrice: resData.price2[index],
+                activePay: resData.price[index],
+                item: resData.item[index]
+              })
+            }
+            this.flowList = list
+            this.currentPay = this.flowList[0].salePrice
+            this.currentItem = this.flowList[0].item
+            this.currentSku = this.flowList[0].mainPrice
+            this.currentActivePay = this.flowList[0].activePay
+          } else {
+            this.currentPay = 0
+            this.flowList = []
           }
         })
-      }
-    },
-    getPhoneLlInfo(type) {
-      let timestamp = utils.getTimeFormatToday();
-      let mac = utils.MD5(type + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
-      let requestData = {
-        client_id: CONST.CLIENT_ID,
-        mobile: type,
-        timestamp: timestamp,
-        format: "json",
-        t_dz: CONST.T_DZ,
-        token: utils.ssdbGet('member_token'),
-        mac: mac
-      }
-      api.recharge.queryPhoneGoodsDetail({
-        data: JSON.stringify(requestData)
-      }).then(data => {
-        this.inlineLoading.close()
-        let resData = JSON.parse(data.body.obj)
-        this.phoneCheck = resData.msg
-        if (resData.sku) {
-          let list = []
-          for (let [index, val] of resData.sku.entries()) {
-            list.push({
-              mainPrice: val,
-              salePrice: resData.price2[index],
-              item: resData.item[index]
-            })
-          }
-          this.flowList = list
-          this.currentPay = this.flowList[0].salePrice
-          this.currentItem = this.flowList[0].item
-          this.currentSku = this.flowList[0].mainPrice
-        } else {
-          this.currentPay = 0
-          this.flowList = []
+      },
+      changeTab(index, type) {
+        this.tabsModel = index
+        this.type = type
+        this.getPhoneInfo(this.iphoneNum)
+      },
+      // 手机号码正则匹配
+      testPhoneNum() {
+        let pattern = /^1\d{10}$/;
+        if (this.$route.query.type == 'petrol') {
+          pattern = /^1\d{18}$/;
         }
-      })
-    },
-    // 生成订单
-    genOrder() {
-      let timestamp = utils.getTimeFormatToday();
-      let useName = '陈鹏'; // 顾客姓名 base64_encode(顾客姓名) mac中使用编码值
-      let mac = utils.MD5(this.iphoneNum + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
-      let requestData = {
-        client_id: CONST.CLIENT_ID,
-        token: utils.ssdbGet('member_token'),
-        mobile: this.iphoneNum,
-        sku: this.currentSku,
-        item: this.currentItem,
-        dkhxm: useName, // 顾客姓名 base64_encode(顾客姓名) mac中使用编码值
-        dkhdh: this.iphoneNum,
-        dkhzh: '', // 顾客登录id AES(dkhzh,8位密钥(client_secret后4位+ timestamp后 4位))   （* mac 用加密前的dkhzh）
-        dxtype: '02',
-        num: 1,
-        timestamp: timestamp,
-        format: "json",
-        t_dz: CONST.T_DZ,
-        mac: mac,
-        dlx: '01'
-      }
-      console.log(requestData)
-    },
-    changeTab(index, once) {
-      this.tabsModel = index
-      this.getPhoneInfo(this.iphoneNum)
-    },
-    // 手机号码正则匹配
-    testPhoneNum() {
-      let pattern = /^1\d{10}$/;
-      if (this.$route.query.type == 'petrol') {
-        pattern = /^1\d{18}$/;
-      }
-      return pattern.test(this.iphoneNum)
-    },
-    // 调native通讯录
-    nativePhone() {
-      window.CTJSBridge && window.CTJSBridge.LoadMethod('Contact', 'selectItem', '', {
-        success: data => {
-          let resData = JSON.parse(data)
-          this.iphoneNum = resData.phoneNumber
-        },
-        fail: () => {},
-        progress: () => {}
-      })
-    },
-    // 获取输入历史数据
-    getHistoryNum() {
-      console.log(this.historyName)
-      let historyNum = JSON.parse(utils.dbGet(this.historyName))
-      if (historyNum && typeof historyNum == 'object') {
-        this.historyNum = JSON.parse(utils.dbGet(this.historyName))
-      }
-    },
-    // 清空输入历史数据
-    emptyHistoryNum() {
-      this.historyNum = []
-      utils.dbRemove(this.historyName)
-    },
-    // 删除当前输入历史数据
-    removeHistoryNum(index) {
-      this.historyNum.splice(index, 1)
-      utils.dbSet(this.historyName, this.historyNum)
-    },
-    // 选择金额
-    selectPrice(index) {
-      if (this.testPhoneNum()) {
-        this.moneyListModel = index
-        this.currentPay = this.moneyList[index].salePrice
-      }
-    },
-    flowSelectPrice(index) {
-      if (this.testPhoneNum()) {
-        this.flowListModel = index
-        this.currentPay = this.flowList[index].salePrice
-      }
-    },
-    // 去支付
-    goPay() {
-      if (this.testPhoneNum()) {
-        // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
-        this.historyNum.forEach((item, index) => {
-          if (item.number == this.iphoneNum) {
-            this.historyNum.splice(index, 1)
-          }
+        return pattern.test(this.iphoneNum)
+      },
+      // 调native通讯录
+      nativePhone() {
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('Contact', 'selectItem', '', {
+          success: data => {
+            let resData = JSON.parse(data)
+            this.iphoneNum = resData.phoneNumber
+          },
+          fail: () => {},
+          progress: () => {}
         })
-        this.historyNum.unshift({
-          number: this.iphoneNum
-        })
-        // 如果输入历史数据长度大于6则截取6条
-        if (this.historyNum.length > 6) {
-          this.historyNum = this.historyNum.slice(0, 6)
+      },
+      // 获取输入历史数据
+      emptyHistoryNum() {
+        this.historyNum = []
+        utils.dbRemove(this.historyName)
+      },
+      getHistoryNum() {
+        console.log(this.historyName)
+        let historyNum = JSON.parse(utils.dbGet(this.historyName))
+        if (historyNum && typeof historyNum == 'object') {
+          this.historyNum = JSON.parse(utils.dbGet(this.historyName))
         }
-        // 把输入历史数据保存到localStore
+      },
+      // 清空输入历史数据
+      // 删除当前输入历史数据
+      removeHistoryNum(index) {
+        this.historyNum.splice(index, 1)
         utils.dbSet(this.historyName, this.historyNum)
-      }
-    },
-    // 给div屏幕的高度
-    wrapperHeight() {
-      return document.documentElement.clientHeight
-    },
-    emptyPhone() {
-      this.iphoneNum = ''
-      this.focus = false
-      $('#number')[0].focus()
-    },
-  },
-  watch: {
-    // 监听输入号码的值,当长度等于11的时候黑框隐藏
-    iphoneNum(val) {
-      if (this.testPhoneNum()) {
-        this.focus = false
-        $('#number')[0].blur()
-
-        this.moneyListModel = 0
-        this.flowListModel = 0
-        if (this.$route.query.type !== 'petrol') {
-          this.getPhoneInfo(this.iphoneNum)
+      },
+      // 选择金额
+      selectPrice(index, item) {
+        if (this.testPhoneNum()) {
+          this.moneyListModel = index
+          this.currentSku = item.mainPrice
+          this.currentItem = item.item
+          this.currentActivePay = item.activePay
+          this.currentPay = item.salePrice
         }
-      }
-    },
-    // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏
-    historyNum(val) {
-      if (val && val.length == 0) {
+      },
+      flowSelectPrice(index, item) {
+        if (this.testPhoneNum()) {
+          this.flowListModel = index
+          this.currentSku = item.mainPrice
+          this.currentItem = item.item
+          this.currentActivePay = item.activePay
+          this.currentPay = item.salePrice
+        }
+      },
+      // 去支付
+      goPay() {
+        let current = this
+        if (this.testPhoneNum()) {
+          this.inlineLoading = this.$toast({
+            iconClass: 'preloader white',
+            message: '加载中',
+            duration: 'loading'
+          })
+          // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
+          this.historyNum.forEach((item, index) => {
+            if (item.number == this.iphoneNum) {
+              this.historyNum.splice(index, 1)
+            }
+          })
+          this.historyNum.unshift({
+            number: this.iphoneNum
+          })
+          // 如果输入历史数据长度大于6则截取6条
+          if (this.historyNum.length > 6) {
+            this.historyNum = this.historyNum.slice(0, 6)
+          }
+          // 把输入历史数据保存到localStore
+          utils.dbSet(this.historyName, this.historyNum)
+        }
+        // 生成订单
+        let timestamp = utils.getTimeFormatToday();
+        let requestData = {
+          client_id: CONST.CLIENT_ID,
+          token: utils.ssdbGet('member_token'),
+          mobile: this.iphoneNum,
+          sku: this.currentSku,
+          item: this.currentItem,
+          dkhxm: this.useName,
+          dkhdh: this.iphoneNum,
+          dkhzh: utils.ssdbGet('member_id'),
+          dxtype: this.getPayType(this.type),
+          num: '1',
+          timestamp: timestamp,
+          format: "json",
+          t_dz: CONST.T_DZ,
+          dlx: '01'
+        }
+        console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+        api.recharge.genOrder(requestData).then(data => {
+          console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+          let goodsName = this.phoneCheck + this.currentSku + (this.type == 'll' ? 'M' : '元')
+          switch (this.type) {
+            case 'yk':
+              goodsName += "加油充值卡"
+              break
+            default:
+              goodsName += "手机充值卡"
+              break
+          }
+          let resData = JSON.parse(data.body.obj)
+          let createExpensesOrderRequestData = {
+            outOrderNo: resData.orderid,
+            payMoney: parseFloat(this.currentActivePay),
+            orderSource: 1,
+            orderTypeCode: this.getOrderTypeCode(this.type),
+            memberId: utils.ssdbGet('member_id'),
+            goodsName: goodsName,
+            phoneNo: this.iphoneNum,
+            price: this.currentSku,
+            count: 1,
+            accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
+            changeMoney: parseFloat(this.currentPay),
+            aliasSaleTime: resData.orddate,
+            orderPhone: this.iphoneNum,
+            serviceFee: Number(0).toFixed(2)
+          }
+          console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+          api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+            console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+            let resData = JSON.parse(data.body.obj)
+            let order = {
+              orderNo: resData.orderNo,
+              outOrderNo: resData.outOrderNo,
+              payMoney: resData.payMoney,
+              orderTime: resData.orderTime,
+              orderTypeCode: resData.orderTypeCode,
+              activeTime: resData.activeTime,
+              changeMoney: resData.changeMoney,
+              omsNotifyUrl: resData.omsNotifyUrl,
+              payType: resData.payType,
+              accountNo: this.iphoneNum
+            }
+            require.ensure([], function(require) {
+              let Pay = require('src/paymodel').default
+              current.inlineLoading.close()
+              Pay.goPay(order, '23')
+            }, 'Pay')
+          })
+        })
+      },
+      getOrderTypeCode(type) {
+        switch (type) {
+          case '01':
+            return '20';
+          case '02':
+            return '21';
+          case '03':
+            return '22';
+          case 'sf':
+            return '20';
+          case 'dl':
+            return '21';
+          case 'mq':
+            return '22';
+          case 'cz':
+            return '23';
+          case 'ltll':
+            return '34';
+          case 'ydll':
+            return '34';
+          case 'dxll':
+            return '34';
+          case 'yk':
+            return '35';
+          case 'gh':
+            return '10';
+          case 'ds':
+            return '9';
+          case 'tt':
+            return '12';
+          case 'yx':
+            return '14';
+          case 'zc':
+            return '15';
+          default:
+            return type;
+        }
+      },
+      getPayType(orderType, data) {
+        if (data && (data.type == 'cz' || data.type == 'yx' || data.type == 'zc')) {
+          return '02';
+        }
+        if (data && data.type == 'gh') {
+          switch (data.subType) {
+            case 'gh':
+              return '00';
+            case 'fz':
+              return '08';
+            case 'xlt':
+              return '01';
+            case 'kd':
+              return '03' + data.psw;
+          }
+        }
+        switch (orderType) {
+          case '01':
+            return 'sf';
+          case '02':
+            return 'dl';
+          case '03':
+            return 'mq';
+          case '20':
+            return 'sf';
+          case '21':
+            return 'dl';
+          case '22':
+            return 'mq';
+          case 'ydll':
+            return '150';
+          case 'ltll':
+            return '151';
+          case 'dxll':
+            return '152';
+          case 'yk':
+            return '143';
+          case 'cz':
+            return '02';
+          default:
+            return orderType;
+        }
+      },
+      // 给div屏幕的高度
+      wrapperHeight() {
+        return document.documentElement.clientHeight
+      },
+      emptyPhone() {
+        this.iphoneNum = ''
         this.focus = false
+        $('#number')[0].focus()
+      },
+    },
+    watch: {
+      // 监听输入号码的值,当长度等于11的时候黑框隐藏
+      iphoneNum(val) {
+        if (this.testPhoneNum()) {
+          this.focus = false
+          $('#number')[0].blur()
+
+          this.moneyListModel = 0
+          this.flowListModel = 0
+          if (this.$route.query.type !== 'petrol') {
+            this.getPhoneInfo(this.iphoneNum)
+          }
+        }
+      },
+      // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏
+      historyNum(val) {
+        if (val && val.length == 0) {
+          this.focus = false
+        }
       }
     }
-  }
-};
+  };
 </script>
