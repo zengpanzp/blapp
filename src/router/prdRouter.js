@@ -114,6 +114,11 @@ export const prdRouter = [
       {path: 'company'}
     ]
   },
+  /* 神马 充值缴费 支付页面  type=1 水费  2 电费  3煤气 */
+  {
+    path: '/recharge/pay/:type',
+      component: r => require.ensure([], () => r(require('../views/recharge/pay')), 'pay')
+  },
   /* 神马 充值缴费 缴费记录  type=1 水费  2 电费  3煤气 */
   {
     path: '/recharge/records/:type',

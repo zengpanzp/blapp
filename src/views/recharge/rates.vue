@@ -85,10 +85,8 @@
             this.memberId = utils.ssdbGet('member_id')
             this.memberToken = utils.ssdbGet('member_token')
             api.recharge.queryMyGroup({
-              sign: "073d3d3436b2d7660d4435a93f79411d",
               timestamp: timestamp,
               member_token: this.memberToken,
-              sysid: 1101
             }).then(data => {
                 console.log(data);
                 let json = JSON.parse(data.body.obj);
@@ -201,16 +199,20 @@
             });
             return false;
           }
+          let timestamp = utils.getTimeFormatToday();
+          console.log(timestamp)
+          let mac = utils.MD5(this.typeObj[this.ratesType] + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
           let queryData = {
             client_id: CONST.CLIENT_ID,
             t_dz: "02",
-            type: this.typeObj[this.ratesType],
+            type: this.typeObj[this.ratesType] + "",
             codetype: this.account.length >= 24 ? "01" : "02",
             dkhzh: this.memberId,
             typecode: this.receiveCompanyItem.id,
             format: "json",
-            year: new Date().getFullYear(),
-            month: new Date().getMonth() + 1,
+            mac: mac,
+            year: new Date().getFullYear().toString(),
+            month: (new Date().getMonth() + 1).toString(),
             code: this.account,
             timestamp: utils.getTimeFormatToday(),
             acctoken: this.memberToken

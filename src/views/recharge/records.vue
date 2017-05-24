@@ -5,7 +5,7 @@
       <div class="content-wrap">
           <ul>
             <li @click.prevent="showCategory">缴费账号
-              <div class="name"><label>7897897979</label></div>
+              <div class="name"><label>{{queryData.code}}</label></div>
             </li>
             <!--	</ul>
             </div>-->
@@ -16,21 +16,15 @@
               <div class="name"><label>时间考虑就看见；肯定是房价</label></div>
             </li>
           </ul>
-          <ul class="record-list" >
-            <li class="record-detail">
-              <span>2015-12-23</span>
-              <span>￥97</span>
-              <span><div class="billstatus">等待付款</div></span>
+          <ul class="record-list" v-if="dataJson">
+            <li class="record-detail" v-for="(item,key) in dataJson" v-if="key==0&&item.Result_code=='200'">
+              <span>{{item.date}}</span>
+              <span>￥{{item.total[0]}}</span>
+              <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
             </li>
-            <li class="record-detail">
-              <span>2015-12-23</span>
-              <span>￥97</span>
-              <span><div class="billstatus other">付款中</div></span>
-            </li>
-            <li class="record-detail">
-              <span>2015-12-23</span>
-              <span>￥97</span>
-              <span><div class="billstatus finish">已完成</div></span>
+            <li class="record-detail" v-else="item.date">
+              <span class="spe">{{item.msg}}</span>
+              <span class="spe"><div class="billstatus finish"></div></span>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
@@ -38,9 +32,14 @@
       </div>
     </div>
 </template>
+<style lang="scss" scoped>
+  .content-wrap {
+    background: transparent;
+  }
+</style>
 <script>
-//    import api from 'src/api/index'
-//    import utils from 'src/utils'
+    import api from 'src/api/index'
+    import utils from 'src/utils'
 //    import CONST from 'src/const'
   export default {
 
@@ -48,7 +47,8 @@
 
     data() {
       return {
-        rateType: 1
+        rateType: 1,
+        dataJson: ''
       }
     },
     computed: {
@@ -57,9 +57,25 @@
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
-        localStorage.removeItem("BL_QUERY_DATA"); // 删除数据
+        this.queryData = queryData;
         console.log(queryData)
         this.fill();
+        utils.isLogin().then(user => {
+            console.log(user)
+          api.recharge.getGoodsDetail(queryData).then(data => {
+            let json = JSON.parse(data.body.obj);
+            console.log(json);
+            this.dataJson = json;
+            delete this.dataJson.Result_code;
+            debugger;
+            for (let obj in this.dataJson) {
+                console.log(this.dataJson[obj].date)
+                if (this.dataJson[obj].date) {
+                  this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
+                }
+            }
+          })
+        });
     },
     watch: {
       '$route': 'fill'
