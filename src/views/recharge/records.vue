@@ -80,6 +80,7 @@
             this.queryData.price = this.dataJson[0].price[0];
             this.queryData.total = this.dataJson[0].total[0];
             this.queryData.date = this.dataJson[0].date;
+            this.queryData.fee = this.dataJson[0].fee[0];
             localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData))
           })
         });

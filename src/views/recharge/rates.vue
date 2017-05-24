@@ -81,7 +81,6 @@
             console.log(user);
             let timestamp = utils.getTimeFormatToday();
             console.log(user.mobile)
-            let mac = utils.MD5(this.typeObj[this.ratesType] + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
             this.memberId = utils.ssdbGet('member_id')
             this.memberToken = utils.ssdbGet('member_token')
             api.recharge.queryMyGroup({
@@ -99,7 +98,6 @@
             api.recharge.queryCompanyGroup({
               client_id: CONST.CLIENT_ID,
               format: "json",
-              mac: mac,
               t_dz: "02",
               timestamp: timestamp,
               type: this.typeObj[this.ratesType]
@@ -206,7 +204,6 @@
           }
           let timestamp = utils.getTimeFormatToday();
           console.log(timestamp)
-          let mac = utils.MD5(this.typeObj[this.ratesType] + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
           let queryData = {
             client_id: CONST.CLIENT_ID,
             t_dz: "02",
@@ -216,12 +213,12 @@
             typecode: this.receiveCompanyItem.id,
             companyName: this.receiveCompanyItem.name,
             format: "json",
-            mac: mac,
             year: new Date().getFullYear().toString(),
             month: (new Date().getMonth() + 1).toString(),
             code: this.account,
             timestamp: utils.getTimeFormatToday(),
-            acctoken: this.memberToken
+            acctoken: this.memberToken,
+            token: this.memberToken
         }
         localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData));
         // 传递参数
