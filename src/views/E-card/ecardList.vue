@@ -109,7 +109,7 @@ export default {
       })
     },
     fnStatus(val) {
-      let aStatus = ['', '在仓', '可售', '已提卡', '已激活', '已作废', '已冻结', '已过期']
+      let aStatus = ['', '在仓', '可售', '已提卡', '已激活', '已作废', '已冻结', '已过期', '已锁定']
       return aStatus[parseInt(val)]
     },
     transPass(val, index) {
