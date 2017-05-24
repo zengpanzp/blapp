@@ -131,6 +131,7 @@ export default {
     })
   },
   methods: {
+    // 切换tab
     changeTab(index, type) {
       this.tabsModel = String(index)
       this.pageNum = 1
@@ -139,17 +140,29 @@ export default {
       console.log(type)
       this.loadMore()
     },
+    // 根据类型查询评论信息
     loadMore() {
       this.busy = true
       this.noRows = false
-      let req = {
-        memberId: this.memberId,
-        channelId: 1,
-        type: this.type,
-        pageSize: 10,
-        pageNo: this.pageNum ++
-      }
-      api.queryCommentBytype(req).then(data => {
+      let orderNo = decodeURIComponent(this.$route.params.orderNo)
+      if (!orderNo) {
+        api.queryComnentByorder({
+          orderNo: orderNo
+        }).then(data => {
+          if (data.body.obj) {
+            console.log("----data orderNo-------" + data.body.obj)
+          }
+        }, err => {
+          console.log(err)
+        })
+      } else {
+        api.queryCommentBytype({
+          memberId: this.memberId,
+          channelId: 1,
+          type: this.type,
+          pageSize: 10,
+          pageNo: this.pageNum ++
+      }).then(data => {
         if (data.body.obj) {
           console.log("------data-----" + data.body.obj)
           let resData = JSON.parse(data.body.obj)
@@ -216,6 +229,7 @@ export default {
       }, err => {
         console.log(err)
       })
+    }
     },
     // 设置评论
     getData: () => {

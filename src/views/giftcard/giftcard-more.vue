@@ -14,7 +14,6 @@
 </template>
 
 <script>
-  import Vue from 'vue'
   export default {
     name: 'giftcard-more',
     data() {
@@ -61,10 +60,6 @@
           })
         }
       }
-    },
-    beforeRouteEnter (to, from, next) {
-      Vue.$loading.close()
-      next()
     }
   }
 </script>

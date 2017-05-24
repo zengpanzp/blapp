@@ -90,7 +90,15 @@ export default {
   recharge: {
     // 虚拟充值 可充值产品查询接口
     queryPhoneGoodsDetail: params => {
-      return Vue.resource(baseUrl + '/kmgm/goods_detail.htm').get(params)
+      return Vue.http.post(baseUrl + '/kmgm/goods_detail.htm', params);
+    },
+    // 虚拟充值 生成订单
+    genOrder: params => {
+      return Vue.http.post(baseUrl + '/kmgm/gen_order.htm', params);
+    },
+    // 虚拟充值 创建费用订单
+    createExpensesOrder: params => {
+      return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
     },
     // 查询我的缴费分组
     queryMyGroup: params => {
@@ -111,6 +119,10 @@ export default {
     queryCompanyGroup: params => {
       return Vue.http.post(baseUrl + '/gyjf/type_detail.htm', params);
     },
+    // 有线电视和铁通机构查询
+    queryLineTVAndTieTongCompany: params => {
+      return Vue.http.post(baseUrl + '/sdm/type_detail.htm', params);
+    },
     // 水电煤 生成订单
     createOrder: params => {
       return Vue.http.post(baseUrl + '/gyjf/gen_order.htm', params);
@@ -121,7 +133,7 @@ export default {
     },
     // 水电煤 商品详情
     getGoodsDetail: params => {
-      return Vue.http.post(baseUrl + '/gyjf/goods_detail.htm', params);
+      return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);
     },
     // 水电煤 订单状态
     getOrderStatus: params => {
