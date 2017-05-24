@@ -116,7 +116,7 @@ export default {
       this.storePage = 1
       if (index == '0') {
         this.loadGoods()
-        this.$router.push({
+        this.$router.replace({
           path: '/myCollection',
           query: {
             deployName: 'goods'
@@ -125,7 +125,7 @@ export default {
       }
       if (index == '1') {
         this.loadStores()
-        this.$router.push({
+        this.$router.replace({
           path: '/myCollection',
           query: {
             deployName: 'stores'
