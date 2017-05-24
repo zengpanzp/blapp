@@ -90,7 +90,15 @@ export default {
   recharge: {
     // 虚拟充值 可充值产品查询接口
     queryPhoneGoodsDetail: params => {
-      return Vue.resource(baseUrl + '/kmgm/goods_detail.htm').get(params)
+      return Vue.http.post(baseUrl + '/kmgm/goods_detail.htm', params);
+    },
+    // 虚拟充值 生成订单
+    genOrder: params => {
+      return Vue.http.post(baseUrl + '/kmgm/gen_order.htm', params);
+    },
+    // 虚拟充值 创建费用订单
+    createExpensesOrder: params => {
+      return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
     },
     // 查询我的缴费分组
     queryMyGroup: params => {

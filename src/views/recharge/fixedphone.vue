@@ -190,7 +190,6 @@ export default {
             duration: 'loading'
           })
           let timestamp = utils.getTimeFormatToday();
-          let mac = utils.MD5(type + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
           let requestData = {
             client_id: CONST.CLIENT_ID,
             mobile: type,
@@ -198,11 +197,8 @@ export default {
             format: "json",
             t_dz: CONST.T_DZ,
             token: utils.ssdbGet('member_token'),
-            mac: mac
           }
-          api.recharge.queryPhoneGoodsDetail({
-            data: JSON.stringify(requestData)
-          }).then(data => {
+          api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
             this.inlineLoading.close()
             let resData = JSON.parse(data.body.obj)
             this.phoneCheck = resData.msg
