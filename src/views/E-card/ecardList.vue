@@ -11,30 +11,32 @@
           <div slot="right-menu">
             <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</bl-swipeout-button>
           </div>
-          <div slot="content" class="swiper-left">
-            <label class="select-box">
-              <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
+          <div slot="content">
+            <label class="swiper-left">
+              <span class="select-box">
+                <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
+              </span>
+              <div class="card-box">
+                <div class="card-num">
+                  <div class="residue-box">
+                    <div>面值：¥{{ item.cardValue }}</div>
+                    <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
+                  </div>
+                  <div class="suit-box">
+                    <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
+                    <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
+                  </div>
+                </div>
+                <div class="card-statu">
+                  <div class="residue-box">
+                    <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
+                  </div>
+                  <div class="suit-box">
+                    <div><span  class="ash-font">状态：</span>{{ fnStatus(item.cardStatus) }}</div>
+                  </div>
+                </div>
+              </div>
             </label>
-            <div class="card-box">
-              <div class="card-num">
-                <div class="residue-box">
-                  <div>面值：¥{{ item.cardValue }}</div>
-                  <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
-                </div>
-                <div class="suit-box">
-                  <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
-                  <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
-                </div>
-              </div>
-              <div class="card-statu">
-                <div class="residue-box">
-                  <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
-                </div>
-                <div class="suit-box">
-                  <div><span  class="ash-font">状态：</span>{{ fnStatus(item.cardStatus) }}</div>
-                </div>
-              </div>
-            </div>
           </div>
         </bl-swipeout-item>
       </bl-swipeout>
@@ -149,12 +151,12 @@ export default {
     },
     cancleSelect() {
       this.more = true
-      this.swipeoutDisabled = false
+      // this.swipeoutDisabled = false
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
     },
     manageSelect() {
       this.selectData.splice(0)
-      this.swipeoutDisabled = true
+      // this.swipeoutDisabled = true
       this.more = false
 
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 2})
