@@ -84,25 +84,29 @@ export default {
         }
       }).then(data => {
         this.$loading.close()
-        let resData = JSON.parse(data.body.obj)
-        resData.body.cardList.forEach((item) => {
-          item.showPass = false
-          item.pheredText = '•••• •••• •••• ••••'
-        })
-        if (resData.body.cardList.length) {
-          this.cardList = this.cardList.concat(resData.body.cardList)
-        }
-        if (resData.body.cardList && resData.body.cardList.length >= 10) {
-          this.busy = false
+        if (data.body.obj) {
+          let resData = JSON.parse(data.body.obj)
+          resData.body.cardList.forEach((item) => {
+            item.showPass = false
+            item.pheredText = '•••• •••• •••• ••••'
+          })
+          if (resData.body.cardList.length) {
+            this.cardList = this.cardList.concat(resData.body.cardList)
+          }
+          if (resData.body.cardList && resData.body.cardList.length >= 10) {
+            this.busy = false
+          } else {
+            this.busy = true
+            once !== 0 && this.$toast('没有了~')
+          }
+          this.$loading.close()
+          if (this.cardList.length < 1) {
+            window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
+          } else {
+            window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
+          }
         } else {
-          this.busy = true
-          once !== 0 && this.$toast('没有了~')
-        }
-        this.$loading.close()
-        if (this.cardList.length < 1) {
-          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
-        } else {
-          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
+          this.$toast(data.body.msg)
         }
       }, err => {
         console.log(err)
