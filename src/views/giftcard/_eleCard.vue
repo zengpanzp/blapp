@@ -74,7 +74,7 @@ export default {
           let goodsId = "1042900";// SIT环境对应商品id
           // let goodsId = "1219874"; pre环境对应商品id
           // let goodsId = "1166100"; 生产环境对应商品id
-          window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
+          window.CTJSBridge && window.CTJSBridge.LoadAPI('BLCartAddCartAPIManager', {
             memberId: memberId,
             member_token: memberToken,
             orderSourceCode: "1",
