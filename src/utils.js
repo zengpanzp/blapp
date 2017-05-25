@@ -128,7 +128,7 @@ const isLogin = (login = true) => {
  */
 const addCard = (goodId, item = {}) => {
   isLogin().then((data) => {
-    window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
+    window.CTJSBridge && window.CTJSBridge.LoadAPI('BLCartAddCartAPIManager', {
       memberId: data.member_id,
       member_token: data.member_token,
       orderSourceCode: "1",
