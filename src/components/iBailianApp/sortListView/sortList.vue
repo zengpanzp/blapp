@@ -2,7 +2,7 @@
   <div class="sortListView" v-show="show">
     <div class="letter" style="display: none;"></div>
     <div class="sort_box">
-      <div class="sort_list" @click.preventDefault="selectRow(item,$event)" v-for=" item of list">
+      <div class="sort_list" @click.prevent="selectRow(item,$event)" v-for=" item of list">
         <div class="slot"></div>
         <div class="num_name">{{item.name}} <img src="./i/unselect.png"></div>
       </div>
@@ -32,7 +32,7 @@
     created() {
     },
     mounted() {
-      console.log(this.list)
+      this.$loading.close();
       sortListView(this.list);
     },
     methods: {

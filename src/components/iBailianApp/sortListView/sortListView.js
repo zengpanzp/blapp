@@ -456,7 +456,7 @@ export default function(a) {
               var letter = _this.text();
               if ($('#' + letter).length > 0) {
                   var LetterTop = $('#' + letter).position().top;
-                  debugger;
+
                   // $('html,body').animate({scrollTop: LetterTop - 45 + 'px'}, 300);
                   $("body").scrollTo({
                       toTop: (LetterTop)

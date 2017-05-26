@@ -111,6 +111,15 @@ export default {
     createMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/createPaySubNoGroup.htm', params);
     },
+    // myInformation/createPaySubNo.htm
+    // 添加我的分组名称
+    createPaySubNo: params => {
+      return Vue.http.post(baseUrl + '/myInformation/createPaySubNo.htm', params);
+    },
+    // 查询我的分组名称
+    queryPaySubNo: params => {
+      return Vue.http.post(baseUrl + '/myInformation/queryPaySubNo.htm', params);
+    },
     // 删除我的分组
     deleteMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/deletePaySubGroup.htm', params);

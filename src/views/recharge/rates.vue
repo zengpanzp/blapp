@@ -32,7 +32,13 @@
             </li>
 
           </ul>
-        <bl-button @click="next" type="blueBtn next selected">下一步</bl-button>
+          <div class="phoneFixBottom">
+            <div class="config-button-contain">
+              <button class="edit-config-button middleFont" @click="next" :disabled="isCantouch">
+                下一步
+              </button>
+            </div>
+          </div>
       </div>
     </div>
 </template>
@@ -68,7 +74,7 @@
             2: "dl",  // 电费
             3: "mq"   // 煤气
         },
-        accountTypeName: "肖根号"
+        accountTypeName: "销根号"
       }
     },
     computed: {
@@ -120,6 +126,7 @@
                   };
                   list.push(obj)
               });
+
               // 支持条形码 和 账号进行缴费
               if (json.typezhname[0].length == 2) {
                 // 默认第一个的名称
@@ -241,12 +248,15 @@
         if (val == 1) {
           this.typeClass = "icon-waitassess";
           this.typeName = "水费";
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle("水费");
         } else if (val == 2) {
           this.typeClass = "icon-electricity";
           this.typeName = "电费";
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle("电费");
         } else if (val == 3) {
           this.typeClass = "icon-gas";
           this.typeName = "煤气费";
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle("煤气费");
         }
         this.$loading.close()
       }
