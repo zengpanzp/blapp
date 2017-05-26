@@ -119,7 +119,6 @@
 //    },
     methods: {
       tabShow(index, $event) {
-        debugger;
         // 通过数组索引方式不会触发视图更新
         // Vue.set(example1.items, indexOfItem, newValue)
         for (let i = 0; i < this.shows.length; i++) {
