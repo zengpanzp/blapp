@@ -9,10 +9,13 @@
       <bl-swipeout>
         <bl-swipeout-item class="swipe-contain margin-b" :disabled="swipeoutDisabled" transition-mode="follow" v-for="(item, index) in cardList">
           <div slot="right-menu">
-            <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</bl-swipeout-button>
+            <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">
+            <span v-if="item.showPass">隐藏<br />密码</span>
+            <span v-else>显示<br />密码</span>
+            </bl-swipeout-button>
           </div>
           <div slot="content">
-            <label class="swiper-left">
+            <label class="swiper-left" @click="item.showPass ? toggleShow = false : toggleShow = true">
               <span class="select-box">
                 <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
               </span>
@@ -47,7 +50,7 @@
     </div>
     <div class="manage-button">
       <div class="button-box">
-        <button class="show-pass" @click="[cancleSelect(), showAllPass()]" :disabled="selectData.length === 0">显示密码</button>
+        <button class="show-pass" @click="showAllPass" :disabled="selectData.length === 0">{{ toggleShow ? '显示密码' : '隐藏密码' }}</button>
       </div>
     </div>
   </div>
@@ -64,11 +67,11 @@ export default {
     return {
       more: true,
       busy: true,
-      swipeoutDisabled: false,
 
       currentPage: 1,
       cardList: [],
-      selectData: []
+      selectData: [],
+      toggleShow: true
     };
   },
   created() {
@@ -120,27 +123,40 @@ export default {
     },
     transPass(val, index) {
       if (!this.cardList[index].showPass) {
-        window.CTJSBridge && window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val}, {
+        window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val, index: index}, {
           success: res => {
             let resData = utils.transData(res)
             this.cardList[index].pheredText = resData.decypheredText
             this.cardList[index].showPass = true
-          },
-          fail: err => {
-            console.log(err)
-          },
-          progress: err => {
-            console.log(err)
           }
         })
+      } else {
+        this.cardList[index].pheredText = '•••• •••• •••• ••••'
+        this.cardList[index].showPass = false
       }
     },
     showAllPass() {
-      this.selectData.forEach(item => {
-        if (this.cardList[item].cardStatus !== '06') {
-          this.transPass(this.cardList[item].cardPin, item)
+      for (let item of this.selectData) {
+        console.log(this.toggleShow, item, this.cardList[item].cardStatus !== '06', !this.cardList[item].showPass)
+        let val = this.cardList[item].cardPin
+        let status = this.cardList[item].cardStatus
+        let showPass = this.cardList[item].showPass
+        if (this.toggleShow) {
+          if (status !== '06' && !showPass) {
+            window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val, index: item}, {
+              success: res => {
+                let resData = JSON.parse(res)
+                this.cardList[item].pheredText = resData.decypheredText
+                this.cardList[item].showPass = true
+              }
+            })
+          }
+        } else {
+          this.cardList[item].pheredText = '•••• •••• •••• ••••'
+          this.cardList[item].showPass = false
         }
-      })
+      }
+      this.toggleShow = !this.toggleShow
     },
     // 下面方法给native调用
     fullSelect() {
@@ -151,12 +167,10 @@ export default {
     },
     cancleSelect() {
       this.more = true
-      // this.swipeoutDisabled = false
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
     },
     manageSelect() {
       this.selectData.splice(0)
-      // this.swipeoutDisabled = true
       this.more = false
 
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 2})
