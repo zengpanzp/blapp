@@ -209,5 +209,13 @@ export const prdRouter = [
       title: '商品评价'
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/goodComment')), 'goodComment')
+  },
+  /* 曾攀售后列表 */
+  {
+    path: '/afterSale',
+    meta: {
+      title: '售后'
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/afterSale')), 'afterSale')
   }
 ]
