@@ -25,7 +25,7 @@
                     <div class="fright dw-show-1">
                         <div class="sicon-1" style="display:block;" @click="sup">-</div>
                         <div class="fl-input" style="display:block;">
-                            <input type="number" v-model="numValue">
+                            <input type="tel" v-model="numValue" maxlength="2">
                         </div>
                         <div class="sicon-2" style="display: block;" @click="sub">+</div>
                     </div>
@@ -59,7 +59,7 @@ export default {
             return
         }
         if (val < 10 || val > 1000) {
-          this.$toast('请输入10-1000的整数!')
+          this.$toast('请输入10-1000的整数面额!')
         }
         this.inputData = String(val).replace(/\D/g, '').replace('.', '');
       }
@@ -115,7 +115,7 @@ export default {
           })
         }, () => {})
       } else {
-        this.$toast('请输入10-1000的整数!')
+        this.$toast('请输入10-1000的整数面额!')
       }
     },
     sup() {
