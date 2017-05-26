@@ -59,6 +59,7 @@
 <script>
 import api from 'src/api'
 import utils from 'src/utils'
+let pinPass = '••••••••••••••••'
 export default {
 
   name: 'ecardList',
@@ -93,13 +94,14 @@ export default {
           let resData = JSON.parse(data.body.obj)
           resData.body.cardList.forEach((item) => {
             item.showPass = false
-            item.pheredText = '•••• •••• •••• ••••'
+            item.pheredText = pinPass
           })
           if (resData.body.cardList.length) {
             this.cardList = this.cardList.concat(resData.body.cardList)
           }
           if (resData.body.cardList && resData.body.cardList.length >= 10) {
             this.busy = false
+            this.fullSelect()
           } else {
             this.busy = true
             once !== 0 && this.$toast('没有了~')
@@ -131,7 +133,7 @@ export default {
           }
         })
       } else {
-        this.cardList[index].pheredText = '•••• •••• •••• ••••'
+        this.cardList[index].pheredText = pinPass
         this.cardList[index].showPass = false
       }
     },
@@ -152,7 +154,7 @@ export default {
             })
           }
         } else {
-          this.cardList[item].pheredText = '•••• •••• •••• ••••'
+          this.cardList[item].pheredText = pinPass
           this.cardList[item].showPass = false
         }
       }
