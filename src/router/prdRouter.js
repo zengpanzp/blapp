@@ -126,8 +126,11 @@ export const prdRouter = [
   },
   /* 神马 充值缴费 有线电视和铁通 */
   {
-    path: '/recharge/linetv',
-    component: r => require.ensure([], () => r(require('../views/recharge/linetv')), 'linetv')
+    path: '/recharge/linetv/',
+    component: r => require.ensure([], () => r(require('../views/recharge/linetv')), 'linetv'),
+    children: [
+      {path: 'company'}
+    ]
   },
   /* 神马 充值缴费 游戏充值 */
   {

@@ -279,6 +279,7 @@
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()
+          debugger;
           let resData = JSON.parse(data.body.obj)
           this.phoneCheck = resData.msg
           if (resData.sku) {

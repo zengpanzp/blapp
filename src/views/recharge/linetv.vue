@@ -4,7 +4,7 @@
     <div class="rates">
       <!--选择缴费机构-->
       <bl-sort-list-view @click="getCompany" v-if="loadListView" :list="companyList"></bl-sort-list-view>
-      <div class="content-wrap nopadding">
+      <div class="content-wrap nopadding" v-show="toShow">
         <div class="headMenu">
           <ul>
             <li :class="{selected:select}" @click="tabSelect">有线电视</li>
@@ -12,17 +12,23 @@
           </ul>
         </div>
         <ul class="linetvul">
-          <li>
+          <li @click="showListView">
             缴费机构
-            <div class="name"><label>上海城投水务（集团）有限公司</label><img class="more" src="./i/iphone/more.png"></div>
+            <div class="name"><label>{{receiveCompanyItem.name}}</label><img class="more" src="./i/iphone/more.png"></div>
           </li>
           <li>
             缴费账号
-            <div class="account"><input placeholder="输入账号或扫一扫条形码"><img src="./i/rates/icon_scan.png"></div>
+            <div class="account"><input v-model="account" placeholder="输入账号或扫一扫条形码"><img src="./i/rates/icon_scan.png"></div>
           </li>
 
         </ul>
-        <bl-button type="blueBtn next selected">下一步</bl-button>
+        <div class="phoneFixBottom">
+          <div class="config-button-contain">
+            <button class="edit-config-button middleFont" @click="next" :disabled="isCantouch">
+              下一步
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 </template>
@@ -38,27 +44,91 @@
   export default {
 
     name: 'linetv',
-
+    components: {
+      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
+    },
     data() {
       return {
         type: "ds", // 默认为有线电视
         select: true, // 默认选中有线电视
         loadListView: false,
-        companyList: []
+        companyList: [],
+        receiveCompanyItem: {},
+        account: "",
+        toShow: true,  // 是否显示父类组件
+        isCantouch: true // 默认不可以点击
       }
     },
     computed: {
     },
     created() {
-        console.log(api)
-      console.log(CONST)
-      // 查询缴费分组
-      utils.isLogin().then(user => {
-        console.log(user);
-        let timestamp = utils.getTimeFormatToday();
-        console.log(user.mobile)
-        this.memberId = utils.ssdbGet('member_id')
-        this.memberToken = utils.ssdbGet('member_token')
+      window.CTJSBridge && window.CTJSBridge._setNativeTitle("有线电视");
+      this.fill();
+      this.loadData();
+    },
+    watch: {
+      '$route': 'fill',
+       type(val) {
+         this.$loading = this.$toast({
+           iconClass: 'preloader white',
+           message: '加载中',
+           duration: 'loading'
+         });
+          this.loadData();
+        },
+        account(val) {
+          if (val.length > 6) {
+            this.isCantouch = false;
+          }
+        },
+    },
+    methods: {
+      next() {
+        if (this.account == "") {
+          this.$toast({
+            position: 'bottom',
+            message: "缴费账号不能为空!"
+          });
+          return false;
+        }
+        utils.isLogin().then(user => {
+          console.log(user)
+          let queryData = {
+            client_id: CONST.CLIENT_ID,
+            t_dz: "02",
+            type: this.type,
+            codetype: this.account.length >= 24 ? "01" : "02",
+            dkhzh: user.member_id,
+            typecode: this.receiveCompanyItem.id,
+            companyName: this.receiveCompanyItem.name,
+            format: "json",
+            year: new Date().getFullYear().toString(),
+            month: (new Date().getMonth() + 1).toString(),
+            code: this.account,
+            timestamp: utils.getTimeFormatToday(),
+            token: this.memberToken
+          }
+          api.recharge.getGoodsDetail(queryData).then(data => {
+            let json = JSON.parse(data.body.obj);
+            if (json[0].Result_code != "200") {
+              this.$toast({
+                position: 'bottom',
+                message: json[0].msg
+              });
+            }
+            console.log(json);
+          })
+        });
+      },
+      loadData() {
+        this.account = "";
+        // 查询缴费分组
+        utils.isLogin().then(user => {
+          console.log(user);
+          let timestamp = utils.getTimeFormatToday();
+          console.log(user.mobile)
+          this.memberId = utils.ssdbGet('member_id')
+          this.memberToken = utils.ssdbGet('member_token')
           // 查询缴费机构
           api.recharge.queryLineTVAndTieTongCompany({
             client_id: CONST.CLIENT_ID,
@@ -66,10 +136,10 @@
             type: this.type,
             t_dz: "02",
             timestamp: timestamp,
-            acctoken: this.memberToken
+            token: this.memberToken
           }).then(data => {
-            console.log(data);
             let json = JSON.parse(data.body.obj);
+            console.log(json);
             this.receiveCompanyItem = {
               id: json.typecode[0],
               name: json.typename[0],
@@ -78,31 +148,48 @@
             let list = [];
             json.typename.forEach((item, i) => {
               let id = json.typecode[i];
-            let typezhname = json.typezhname[i];
-            let obj = {
-              id: id,
-              name: item,
-              typezhname: typezhname
-            };
-            list.push(obj)
-          });
-          // 支持条形码 和 账号进行缴费
-          if (json.typezhname[0].length == 2) {
-            // 默认第一个的名称
-            this.accountTypeName = json.typezhname[0][1].name;
-          } else { // 只支持条码
-            this.hasShow2 = false;
-          }
-          this.companyList = list;
-          console.log(json);
-        })
-      });
-        this.$loading.close();
-    },
-    methods: {
-        tabSelect() {
-           this.select = !this.select;
+              let typezhname = json.typezhname[i];
+              let obj = {
+                id: id,
+                name: item,
+                typezhname: typezhname
+              };
+              list.push(obj)
+            });
+            console.log(list)
+            this.companyList = list;
+            this.$loading.close();
+          })
+        });
+      },
+      // 选择缴费机构
+      showListView() {
+        this.toShow = false;
+        this.loadListView = true;
+        this.$router.push({path: "/recharge/linetv/company"});
+      },
+      // 获得子组件选择的机构
+      getCompany(item) {
+        console.log(item)
+        this.receiveCompanyItem = item;
+        console.log(this.receiveCompanyItem)
+        this.loadListView = false;
+        this.toShow = true;
+        this.$router.push({path: "/recharge/linetv"});
+      },
+      tabSelect() {
+         this.select = !this.select;
+         this.type = this.select ? 'ds' : 'tt';
+      },
+      // 监听路由
+      fill(to, from) {
+        debugger;
+        if (to && to.fullPath.indexOf("company") == "-1") {
+          this.toShow = true;
+          this.loadListView = false;
+          this.$loading.close();
         }
+      }
     }
   };
 </script>
