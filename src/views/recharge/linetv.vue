@@ -183,7 +183,6 @@
       },
       // 监听路由
       fill(to, from) {
-        debugger;
         if (to && to.fullPath.indexOf("company") == "-1") {
           this.toShow = true;
           this.loadListView = false;

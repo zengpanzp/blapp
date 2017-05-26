@@ -126,7 +126,7 @@
                   };
                   list.push(obj)
               });
-              debugger;
+
               // 支持条形码 和 账号进行缴费
               if (json.typezhname[0].length == 2) {
                 // 默认第一个的名称
