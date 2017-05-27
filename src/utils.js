@@ -94,6 +94,7 @@ const isLogin = (login = true) => {
         if (resData.member_id && resData.member_token) {
           ssdbSet('member_id', resData.member_id)
           ssdbSet('member_token', resData.member_token)
+          ssdbSet('member_mobile', resData.member_mobile)
           console.log('已经登录')
           resolve(resData)
         } else {
@@ -105,6 +106,7 @@ const isLogin = (login = true) => {
               let resData = transData(data)
               ssdbSet('member_id', resData.member_id)
               ssdbSet('member_token', resData.member_token)
+              ssdbSet('member_mobile', resData.member_mobile)
               resolve(resData)
             },
             fail: () => {

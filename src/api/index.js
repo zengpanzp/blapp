@@ -96,6 +96,10 @@ export default {
     genOrder: params => {
       return Vue.http.post(baseUrl + '/kmgm/gen_order.htm', params);
     },
+    // 虚拟充值 生成固话订单
+    buyszkOrder: params => {
+      return Vue.http.post(baseUrl + '/kmgm/buyszk.htm', params);
+    },
     // 虚拟充值 创建费用订单
     createExpensesOrder: params => {
       return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
@@ -140,6 +144,10 @@ export default {
     getOrderDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/order_search.htm', params);
     },
+    // 水电煤 订单详情
+    getNewOrderDetail: params => {
+      return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
+    },
     // 水电煤 商品详情
     getGoodsDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);
@@ -164,6 +172,9 @@ export default {
   // 查询评价数量
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
+  },
+  // 获取售后单列表
+  getSaleList: params => {
+    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
   }
-
 }
