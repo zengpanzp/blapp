@@ -415,7 +415,9 @@
           console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
           api.recharge.genOrder(requestData).then(data => {
             console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-            let goodsName = this.phoneCheck + this.currentSku + (this.type == 'll' ? 'M' : '元')
+            console.log('this.type: ' + this.type)
+            console.log(this.type.indexOf('ll'))
+            let goodsName = this.phoneCheck + this.currentSku + (this.type.indexOf('ll') >= 0 ? 'M' : '元')
             switch (this.type) {
               case 'yk':
                 goodsName += "加油充值卡"

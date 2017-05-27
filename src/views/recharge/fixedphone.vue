@@ -164,6 +164,8 @@ export default {
 
   data() {
     return {
+      inlineLoading: null,
+
       tabsModel: 0,
       historyNum: [],
       tab: [{
@@ -298,7 +300,13 @@ export default {
     },
     // 去支付
     goPay() {
+      let current = this
       if (this.testPhoneNum()) {
+        this.inlineLoading = this.$toast({
+          iconClass: 'preloader white',
+          message: '加载中',
+          duration: 'loading'
+        })
         // 遍历输入历史数据,出现重复的删掉然后重新插入到第一条
         this.historyNum.forEach((item, index) => {
           if (item.number == this.iphoneNum) {
@@ -367,7 +375,7 @@ export default {
             }
             require.ensure([], function(require) {
               let Pay = require('src/paymodel').default
-              // current.inlineLoading.close()
+              current.inlineLoading.close()
               Pay.goPay(order, '23')
             }, 'Pay')
           })
