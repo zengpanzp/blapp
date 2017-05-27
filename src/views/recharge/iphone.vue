@@ -167,6 +167,7 @@
         currentActivePay: '', // 真实金额
         currentItem: '', // 货号
         currentSku: '', // 面值
+        currentFee: 0, // 支付费用
         useName: '',
 
         moneyListModel: 0,
@@ -230,7 +231,8 @@
                 mainPrice: val,
                 salePrice: resData.price2[index],
                 activePay: resData.price[index],
-                item: resData.item[index]
+                item: resData.item[index],
+                fee: resData.fee[index]
               })
             }
             this.moneyList = list
@@ -238,6 +240,7 @@
             this.currentItem = this.moneyList[0].item
             this.currentSku = this.moneyList[0].mainPrice
             this.currentActivePay = this.moneyList[0].activePay
+            this.currentFee = this.moneyList[0].fee
 
             let msg = resData.msg.split("|")[1]
             if (this.tabsModel == '0') {
@@ -279,7 +282,6 @@
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()
-
           let resData = JSON.parse(data.body.obj)
           this.phoneCheck = resData.msg
           if (resData.sku) {
@@ -289,7 +291,8 @@
                 mainPrice: val,
                 salePrice: resData.price2[index],
                 activePay: resData.price[index],
-                item: resData.item[index]
+                item: resData.item[index],
+                fee: resData.fee[index]
               })
             }
             this.flowList = list
@@ -297,6 +300,7 @@
             this.currentItem = this.flowList[0].item
             this.currentSku = this.flowList[0].mainPrice
             this.currentActivePay = this.flowList[0].activePay
+            this.currentFee = this.flowList[0].fee
           } else {
             this.currentPay = 0
             this.flowList = []
@@ -353,6 +357,7 @@
           this.currentItem = item.item
           this.currentActivePay = item.activePay
           this.currentPay = item.salePrice
+          this.currentFee = item.fee
         }
       },
       flowSelectPrice(index, item) {
@@ -362,6 +367,7 @@
           this.currentItem = item.item
           this.currentActivePay = item.activePay
           this.currentPay = item.salePrice
+          this.currentFee = item.fee
         }
       },
       // 去支付
@@ -409,7 +415,9 @@
           console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
           api.recharge.genOrder(requestData).then(data => {
             console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-            let goodsName = this.phoneCheck + this.currentSku + (this.type == 'll' ? 'M' : '元')
+            console.log('this.type: ' + this.type)
+            console.log(this.type.indexOf('ll'))
+            let goodsName = this.phoneCheck + this.currentSku + (this.type.indexOf('ll') >= 0 ? 'M' : '元')
             switch (this.type) {
               case 'yk':
                 goodsName += "加油充值卡"
@@ -419,6 +427,7 @@
                 break
             }
             let resData = JSON.parse(data.body.obj)
+            console.log('this.currentFee: ' + this.currentFee)
             let createExpensesOrderRequestData = {
               outOrderNo: resData.orderid,
               payMoney: parseFloat(this.currentActivePay),
@@ -433,7 +442,7 @@
               changeMoney: parseFloat(this.currentPay),
               aliasSaleTime: resData.orddate,
               orderPhone: this.iphoneNum,
-              serviceFee: Number(0).toFixed(2)
+              serviceFee: Number(this.currentFee).toFixed(2)
             }
             console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
             api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
