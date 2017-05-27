@@ -96,6 +96,7 @@ export default {
       if (item.categoryId === '9999162882') {
         this.eItem = item
         this.load = true
+        this.cwrapTitle = item.categoryName
       } else {
         this.load = false
         this.jumpId = item.categoryId.replace('9999', '');

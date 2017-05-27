@@ -388,77 +388,77 @@
           }
           // 把输入历史数据保存到localStore
           utils.dbSet(this.historyName, this.historyNum)
-        }
-        // 生成订单
-        let timestamp = utils.getTimeFormatToday();
-        let requestData = {
-          client_id: CONST.CLIENT_ID,
-          token: utils.ssdbGet('member_token'),
-          mobile: this.iphoneNum,
-          sku: this.currentSku,
-          item: this.currentItem,
-          dkhxm: this.useName,
-          dkhdh: this.iphoneNum,
-          dkhzh: utils.ssdbGet('member_id'),
-          dxtype: this.getPayType(this.type),
-          num: '1',
-          timestamp: timestamp,
-          format: "json",
-          t_dz: CONST.T_DZ,
-          dlx: '01'
-        }
-        console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-        api.recharge.genOrder(requestData).then(data => {
-          console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-          let goodsName = this.phoneCheck + this.currentSku + (this.type == 'll' ? 'M' : '元')
-          switch (this.type) {
-            case 'yk':
-              goodsName += "加油充值卡"
-              break
-            default:
-              goodsName += "手机充值卡"
-              break
+          // 生成订单
+          let timestamp = utils.getTimeFormatToday();
+          let requestData = {
+            client_id: CONST.CLIENT_ID,
+            token: utils.ssdbGet('member_token'),
+            mobile: this.iphoneNum,
+            sku: this.currentSku,
+            item: this.currentItem,
+            dkhxm: this.useName,
+            dkhdh: this.iphoneNum,
+            dkhzh: utils.ssdbGet('member_id'),
+            dxtype: this.getPayType(this.type),
+            num: '1',
+            timestamp: timestamp,
+            format: "json",
+            t_dz: CONST.T_DZ,
+            dlx: '01'
           }
-          let resData = JSON.parse(data.body.obj)
-          let createExpensesOrderRequestData = {
-            outOrderNo: resData.orderid,
-            payMoney: parseFloat(this.currentActivePay),
-            orderSource: 1,
-            orderTypeCode: this.getOrderTypeCode(this.type),
-            memberId: utils.ssdbGet('member_id'),
-            goodsName: goodsName,
-            phoneNo: this.iphoneNum,
-            price: this.currentSku,
-            count: 1,
-            accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
-            changeMoney: parseFloat(this.currentPay),
-            aliasSaleTime: resData.orddate,
-            orderPhone: this.iphoneNum,
-            serviceFee: Number(0).toFixed(2)
-          }
-          console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-          api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-            console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-            let resData = JSON.parse(data.body.obj)
-            let order = {
-              orderNo: resData.orderNo,
-              outOrderNo: resData.outOrderNo,
-              payMoney: resData.payMoney,
-              orderTime: resData.orderTime,
-              orderTypeCode: resData.orderTypeCode,
-              activeTime: resData.activeTime,
-              changeMoney: resData.changeMoney,
-              omsNotifyUrl: resData.omsNotifyUrl,
-              payType: resData.payType,
-              accountNo: this.iphoneNum
+          console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+          api.recharge.genOrder(requestData).then(data => {
+            console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+            let goodsName = this.phoneCheck + this.currentSku + (this.type == 'll' ? 'M' : '元')
+            switch (this.type) {
+              case 'yk':
+                goodsName += "加油充值卡"
+                break
+              default:
+                goodsName += "手机充值卡"
+                break
             }
-            require.ensure([], function(require) {
-              let Pay = require('src/paymodel').default
-              current.inlineLoading.close()
-              Pay.goPay(order, '23')
-            }, 'Pay')
+            let resData = JSON.parse(data.body.obj)
+            let createExpensesOrderRequestData = {
+              outOrderNo: resData.orderid,
+              payMoney: parseFloat(this.currentActivePay),
+              orderSource: 1,
+              orderTypeCode: this.getOrderTypeCode(this.type),
+              memberId: utils.ssdbGet('member_id'),
+              goodsName: goodsName,
+              phoneNo: this.iphoneNum,
+              price: this.currentSku,
+              count: 1,
+              accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
+              changeMoney: parseFloat(this.currentPay),
+              aliasSaleTime: resData.orddate,
+              orderPhone: this.iphoneNum,
+              serviceFee: Number(0).toFixed(2)
+            }
+            console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+            api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+              console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+              let resData = JSON.parse(data.body.obj)
+              let order = {
+                orderNo: resData.orderNo,
+                outOrderNo: resData.outOrderNo,
+                payMoney: resData.payMoney,
+                orderTime: resData.orderTime,
+                orderTypeCode: resData.orderTypeCode,
+                activeTime: resData.activeTime,
+                changeMoney: resData.changeMoney,
+                omsNotifyUrl: resData.omsNotifyUrl,
+                payType: resData.payType,
+                accountNo: this.iphoneNum
+              }
+              require.ensure([], function(require) {
+                let Pay = require('src/paymodel').default
+                current.inlineLoading.close()
+                Pay.goPay(order, '23')
+              }, 'Pay')
+            })
           })
-        })
+        }
       },
       getOrderTypeCode(type) {
         switch (type) {
@@ -498,22 +498,7 @@
             return type;
         }
       },
-      getPayType(orderType, data) {
-        if (data && (data.type == 'cz' || data.type == 'yx' || data.type == 'zc')) {
-          return '02';
-        }
-        if (data && data.type == 'gh') {
-          switch (data.subType) {
-            case 'gh':
-              return '00';
-            case 'fz':
-              return '08';
-            case 'xlt':
-              return '01';
-            case 'kd':
-              return '03' + data.psw;
-          }
-        }
+      getPayType(orderType, password) {
         switch (orderType) {
           case '01':
             return 'sf';
@@ -537,6 +522,15 @@
             return '143';
           case 'cz':
             return '02';
+
+          case 'gh':
+            return '00';
+          case 'fz':
+            return '08';
+          case 'xlt':
+            return '01';
+          case 'kd':
+            return '03' + password;
           default:
             return orderType;
         }
