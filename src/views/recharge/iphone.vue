@@ -57,7 +57,7 @@
       </ul>
       <div class="phoneRechargeTitle" v-else>
         <bl-navbar class="flex" v-model="tabsModel">
-          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item.type)">
+          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item)">
             {{ item.text }}
           </bl-tab-item>
         </bl-navbar>
@@ -151,10 +151,12 @@
         phoneCheck: '',
         tab: [{
           text: '充话费',
-          type: 'cz'
+          type: 'cz',
+          orderType: '23'
         }, {
           text: '充流量',
-          type: 'll'
+          type: 'll',
+          orderType: '34'
         }],
         rechargeType: '', // 充值类型
         placeholder: '',
@@ -309,9 +311,12 @@
           }
         })
       },
-      changeTab(index, type) {
+      changeTab(index, item) {
         this.tabsModel = index
-        this.type = type
+        this.type = item.type
+        window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
+          type: item.orderType
+        })
         this.getPhoneInfo(this.iphoneNum)
       },
       // 手机号码正则匹配
