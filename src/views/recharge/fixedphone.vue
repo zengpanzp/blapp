@@ -242,6 +242,7 @@ export default {
             this.currentSku = this.moneyList[0].mainPrice
             this.currentActivePay = this.moneyList[0].activePay
             this.currentFee = this.moneyList[0].fee
+            this.moneyListModel = 0
           } else {
             this.currentPay = 0
             this.moneyList = []
