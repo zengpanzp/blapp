@@ -56,6 +56,8 @@
 
     data() {
       return {
+        groupId: 0,  // 分组id
+        groupName: "", // 分组名称
         hasShow: true, // 显示条形码
         hasShow2: true, // 显示销根号
         toShow: true,  // 是否显示父类组件
@@ -82,21 +84,37 @@
     created() {
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
+        // 从账单那边传递过来的参数
+        let groupId = this.$route.query.groupId;  // 分组id
+        let groupName = this.$route.query.groupName;  // 分组名称
+        let jigouCode = this.$route.query.jigouCode;
+        let jigouName = this.$route.query.jigouName;
+        if (groupId && groupName) {
+          this.groupId = groupId;
+          this.groupName = groupName;
+          this.receiveGroupItem.id = groupId;
+          this.receiveGroupItem.groupName = groupName;
+        }
+        debugger
+        if (jigouCode && jigouName) {
+          this.receiveCompanyItem.id = jigouCode;
+          this.receiveCompanyItem.name = jigouName;
+        }
         // 查询缴费分组
         utils.isLogin().then(user => {
-            console.log(user);
             let timestamp = utils.getTimeFormatToday();
-            console.log(user.mobile)
             this.memberId = utils.ssdbGet('member_id')
             this.memberToken = utils.ssdbGet('member_token')
             api.recharge.queryMyGroup({
               timestamp: timestamp,
-              member_token: this.memberToken,
+              member_token: this.memberToken
             }).then(data => {
-                console.log(data);
                 let json = JSON.parse(data.body.obj);
-                this.receiveGroupItem = json.list[0];
-                debugger
+                if (!groupId && !groupName) {
+                  this.receiveGroupItem = json.list[0];
+                  this.groupId = this.receiveGroupItem.id;
+                  this.groupName = this.receiveGroupItem.groupName;
+                }
                 // 子组件的分组列表
                 this.groupList = json.list;
             });
@@ -108,13 +126,7 @@
               timestamp: timestamp,
               type: this.typeObj[this.ratesType]
             }).then(data => {
-              console.log(data);
               let json = JSON.parse(data.body.obj);
-              this.receiveCompanyItem = {
-                  id: json.typecode[0],
-                  name: json.typename[0],
-                  typezhname: json.typezhname[0]
-              };
               let list = [];
               json.typename.forEach((item, i) => {
                   let id = json.typecode[i];
@@ -126,7 +138,6 @@
                   };
                   list.push(obj)
               });
-
               // 支持条形码 和 账号进行缴费
               if (json.typezhname[0].length == 2) {
                 // 默认第一个的名称
@@ -134,9 +145,12 @@
               } else { // 只支持条码
                 this.hasShow2 = false;
               }
-              this.receiveCompanyItem = {
-                id: json.typecode[0],
-                name: json.typename[0]
+              debugger
+              if (!jigouCode && !jigouName) {
+                this.$set(this.receiveCompanyItem, "id", json.typecode[0])
+                console.log("111")
+                this.$set(this.receiveCompanyItem, "name", json.typename[0])
+                this.$set(this.receiveCompanyItem, "typezhname", json.typezhname[0])
               }
               this.companyList = list;
               console.log(json);
@@ -159,7 +173,7 @@
             },
             fail: () => {
               this.$toast({
-                position: 'bottom',
+                position: 'bottomTop',
                 message: "识别条形码失败!"
               });
             }
@@ -209,7 +223,7 @@
                 msg = "缴费账号不能为空!";
             }
             this.$toast({
-              position: 'bottom',
+              position: 'bottomTop',
               message: msg
             });
             return false;
@@ -222,6 +236,8 @@
             type: this.typeObj[this.ratesType] + "",
             codetype: this.account.length >= 24 ? "01" : "02",
             dkhzh: this.memberId,
+            groupId: this.groupId,
+            groupName: this.groupName,
             typecode: this.receiveCompanyItem.id,
             companyName: this.receiveCompanyItem.name,
             format: "json",
@@ -239,6 +255,8 @@
       // 获得选择的分组
       getGroup(item) {
         this.receiveGroupItem = item;
+        this.groupId = this.receiveGroupItem.id;
+        this.groupName = this.receiveGroupItem.groupName;
         this.toShow = true;
       },
       // 监听路由

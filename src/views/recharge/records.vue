@@ -23,7 +23,7 @@
               <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
             </li>
             <li class="record-detail" v-else="item.date">
-              <span class="spe">{{item.msg}}</span>
+              <span class="spe" v-bind:style="{ 'line-height': (item.msg.length>21?'':'70px')}">{{item.msg}}</span>
               <span class="spe"><div class="billstatus finish"></div></span>
             </li>
           </ul>
@@ -50,8 +50,6 @@
         rateType: 1,
         dataJson: ''
       }
-    },
-    computed: {
     },
     created() {
         window.CTJSBridge && window.CTJSBridge._setNativeTitle("缴费记录");

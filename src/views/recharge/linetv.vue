@@ -18,7 +18,7 @@
           </li>
           <li>
             缴费账号
-            <div class="account"><input v-model="account" placeholder="输入账号或扫一扫条形码"><img src="./i/rates/icon_scan.png"></div>
+            <div class="account"><input v-model="account" placeholder="输入账号或扫一扫条形码"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
           </li>
 
         </ul>
@@ -83,6 +83,23 @@
         },
     },
     methods: {
+      // 扫描条形码获得账号
+      scanQ() {
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
+          success: data => {
+            data = JSON.parse(data);
+            if (data.result == "success") {
+              this.account = data.params;
+            }
+          },
+          fail: () => {
+            this.$toast({
+              position: 'bottom',
+              message: "识别条形码失败!"
+            });
+          }
+        })
+      },
       next() {
         if (this.account == "") {
           this.$toast({
