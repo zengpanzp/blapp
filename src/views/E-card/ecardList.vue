@@ -101,7 +101,6 @@ export default {
           }
           if (resData.body.cardList && resData.body.cardList.length >= 10) {
             this.busy = false
-            this.fullSelect()
           } else {
             this.busy = true
             once !== 0 && this.$toast('没有了~')
@@ -162,18 +161,24 @@ export default {
     },
     // 下面方法给native调用
     fullSelect() {
-      this.selectData = []
-      for (let i = 0; i < this.cardList.length; i++) {
-        this.selectData.push(i)
+      if (this.cardList.length == this.selectData.length) {
+        this.selectData = []
+      } else {
+        this.selectData = []
+        for (let i = 0; i < this.cardList.length; i++) {
+          this.selectData.push(i)
+        }
       }
     },
     cancleSelect() {
       this.more = true
+      this.busy = false
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
     },
     manageSelect() {
       this.selectData.splice(0)
       this.more = false
+      this.busy = true
 
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 2})
     },
