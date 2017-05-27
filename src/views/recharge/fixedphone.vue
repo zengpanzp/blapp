@@ -158,7 +158,6 @@ import utils from 'src/utils'
 import CONST from 'src/const'
 import api from 'src/api'
 
-let timestamp = utils.getTimeFormatToday();
 export default {
 
   name: 'fixedphone',
@@ -186,6 +185,7 @@ export default {
       currentActivePay: '', // 真实金额
       currentItem: '', // 货号
       currentSku: '', // 面值
+      currentFee: 0, // 支付费用
       password: '', // 密码
 
       focus: false,
@@ -215,7 +215,7 @@ export default {
         let requestData = {
           client_id: CONST.CLIENT_ID,
           mobile: type,
-          timestamp: timestamp,
+          timestamp: utils.getTimeFormatToday(),
           format: "json",
           t_dz: CONST.T_DZ,
           token: utils.ssdbGet('member_token'),
@@ -230,7 +230,8 @@ export default {
                 mainPrice: val,
                 salePrice: resData.price2[index],
                 activePay: resData.price[index],
-                item: resData.item[index]
+                item: resData.item[index],
+                fee: resData.fee[index]
               })
             }
             this.moneyList = list
@@ -238,6 +239,7 @@ export default {
             this.currentItem = this.moneyList[0].item
             this.currentSku = this.moneyList[0].mainPrice
             this.currentActivePay = this.moneyList[0].activePay
+            this.currentFee = this.moneyList[0].fee
           } else {
             this.currentPay = 0
             this.moneyList = []
@@ -291,6 +293,7 @@ export default {
         this.currentItem = item.item
         this.currentActivePay = item.activePay
         this.currentPay = item.salePrice
+        this.currentFee = item.fee
       }
     },
     // 去支付
@@ -319,12 +322,13 @@ export default {
           ddgsl: '1',
           dkhzh: utils.ssdbGet('member_id'),
           dsphh: this.currentItem,
-          dtype: this.getPayType(this.payType),
+          dtype: this.getPayType(this.payType, this.password),
           str_snda: '0',
           format: 'json',
           dlx: '01'
         }
         console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+        console.log('this.currentFee: ' + this.currentFee)
         api.recharge.buyszkOrder(requestData).then(data => {
           console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
           let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
@@ -336,14 +340,14 @@ export default {
             orderTypeCode: '10',
             memberId: utils.ssdbGet('member_id'),
             goodsName: goodsName,
-            phoneNo: utils.dbGet('member_mobile'),
+            phoneNo: utils.ssdbGet('member_mobile'),
             price: this.currentSku,
             count: 1,
             accountNo: this.iphoneNum,
             changeMoney: parseFloat(this.currentPay),
             aliasSaleTime: resData.orddate,
-            orderPhone: utils.dbGet('member_mobile'),
-            serviceFee: Number(0).toFixed(2)
+            orderPhone: utils.ssdbGet('member_mobile'),
+            serviceFee: Number(this.currentFee).toFixed(2)
           }
           console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
           api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
@@ -370,7 +374,7 @@ export default {
         })
       }
     },
-    getPayType(orderType) {
+    getPayType(orderType, password) {
       switch (orderType) {
         case '01':
           return 'sf';
@@ -402,7 +406,7 @@ export default {
         case 'xlt':
           return '01';
         case 'kd':
-          return '03' + this.password;
+          return '03' + password;
         default:
           return orderType;
       }
