@@ -54,6 +54,7 @@
     computed: {
     },
     created() {
+        window.CTJSBridge && window.CTJSBridge._setNativeTitle("缴费记录");
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));

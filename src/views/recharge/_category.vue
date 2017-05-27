@@ -128,7 +128,6 @@
                 "timestamp": timestamp
               }).then(data => {
                 let obj = JSON.parse(data.body.obj);
-
                 // 添加成功
                 if (data.body.resCode == "00100000") {
                     this.groupList.push({

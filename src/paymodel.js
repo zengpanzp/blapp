@@ -1,6 +1,7 @@
 import utils from 'src/utils'
 
-const goPay = function(order, type) {
+// sucCallback 成功支付的回调  failCallback 取消支付的回调
+const goPay = function(order, type, sucCallback, failCallback) {
   this.sendData = {
     price: Number(order.payMoney).toFixed(2),
     detailPageId: 0,
@@ -54,12 +55,14 @@ const goPay = function(order, type) {
       window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequestData, {
         success: data => {
           console.log('native接口 调native收银台返回报文=============<br>' + data)
+          sucCallback(data);
         },
         fail: error => {
           console.log(error)
           let errorData = JSON.parse(error)
           if (errorData.result == 'fail') {
             // 取消支付
+            failCallback(errorData)
           }
         }
       })

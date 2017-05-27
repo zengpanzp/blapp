@@ -147,18 +147,23 @@
     watch: {
       '$route': 'fill'
     },
-//    beforeRouteEnter(to, from, next) {
-//        debugger
-//      next(vm => {
-//        vm.toShow = true;
-//        vm.loadGroup = false;
-//        vm.loadListView = false;
-//      });
-//    },
     methods: {
-      // 扫码进行支付
+      // 扫描条形码获得账号
       scanQ() {
-        alert("扫一扫！");
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
+            success: data => {
+              data = JSON.parse(data);
+              if (data.result == "success") {
+                this.account = data.params;
+              }
+            },
+            fail: () => {
+              this.$toast({
+                position: 'bottom',
+                message: "识别条形码失败!"
+              });
+            }
+          })
       },
       // 改变选择的缴费类型
       changeType() {

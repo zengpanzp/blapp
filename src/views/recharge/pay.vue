@@ -204,12 +204,18 @@
                     changeMoney: resData.changeMoney,
                     omsNotifyUrl: resData.omsNotifyUrl,
                     payType: resData.payType,
-                    accountNo: this.iphoneNum
+                    accountNo: resData.accountNo
                   }
+                  console.log(order)
                   require.ensure([], function(require) {
                     let Pay = require('src/paymodel').default
                     current.inlineLoading.close()
-                    Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]));
+                    Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
+                      console.log(data);
+                    }, (data) => {
+                      // 跳转到详情
+                      current.$router.push({ path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo });
+                    });
                   }, 'Pay')
                 })
                 console.log(data);

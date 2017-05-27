@@ -140,6 +140,10 @@ export default {
     getOrderDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/order_search.htm', params);
     },
+    // 水电煤 订单详情
+    getNewOrderDetail: params => {
+      return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
+    },
     // 水电煤 商品详情
     getGoodsDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);
