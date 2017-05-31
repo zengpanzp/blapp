@@ -3,11 +3,12 @@
     <div class="modal" :class="[className, effect]" :style="halfModal" ref="modal" @touchmove.prevent>
       <div class="modal-inner">
         <div class="modal-title" v-if="title !== ''">{{ title }}</div>
-        <div class="modal-text" v-show="!input">{{ content }}<slot name="inner"></slot></div>
-        <div class="modal-input" v-show="input"><!--<label>{{labelText}}</label>--><input type="text" v-model="inputValue" :placeholder="placeholder"></div>
+        <div class="modal-input" v-if="input"><!--<label>{{labelText}}</label>--><input type="text" v-model="inputValue" :placeholder="placeholder"></div>
+        <div class="modal-text" v-else>{{ content }}<slot name="inner"></slot></div>
       </div>
       <div class="modal-buttons">
-        <div class="modal-button" v-for="button in buttons" v-text="button.text" @click="[sure(), close()]"></div>
+        <div class="modal-button" v-for="button in buttons" v-if="input" v-text="button.text" @click="[button.onClick(), close()]"></div>
+        <div class="modal-button" v-for="button in buttons" v-else v-text="button.text" @click="[sure(), close()]"></div>
       </div>
     </div>
   </div>

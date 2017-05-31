@@ -148,6 +148,10 @@ export default {
     getNewOrderDetail: params => {
       return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
     },
+    // 根据扫描条形码进行账单查询
+    getOrderByScanCode: params => {
+      return Vue.http.post(baseUrl + '/txmjx/do_txmjx.htm', params);
+    },
     // 水电煤 商品详情
     getGoodsDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);

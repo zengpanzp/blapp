@@ -22,6 +22,7 @@
   </div>
 </template>
 <script>
+  import api from 'src/api/index'
 export default {
   name: 'index',
   components: {
@@ -35,13 +36,40 @@ export default {
     this.$loading.close()
   },
   methods: {
+    // 扫一扫
     scanner() {
       window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
         success: data => {
-          console.log(data)
+          data = JSON.parse(data);
+          if (data.result == "success") {
+            this.account = data.params;
+            api.recharge.getOrderByScanCode({
+              "txmh": this.account,
+              client_id: '11125'
+            }).then(data => {
+                console.log(data)
+            });
+//            let queryData = {
+//              type: obj.type,
+//              companyId: obj.typecode,
+//              scanNo: code,
+//              companyName: obj.company,
+//              time: obj.year + obj.month,
+//              typeName: current.getTypeName(obj.type).typeName,
+//              pic: current.getTypeName(obj.type).pic,
+//              price: obj.price,
+//              fee: obj.fee ? obj.fee : 0,
+//              total: parseFloat(obj.price.replace(',', '')) + parseFloat(obj.fee ? obj.fee : 0),
+//              canPay: obj.ret == '01',
+//              msg: obj.retmsg
+//            };
+          }
         },
-        fail: data => {
-          console.log(data)
+        fail: () => {
+          this.$toast({
+            position: 'bottomTop',
+            message: "识别条形码失败!"
+          });
         }
       })
     }
