@@ -9,3 +9,10 @@ test/unit/coverage
 .idea
 .idea/*
 *.iml
+/editor.xml
+/debugger.xml
+/ignore.xml
+/scala.xml
+/_mac/
+/.idea/
+/codestyles/
