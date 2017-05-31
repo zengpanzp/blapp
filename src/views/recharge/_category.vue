@@ -128,7 +128,6 @@
                 "timestamp": timestamp
               }).then(data => {
                 let obj = JSON.parse(data.body.obj);
-                  debugger;
                 // 添加成功
                 if (data.body.resCode == "00100000") {
                     this.groupList.push({
@@ -162,7 +161,6 @@
 //                let obj = JSON.parse(data.body.obj);
                 // 删除成功
                 if (data.body.resCode == "00100000") {
-                    debugger;
                     let index = this.groupList.indexOf(item);
                     this.groupList.splice(index, 1)
                 } else {

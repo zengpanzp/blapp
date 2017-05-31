@@ -4,19 +4,8 @@
  * 请求集中在这个文件中
  */
 import Vue from 'vue'
-import VueResource from 'vue-resource'
 import URL from '../default-urlConfig'
 import { DEV_SERVICE } from './dev-urlConfig'
-
-Vue.use(VueResource)
-Vue.http.options.xhr = { withCredentials: true }
-
-Vue.http.interceptors.push((request, next) => {
-  request.headers.set('chnflg', 'h5')
-next((response) => {
-  return response
-});
-})
 
 const baseUrl = process.env.NODE_ENV !== 'production' ? DEV_SERVICE : URL.SERVICE_BASE_URL
 
@@ -102,6 +91,19 @@ export default {
     // 虚拟充值 可充值产品查询接口
     queryPhoneGoodsDetail: params => {
       return Vue.resource(baseUrl + '/kmgm/goods_detail.htm').get(params)
+      return Vue.http.post(baseUrl + '/kmgm/goods_detail.htm', params);
+    },
+    // 虚拟充值 生成订单
+    genOrder: params => {
+      return Vue.http.post(baseUrl + '/kmgm/gen_order.htm', params);
+    },
+    // 虚拟充值 生成固话订单
+    buyszkOrder: params => {
+      return Vue.http.post(baseUrl + '/kmgm/buyszk.htm', params);
+    },
+    // 虚拟充值 创建费用订单
+    createExpensesOrder: params => {
+      return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
     },
     // 查询我的缴费分组
     queryMyGroup: params => {
@@ -114,6 +116,15 @@ export default {
     createMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/createPaySubNoGroup.htm', params);
     },
+    // myInformation/createPaySubNo.htm
+    // 添加我的分组名称
+    createPaySubNo: params => {
+      return Vue.http.post(baseUrl + '/myInformation/createPaySubNo.htm', params);
+    },
+    // 查询我的分组名称
+    queryPaySubNo: params => {
+      return Vue.http.post(baseUrl + '/myInformation/queryPaySubNo.htm', params);
+    },
     // 删除我的分组
     deleteMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/deletePaySubGroup.htm', params);
@@ -121,6 +132,10 @@ export default {
     // 水电煤的缴费机构
     queryCompanyGroup: params => {
       return Vue.http.post(baseUrl + '/gyjf/type_detail.htm', params);
+    },
+    // 有线电视和铁通机构查询
+    queryLineTVAndTieTongCompany: params => {
+      return Vue.http.post(baseUrl + '/sdm/type_detail.htm', params);
     },
     // 水电煤 生成订单
     createOrder: params => {
@@ -133,6 +148,13 @@ export default {
     // 水电煤 商品详情
     getGoodsDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/goods_detail.htm', params);
+    // 水电煤 订单详情
+    getNewOrderDetail: params => {
+      return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
+    },
+    // 水电煤 商品详情
+    getGoodsDetail: params => {
+      return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);
     },
     // 水电煤 订单状态
     getOrderStatus: params => {
@@ -173,5 +195,9 @@ export default {
     realName: params => {
       return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
     }
+  // 获取售后单列表
+  getSaleList: params => {
+    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
+
   }
 }

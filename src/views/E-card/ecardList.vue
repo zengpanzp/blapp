@@ -9,32 +9,37 @@
       <bl-swipeout>
         <bl-swipeout-item class="swipe-contain margin-b" :disabled="swipeoutDisabled" transition-mode="follow" v-for="(item, index) in cardList">
           <div slot="right-menu">
-            <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">显示<br>密码</bl-swipeout-button>
+            <bl-swipeout-button class="show-pass" @click.native="transPass(item.cardPin, index)" :disabled="item.cardStatus == '06'">
+            <span v-if="item.showPass">隐藏<br />密码</span>
+            <span v-else>显示<br />密码</span>
+            </bl-swipeout-button>
           </div>
-          <div slot="content" class="swiper-left">
-            <label class="select-box">
-              <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
+          <div slot="content">
+            <label class="swiper-left" @click="item.showPass ? toggleShow = false : toggleShow = true">
+              <span class="select-box">
+                <input type="checkbox" class="circle-select" :value="index" v-model="selectData">
+              </span>
+              <div class="card-box">
+                <div class="card-num">
+                  <div class="residue-box">
+                    <div>面值：¥{{ item.cardValue }}</div>
+                    <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
+                  </div>
+                  <div class="suit-box">
+                    <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
+                    <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
+                  </div>
+                </div>
+                <div class="card-statu">
+                  <div class="residue-box">
+                    <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
+                  </div>
+                  <div class="suit-box">
+                    <div><span  class="ash-font">状态：</span>{{ fnStatus(item.cardStatus) }}</div>
+                  </div>
+                </div>
+              </div>
             </label>
-            <div class="card-box">
-              <div class="card-num">
-                <div class="residue-box">
-                  <div>面值：¥{{ item.cardValue }}</div>
-                  <div>余额：<span class="red-font">¥{{ item.balance | limitFixed(2) }}</span></div>
-                </div>
-                <div class="suit-box">
-                  <div>卡序号：{{ item.cardNo | stringSpace(4) }}</div>
-                  <div>卡密码：{{ item.pheredText | stringSpace(4) }}</div>
-                </div>
-              </div>
-              <div class="card-statu">
-                <div class="residue-box">
-                  <div class="ash-font">有效期：{{ item.cardTime1 }}</div>
-                </div>
-                <div class="suit-box">
-                  <div><span  class="ash-font">状态：</span>{{ fnStatus(item.cardStatus) }}</div>
-                </div>
-              </div>
-            </div>
           </div>
         </bl-swipeout-item>
       </bl-swipeout>
@@ -45,7 +50,7 @@
     </div>
     <div class="manage-button">
       <div class="button-box">
-        <button class="show-pass" @click="[cancleSelect(), showAllPass()]" :disabled="selectData.length === 0">显示密码</button>
+        <button class="show-pass" @click="showAllPass" :disabled="selectData.length === 0">{{ toggleShow ? '显示密码' : '隐藏密码' }}</button>
       </div>
     </div>
   </div>
@@ -54,6 +59,7 @@
 <script>
 import api from 'src/api'
 import utils from 'src/utils'
+let pinPass = '••••••••••••••••'
 export default {
 
   name: 'ecardList',
@@ -62,11 +68,11 @@ export default {
     return {
       more: true,
       busy: true,
-      swipeoutDisabled: false,
 
       currentPage: 1,
       cardList: [],
-      selectData: []
+      selectData: [],
+      toggleShow: true
     };
   },
   created() {
@@ -84,74 +90,95 @@ export default {
         }
       }).then(data => {
         this.$loading.close()
-        let resData = JSON.parse(data.body.obj)
-        resData.body.cardList.forEach((item) => {
-          item.showPass = false
-          item.pheredText = '•••• •••• •••• ••••'
-        })
-        if (resData.body.cardList.length) {
-          this.cardList = this.cardList.concat(resData.body.cardList)
-        }
-        if (resData.body.cardList && resData.body.cardList.length >= 10) {
-          this.busy = false
+        if (data.body.obj) {
+          let resData = JSON.parse(data.body.obj)
+          resData.body.cardList.forEach((item) => {
+            item.showPass = false
+            item.pheredText = pinPass
+          })
+          if (resData.body.cardList.length) {
+            this.cardList = this.cardList.concat(resData.body.cardList)
+          }
+          if (resData.body.cardList && resData.body.cardList.length >= 10) {
+            this.busy = false
+          } else {
+            this.busy = true
+            once !== 0 && this.$toast('没有了~')
+          }
+          this.$loading.close()
+          if (this.cardList.length < 1) {
+            window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
+          } else {
+            window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
+          }
         } else {
-          this.busy = true
-          once !== 0 && this.$toast('没有了~')
-        }
-        this.$loading.close()
-        if (this.cardList.length < 1) {
-          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 0})
-        } else {
-          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
+          this.$toast(data.body.msg)
         }
       }, err => {
         console.log(err)
       })
     },
     fnStatus(val) {
-      let aStatus = ['', '在仓', '可售', '已提卡', '已激活', '已作废', '已冻结', '已过期']
+      let aStatus = ['', '在仓', '可售', '已提卡', '已激活', '已作废', '已冻结', '已过期', '已锁定']
       return aStatus[parseInt(val)]
     },
     transPass(val, index) {
       if (!this.cardList[index].showPass) {
-        window.CTJSBridge && window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val}, {
+        window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val, index: index}, {
           success: res => {
             let resData = utils.transData(res)
             this.cardList[index].pheredText = resData.decypheredText
             this.cardList[index].showPass = true
-          },
-          fail: err => {
-            console.log(err)
-          },
-          progress: err => {
-            console.log(err)
           }
         })
+      } else {
+        this.cardList[index].pheredText = pinPass
+        this.cardList[index].showPass = false
       }
     },
     showAllPass() {
-      this.selectData.forEach(item => {
-        if (this.cardList[item].cardStatus !== '06') {
-          this.transPass(this.cardList[item].cardPin, item)
+      for (let item of this.selectData) {
+        console.log(this.toggleShow, item, this.cardList[item].cardStatus !== '06', !this.cardList[item].showPass)
+        let val = this.cardList[item].cardPin
+        let status = this.cardList[item].cardStatus
+        let showPass = this.cardList[item].showPass
+        if (this.toggleShow) {
+          if (status !== '06' && !showPass) {
+            window.CTJSBridge.LoadMethod('RedCardCrypto', 'DecypherWithCypherText', {cypherText: val, index: item}, {
+              success: res => {
+                let resData = JSON.parse(res)
+                this.cardList[item].pheredText = resData.decypheredText
+                this.cardList[item].showPass = true
+              }
+            })
+          }
+        } else {
+          this.cardList[item].pheredText = pinPass
+          this.cardList[item].showPass = false
         }
-      })
+      }
+      this.toggleShow = !this.toggleShow
     },
     // 下面方法给native调用
     fullSelect() {
-      this.selectData = []
-      for (let i = 0; i < this.cardList.length; i++) {
-        this.selectData.push(i)
+      if (this.cardList.length == this.selectData.length) {
+        this.selectData = []
+      } else {
+        this.selectData = []
+        for (let i = 0; i < this.cardList.length; i++) {
+          this.selectData.push(i)
+        }
       }
     },
     cancleSelect() {
       this.more = true
-      this.swipeoutDisabled = false
+      this.busy = false
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 1})
     },
     manageSelect() {
       this.selectData.splice(0)
-      this.swipeoutDisabled = true
       this.more = false
+      this.busy = true
 
       window.CTJSBridge.LoadMethod('BLElectronCard', 'exchangeState', {changeState: 2})
     },

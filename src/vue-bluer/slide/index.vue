@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import TouchSlide from './TouchSlide'
 export default {
 
   name: 'Slide',
@@ -69,17 +68,20 @@ export default {
     /* init */
     reInitPages() {
       this.$nextTick(() => {
-        TouchSlide({
-          slideCell: this.$refs.slide,
-          titCell: this.pagination ? ".swiper-pagination ul" : false,
-          mainCell: ".swiper-wrapper",
-          effect: this.effect,
-          autoPlay: this.autoPlay,
-          delayTime: 300,
-          interTime: 2000,
-          autoPage: this.pagination,
-          switchLoad: "_src"
-        })
+        require.ensure([], require => {
+          let TouchSlide = require('./TouchSlide').default;
+          TouchSlide({
+            slideCell: this.$refs.slide,
+            titCell: this.pagination ? ".swiper-pagination ul" : false,
+            mainCell: ".swiper-wrapper",
+            effect: this.effect,
+            autoPlay: this.autoPlay,
+            delayTime: 300,
+            interTime: 2000,
+            autoPage: this.pagination,
+            switchLoad: "_src"
+          })
+        }, 'TouchSlide');
       });
     }
   }

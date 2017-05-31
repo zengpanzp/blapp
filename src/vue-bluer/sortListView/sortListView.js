@@ -425,7 +425,7 @@ export default function(a) {
           }
           return arrRslt;
       }
-      debugger;
+
       var $body = $(".sortListView");
       var Initials = $body.find('.initials');
       var LetterBox = $body.find('.letter');
@@ -457,7 +457,7 @@ export default function(a) {
               var letter = _this.text();
               if ($('#' + letter).length > 0) {
                   var LetterTop = $('#' + letter).position().top;
-                  debugger;
+
                   // $('html,body').animate({scrollTop: LetterTop - 45 + 'px'}, 300);
                   $("body").scrollTo({
                       toTop: (LetterTop)
@@ -492,7 +492,6 @@ export default function(a) {
                   num++;
               }
           });
-          debugger;
           for (let j = 0; j < initials.length; j++) {
               $(".sortListView .initials").append("<li>" + initials[j] + "</li>");
           }
@@ -500,7 +499,6 @@ export default function(a) {
           $.each(initials, function(index, value) { // 添加首字母标签
               SortBox.append('<div class="sort_letter" id="' + value + '">' + value + '</div>');
           });
-
           function addDom(letter, dom, flag, i) {
               console.log(letter)
               if (!flag) {

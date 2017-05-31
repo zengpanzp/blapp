@@ -2,7 +2,7 @@
 <template>
   <div class="index">
     <div class="bl-mywallet-hd">
-      <a href="javascript:;" class="wallet-hd-cell bill-index-line">
+      <a href="javascript:;" class="wallet-hd-cell bill-index-line" @click="scanner">
         <img class="hd-cell-icon" src="./i/index/bill-index-icon1.png" alt="">
         <p>扫一扫</p>
       </a>
@@ -33,6 +33,18 @@ export default {
   },
   mounted() {
     this.$loading.close()
+  },
+  methods: {
+    scanner() {
+      window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
+        success: data => {
+          console.log(data)
+        },
+        fail: data => {
+          console.log(data)
+        }
+      })
+    }
   }
 };
 </script>

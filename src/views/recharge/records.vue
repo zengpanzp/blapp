@@ -5,7 +5,7 @@
       <div class="content-wrap">
           <ul>
             <li @click.prevent="showCategory">缴费账号
-              <div class="name"><label>7897897979</label></div>
+              <div class="name"><label>{{queryData.code}}</label></div>
             </li>
             <!--	</ul>
             </div>-->
@@ -13,24 +13,18 @@
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
             <li>缴费机构
-              <div class="name"><label>时间考虑就看见；肯定是房价</label></div>
+              <div class="name"><label>{{queryData.companyName}}</label></div>
             </li>
           </ul>
-          <ul class="record-list" >
-            <li class="record-detail">
-              <span>2015-12-23</span>
-              <span>￥97</span>
-              <span><div class="billstatus">等待付款</div></span>
+          <ul class="record-list" v-if="dataJson">
+            <li class="record-detail" @click="toPay" v-for="(item,key) in dataJson" v-if="key==0&&item.Result_code=='200'">
+              <span>{{item.date}}</span>
+              <span>￥{{item.total[0]}}</span>
+              <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
             </li>
-            <li class="record-detail">
-              <span>2015-12-23</span>
-              <span>￥97</span>
-              <span><div class="billstatus other">付款中</div></span>
-            </li>
-            <li class="record-detail">
-              <span>2015-12-23</span>
-              <span>￥97</span>
-              <span><div class="billstatus finish">已完成</div></span>
+            <li class="record-detail" v-else="item.date">
+              <span class="spe">{{item.msg}}</span>
+              <span class="spe"><div class="billstatus finish"></div></span>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
@@ -38,9 +32,14 @@
       </div>
     </div>
 </template>
+<style lang="scss" scoped>
+  .content-wrap {
+    background: transparent;
+  }
+</style>
 <script>
-//    import api from 'src/api/index'
-//    import utils from 'src/utils'
+    import api from 'src/api/index'
+    import utils from 'src/utils'
 //    import CONST from 'src/const'
   export default {
 
@@ -48,14 +47,44 @@
 
     data() {
       return {
+        rateType: 1,
+        dataJson: ''
       }
     },
     computed: {
     },
     created() {
+        window.CTJSBridge && window.CTJSBridge._setNativeTitle("缴费记录");
         // 1位水费 2为电费 3为煤气费
         this.ratesType = this.$route.params["type"];
+        let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
+        this.queryData = queryData;
+        console.log(queryData)
         this.fill();
+        utils.isLogin().then(user => {
+            console.log(user)
+          api.recharge.getGoodsDetail(queryData).then(data => {
+            let json = JSON.parse(data.body.obj);
+            console.log(json);
+            this.dataJson = json;
+            console.log(this.dataJson[0]);
+            delete this.dataJson.Result_code;
+            for (let obj in this.dataJson) {
+                console.log(this.dataJson[obj].date)
+                if (this.dataJson[obj].date) {
+                  this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
+                }
+            }
+            this.queryData.canpay = this.dataJson[0].canpay[0];
+            // 条码
+            this.queryData.tiaoma = this.dataJson[0].code[0];
+            this.queryData.price = this.dataJson[0].price[0];
+            this.queryData.total = this.dataJson[0].total[0];
+            this.queryData.date = this.dataJson[0].date;
+            this.queryData.fee = this.dataJson[0].fee[0];
+            localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData))
+          })
+        });
     },
     watch: {
       '$route': 'fill'
@@ -69,25 +98,13 @@
 //      });
 //    },
     methods: {
+      toPay() {
+        this.$router.push({ path: "/recharge/pay/" + this.rateType });
+      },
       // 监听路由
       fill(to, from) {
-        if (to && to.fullPath.indexOf("category") == "-1" && to.fullPath.indexOf("company") == "-1") {
-          this.toShow = true;
-          this.loadGroup = false;
-          this.loadListView = false;
-        }
         let val = this.$route.params["type"];
         this.rateType = val;  // 缴费类别 1 水费 2电费 3 煤气费
-        if (val == 1) {
-          this.typeClass = "icon-waitassess";
-          this.typeName = "水费";
-        } else if (val == 2) {
-          this.typeClass = "icon-electricity";
-          this.typeName = "电费";
-        } else if (val == 3) {
-          this.typeClass = "icon-gas";
-          this.typeName = "煤气费";
-        }
         this.$loading.close()
       }
     }

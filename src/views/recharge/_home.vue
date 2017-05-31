@@ -17,12 +17,12 @@ export default {
     return {
       list: [{
         url: 'recharge/iphone/0',
-        type: '23, 34',
+        type: '23',
         icon: 'icon-waitpay',
         text: '手机充值'
       }, {
         url: 'recharge/iphone/1',
-        type: '23, 34',
+        type: '34',
         icon: 'icon-waitreceive',
         text: '流量充值'
       }, {
@@ -32,17 +32,17 @@ export default {
         text: '固话/宽带'
       }, {
         url: 'recharge/rates/1',
-        type: '20',
+        type: '',
         icon: 'icon-waitassess',
         text: '水费'
       }, {
         url: 'recharge/rates/2',
-        type: '21',
+        type: '',
         icon: 'icon-electricity',
         text: '电费'
       }, {
         url: 'recharge/rates/3',
-        type: '22',
+        type: '',
         icon: 'icon-gas',
         text: '煤气费'
       }, {
@@ -56,7 +56,7 @@ export default {
         icon: 'icon-play',
         text: '游戏'
       }, {
-        url: 'recharge/petrol',
+        url: 'recharge/iphone/0?type=petrol',
         type: '35, ',
         icon: 'icon-card',
         text: '加油卡'
@@ -65,11 +65,11 @@ export default {
   },
   methods: {
     nativeGo(type, url) {
-      if (process.env.NODE_ENV !== 'production') {
-        this.$router.push({ path: url })
-        return
-      }
       utils.isLogin().then(data => {
+        if (process.env.NODE_ENV !== 'production') {
+          this.$router.push({ path: url })
+          return
+        }
         window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
           type: type,
           url: url

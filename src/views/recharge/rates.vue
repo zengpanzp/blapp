@@ -28,11 +28,17 @@
               </div>
             </li>
             <li>缴费账号
-              <div class="account"><input type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
+              <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
             </li>
 
           </ul>
-        <bl-button type="blueBtn next selected">下一步</bl-button>
+          <div class="phoneFixBottom">
+            <div class="config-button-contain">
+              <button class="edit-config-button middleFont" @click="next" :disabled="isCantouch">
+                下一步
+              </button>
+            </div>
+          </div>
       </div>
     </div>
 </template>
@@ -62,12 +68,13 @@
         loadListView: false,  // 加载缴费机构
         typeChange: true, // 条形码 或者 账号,
         companyList: [],
+        account: "",  // 缴费账号
         typeObj: {
             1: "sf",  // 水费
             2: "dl",  // 电费
             3: "mq"   // 煤气
         },
-        accountTypeName: "肖根号"
+        accountTypeName: "销根号"
       }
     },
     computed: {
@@ -80,14 +87,11 @@
             console.log(user);
             let timestamp = utils.getTimeFormatToday();
             console.log(user.mobile)
-            let mac = utils.MD5(this.typeObj[this.ratesType] + timestamp + CONST.CLIENT_ID + CONST.CLIENT_SECRET.slice(-8)).toLocaleLowerCase()
             this.memberId = utils.ssdbGet('member_id')
             this.memberToken = utils.ssdbGet('member_token')
             api.recharge.queryMyGroup({
-              sign: "073d3d3436b2d7660d4435a93f79411d",
               timestamp: timestamp,
               member_token: this.memberToken,
-              sysid: 1101
             }).then(data => {
                 console.log(data);
                 let json = JSON.parse(data.body.obj);
@@ -100,7 +104,6 @@
             api.recharge.queryCompanyGroup({
               client_id: CONST.CLIENT_ID,
               format: "json",
-              mac: mac,
               t_dz: "02",
               timestamp: timestamp,
               type: this.typeObj[this.ratesType]
@@ -123,12 +126,17 @@
                   };
                   list.push(obj)
               });
+
               // 支持条形码 和 账号进行缴费
               if (json.typezhname[0].length == 2) {
                 // 默认第一个的名称
                 this.accountTypeName = json.typezhname[0][1].name;
               } else { // 只支持条码
                 this.hasShow2 = false;
+              }
+              this.receiveCompanyItem = {
+                id: json.typecode[0],
+                name: json.typename[0]
               }
               this.companyList = list;
               console.log(json);
@@ -139,18 +147,23 @@
     watch: {
       '$route': 'fill'
     },
-//    beforeRouteEnter(to, from, next) {
-//        debugger
-//      next(vm => {
-//        vm.toShow = true;
-//        vm.loadGroup = false;
-//        vm.loadListView = false;
-//      });
-//    },
     methods: {
-      // 扫码进行支付
+      // 扫描条形码获得账号
       scanQ() {
-        alert("扫一扫！");
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
+            success: data => {
+              data = JSON.parse(data);
+              if (data.result == "success") {
+                this.account = data.params;
+              }
+            },
+            fail: () => {
+              this.$toast({
+                position: 'bottom',
+                message: "识别条形码失败!"
+              });
+            }
+          })
       },
       // 改变选择的缴费类型
       changeType() {
@@ -166,6 +179,7 @@
       getCompany(item) {
           console.log(item)
         this.receiveCompanyItem = item;
+          console.log(this.receiveCompanyItem)
         this.loadListView = false;
         this.toShow = true;
         // 支持条形码 和 账号进行缴费
@@ -185,9 +199,45 @@
         this.loadListView = true;
         this.$router.push({path: "/recharge/rates/" + this.rateType + "/company"});
       },
+      // 下一步跳转到缴费记录
+      next() {
+          if (this.account == "" && this.typeChange) {
+            let msg = "!";
+            if (this.typeChange) {
+                msg = "请先扫描账单条形码!";
+            } else {
+                msg = "缴费账号不能为空!";
+            }
+            this.$toast({
+              position: 'bottom',
+              message: msg
+            });
+            return false;
+          }
+          let timestamp = utils.getTimeFormatToday();
+          console.log(timestamp)
+          let queryData = {
+            client_id: CONST.CLIENT_ID,
+            t_dz: "02",
+            type: this.typeObj[this.ratesType] + "",
+            codetype: this.account.length >= 24 ? "01" : "02",
+            dkhzh: this.memberId,
+            typecode: this.receiveCompanyItem.id,
+            companyName: this.receiveCompanyItem.name,
+            format: "json",
+            year: new Date().getFullYear().toString(),
+            month: (new Date().getMonth() + 1).toString(),
+            code: this.account,
+            timestamp: utils.getTimeFormatToday(),
+            acctoken: this.memberToken,
+            token: this.memberToken
+        }
+        localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData));
+        // 传递参数
+        this.$router.push({path: "/recharge/records/" + this.rateType});
+      },
       // 获得选择的分组
       getGroup(item) {
-          debugger
         this.receiveGroupItem = item;
         this.toShow = true;
       },
@@ -203,12 +253,15 @@
         if (val == 1) {
           this.typeClass = "icon-waitassess";
           this.typeName = "水费";
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle("水费");
         } else if (val == 2) {
           this.typeClass = "icon-electricity";
           this.typeName = "电费";
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle("电费");
         } else if (val == 3) {
           this.typeClass = "icon-gas";
           this.typeName = "煤气费";
+          window.CTJSBridge && window.CTJSBridge._setNativeTitle("煤气费");
         }
         this.$loading.close()
       }
