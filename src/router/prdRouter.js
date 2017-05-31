@@ -184,6 +184,23 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   },
+  /* 薛天玲 安全中心 */
+  {
+    path: '/securityCenter',
+    meta: {
+      title: '安全中心',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/securityCenter')), 'securityCenter'),
+  },
+  /* 薛天玲 安全中心 邮箱 */
+  {
+    path: '/securityCenter/myEmail',
+    meta: {
+      title: '我的邮箱'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/myEmail')), 'myEmail')
+  },
   /* 陈鹏 我的评价 */
   {
     path: '/myEvaluation',

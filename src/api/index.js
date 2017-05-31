@@ -58,6 +58,10 @@ export default {
     // 我的收藏 门店
     queryShopFavorites: params => {
       return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
+    },
+    // 安全中心 获取个人信息
+    getMyInformation: params => {
+      return Vue.http.post(baseUrl + '/myInformation/getMyInformation.htm', params);
     }
   },
   // 查询资源位

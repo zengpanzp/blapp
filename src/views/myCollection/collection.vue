@@ -143,6 +143,7 @@ export default {
           member_token: memberToken,
           currentPage: Number(this.pageNum++)
         }).then(data => {
+          console.log(data)
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
             console.log(resData)
@@ -183,6 +184,7 @@ export default {
                 // this.$toast('没有收藏的商品')
             }
           } else {
+            this.goodsLoading = false
             this.$loading.close()
           }
         }).then(err => {
@@ -219,6 +221,8 @@ export default {
             this.$loading.close()
               // this.$toast('没有收藏的门店')
           }
+        }).then(err => {
+          console.log(err)
         })
       })
     },

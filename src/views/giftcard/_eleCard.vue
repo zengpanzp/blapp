@@ -58,7 +58,7 @@ export default {
             this.inputData = String(val).replace(0, '')
             return
         }
-        if (val <= 10 || val >= 1000) {
+        if (val < 10 || val > 1000) {
           this.$toast('请输入10-1000的整数!')
         }
         this.inputData = String(val).replace(/\D/g, '').replace('.', '');

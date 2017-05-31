@@ -212,6 +212,13 @@
           display: none;
       }
   }
+  .modal-button:last-child {
+    background-image: none;
+    border-radius: 0 0 0.08rem 0;
+    color: #fff;
+    background-color: rgb(253,112,114);
+    border-radius: 0px 0px 0px 0.08rem;
+  }
 
   .modal-mask{
     position: fixed;

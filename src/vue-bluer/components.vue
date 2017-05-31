@@ -253,7 +253,11 @@ export default {
       // })
       this.$modal({
         title: '提示',
-        content: '操作成功'
+        content: '操作成功',
+        buttons: [
+          { text: '确定', onClick: function() {} },
+          { text: '取消', onClick: function() {} },
+        ]
       })
     },
     onchange(val) {
