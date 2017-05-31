@@ -206,5 +206,13 @@ export const prdRouter = [
       title: '商品评价'
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/goodComment')), 'goodComment')
-  }
+  },
+  /* 郭健 联通专区 */
+  {
+    path: '/unicom',
+    meta: {
+      title: '联通专区'
+    },
+    component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
+  },
 ]
