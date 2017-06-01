@@ -57,35 +57,38 @@
         this.ratesType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
         this.queryData = queryData;
-        console.log(queryData)
-        this.fill();
-        utils.isLogin().then(user => {
-            console.log(user)
+        console.log("queryData", this.queryData)
+      utils.isLogin().then(user => {
           api.recharge.getGoodsDetail(queryData).then(data => {
             let json = JSON.parse(data.body.obj);
-            console.log(json);
             this.dataJson = json;
-            console.log(this.dataJson[0]);
+            console.log(json)
             delete this.dataJson.Result_code;
             for (let obj in this.dataJson) {
-                console.log(this.dataJson[obj].date)
                 if (this.dataJson[obj].date) {
                   this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
                 }
             }
-            this.queryData.canpay = this.dataJson[0].canpay[0];
-            // 条码
-            this.queryData.tiaoma = this.dataJson[0].code[0];
-            this.queryData.price = this.dataJson[0].price[0];
-            this.queryData.total = this.dataJson[0].total[0];
-            this.queryData.date = this.dataJson[0].date;
-            this.queryData.fee = this.dataJson[0].fee[0];
-            localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData))
+            if (this.dataJson[0]) {
+              let first = this.dataJson[0];
+              this.queryData.canpay = first.canpay && first.canpay[0];
+              // 条码
+              this.queryData.tiaoma = first.code && first.code[0];
+              this.queryData.price = first.price && first.price[0];
+              this.queryData.total = first.total && first.total[0];
+              this.queryData.date = first.date & first.date;
+              this.queryData.fee = first.fee && first.fee[0];
+              localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData));
+            }
+            this.$loading.close()
           })
         });
     },
     watch: {
       '$route': 'fill'
+    },
+    loadData() {
+
     },
 //    beforeRouteEnter(to, from, next) {
 //        debugger
@@ -103,7 +106,7 @@
       fill(to, from) {
         let val = this.$route.params["type"];
         this.rateType = val;  // 缴费类别 1 水费 2电费 3 煤气费
-        this.$loading.close()
+        this.$loading.close();
       }
     }
   };

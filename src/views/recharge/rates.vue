@@ -30,7 +30,6 @@
             <li>缴费账号
               <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
             </li>
-
           </ul>
           <div class="phoneFixBottom">
             <div class="config-button-contain">
@@ -76,7 +75,8 @@
             2: "dl",  // 电费
             3: "mq"   // 煤气
         },
-        accountTypeName: "销根号"
+        accountTypeName: "销根号",
+        isCantouch: true
       }
     },
     computed: {
@@ -95,7 +95,6 @@
           this.receiveGroupItem.id = groupId;
           this.receiveGroupItem.groupName = groupName;
         }
-        debugger
         if (jigouCode && jigouName) {
           this.receiveCompanyItem.id = jigouCode;
           this.receiveCompanyItem.name = jigouName;
@@ -159,7 +158,14 @@
         this.fill();
     },
     watch: {
-      '$route': 'fill'
+      '$route': 'fill',
+      account(val) {
+        if (val.length > 6) {
+          this.isCantouch = false;
+        } else {
+          this.isCantouch = true;
+        }
+      }
     },
     methods: {
       // 扫描条形码获得账号

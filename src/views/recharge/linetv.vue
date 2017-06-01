@@ -77,8 +77,10 @@
           this.loadData();
         },
         account(val) {
-          if (val.length > 6) {
+          if (val.length >= 6) {
             this.isCantouch = false;
+          } else {
+            this.isCantouch = true;
           }
         },
     },
@@ -101,6 +103,7 @@
         })
       },
       next() {
+        debugger;
         if (this.account == "") {
           this.$toast({
             position: 'bottom',
@@ -125,16 +128,26 @@
             timestamp: utils.getTimeFormatToday(),
             token: this.memberToken
           }
-          api.recharge.getGoodsDetail(queryData).then(data => {
-            let json = JSON.parse(data.body.obj);
-            if (json[0].Result_code != "200") {
-              this.$toast({
-                position: 'bottom',
-                message: json[0].msg
-              });
-            }
-            console.log(json);
-          })
+          let rateType = 4;
+          switch (this.type) {
+            case "sf":
+              rateType = 1;
+              break;
+            case "dl":
+              rateType = 2;
+              break;
+            case "mq":
+              rateType = 3;
+              break;
+            case "ds":
+              rateType = 4;
+              break;
+            case "tt":
+              rateType = 5;
+              break;
+          }
+          localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData));
+          this.$router.push({path: "/recharge/records/" + rateType});
         });
       },
       loadData() {

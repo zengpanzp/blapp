@@ -174,6 +174,7 @@
                   orderPhone: user.mobile,
                   serviceFee: this.queryData.fee ? this.queryData.fee : 0
                 }
+                console.log(json.orderid);
                 // 创建账号账单
                 let createPaySubNoData = {
                   paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
@@ -205,7 +206,7 @@
                     payType: resData.payType,
                     accountNo: resData.accountNo
                   }
-                  console.log(order)
+                  console.log(resData)
                   require.ensure([], function(require) {
                     let Pay = require('src/paymodel').default
                     current.inlineLoading.close()

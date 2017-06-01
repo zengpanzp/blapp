@@ -80,6 +80,7 @@
         }).then(data => {
           console.log(data)
           let json = JSON.parse(data.body.obj);
+          console.log(json)
           this.orderDetail = json;
           this.$loading.close();
           window._PAY_SETINTERVAL_ID = setInterval(function() {
@@ -106,8 +107,8 @@
         var lh = parseInt(obj.orderTime.split(' ')[1].split(':')[0]);
         var lm = parseInt(obj.orderTime.split(' ')[1].split(':')[1]);
         var ls = parseInt(obj.orderTime.split(' ')[1].split(':')[2]);
-        var period = parseInt(obj.activeTime);
-        console.log("&&----------" + ld + "------------" + lh + "----" + lm + "--------" + ls + "--------" + period);
+//        var period = parseInt(obj.activeTime);
+//        console.log("&&----------" + ld + "------------" + lh + "----" + lm + "--------" + ls + "--------" + period);
         return {
           lM: lM,
           ld: ld,
@@ -117,6 +118,7 @@
         };
       },
       getTime: function (limit, max) {
+        console.log(limit)
         if (!max) {
           max = 2;
         }
