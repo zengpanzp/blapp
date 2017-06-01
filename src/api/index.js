@@ -90,7 +90,6 @@ export default {
   recharge: {
     // 虚拟充值 可充值产品查询接口
     queryPhoneGoodsDetail: params => {
-      return Vue.resource(baseUrl + '/kmgm/goods_detail.htm').get(params)
       return Vue.http.post(baseUrl + '/kmgm/goods_detail.htm', params);
     },
     // 虚拟充值 生成订单
@@ -145,9 +144,6 @@ export default {
     getOrderDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/order_search.htm', params);
     },
-    // 水电煤 商品详情
-    getGoodsDetail: params => {
-      return Vue.http.post(baseUrl + '/gyjf/goods_detail.htm', params);
     // 水电煤 订单详情
     getNewOrderDetail: params => {
       return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
@@ -177,6 +173,10 @@ export default {
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
   },
+  // 获取售后单列表
+  getSaleList: params => {
+    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
+  },
   // 联通专区
   unicom: {
     // 登陆后查看认证状态
@@ -194,10 +194,10 @@ export default {
     // 查看实名认证等级
     realName: params => {
       return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
-    }
-  // 获取售后单列表
-  getSaleList: params => {
-    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
-
+    },
+    // 领取流量
+    getTraffic: params => {
+      return Vue.http.post(baseUrl + '/uniconOrder/makeUnicomOrder.htm', params);
+    },
   }
 }

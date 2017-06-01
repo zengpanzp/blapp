@@ -61,6 +61,15 @@ export default {
   created() {
   	let list = [];
   	utils.isLogin().then(data => {
+  		try {
+	        sa.track('$pageview', {
+	          pageId: 'APP_我的消息',
+	          categoryId: 'APP_User',
+	          $title: "APP_我的消息"
+	        })
+	    } catch (err) {
+	    	console.log("sa error => " + err);
+	    }
   		let memberId = data.member_id;
 	  	api.messageCenter.loadMsgType({
 	  		"types": ['sys_data_msg_busniess_type']

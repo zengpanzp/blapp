@@ -45,8 +45,8 @@
 						            <span class="contr-small">全国流量包</span>
 						        </div>
 						    </div>
-						    <div class="llitem-right" @click="getTraffic()">
-						        <a>点击<br/>领取</a>
+						    <div class="llitem-right" @click="getTraffic(item.ruleCode)">
+						        <a :class="{ 'unicom-disabled' : item.remainTimes <= 0 }">点击<br/>领取</a>
 						    </div>
 						</li>
 	                </ul>
@@ -105,8 +105,16 @@ export default {
   },
   created() {
   	this.$loading.close()
-	// $(".llitem-right a").addClass("unicom-disabled")
-  	let list = [];
+  	try {
+        sa.track('$pageview', {
+          pageId: 'APP_联通专区',
+          categoryId: 'APP_User',
+          $title: "APP_联通专区"
+        })
+    } catch (err) {
+    	console.log("sa error => " + err);
+    }
+  	this.getTrafficList()
   	window.CTJSBridge.LoadMethod('ExposeJsApi', 'getIMEI', '', {
   			success: data => {
 	        	this.deviceId = JSON.parse(data).IMEI
@@ -114,7 +122,11 @@ export default {
 	        fail: () => {},
 	        progress: () => {}
   		})
-  	api.unicom.getTrafficList({
+  },
+  methods: {
+  	getTrafficList() {
+  		let list = [];
+  		api.unicom.getTrafficList({
   			deviceId: this.deviceId,
   			member_token: this.memberToken
   		}).then(data => {
@@ -124,48 +136,47 @@ export default {
   				list.push(obj.list[i])
   			}
   			this.llList = list
-  		})
-  	utils.isLogin().then(data => {
-  		this.memberId = data.member_id;
-  		this.memberToken = data.member_token;
-  		this.mobile = data.mobile;
-  		// $(".llitem-right a").addClass("unicom-disabled")
-  		api.unicom.checkAuthentic({
-  			member_token: this.memberToken,
-            mobile: this.mobile,
-            deviceId: this.deviceId
-  		}).then(data => {
-  			$(".block").hide();
-  			if (data.body.obj) {
-  				let obj = JSON.parse(data.body.obj);
-	  			if (obj && obj.key) {
-	  				if (obj.key == "1") {
-	  					$("#start").css("display", "block")
-		  			} else if (obj.key == "2") {
-		  				$("#finish").css("display", "block")
-		  			} else if (obj.key == "3") {
-		  				$("#cannot").css("display", "block")
+	  	utils.isLogin().then(data => {
+	  		this.memberId = data.member_id;
+	  		this.memberToken = data.member_token;
+	  		this.mobile = data.mobile;
+	  		// $(".llitem-right a").addClass("unicom-disabled")
+	  		api.unicom.checkAuthentic({
+	  			member_token: this.memberToken,
+	            mobile: this.mobile,
+	            deviceId: this.deviceId
+	  		}).then(data => {
+	  			$(".block").hide();
+	  			if (data.body.obj) {
+	  				let obj = JSON.parse(data.body.obj);
+		  			if (obj && obj.key) {
+		  				if (obj.key == "1") {
+		  					$("#start").css("display", "block")
+			  			} else if (obj.key == "2") {
+			  				$("#finish").css("display", "block")
+			  			} else if (obj.key == "3") {
+			  				$("#cannot").css("display", "block")
+			  			}
 		  			}
 	  			}
-  			}
-  			this.$nextTick(() => {
-  				this.$loading.close();
-  				for (var i = 0; i < this.llList.length; i++) {
-  					if (this.llList[i].remainTimes <= '0') {
-  						$(".llitem-right a").addClass("unicom-disabled")
-  					}
-  					if ((this.llList[i].exchangedTimes && parseInt(this.llList[i].exchangedTimes) > 0 && parseInt(this.llList[i].remainTimes) <= 0)) {
-  							$(".llitem-right a").html("已领取")
-  					}
-	  			}
-  			})
-  		}, err => {
-  			console.log(err)
-  			$("#start").css("display", "block")
-  		})
+	  			this.$nextTick(() => {
+	  				this.$loading.close();
+	  				for (var i = 0; i < this.llList.length; i++) {
+	  					if (this.llList[i].remainTimes <= '0') {
+	  						$(".llitem-right a").addClass("unicom-disabled")
+	  					}
+	  					if ((this.llList[i].exchangedTimes && parseInt(this.llList[i].exchangedTimes) > 0 && parseInt(this.llList[i].remainTimes) <= 0)) {
+	  							$(".llitem-right a").html("已领取")
+	  					}
+		  			}
+	  			})
+	  		}, err => {
+	  			console.log(err)
+	  			$("#start").css("display", "block")
+	  		})
+	  	})
   	})
-  },
-  methods: {
+  	},
   	notice() {
   		$(".modal").removeClass("modal-out").css({
   			"top": "30%",
@@ -217,18 +228,17 @@ export default {
   			})
   		}
   	},
-  	getTraffic() {
-  		// if ($(".llitem-right a").hasClass("unicom-disabled")) {
-  		// 	// console.log($(".llitem-right a").text() == "已领取")
-  		// 	if ($("#start")[0].style.cssText == "display: block;") {
-  		// 		this.$toast("~请开始认证，详见流量领取说明~")
-  		// 	} else if ($(".llitem-right a").text() == "已领取") {
-    //             this.$toast("~很遗憾，您已领取过该流量礼包~");
-    //         } else {
-    //         	this.$toast('~很遗憾您不符合参与条件，详见流量领取说明~')
-    //         }
-    //         return
-  		// }
+  	getTraffic(ruleCode) {
+  		if ($(".llitem-right a").hasClass("unicom-disabled")) {
+  			if ($("#start")[0].style.cssText == "display: block;") {
+  				this.$toast({position: "bottom", message: "~请开始认证，详见流量领取说明~"})
+  			} else if ($(".llitem-right a").text() == "已领取") {
+                this.$toast({position: "bottom", message: "~很遗憾，您已领取过该流量礼包~"});
+            } else {
+            	this.$toast({position: "bottom", message: "~很遗憾您不符合参与条件，详见流量领取说明~"})
+            }
+            return
+  		}
   		api.unicom.realName({
   			memberId: this.memberId
   		}).then(data => {
@@ -246,17 +256,39 @@ export default {
 					    }, {
 					      text: '确定',
 					      onClick: () => {
-					        // this.$toast('确定', function() {
-					        	console.log("111")
-					        // })
+					        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+					          pageId: 'authenticate'
+					      	})
 					      }
 					    }]
 					})
-	                // confirmationView.show(INFO, "~您还没完成实名认证哦，完成认证可领取免费流量！~", function () {
-	                //     BackboneRouter.navigate("#authenticatePage", {trigger: true});
-	                // });
-	                // return;
+	                return;
             	}
+            	api.unicom.getTraffic({
+            		member_token: this.memberToken,
+	                ruleCode: ruleCode,
+	                mobile: this.mobile,
+	                deviceId: this.deviceId
+            	}).then(data => {
+            		var current = this
+            		if (data.body.obj) {
+	            		this.$toast({
+					        position: 'bottom',
+					        message: "~领取成功~"
+					    })
+					   	setTimeout(function () {
+					   		window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+					          pageId: 'mycoupon'
+					      	})
+					      	current.getTrafficList()
+					   	}, 2000)
+            		} else {
+            			this.$toast({
+					        position: 'bottom',
+					        message: data.body.msg
+					    })
+            		}
+            	})
             } else {
             	this.$modal({
 				    title: '提示',
@@ -264,13 +296,13 @@ export default {
 				    buttons: [{
 				      text: '取消',
 				      onClick: () => {
-				        this.$toast('取消')
 				      }
 				    }, {
 				      text: '确定',
 				      onClick: () => {
-				      	alert(1)
-  						console.log("qwer")
+  						window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+				          pageId: 'authenticate'
+				      	})
 				      }
 				    }]
 				})
