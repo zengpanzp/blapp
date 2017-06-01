@@ -100,6 +100,10 @@ export default {
     genOrder: params => {
       return Vue.http.post(baseUrl + '/kmgm/gen_order.htm', params);
     },
+    // 虚拟充值 生成固话订单
+    buyszkOrder: params => {
+      return Vue.http.post(baseUrl + '/kmgm/buyszk.htm', params);
+    },
     // 虚拟充值 创建费用订单
     createExpensesOrder: params => {
       return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
@@ -114,6 +118,15 @@ export default {
     // 添加我的分组名称
     createMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/createPaySubNoGroup.htm', params);
+    },
+    // myInformation/createPaySubNo.htm
+    // 添加我的分组名称
+    createPaySubNo: params => {
+      return Vue.http.post(baseUrl + '/myInformation/createPaySubNo.htm', params);
+    },
+    // 查询我的分组名称
+    queryPaySubNo: params => {
+      return Vue.http.post(baseUrl + '/myInformation/queryPaySubNo.htm', params);
     },
     // 删除我的分组
     deleteMyGroup: params => {
@@ -134,6 +147,10 @@ export default {
     // 水电煤 订单详情
     getOrderDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/order_search.htm', params);
+    },
+    // 水电煤 订单详情
+    getNewOrderDetail: params => {
+      return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
     },
     // 水电煤 商品详情
     getGoodsDetail: params => {
@@ -159,6 +176,9 @@ export default {
   // 查询评价数量
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
+  },
+  // 获取售后单列表
+  getSaleList: params => {
+    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
   }
-
 }

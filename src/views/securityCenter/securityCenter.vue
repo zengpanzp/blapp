@@ -38,7 +38,7 @@ export default {
 
   data () {
     return {
-      memberToken: null
+      memberToken: null,
     };
   },
   // afterRouteUpdate () {

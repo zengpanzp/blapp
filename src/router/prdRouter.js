@@ -98,12 +98,12 @@ export const prdRouter = [
   /* 神马 充值缴费 未支付账单 */
   {
     path: '/recharge/billempty',
-      component: r => require.ensure([], () => r(require('../views/recharge/billempty')), 'billempty')
+    component: r => require.ensure([], () => r(require('../views/recharge/billempty')), 'billempty')
   },
-  /* 神马 充值缴费 未支付账单 */
+  /* 神马 充值缴费 订单详情 */
   {
-    path: '/recharge/orderdetail',
-      component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
+    path: '/recharge/orderdetail/:type/:orderNo',
+    component: r => require.ensure([], () => r(require('../views/recharge/orderdetail')), 'orderdetail')
   },
   /* 神马 充值缴费 水费 type=1 电费 2 煤气3 */
   {
@@ -126,8 +126,11 @@ export const prdRouter = [
   },
   /* 神马 充值缴费 有线电视和铁通 */
   {
-    path: '/recharge/linetv',
-    component: r => require.ensure([], () => r(require('../views/recharge/linetv')), 'linetv')
+    path: '/recharge/linetv/',
+    component: r => require.ensure([], () => r(require('../views/recharge/linetv')), 'linetv'),
+    children: [
+      {path: 'company'}
+    ]
   },
   /* 神马 充值缴费 游戏充值 */
   {

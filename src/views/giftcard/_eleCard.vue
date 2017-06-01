@@ -25,7 +25,7 @@
                     <div class="fright dw-show-1">
                         <div class="sicon-1" style="display:block;" @click="sup">-</div>
                         <div class="fl-input" style="display:block;">
-                            <input type="number" v-model="numValue">
+                            <input type="tel" v-model="numValue" maxlength="2">
                         </div>
                         <div class="sicon-2" style="display: block;" @click="sub">+</div>
                     </div>
@@ -59,7 +59,7 @@ export default {
             return
         }
         if (val < 10 || val > 1000) {
-          this.$toast('请输入10-1000的整数!')
+          this.$toast('请输入10-1000的整数面额!')
         }
         this.inputData = String(val).replace(/\D/g, '').replace('.', '');
       }
@@ -71,10 +71,15 @@ export default {
         utils.isLogin().then(data => {
           let memberId = utils.ssdbGet('member_id')
           let memberToken = utils.ssdbGet('member_token')
-          let goodsId = "1042900";// SIT环境对应商品id
-          // let goodsId = "1219874"; pre环境对应商品id
-          // let goodsId = "1166100"; 生产环境对应商品id
-          window.CTJSBridge && window.CTJSBridge.LoadAPI('BLDJAddCartAPIManager', {
+          let goodsId = '1166100'
+          if (window.location.host == 'mh5.st.bl.com') {
+            goodsId = '1042900'
+          } else if (window.location.host == 'mh5.ut.bl.com') {
+            goodsId = "1219874"
+          } else {
+            goodsId = "1166100"
+          }
+          window.CTJSBridge && window.CTJSBridge.LoadAPI('BLCartAddCartAPIManager', {
             memberId: memberId,
             member_token: memberToken,
             orderSourceCode: "1",
@@ -115,7 +120,7 @@ export default {
           })
         }, () => {})
       } else {
-        this.$toast('请输入10-1000的整数!')
+        this.$toast('请输入10-1000的整数面额!')
       }
     },
     sup() {

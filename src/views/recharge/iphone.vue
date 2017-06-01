@@ -57,7 +57,7 @@
       </ul>
       <div class="phoneRechargeTitle" v-else>
         <bl-navbar class="flex" v-model="tabsModel">
-          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item.type)">
+          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item)">
             {{ item.text }}
           </bl-tab-item>
         </bl-navbar>
@@ -151,10 +151,12 @@
         phoneCheck: '',
         tab: [{
           text: '充话费',
-          type: 'cz'
+          type: 'cz',
+          orderType: '23'
         }, {
           text: '充流量',
-          type: 'll'
+          type: 'll',
+          orderType: '34'
         }],
         rechargeType: '', // 充值类型
         placeholder: '',
@@ -167,6 +169,7 @@
         currentActivePay: '', // 真实金额
         currentItem: '', // 货号
         currentSku: '', // 面值
+        currentFee: 0, // 支付费用
         useName: '',
 
         moneyListModel: 0,
@@ -230,7 +233,8 @@
                 mainPrice: val,
                 salePrice: resData.price2[index],
                 activePay: resData.price[index],
-                item: resData.item[index]
+                item: resData.item[index],
+                fee: resData.fee[index]
               })
             }
             this.moneyList = list
@@ -238,6 +242,8 @@
             this.currentItem = this.moneyList[0].item
             this.currentSku = this.moneyList[0].mainPrice
             this.currentActivePay = this.moneyList[0].activePay
+            this.currentFee = this.moneyList[0].fee
+            this.moneyListModel = 0
 
             let msg = resData.msg.split("|")[1]
             if (this.tabsModel == '0') {
@@ -288,7 +294,8 @@
                 mainPrice: val,
                 salePrice: resData.price2[index],
                 activePay: resData.price[index],
-                item: resData.item[index]
+                item: resData.item[index],
+                fee: resData.fee[index]
               })
             }
             this.flowList = list
@@ -296,15 +303,20 @@
             this.currentItem = this.flowList[0].item
             this.currentSku = this.flowList[0].mainPrice
             this.currentActivePay = this.flowList[0].activePay
+            this.currentFee = this.flowList[0].fee
+            this.flowListModel = 0
           } else {
             this.currentPay = 0
             this.flowList = []
           }
         })
       },
-      changeTab(index, type) {
+      changeTab(index, item) {
         this.tabsModel = index
-        this.type = type
+        this.type = item.type
+        window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
+          type: item.orderType
+        })
         this.getPhoneInfo(this.iphoneNum)
       },
       // 手机号码正则匹配
@@ -352,6 +364,7 @@
           this.currentItem = item.item
           this.currentActivePay = item.activePay
           this.currentPay = item.salePrice
+          this.currentFee = item.fee
         }
       },
       flowSelectPrice(index, item) {
@@ -361,6 +374,7 @@
           this.currentItem = item.item
           this.currentActivePay = item.activePay
           this.currentPay = item.salePrice
+          this.currentFee = item.fee
         }
       },
       // 去支付
@@ -387,77 +401,80 @@
           }
           // 把输入历史数据保存到localStore
           utils.dbSet(this.historyName, this.historyNum)
-        }
-        // 生成订单
-        let timestamp = utils.getTimeFormatToday();
-        let requestData = {
-          client_id: CONST.CLIENT_ID,
-          token: utils.ssdbGet('member_token'),
-          mobile: this.iphoneNum,
-          sku: this.currentSku,
-          item: this.currentItem,
-          dkhxm: this.useName,
-          dkhdh: this.iphoneNum,
-          dkhzh: utils.ssdbGet('member_id'),
-          dxtype: this.getPayType(this.type),
-          num: '1',
-          timestamp: timestamp,
-          format: "json",
-          t_dz: CONST.T_DZ,
-          dlx: '01'
-        }
-        console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-        api.recharge.genOrder(requestData).then(data => {
-          console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-          let goodsName = this.phoneCheck + this.currentSku + (this.type == 'll' ? 'M' : '元')
-          switch (this.type) {
-            case 'yk':
-              goodsName += "加油充值卡"
-              break
-            default:
-              goodsName += "手机充值卡"
-              break
+          // 生成订单
+          let timestamp = utils.getTimeFormatToday();
+          let requestData = {
+            client_id: CONST.CLIENT_ID,
+            token: utils.ssdbGet('member_token'),
+            mobile: this.iphoneNum,
+            sku: this.currentSku,
+            item: this.currentItem,
+            dkhxm: this.useName,
+            dkhdh: this.iphoneNum,
+            dkhzh: utils.ssdbGet('member_id'),
+            dxtype: this.getPayType(this.type),
+            num: '1',
+            timestamp: timestamp,
+            format: "json",
+            t_dz: CONST.T_DZ,
+            dlx: '01'
           }
-          let resData = JSON.parse(data.body.obj)
-          let createExpensesOrderRequestData = {
-            outOrderNo: resData.orderid,
-            payMoney: parseFloat(this.currentActivePay),
-            orderSource: 1,
-            orderTypeCode: this.getOrderTypeCode(this.type),
-            memberId: utils.ssdbGet('member_id'),
-            goodsName: goodsName,
-            phoneNo: this.iphoneNum,
-            price: this.currentSku,
-            count: 1,
-            accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
-            changeMoney: parseFloat(this.currentPay),
-            aliasSaleTime: resData.orddate,
-            orderPhone: this.iphoneNum,
-            serviceFee: Number(0).toFixed(2)
-          }
-          console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-          api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-            console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-            let resData = JSON.parse(data.body.obj)
-            let order = {
-              orderNo: resData.orderNo,
-              outOrderNo: resData.outOrderNo,
-              payMoney: resData.payMoney,
-              orderTime: resData.orderTime,
-              orderTypeCode: resData.orderTypeCode,
-              activeTime: resData.activeTime,
-              changeMoney: resData.changeMoney,
-              omsNotifyUrl: resData.omsNotifyUrl,
-              payType: resData.payType,
-              accountNo: this.iphoneNum
+          console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+          api.recharge.genOrder(requestData).then(data => {
+            console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+            console.log('this.type: ' + this.type)
+            console.log(this.type.indexOf('ll'))
+            let goodsName = this.phoneCheck + this.currentSku + (this.type.indexOf('ll') >= 0 ? 'M' : '元')
+            switch (this.type) {
+              case 'yk':
+                goodsName += "加油充值卡"
+                break
+              default:
+                goodsName += "手机充值卡"
+                break
             }
-            require.ensure([], function(require) {
-              let Pay = require('src/paymodel').default
-              current.inlineLoading.close()
-              Pay.goPay(order, '23')
-            }, 'Pay')
+            let resData = JSON.parse(data.body.obj)
+            console.log('this.currentFee: ' + this.currentFee)
+            let createExpensesOrderRequestData = {
+              outOrderNo: resData.orderid,
+              payMoney: parseFloat(this.currentActivePay),
+              orderSource: 1,
+              orderTypeCode: this.getOrderTypeCode(this.type),
+              memberId: utils.ssdbGet('member_id'),
+              goodsName: goodsName,
+              phoneNo: this.iphoneNum,
+              price: this.currentSku,
+              count: 1,
+              accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
+              changeMoney: parseFloat(this.currentPay),
+              aliasSaleTime: resData.orddate,
+              orderPhone: this.iphoneNum,
+              serviceFee: Number(this.currentFee).toFixed(2)
+            }
+            console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+            api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+              console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+              let resData = JSON.parse(data.body.obj)
+              let order = {
+                orderNo: resData.orderNo,
+                outOrderNo: resData.outOrderNo,
+                payMoney: resData.payMoney,
+                orderTime: resData.orderTime,
+                orderTypeCode: resData.orderTypeCode,
+                activeTime: resData.activeTime,
+                changeMoney: resData.changeMoney,
+                omsNotifyUrl: resData.omsNotifyUrl,
+                payType: resData.payType,
+                accountNo: this.iphoneNum
+              }
+              require.ensure([], function(require) {
+                let Pay = require('src/paymodel').default
+                current.inlineLoading.close()
+                Pay.goPay(order, '23')
+              }, 'Pay')
+            })
           })
-        })
+        }
       },
       getOrderTypeCode(type) {
         switch (type) {
@@ -497,22 +514,7 @@
             return type;
         }
       },
-      getPayType(orderType, data) {
-        if (data && (data.type == 'cz' || data.type == 'yx' || data.type == 'zc')) {
-          return '02';
-        }
-        if (data && data.type == 'gh') {
-          switch (data.subType) {
-            case 'gh':
-              return '00';
-            case 'fz':
-              return '08';
-            case 'xlt':
-              return '01';
-            case 'kd':
-              return '03' + data.psw;
-          }
-        }
+      getPayType(orderType, password) {
         switch (orderType) {
           case '01':
             return 'sf';
@@ -536,6 +538,15 @@
             return '143';
           case 'cz':
             return '02';
+
+          case 'gh':
+            return '00';
+          case 'fz':
+            return '08';
+          case 'xlt':
+            return '01';
+          case 'kd':
+            return '03' + password;
           default:
             return orderType;
         }

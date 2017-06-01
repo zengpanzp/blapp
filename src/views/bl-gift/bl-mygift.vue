@@ -269,9 +269,7 @@ export default {
         if (type == this.currentType) {
             return false;
         } else {
-            debugger;
             if (!this.hasLoad) {
-                debugger;
                 this.$loading = this.$toast({
                     iconClass: 'preloader white',
                     message: '加载中',
@@ -297,7 +295,7 @@ export default {
         } else {  // 查询我收到的礼物
             methodName = 'getGiftOrderListByReceiver';
         }
-        debugger;
+
         api.blgift[methodName]({
             pageNumber: this.sendType ? this.sendPageIndex : this.receivePageIndex,
             pageSize: this.pageSize,

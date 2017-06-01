@@ -151,6 +151,69 @@ export default {
         }).then(data => {
           if (data.body.obj) {
             console.log("----data orderNo-------" + data.body.obj)
+            if (data.body.obj) {
+              console.log("------data-----" + data.body.obj)
+              let resData = JSON.parse(data.body.obj)
+              if (resData.resultInfo) {
+                  this.pageNo = resData.resultInfo.pageNo
+                  let resRow = resData.resultInfo.rows
+                  if (resRow) {
+                    for (let i = 0; i < resRow.length; i++) {
+                            let orderNo = -1;
+                            if (resRow[i].orderNo) {
+                                orderNo = resRow[i].orderNo;
+                            }
+                            if (resRow[i].order_number) {
+                                orderNo = resRow[i].order_number;
+                            }
+                            let good = {
+                                id: resRow[i].id,
+                                orderTime: resRow[i].orderTime,
+                                orderNo: orderNo,
+                                goodsName: resRow[i].productName,
+                                pic: resRow[i].productPic,
+                                isAgain: resRow[i].isCanZP,
+                                isContent: resRow[i].commentAgain,
+                                isvalid: resRow[i].isvalid,
+                                ispic: resRow[i].ispic,
+                                product: encodeURIComponent(JSON.stringify({
+                                    pic: resRow[i].productPic,
+                                    goodsName: resRow[i].productName,
+                                    productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
+                                    supplyId: resRow[i].dshh,
+                                    merchantName: resRow[i].shopId,
+                                    tags: resRow[i].tags,
+                                    comment: ''
+                                }).replace(/[\ud800-\udfff]/g, ''))
+                            }
+                            this.list = this.list.concat(good)
+                        }
+                    this.busy = false
+                    this.loading = true
+                    if (resRow.length < 10) {
+                      this.busy = true
+                      this.loading = false
+                      this.$toast({
+                        position: 'bottom',
+                        message: '没有了~'
+                      })
+                    }
+                  } else {
+                    this.busy = true
+                    this.loading = false
+                    if (resData.resultInfo.pageNo > 1) {
+                      this.$toast({
+                        position: 'bottom',
+                        message: '亲，没有数据了！'
+                      })
+                    } else {
+                      this.noRows = true
+                    }
+                  }
+              } else {
+                this.noRows = true
+              }
+            }
           }
         }, err => {
           console.log(err)
@@ -195,7 +258,7 @@ export default {
                                 supplyId: resRow[i].dshh,
                                 merchantName: resRow[i].shopId,
                                 tags: resRow[i].tags,
-                                comment: resRow[i]
+                                comment: ''
                             }).replace(/[\ud800-\udfff]/g, ''))
                         }
                         this.list = this.list.concat(good)
@@ -230,128 +293,7 @@ export default {
         console.log(err)
       })
     }
-    },
-    // 设置评论
-    getData: () => {
-            let name = "匿名用户";
-            if (this.attributes.isAnony != "01") {
-                name = this.attributes.nickName;
-                if (!name) {
-                    name = this.attributes.username;
-                    let temp = "";
-                    if (name) {
-                        if (name.length == 2) {
-                            temp = name.charAt(0).toString() + "*";
-                        } else if (name.length > 2) {
-                            temp = name.charAt(0).toString();
-                            for (let i = 1; i < name.length - 1; i++) {
-                                temp += "*";
-                            }
-                            temp += name.charAt(name.length - 1).toString()
-                        }
-                        name = temp;
-                    } else {
-                        name = this.attributes.mobile;
-                        if (name && name.length == 11) {
-                            temp = name.substring(0, 3) + "****" + name.substring(7, 11);
-                        }
-                        name = temp;
-                    }
-                }
-            }
-            let content = "此用户没有填写评论！";
-            if (this.attributes.isAuto == '01') {
-                content = "好评!";
-            }
-            if (this.attributes.comments != '') {
-                content = this.attributes.comments;
-            }
-            if (this.attributes.isAuto != '01' && !this.attributes.comments && this.attributes.tags) {
-                content = 'notShow';
-            }
-
-            let reason = [];
-            if (this.attributes.dscore <= 3) {
-                reason.push('产品质量');
-            }
-            if (this.attributes.qscore <= 3) {
-                reason.push('描述相符');
-            }
-            if (this.attributes.lscore <= 3) {
-                reason.push('物流配送');
-            }
-            if (this.attributes.sscore <= 3) {
-                reason.push('服务态度');
-            }
-
-            let hasVote = false;
-            if (this.attributes.isLike) {
-                if (this.attributes.isLike == '01') {
-                    hasVote = true;
-                }
-            } else {
-                if (this.attributes.votes_user) {
-                    for (let i = 0; i < this.attributes.votes_user.length; i++) {
-                        if (this.loginflag && this.attributes.votes_user[i] == this.memberId) {
-                            hasVote = true;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            let picMinURLS = [];
-            let picMaxURLS = [];
-            let allPicMinURLS = [];
-            let allPicMaxURLS = [];
-            let twoSet = false;
-            if (this.attributes.pictures) {
-                for (let i = 0; i < this.attributes.pictures.length; i++) {
-                    if (this.attributes.pictures[i].imgMin && this.attributes.pictures[i].imgMax) {
-                        allPicMinURLS.push(this.attributes.pictures[i].imgMin);
-                        allPicMaxURLS.push(this.attributes.pictures[i].imgMax);
-                        if (this.attributes.pictures[i].isvalid == "01") {
-                            picMinURLS.push(this.attributes.pictures[i].imgMin);
-                            picMaxURLS.push(this.attributes.pictures[i].imgMax);
-                        }
-                        twoSet = true;
-                    } else {
-                        allPicMinURLS.push(this.attributes.pictures[i].url);
-                        if (this.attributes.pictures[i].isvalid == "01") {
-                            picMinURLS.push(this.attributes.pictures[i].url);
-                        }
-                    }
-                }
-            }
-            if (!twoSet) {
-                allPicMaxURLS = allPicMinURLS;
-                picMaxURLS = picMinURLS;
-            }
-            return {
-                id: this.attributes.id,
-                username: name,
-                datetime: this.attributes.datetime,
-                score: parseInt(this.attributes.score),
-                reason: reason,
-                content: content,
-                votes: this.attributes.votes ? this.attributes.votes : {good: 0, bad: 0},
-                tags: this.attributes.tags,
-                hasVote: hasVote,
-                ip: this.attributes.ip,
-                isReply: this.attributes.isreply != "00",
-                reply: this.attributes.reply,
-                isAgain: this.attributes.isCanZP,
-                commentAgain: this.attributes.commentAgain,
-                headPic: this.attributes.headPic,
-                pictures: this.attributes.pictures,
-                validURLS: picMinURLS,
-                allURLS: allPicMinURLS,
-                validPicList: encodeURIComponent(JSON.stringify(picMaxURLS)),
-                allPicList: encodeURIComponent(JSON.stringify(allPicMaxURLS)),
-                isAnony: this.attributes.isAnony,
-                orderTime: this.attributes.orderTime
-            };
-        }
+    }
   },
   beforeRouteEnter (to, from, next) {
     utils.isLogin().then(user => {

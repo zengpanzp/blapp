@@ -174,6 +174,22 @@
                   orderPhone: user.mobile,
                   serviceFee: this.queryData.fee ? this.queryData.fee : 0
                 }
+
+                let createPaySubNoData = {
+                  format: "json",
+                  dkhdh: user.mobile,
+                  typecode: this.queryData.typecode,
+                  t_dz: "02",
+                  code: this.queryData.tiaoma,
+                  dkhxm: user.member_name,
+                  dkhzh: user.member_id,
+                  type: this.getOrderTypeCode(this.typeObj[this.rateType]),
+                  timestamp: timestamp,
+                  token: user.member_token,
+                }
+                api.recharge.createPaySubNo(createPaySubNoData).then(data => {
+                  console.log(data);
+                });
                 console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
                 api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
                   console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
@@ -188,12 +204,18 @@
                     changeMoney: resData.changeMoney,
                     omsNotifyUrl: resData.omsNotifyUrl,
                     payType: resData.payType,
-                    accountNo: this.iphoneNum
+                    accountNo: resData.accountNo
                   }
+                  console.log(order)
                   require.ensure([], function(require) {
                     let Pay = require('src/paymodel').default
                     current.inlineLoading.close()
-                    Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]));
+                    Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
+                      console.log(data);
+                    }, (data) => {
+                      // 跳转到详情
+                      current.$router.push({ path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo });
+                    });
                   }, 'Pay')
                 })
                 console.log(data);
