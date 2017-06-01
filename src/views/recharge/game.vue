@@ -1,139 +1,179 @@
+<style lang="scss" src="./css/_comm.scss"></style>
 <style lang="scss" src="./css/_game.scss" scoped></style>
-<!--游戏充值-->
 <template>
-    <div class="gameWrap">
-      <!--通讯录组件模式-->
-      <!--<bl-sortListView v-bind:model="list" v-if="selectItem" @click="selectItemName"></bl-sortListView>-->
-      <div class="headMenu">
-        <ul>
-          <li :class="shows[0]?'selected':''" @click.preventDefault="tabShow(0, $event)">盛大充值</li>
-          <li :class="shows[1]?'selected':''" @click.preventDefault="tabShow(1, $event)">QQ充值</li>
-          <li :class="shows[2]?'selected':''" @click.preventDefault="tabShow(2, $event)">更多游戏</li>
-        </ul>
+  <div class="phoneRechargeBox" :style="{ 'min-height': wrapperHeight() + 'px' }">
+    <div class="modal-fix" v-show="focus" @click="focus = false"></div>
+    <div class="phone-box">
+      <div class="phoneRechargeTitle">
+        <bl-navbar class="flex" v-model="tabsModel">
+          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item)">
+            {{ item.text }}
+          </bl-tab-item>
+        </bl-navbar>
       </div>
-      <!--盛大游戏充值-->
-      <div class="shengdaGame" v-show="shows[0]">
-        <div class="gameFir">
-          <ul>
-            <li class="selected">游戏名称 <input type="text" placeholder="请选择游戏"> <img class="more" src="./i/iphone/more.png"></li>
-            <li>充值类型 <div class="selected">游戏账号</div> <div>盛大通行证</div></li>
-            <li>充值方式 <div class="selected">卡密</div> <div>直充</div></li>
-          </ul>
-        </div>
-        <div class="gameFir new">
-          <ul>
-            <li>充值账号 <input type="text" placeholder="请输入游戏账号"> </li>
-          </ul>
-        </div>
-        <div class="gameFir top">
-          <ul>
-            <li>游戏区号 <input type="text" placeholder="请选择游戏区号"> <img class="more" src="./i/iphone/more.png"></li>
-            <li>游戏区服 <input type="text" placeholder="请选择游戏服务器"> <img class="more" src="./i/iphone/more.png"></li>
-            <li>充值金额 <input type="text" placeholder="请选择游戏金额"> <img class="more" src="./i/iphone/more.png"></li>
-            <li>购买数量 <input type="text" placeholder="请输入购买数量"> </li>
-          </ul>
-        </div>
-      </div>
-      <!--盛大游戏充值结束-->
-      <!--QQ充值-->
-      <div class="QQGame" v-show="shows[1]">
-        <div class="gameFir">
-          <ul>
-            <li>QQ号码 <input class="spe" type="text" placeholder="请输入QQ号"> </li>
-            <li>QQ卡数量 <input type="text" placeholder="请输入充值卡数量"> </li>
-          </ul>
-        </div>
-      </div>
-      <!--更多游戏充值-->
-      <div class="moreGame" v-show="shows[2]">
-        <div class="gameFir">
-          <ul>
-            <li>游戏名称 <input type="text" placeholder="请选择游戏"> <img class="more" src="./i/iphone/more.png"></li>
-            <li>充值类型 <div class="selected">游戏账号</div> <div>盛大通行证</div></li>
-            <li>充值面额 <input type="text" placeholder="请选择游戏"> <img class="more" src="./i/iphone/more.png"></li>
-            <li>购买数量 <input type="text" placeholder="请输入购买数量"> </li>
-          </ul>
-        </div>
-      </div>
-      <div class="phoneFixBottom">
+      <bl-tab-container class="gameWrap" v-model="tabsModel">
+        <bl-tab-container-item :id="0">
+          <!--盛大游戏充值-->
+          <div class="shengdaGame">
+            <div class="gameFir">
+              <ul>
+                <li class="selected">游戏名称
+                  <input type="text" placeholder="请选择游戏" v-model="gameName" disabled> <img class="more" src="./i/iphone/more.png"></li>
+                <li>充值类型
+                  <div :class="{'selected': rechargeType == index}" v-for="(item, index) in ['游戏账号', '盛大通行证']" @click="rechargeType = index">{{ item }}</div>
+                </li>
+              </ul>
+            </div>
+            <div class="gameFir new">
+              <ul>
+                <li>充值账号
+                  <input type="text" v-model="iphoneNum" placeholder="请输入游戏账号"> </li>
+              </ul>
+            </div>
+            <div class="gameFir top">
+              <ul>
+                <li>游戏区号
+                  <input type="text" placeholder="请选择游戏区号" v-model="gameAreaCode" disabled> <img class="more" src="./i/iphone/more.png"></li>
+                <li>游戏区服
+                  <input type="text" placeholder="请选择游戏服务器" v-model="gameServer" disabled><img class="more" src="./i/iphone/more.png"></li>
+                <li>充值金额
+                  <input type="text" placeholder="请选择游戏金额" v-model="rechargeMoney" disabled><img class="more" src="./i/iphone/more.png"></li>
+              </ul>
+            </div>
+          </div>
+          <!--盛大游戏充值结束-->
+        </bl-tab-container-item>
+        <bl-tab-container-item :id="1">
+          <!--QQ充值-->
+          <div class="QQGame">
+            <div class="gameFir">
+              <ul>
+                <li>QQ号码
+                  <input class="spe" type="text" placeholder="请输入QQ号"> </li>
+                <li>QQ卡数量
+                  <input type="text" placeholder="请输入充值卡数量"> </li>
+              </ul>
+            </div>
+          </div>
+        </bl-tab-container-item>
+        <bl-tab-container-item :id="2">
+          <!--更多游戏充值-->
+          <div class="moreGame">
+            <div class="gameFir">
+              <ul>
+                <li>游戏名称
+                  <input type="text" placeholder="请选择游戏"> <img class="more" src="./i/iphone/more.png"></li>
+                <li>充值类型
+                  <div class="selected">游戏账号</div>
+                  <div>盛大通行证</div>
+                </li>
+                <li>充值面额
+                  <input type="text" placeholder="请选择游戏"> <img class="more" src="./i/iphone/more.png"></li>
+                <li>购买数量
+                  <input type="text" placeholder="请输入购买数量"> </li>
+              </ul>
+            </div>
+          </div>
+        </bl-tab-container-item>
+      </bl-tab-container>
+    </div>
+    <div class="phoneFixBottom">
+      <div class="limit-remind">
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
-        <div class='config-button-contain'>
-          <div class="edit-config-button middleFont">立即支付：￥499.90  <span class="smallFont">（服务费￥1.00）</span></div>
-        </div>
+      </div>
+      <div class="config-button-contain">
+        <button class="edit-config-button middleFont">
+          立即支付：￥{{ currentPay }}
+        </button>
       </div>
     </div>
+  </div>
 </template>
 <script>
-  //  import api from 'src/api/index'
-  //  import utils from 'src/utils'
-  export default {
+ import api from 'src/api'
+//  import utils from 'src/utils'
+export default {
 
-    name: 'game',
+  name: 'game',
 
-    data() {
-      return {
-        selectItem: true, // 选择游戏名称的时候才渲染
-        list: [],
-        shows: [true, false, false]
-      }
-    },
-    computed: {
-    },
-    created() {
-      this.list = [{
-        name: 'jack',
-        img: './img/img.png',
-      },
-      {
-        name: 'aack',
-        img: './img/img.png',
-      },
-      {
-        name: 'abcdefg',
-        img: './img/img.png',
-      },
-      {
-        name: 'java',
-        img: './img/img.png',
-      },
-      {
-        name: 'fuck',
-        img: './img/img.png',
-      },
-      {
-        name: 'atom',
-        img: './img/img.png',
-      },
-      {
-        name: 'fack',
-        img: './img/img.png',
-      }
-      ];
-      this.$loading.close();
-      // 1位水费 2为电费 3为煤气费
-      console.log(this.$route);
-      // this.fill(this.$route);
-    },
-//    watch: {
-//      'show': 'tabShow'
-//    },
-    methods: {
-      tabShow(index, $event) {
-        // 通过数组索引方式不会触发视图更新
-        // Vue.set(example1.items, indexOfItem, newValue)
-        for (let i = 0; i < this.shows.length; i++) {
-            if (i == index) {
-              this.$set(this.shows, index, true);
-            } else {
-              this.$set(this.shows, i, false);
-            }
-        }
-      },
-      // 选择游戏名称 用来接收子组件传递的数据
-      selectItemName(data) {
-          console.log("接收的数据为:", data);
-      }
+  data() {
+    return {
+      tabsModel: 0,
+      rechargeType: 0,
+      tab: [{
+        text: '盛大充值',
+        type: 'sd'
+      }, {
+        text: 'QQ充值',
+        type: 'qq'
+      }, {
+        text: '更多游戏',
+        type: 'moreGame'
+      }],
+
+      iphoneNum: '',
+      currentPay: 0,
+      type: 'sd', // 默认盛大充值
+      payType: 3,
+
+      gameName: '', // 游戏名称
+      gameAreaCode: '', // 游戏区号
+      gameServer: '', // 游戏服务
+      rechargeMoney: '', // 充值金额
     }
-  };
+  },
+  created() {
+    this.$loading.close()
+    this.getGameDetail('game')
+  },
+  methods: {
+    getGameDetail(cate) {
+      if (this.type == 'sd') {
+        api.recharge.sdyxJson().then(data => {
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            console.log(resData)
+            this.gameName = resData[0].name
+          } else {
+            this.$toast(data.body.msg)
+          }
+        }, err => {
+          console.log(err)
+        })
+        api.recharge.sdyxJson({
+          type: '0'
+        }).then(data => {
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            console.log(resData)
+            this.gameAreaCode = resData.deposititem.areas.area[0]['@attributes'].name
+            this.gameServer = resData.deposititem.areas.area[0].groups.group['@attributes'].name
+            this.rechargeMoney = resData.deposititem.consumes.consume.price.split(',')[0]
+          } else {
+            this.$toast(data.body.msg)
+          }
+        }, err => {
+          console.log(err)
+        })
+      }
+    },
+    fetchGameDetail() {},
+    // 手机号码正则匹配
+    testPhoneNum() {
+      let pattern = /^1\d{10}$/;
+      if (this.$route.query.type == 'petrol') {
+        pattern = /^1\d{18}$/;
+      }
+      return pattern.test(this.iphoneNum)
+    },
+    changeTab(index, item) {
+      this.tabsModel = index
+      this.type = item.type
+    },
+    // 给div屏幕的高度
+    wrapperHeight() {
+      return document.documentElement.clientHeight
+    },
+  }
+};
 </script>
-

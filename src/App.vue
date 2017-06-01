@@ -26,6 +26,9 @@
       toggleFn() {
         this.toggle = !this.toggle
       }
+    },
+    mounted() {
+      document.querySelector('body').removeChild(document.querySelector('.ant-transparent'))
     }
   }
 </script>
