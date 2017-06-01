@@ -104,6 +104,10 @@ export default {
     createExpensesOrder: params => {
       return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
     },
+    // 游戏充值 获取游戏商品详情
+    sdyxJson: params => {
+      return Vue.http.post(baseUrl + '/web/sdyx_json.htm', params);
+    },
     // 查询我的缴费分组
     queryMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/queryPaySubGroup.htm', params);

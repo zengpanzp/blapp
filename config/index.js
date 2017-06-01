@@ -20,7 +20,7 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
-    manifest: 'static/manifest.appcache',
+    manifest: '',
     sence: 'production',
     remotejs: ''
   },

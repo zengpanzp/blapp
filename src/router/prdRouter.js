@@ -21,18 +21,18 @@ export const prdRouter = [
     component: r => require.ensure([], () => r(require('../views/electricCity/electricHome')), 'electricMainPage')
   },
   /* 陈鹏 值得买首页 */
-  {
-    path: '/rankMainPage',
-    meta: {
-      title: '大家都在买'
-    },
-    component: r => require.ensure([], () => r(require('../views/rank/mainView')), 'rankMainPage')
-  },
+  // {
+  //   path: '/rankMainPage',
+  //   meta: {
+  //     title: '大家都在买'
+  //   },
+  //   component: r => require.ensure([], () => r(require('../views/rank/mainView')), 'rankMainPage')
+  // },
   /* 陈鹏 值得买分类页 */
-  {
-    path: '/rankSortPage/:blackId',
-    component: r => require.ensure([], () => r(require('../views/rank/sortView')), 'rankSortView')
-  },
+  // {
+  //   path: '/rankSortPage/:blackId',
+  //   component: r => require.ensure([], () => r(require('../views/rank/sortView')), 'rankSortView')
+  // },
   /* 神马 领券中心 cid 为优惠券id */
   {
     path: '/banknote',
@@ -50,23 +50,23 @@ export const prdRouter = [
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */
-  {
-    path: '/blgift',
-    meta: {
-      title: '百联财礼'
-    },
-    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift')
-  },
+  // {
+  //   path: '/blgift',
+  //   meta: {
+  //     title: '百联财礼'
+  //   },
+  //   component: r => require.ensure([], () => r(require('../views/bl-gift/bl-gift')), 'blgift')
+  // },
   /* 神马 百联财礼 */
-  {
-    path: '/blgift/goods/:jumpId/',
-    component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
-  },
+  // {
+  //   path: '/blgift/goods/:jumpId/',
+  //   component: r => require.ensure([], () => r(require('../views/bl-gift/goods')), 'giftgoods')
+  // },
   /* 神马 百联财礼  我的礼物中心 */
-  {
-    path: '/blgift/mygift',
-    component: r => require.ensure([], () => r(require('../views/bl-gift/bl-mygift')), 'blmygift')
-  },
+  // {
+  //   path: '/blgift/mygift',
+  //   component: r => require.ensure([], () => r(require('../views/bl-gift/bl-mygift')), 'blmygift')
+  // },
   /* 神马 充值缴费 首页 */
   {
     path: '/recharge',
@@ -75,14 +75,17 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/recharge/index')), 'index')
   },
-  /* 神马 充值缴费 手机充值 type=1 */
+  /* 陈鹏 充值缴费 手机充值 type=1 */
   {
     path: '/recharge/iphone/:type',
     component: r => require.ensure([], () => r(require('../views/recharge/iphone')), 'iphone')
   },
-  /* 神马 充值缴费 固话充值 */
+  /* 陈鹏 充值缴费 固话充值 */
   {
     path: '/recharge/fixedphone',
+    meta: {
+      title: '固话/宽带充值'
+    },
     component: r => require.ensure([], () => r(require('../views/recharge/fixedphone')), 'fixedphone')
   },
   /* 神马 充值缴费 付账单 */
@@ -135,9 +138,12 @@ export const prdRouter = [
       {path: 'company'}
     ]
   },
-  /* 神马 充值缴费 游戏充值 */
+  /* 陈鹏 充值缴费 游戏充值 */
   {
     path: '/recharge/game',
+    meta: {
+      title: '游戏充值'
+    },
     component: r => require.ensure([], () => r(require('../views/recharge/game')), 'game')
   },
   /* 陈鹏 礼品卡首页 */
@@ -190,7 +196,7 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   },
-  /* 陈鹏 我的评价 */
+  /* 曾攀 我的评价 */
   {
     path: '/myEvaluation',
     meta: {

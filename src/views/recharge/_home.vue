@@ -65,7 +65,6 @@ export default {
   },
   methods: {
     nativeGo(type, url) {
-      debugger
       utils.isLogin().then(data => {
         if (process.env.NODE_ENV !== 'production') {
           this.$router.push({ path: url })
