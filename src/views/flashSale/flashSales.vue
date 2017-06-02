@@ -2,7 +2,6 @@
 <template>
   <div class="flash-sales">
     <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record v-scroll-fixed>
-      <!-- <iframe src="http://localhost/index.html" id="Iframe" frameborder="0" scrolling="no" style="border:0px; width:100%;"></iframe> -->
       <!-- 轮播图 -->
       <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
@@ -12,8 +11,8 @@
           <li class="ovfs-item" :class="{ active: isActive == 'j' }" @click="selectCate('j', undefined, '今日上新')">
             <p>今日上新</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive == flashCategories}" v-if="flashCategoriesName != '闪购首页'" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories, flashCategoriesName)">
-            <p v-text="flashCategoriesName"></p>
+          <li class="ovfs-item" :class="{ active: isActive == item.flashCategories}" v-if="item.flashCategoriesName != '闪购首页'" v-for="(item, index) in queryCate" @click="selectCate(item.flashCategories, item.flashCategories, item.flashCategoriesName, item)">
+            <p v-text="item.flashCategoriesName"></p>
           </li>
           <li class="ovfs-item" :class="{ active: isActive == 'z' }" @click="selectCate('z', undefined, '最后疯抢')">
             <p>最后疯抢</p>
@@ -23,6 +22,7 @@
           </li>
         </ul>
       </div>
+      <iframe v-if="miniUrl" :src="miniUrl" id="Iframe" frameborder="0" scrolling="no" style="border:0px; width:100%; height: 1334px;"></iframe>
       <!-- end -->
       <!-- 闪购商品列表 -->
       <div class="flash-list">
@@ -93,6 +93,7 @@ export default {
       allSlides: [],
       pages: 0, // 总页数
       getFlashDetailData: [], // 商品列表数据
+      queryCate: [], // 分类
       requestData: {
         channelid: 1,
         type: 1,
@@ -100,7 +101,8 @@ export default {
         pageSize: 10,
         parameter: 0,
         flashCategories: parseFloat(this.$route.query.flashCategories).toString() !== "NaN" ? String(this.$route.query.flashCategories) : ''
-      }
+      },
+      miniUrl: '', // CMS页面的URL
     }
   },
   created() {
@@ -120,6 +122,9 @@ export default {
         let resData = utils.transData(res)
         this.$nextTick(() => {
           this.queryCate = resData.list
+          if (this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
+            this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+          }
           this.loaded = true
           this.$loading.close()
         });
@@ -133,7 +138,6 @@ export default {
       progress: data => {}
     })
     this.getList()
-    window.loadeds = this.loadeds
   },
   activated() {
     if (this.loaded) {
@@ -228,7 +232,15 @@ export default {
       })
     },
     /* 点击分类加载数据 */
-    selectCate(key, index, flashname) {
+    selectCate(key, index, flashname, item) {
+      if (item && item.miniList && item.miniList.length) {
+        this.miniUrl = item.miniList[0].miniUrl
+      } else {
+        this.miniUrl = ''
+      }
+      if (key == 'j' && this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
+        this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+      }
       this.inlineLoading = this.$toast({
         iconClass: 'preloader white',
         message: '加载中',

@@ -259,9 +259,9 @@ router.beforeEach(({ meta, path }, from, next) => {
   if (!meta.notLoading) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
-      message: '加载中',
+      // message: '加载中',
       duration: 'loading',
-      className: 'white-bg'
+      className: 'white-bg loading-bg'
     })
   }
   jsBridgeReady("_loginInfo", meta.isWeb, () => {
