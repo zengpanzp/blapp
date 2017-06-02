@@ -172,9 +172,5 @@ export default {
   // 查询评价数量
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
-  },
-  // 获取售后单列表
-  getSaleList: params => {
-    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
   }
 }

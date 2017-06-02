@@ -194,23 +194,5 @@ export const prdRouter = [
       title: '我的评价'
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
-  },
-  /* 曾攀 查看评价 */
-  {
-    path: '/seeComment/:comId/:type/:product',
-    name: 'seeComment',
-    meta: {
-      title: '查看评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/myEvaluation/seeComment')), 'seeComment')
-  },
-  /* 曾攀 商品评价 */
-  {
-    path: '/goodComment/:order/:product',
-    name: 'goodComment',
-    meta: {
-      title: '商品评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/myEvaluation/goodComment')), 'goodComment')
   }
 ]
