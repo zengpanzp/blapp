@@ -183,7 +183,7 @@
     &:last-child {
       background-image: none;
       border-radius: 0 0 $border-radius 0;
-      color: #263238;
+      color: #fff;
     }
     &:first-child:last-child {
       border-radius: 0 0 $border-radius $border-radius;
@@ -213,7 +213,18 @@
       display: none;
     }
   }
-
+  .modal-button:last-child {
+    background-image: none;
+    border-radius: 0 0 0.08rem 0;
+    color: #fff;
+    background-color: #fd7072;
+    border-radius: 0px 0px 0px 0.08rem;
+  }
+  .modal-button:first-child:last-child {
+    border-radius: 0 0 0.08rem 0.08rem;
+    background-origin: padding-box;
+    color: #fff;
+  }
   .modal-mask{
     position: fixed;
     left: 0;

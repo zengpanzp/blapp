@@ -196,7 +196,24 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   },
-  /* 曾攀 我的评价 */
+  /* 薛天玲 安全中心 */
+  {
+    path: '/securityCenter',
+    meta: {
+      title: '安全中心',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/securityCenter')), 'securityCenter'),
+  },
+  /* 薛天玲 安全中心 邮箱 */
+  {
+    path: '/securityCenter/myEmail',
+    meta: {
+      title: '我的邮箱'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/myEmail')), 'myEmail')
+  },
+  /* 陈鹏 我的评价 */
   {
     path: '/myEvaluation',
     meta: {
@@ -204,22 +221,12 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
   },
-  /* 曾攀 查看评价 */
+  /* 郭健 联通专区 */
   {
-    path: '/seeComment/:comId/:type/:product',
-    name: 'seeComment',
+    path: '/unicom',
     meta: {
-      title: '查看评价'
+      title: '联通专区'
     },
-    component: r => require.ensure([], () => r(require('../views/myEvaluation/seeComment')), 'seeComment')
-  },
-  /* 曾攀 商品评价 */
-  {
-    path: '/goodComment/:order/:product',
-    name: 'goodComment',
-    meta: {
-      title: '商品评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/myEvaluation/goodComment')), 'goodComment')
+    component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
   }
 ]

@@ -247,14 +247,14 @@ export default {
       setTimeout(() => toastd.close(), 3000)
     },
     modal() {
-      // this.$modal({
-      //   content: '确定要解绑百联卡吗？',
-      //   buttons: this.buttons
-      // })
       this.$modal({
-        title: '提示',
-        content: '操作成功'
+        content: '确定要解绑百联卡吗？',
+        buttons: this.buttons
       })
+      // this.$modal({
+      //   title: '提示',
+      //   content: '操作成功'
+      // })
     },
     onchange(val) {
       this.sheetVisible = val
