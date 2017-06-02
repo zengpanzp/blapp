@@ -11,7 +11,7 @@
           <li class="ovfs-item" :class="{ active: isActive == 'j' }" @click="selectCate('j', undefined, '今日上新')">
             <p>今日上新</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive == item.flashCategories}" v-for="(item, index) in queryCate" @click="selectCate(item.flashCategories, item.flashCategories, item.flashCategoriesName, item)">
+          <li class="ovfs-item" :class="{ active: isActive == item.flashCategories}" v-if="item.flashCategoriesName != '闪购首页'" v-for="(item, index) in queryCate" @click="selectCate(item.flashCategories, item.flashCategories, item.flashCategoriesName, item)">
             <p v-text="item.flashCategoriesName"></p>
           </li>
           <li class="ovfs-item" :class="{ active: isActive == 'z' }" @click="selectCate('z', undefined, '最后疯抢')">
@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <iframe v-if="miniUrl" :src="miniUrl" id="Iframe" frameborder="0" scrolling="no" style="border:0px; width:100%;"></iframe>
+      <iframe v-if="miniUrl" :src="miniUrl" id="Iframe" frameborder="0" scrolling="no" style="border:0px; width:100%; height: 1334px;"></iframe>
       <!-- end -->
       <!-- 闪购商品列表 -->
       <div class="flash-list">
@@ -102,23 +102,10 @@ export default {
         parameter: 0,
         flashCategories: parseFloat(this.$route.query.flashCategories).toString() !== "NaN" ? String(this.$route.query.flashCategories) : ''
       },
-      miniUrl: 'http://localhost/index.html'
+      miniUrl: '', // CMS页面的URL
     }
   },
   created() {
-    // this.$http.post('/api/home/activityHomePage.htm', {
-    //   buid: null,
-    //   activityCate: "10",
-    //   flashId: '11776',
-    //   resCode: null,
-    //   shopid: null,
-    //   brandSid: null,
-    //   activityType: "0",
-    //   type: 0,
-    //   queryType: null
-    // }).then(data => {
-    //   console.log(data)
-    // })
     /* 获取轮播图 */
     window.CTJSBridge.LoadAPI("BLAPPSiteQueryAdDeployAPIManager", {resourceId: 500}, {
       success: res => {
@@ -135,6 +122,9 @@ export default {
         let resData = utils.transData(res)
         this.$nextTick(() => {
           this.queryCate = resData.list
+          if (this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
+            this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+          }
           this.loaded = true
           this.$loading.close()
         });
@@ -148,7 +138,6 @@ export default {
       progress: data => {}
     })
     this.getList()
-    window.loadeds = this.loadeds
   },
   activated() {
     if (this.loaded) {
@@ -248,6 +237,9 @@ export default {
         this.miniUrl = item.miniList[0].miniUrl
       } else {
         this.miniUrl = ''
+      }
+      if (key == 'j' && this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
+        this.miniUrl = this.queryCate[0].miniList[0].miniUrl
       }
       this.inlineLoading = this.$toast({
         iconClass: 'preloader white',
