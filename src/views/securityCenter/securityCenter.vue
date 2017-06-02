@@ -1,10 +1,5 @@
 <template>
   <div class="wholepage">
-<!--   <transition>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
-  </transition> -->
    <div class="section1">
      <div class="list">
       <ul>
@@ -17,7 +12,7 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li><i class="iconfont arrow-back"></i>登录密码<i>密码强度:{{ pwStatus }}</i></li>
+        <li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li>
         <li @click="checkPhone"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
       </ul>  
     </div>
@@ -58,7 +53,7 @@ export default {
         let phoneNum = JSON.parse(data.body.obj).mobile
         if (phoneNum) {
           this.phoneNum += phoneNum.substring(0, 3)
-          for (var i = 0; i < 4; i++) {
+          for (let i = 0; i < 4; i++) {
             this.phoneNum += '*'
           }
           this.phoneNum += phoneNum.substring(phoneNum.length - 4, phoneNum.length)
@@ -69,12 +64,12 @@ export default {
           var before = email.split('@')[0];
           var after = email.split('@')[1];
           if (before.length > 3) {
-              for (i = 3; i < before.length; i++) {
+              for (let i = 3; i < before.length; i++) {
                   this.email += '*';
               }
           }
           this.email += '@';
-          for (i = 0; i < after.length - 4; i++) {
+          for (let i = 0; i < after.length - 4; i++) {
               this.email += '*';
           }
           this.email += email.substring(email.length - 4, email.length);
