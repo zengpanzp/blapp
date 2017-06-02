@@ -96,10 +96,10 @@ export default {
       this.$router.go(0)
     },
     changeTab(index, deployName) {
-      let saName = this.filterEleTabs[this.tabsModel].saName
+      let saName = this.filterEleTabs[this.tabsModel].deployName
       // sensor analytics商品详情埋点
       try {
-        console.log((new Date()).toLocaleString() + deployName)
+        // console.log((new Date()).toLocaleString() + deployName)
         sa.track('$pageview', {
           pageId: 'APP_我的收藏_' + saName,
           categoryId: 'APP_User'
