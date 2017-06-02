@@ -35,6 +35,7 @@
 
 input {
   width: 100%;
+  padding-left: rem(55)
 }
 
 .btn-confirm {
@@ -60,15 +61,20 @@ input {
   border-top-right-radius: 5rem;
 }
 
-.input { padding: 5px; margin: 0; border: 1px solid #beceeb; }
+.input { 
+  padding: 5px; 
+  margin: 0; 
+  border: 1px 
+  solid #beceeb;
+}
 .clear { 
   position: absolute; 
-  font-size: rem(20);
+  font-size: rem(30);
   padding: rem(10);
   background: #ddd;
   border-radius: 50%;
-  color: #fff;
-  right: rem(20);
+  color: #aeaeae;
+  left: rem(10);
   top: 50%;
   @include transform(translate(0, -50%));
 }
