@@ -151,7 +151,6 @@ export default {
   methods: {
     // 切换tab
     changeTab(index, type) {
-      this.tabsModel = String(index)
       this.pageNum = 1
       this.list = []
       this.type = type

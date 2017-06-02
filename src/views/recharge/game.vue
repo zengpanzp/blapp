@@ -256,7 +256,6 @@
         }
       },
       changeTab(index, item) {
-        this.tabsModel = index
         this.type = item.type
       },
       // 给div屏幕的高度

@@ -252,7 +252,6 @@ export default {
     },
     changeTab(index, type) {
       this.iphoneNum = ''
-      this.tabsModel = index
       this.focus = false
 
       this.payType = type
