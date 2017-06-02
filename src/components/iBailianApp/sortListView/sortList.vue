@@ -2,17 +2,17 @@
   <div class="sortListView" v-show="show">
     <div class="letter" style="display: none;"></div>
     <div class="sort_box">
-      <div class="sort_list" @click.prevent="selectRow(item,$event)" v-for=" item of list">
-        <div class="slot"></div>
-        <div class="num_name">{{item.name}} <img src="./i/unselect.png"></div>
+      <div class="sort_list" @click.prevent="selectRow(item)" v-for="(item, index) of list">
+        <!-- <div class="slot"></div> -->
+        <div class="num_name">{{item.name}}<img :src="value == item.id ? require('./i/select.jpg') : require('./i/unselect.png')"></div>
       </div>
     </div>
 
-    <div class="initials">
-      <ul>
+    <ul class="initials">
+      <!-- <ul>
         <li><img src="./i/all.png"></li>
-      </ul>
-    </div>
+      </ul> -->
+    </ul>
     <slot></slot>
   </div>
 </template>
@@ -21,15 +21,14 @@
   import sortListView from './sortListView'
   export default {
     name: 'SortListView',
-    props: {
-      "list": Array
-    },
+    props: ['list', 'value'],
     data() {
       return {
         show: true
       };
     },
     created() {
+      console.log(this.value)
     },
     mounted() {
       this.$loading.close();
@@ -37,7 +36,8 @@
     },
     methods: {
       // 将数据传递到父组件
-      selectRow(item, $event) {
+      selectRow(item) {
+        this.listModel = item.id
           this.show = false;
           if (!this.disabled) {
             this.$emit('click', item)
@@ -83,10 +83,11 @@
       width: 100%;
     }
     .sort_list{
-      div{
-        display:inline-block;
-        vertical-align:middle;
-      }
+      padding: 0 rem(30);
+      // div{
+      //   display:inline-block;
+      //   vertical-align:middle;
+      // }
       .slot{
         width:rem(30);
         height:100%;
@@ -94,8 +95,9 @@
       img{
         width:rem(30);
         position:absolute;
-        right:rem(10);
-        top:rem(20);
+        right: rem(20);
+        top: 50%;
+        @include transform(translate(0, -50%));
       }
       height: rem(80);
       line-height: rem(80);
@@ -103,9 +105,9 @@
     }
     .sort_list .num_name{
       color: #000;
-      width:rem(650);
+      // width:rem(650);
       font-size: rem(28);
-      border-bottom:rem(1.8) solid #ddd;
+      border-bottom: 1px solid #ddd;
       position:relative;
       color:#333;
     }
@@ -120,14 +122,15 @@
     .initials{
       position: fixed;
       top: rem(0);
-      padding-top:rem(60);
+      // padding-top:rem(60);
       right: rem(0);
-      height: 60%;
+      // height: 60%;
       width: rem(55);
       text-align: center;
       font-size: rem(12);
       z-index: 99;
       background: rgba(145,145,145,0);
+      @include transform(translate(0, 50%));
       img{
         width:rem(40)
       }

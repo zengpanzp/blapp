@@ -58,6 +58,7 @@
             that.$set(item, "active", true);
           }
         });
+        this.$loading.close();
     },
     mounted() {
     },

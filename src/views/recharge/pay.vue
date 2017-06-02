@@ -174,18 +174,18 @@
                   orderPhone: user.mobile,
                   serviceFee: this.queryData.fee ? this.queryData.fee : 0
                 }
-
+                console.log(json.orderid);
+                // 创建账号账单
                 let createPaySubNoData = {
-                  format: "json",
-                  dkhdh: user.mobile,
-                  typecode: this.queryData.typecode,
-                  t_dz: "02",
-                  code: this.queryData.tiaoma,
-                  dkhxm: user.member_name,
-                  dkhzh: user.member_id,
-                  type: this.getOrderTypeCode(this.typeObj[this.rateType]),
+                  paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
+                  jigouName: this.queryData.companyName,
+                  jigouCode: this.queryData.typecode,
+                  accountName: "APP",
+                  groupId: this.queryData.groupId,
+                  groupName: this.queryData.groupName,
+                  accountNo: this.queryData.code,
                   timestamp: timestamp,
-                  token: user.member_token,
+                  member_token: user.member_token
                 }
                 api.recharge.createPaySubNo(createPaySubNoData).then(data => {
                   console.log(data);
@@ -206,7 +206,7 @@
                     payType: resData.payType,
                     accountNo: resData.accountNo
                   }
-                  console.log(order)
+                  console.log(resData)
                   require.ensure([], function(require) {
                     let Pay = require('src/paymodel').default
                     current.inlineLoading.close()

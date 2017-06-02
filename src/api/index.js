@@ -104,6 +104,10 @@ export default {
     createExpensesOrder: params => {
       return Vue.http.post(baseUrl + '/order/createExpensesOrder.htm', params);
     },
+    // 游戏充值 获取游戏商品详情
+    sdyxJson: params => {
+      return Vue.http.post(baseUrl + '/web/sdyx_json.htm', params);
+    },
     // 查询我的缴费分组
     queryMyGroup: params => {
       return Vue.http.post(baseUrl + '/myInformation/queryPaySubGroup.htm', params);
@@ -148,6 +152,10 @@ export default {
     getNewOrderDetail: params => {
       return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
     },
+    // 根据扫描条形码进行账单查询
+    getOrderByScanCode: params => {
+      return Vue.http.post(baseUrl + '/txmjx/do_txmjx.htm', params);
+    },
     // 水电煤 商品详情
     getGoodsDetail: params => {
       return Vue.http.post(baseUrl + '/gyjf/goods_new_detail.htm', params);
@@ -172,5 +180,28 @@ export default {
   // 查询评价数量
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
+  },
+  // 联通专区
+  unicom: {
+    // 登陆后查看认证状态
+    authenticate: params => {
+      return Vue.http.post(baseUrl + '/unicom/jn/UnicomVerifyAndGroup.htm', params);
+    },
+    // 点击认证查看认证状态
+    checkAuthentic: params => {
+      return Vue.http.post(baseUrl + '/unicom/jn/UnicomVerifyStatus.htm', params);
+    },
+    // 获取流量列表
+    getTrafficList: params => {
+      return Vue.http.post(baseUrl + '/uniconOrder/queryUniconGroupQuali.htm', params);
+    },
+    // 查看实名认证等级
+    realName: params => {
+      return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
+    },
+    // 领取流量
+    getTraffic: params => {
+      return Vue.http.post(baseUrl + '/uniconOrder/makeUnicomOrder.htm', params);
+    }
   }
 }
