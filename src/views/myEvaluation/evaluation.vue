@@ -442,7 +442,7 @@ export default {
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addcomment',
-        params: params
+        params: JSON.stringify(params)
       })
     },
     // 查看评价
@@ -454,7 +454,7 @@ export default {
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: params
+        params: JSON.stringify(params)
       })
     },
     // 追加晒单
@@ -466,7 +466,7 @@ export default {
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: params
+        params: JSON.stringify(params)
       })
     },
     // 追加评价
@@ -478,7 +478,7 @@ export default {
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: params
+        params: JSON.stringify(params)
       })
     }
   },
