@@ -6,7 +6,6 @@ import ScrollTo from 'scroll'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import VueResource from 'vue-resource'
-// import Validator from 'vue-validator'
 
 import App from './App'
 import router from './router'
@@ -15,8 +14,6 @@ import bluer from './vue-bluer'
 import 'src/utils'
 import 'src/api'
 import 'src/const'
-
-// Vue.use(Validator)
 
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
