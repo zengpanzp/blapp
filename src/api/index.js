@@ -71,6 +71,10 @@ export default {
     validPayPwd: params => {
       return Vue.http.post(baseUrl + '/myInformation/validPayPwd.htm', params);
     },
+    // 安全中心 修改邮箱
+    modifyEmail: params => {
+      return Vue.http.post(baseUrl + '/myInformation/modifyEmail.htm', params);
+    },
   },
   // 查询资源位
   queryAdDeploy: params => {

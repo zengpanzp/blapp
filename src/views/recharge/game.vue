@@ -5,7 +5,7 @@
     <div class="phone-box">
       <div class="phoneRechargeTitle">
         <bl-navbar class="flex" v-model="tabsModel">
-          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="type = item.type">
+          <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="tabItem = item">
             {{ item.text }}
           </bl-tab-item>
         </bl-navbar>
@@ -138,19 +138,22 @@
 
         tab: [{
           text: '盛大充值',
-          type: 'sd'
+          type: 'sd',
+          dsphh: '099159'
         }, {
           text: 'QQ充值',
-          type: 'qq'
+          type: 'qq',
+          dsphh: '099588'
         }, {
           text: '更多游戏',
-          type: 'moreGame'
+          type: 'moreGame',
+          dsphh: ''
         }],
 
         iphoneNum: '', // 盛大充值账号
         moreGameCount: '', // 更多游戏充值账号
         currentPay: 0, // 支付金额
-        type: 'sd', // 默认盛大充值
+        tabItem: {}, // 默认盛大充值
 
         showGameNameModel: false, // 显示游戏名称
         gameName: {}, // 游戏名称
@@ -176,7 +179,7 @@
         }, {
           id: 2,
           name: 'test2'
-        }], // 更多游戏名称
+        }], // 更多游戏名称列表
 
         showMoreGameNumModel: false, // 显示更多游戏购买面额
         moreGameNum: {
@@ -205,6 +208,7 @@
       'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
     },
     created() {
+      this.tabItem = this.tab[0]
       this.$loading.close()
       this.getGameDetail('game')
     },
@@ -225,16 +229,18 @@
             decid: this.iphoneNum,
             ddgsl: '1',
             dkhzh: utils.ssdbGet('member_id'),
-            dsphh: '099159',
-            dtype: this.getPayType(this.type, this.password),
-            str_snda: '0'
+            dsphh: this.tabItem.dsphh,
+            dtype: this.getPayType(this.tabItem.type, this.password),
+            str_snda: '0',
+            dlx: '01'
           }
           /* TODO */
-          if (this.type == 'sd') {
-            requestData.str_snda = ''
+          if (this.tabItem.type == 'sd') {
+            requestData.str_snda = `${this.iphoneNum}|${this.rechargeType}|${this.gameName.name}|${this.gameName.id}|${this.gameArea.id}|${this.gameServer.id}|${this.rechargeMoney.pay}|${this.rechargeMoney.id}|${Number(this.rechargeMoney.price).toFixed(0)}`
+          } else if (this.tabItem.type == 'qq') {
+            requestData.str_snda = `${this.qq}|00|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
           }
           console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-          console.log('this.currentFee: ' + this.currentFee)
           api.recharge.buyszkOrder(requestData).then(data => {
             console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
             if (data.body.obj) {
@@ -306,6 +312,8 @@
             return '01';
           case 'sd':
             return '02';
+          case 'qq':
+            return '02';
           case 'kd':
             return '03' + password;
           default:
@@ -313,7 +321,7 @@
         }
       },
       getGameDetail(cate) {
-        if (this.type == 'sd') {
+        if (this.tabItem.type == 'sd') {
           api.recharge.sdyxJson().then(data => {
             if (data.body.obj) {
               let resData = JSON.parse(data.body.obj)
@@ -400,15 +408,17 @@
             this.gameServer = serverList[0]
             this.gameServerList = serverList
           } else {
+            this.gameServer.id = ''
             this.gameServerList = []
           }
         } else {
-          this.gameServerList = []
+          this.gameArea.id = ''
+          this.areaList = []
         }
       },
       // 手机号码正则匹配
       testPhoneNum() {
-        switch (this.type) {
+        switch (this.tabItem.type) {
           case 'sd':
             return this.iphoneNum.length
           case 'qq':
@@ -427,10 +437,16 @@
     watch: {
       'gameName.id': {
         handler(val) {
+          this.inlineLoading = this.$toast({
+            iconClass: 'preloader white',
+            duration: 'loading',
+            className: 'loading-bg'
+          })
           console.warn('watch gameName.id根据游戏名称联动: ' + val)
           api.recharge.sdyxJson({
             type: val
           }).then(data => {
+            this.inlineLoading.close()
             if (data.body.obj) {
               let resData = JSON.parse(data.body.obj).deposititem
               console.log('获取游戏名称联动的信息==========:')
@@ -458,14 +474,17 @@
                   consumeData = consumeData[0]
                 }
                 let moneyName = consumeData['@attributes'].name
+                let moneyPayId = consumeData['@attributes'].id
                 let consumesArr = consumeData.quantity.split(',')
                 let consumesPriceArr = consumeData.price.split(',')
                 let moneyListArr = []
                 for (let [index, item] of consumesArr.entries()) {
                   moneyListArr.push({
-                    id: index,
+                    id: item,
                     name: `${item} ${moneyName}`,
-                    price: consumesPriceArr[index]
+                    price: consumesPriceArr[index],
+                    pay: moneyPayId,
+                    moneyName: moneyName
                   })
                 }
                 this.rechargeMoneyList = moneyListArr
@@ -484,7 +503,7 @@
         },
         immediate: false
       },
-      type(val) {
+      'tabItem.type'(val) {
         if (val == 'sd') {
           this.currentPay = Number(this.rechargeMoney.price).toFixed(2)
         } else if (val == 'moreGame') {
