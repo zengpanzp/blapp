@@ -218,6 +218,14 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/myEmail')), 'myEmail')
   },
+  /* 薛天玲 安全中心 登录密码 */
+  {
+    path: '/securityCenter/enterPw',
+    meta: {
+      title: '我的密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/enterPw')), 'enterPw')
+  },
   /* 陈鹏 我的评价 */
   {
     path: '/myEvaluation',

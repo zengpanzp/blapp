@@ -1,10 +1,5 @@
 <template>
   <div class="wholepage">
-<!--   <transition>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
-  </transition> -->
    <div class="section1">
      <div class="list">
       <ul>
@@ -17,7 +12,7 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li><i class="iconfont arrow-back"></i>登录密码<i>密码强度:{{ pwStatus }}</i></li>
+        <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
         <li @click="checkPhone"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
       </ul>  
     </div>
@@ -49,16 +44,27 @@ export default {
   //   this.$router.replace('/securityCenter/myEmail')
   // },
   created() {
+    try {
+      // console.log((new Date()).toLocaleString() + deployName)
+      sa.track('$pageview', {
+        pageId: 'APP_安全中心',
+        categoryId: 'APP_User',
+        $title: 'APP_安全中心'
+      })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
     utils.isLogin().then(data => {
       let memberToken = data.member_token
       let member_id = data.member_id
       api.userCenter.getMyInformation({
-        member_token: memberToken
+        member_token: memberToken,
+        timestamp: utils.getTimeFormatToday()
       }).then(data => {
         let phoneNum = JSON.parse(data.body.obj).mobile
         if (phoneNum) {
           this.phoneNum += phoneNum.substring(0, 3)
-          for (var i = 0; i < 4; i++) {
+          for (let i = 0; i < 4; i++) {
             this.phoneNum += '*'
           }
           this.phoneNum += phoneNum.substring(phoneNum.length - 4, phoneNum.length)
@@ -69,12 +75,12 @@ export default {
           var before = email.split('@')[0];
           var after = email.split('@')[1];
           if (before.length > 3) {
-              for (i = 3; i < before.length; i++) {
+              for (let i = 3; i < before.length; i++) {
                   this.email += '*';
               }
           }
           this.email += '@';
-          for (i = 0; i < after.length - 4; i++) {
+          for (let i = 0; i < after.length - 4; i++) {
               this.email += '*';
           }
           this.email += email.substring(email.length - 4, email.length);
@@ -92,7 +98,8 @@ export default {
         console.log(err)
       })
       api.userCenter.queryMemberRNAuthDetail({
-        memberId: member_id
+        memberId: member_id,
+        timestamp: utils.getTimeFormatToday()
       }).then(data => {
         this.realNameAuthType = JSON.parse(data.body.obj).realNameAuthType
       })
@@ -106,29 +113,32 @@ export default {
   },
   methods: {
     exit() {
-      this.$modal({
-      title: '提示',
-      content: '确认要退出？',
-      buttons: [
-        { text: '取消', onClick: function() {} },
-        { text: '确定', onClick: function() {} },
-      ]
-    })
-    // this.$modal({
-    //     title: '提示',
-    //     content: '确认要退出？',
-    //     buttons: [{
-    //       text: '取消',
-    //       onClick: () => {
-    //         this.$toast('取消')
-    //       }
-    //     }, {
-    //       text: '确定',
-    //       onClick: () => {
-    //         this.$toast('确定')
-    //       }
-    //     }]
+    //   this.$modal({
+    //   title: '提示',
+    //   content: '确认要退出？',
+    //   buttons: [
+    //     { text: '取消', onClick: function() {} },
+    //     { text: '确定', onClick: function() {} },
+    //   ]
     // })
+    this.$modal({
+        title: '提示',
+        content: '确认要退出？',
+        buttons: [{
+          text: '取消',
+          onClick: () => {
+            this.$toast('取消退出')
+          }
+        }, {
+          text: '确定',
+          onClick: () => {
+            this.$toast('退出成功')
+            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+              pageId: 'homepage/pro'
+            })
+          }
+        }]
+    })
     },
     authen() {
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
