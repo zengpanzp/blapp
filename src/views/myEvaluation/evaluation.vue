@@ -435,49 +435,49 @@ export default {
         },
     // 评价晒单
     commentShow(order, product) {
-      let params = {
+      let reqData = {
         order: order,
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addcomment',
-        params: JSON.stringify(params)
+        params: JSON.stringify(reqData)
       })
     },
     // 查看评价
     seeComment(id, product) {
-      let params = {
+      let reqData = {
         comId: id,
         type: 'show',
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: JSON.stringify(params)
+        params: JSON.stringify(reqData)
       })
     },
     // 追加晒单
     commentAfter(id, product) {
-      let params = {
+      let reqData = {
         comId: id,
         type: 'pic',
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: JSON.stringify(params)
+        params: JSON.stringify(reqData)
       })
     },
     // 追加评价
     againComment(id, product) {
-      let params = {
+      let reqData = {
         comId: id,
         type: 'again',
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: JSON.stringify(params)
+        params: JSON.stringify(reqData)
       })
     }
   },
