@@ -125,6 +125,11 @@ export const prdRouter = [
     path: '/recharge/pay/:type',
       component: r => require.ensure([], () => r(require('../views/recharge/pay')), 'pay')
   },
+  /* 神马 充值缴费 支付成功页面 */
+  {
+    path: '/recharge/paysuccess',
+      component: r => require.ensure([], () => r(require('../views/recharge/paysuccess')), 'paysuccess')
+  },
   /* 神马 充值缴费 缴费记录  type=1 水费  2 电费  3煤气 */
   {
     path: '/recharge/records/:type',
