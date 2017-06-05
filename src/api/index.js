@@ -58,7 +58,19 @@ export default {
     // 我的收藏 门店
     queryShopFavorites: params => {
       return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
-    }
+    },
+    // 安全中心 获取个人信息
+    getMyInformation: params => {
+      return Vue.http.post(baseUrl + '/myInformation/getMyInformation.htm', params);
+    },
+    // 安全中心 设置支付密码
+    queryMemberRNAuthDetail: params => {
+      return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
+    },
+    // 安全中心 验证登录密码强度
+    validPayPwd: params => {
+      return Vue.http.post(baseUrl + '/myInformation/validPayPwd.htm', params);
+    },
   },
   // 查询资源位
   queryAdDeploy: params => {
@@ -181,8 +193,27 @@ export default {
   queryCount: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentCount.htm', params)
   },
-  // 获取售后单列表
-  getSaleList: params => {
-    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
+  // 联通专区
+  unicom: {
+    // 登陆后查看认证状态
+    authenticate: params => {
+      return Vue.http.post(baseUrl + '/unicom/jn/UnicomVerifyAndGroup.htm', params);
+    },
+    // 点击认证查看认证状态
+    checkAuthentic: params => {
+      return Vue.http.post(baseUrl + '/unicom/jn/UnicomVerifyStatus.htm', params);
+    },
+    // 获取流量列表
+    getTrafficList: params => {
+      return Vue.http.post(baseUrl + '/uniconOrder/queryUniconGroupQuali.htm', params);
+    },
+    // 查看实名认证等级
+    realName: params => {
+      return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
+    },
+    // 领取流量
+    getTraffic: params => {
+      return Vue.http.post(baseUrl + '/uniconOrder/makeUnicomOrder.htm', params);
+    }
   }
 }

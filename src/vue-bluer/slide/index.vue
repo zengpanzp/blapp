@@ -2,10 +2,10 @@
   <div class="swiper-container" ref="slide" v-show="show">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-if="slides.length > 1" v-for="item in slides" v-go-native-resource="item">
-        <a href="javascript:;"><img :_src="item.mediaUrl" :alt="item.deployName"></a>
+        <a href="javascript:;"><img :_src="item.mediaUrl.replace(/^http:/, '')" :alt="item.deployName"></a>
       </div>
       <div class="swiper-slide" v-else v-go-native-resource="item">
-        <a href="javascript:;"><img :src="item.mediaUrl" :alt="item.deployName"></a>
+        <a href="javascript:;"><img :src="item.mediaUrl.replace(/^http:/, '')" :alt="item.deployName"></a>
       </div>
     </div>
     <div class="swiper-pagination" v-if="pagination">

@@ -2,45 +2,50 @@
   <div class="sortListView" v-show="show">
     <div class="letter" style="display: none;"></div>
     <div class="sort_box">
-      <div class="sort_list" @click.prevent="selectRow(item)" v-for="(item, index) of list">
-        <!-- <div class="slot"></div> -->
+      <div class="sort_list" @click.prevent="selectRow(item, index)" v-for="(item, index) of list">
         <div class="num_name">{{item.name}}<img :src="value == item.id ? require('./i/select.jpg') : require('./i/unselect.png')"></div>
       </div>
     </div>
 
     <ul class="initials">
-      <!-- <ul>
-        <li><img src="./i/all.png"></li>
-      </ul> -->
     </ul>
     <slot></slot>
   </div>
 </template>
 
 <script>
-  import sortListView from './sortListView'
   export default {
     name: 'SortListView',
-    props: ['list', 'value'],
+    props: {
+      list: Array,
+      value: [String, Number],
+      showLetter: {
+        type: Boolean,
+        default: true
+      }
+    },
     data() {
       return {
         show: true
       };
     },
-    created() {
-      console.log(this.value)
-    },
     mounted() {
       this.$loading.close();
-      sortListView(this.list);
+      let current = this
+      if (this.showLetter) {
+        require.ensure([], function(require) {
+          let sortListView = require('./sortListView').default
+          sortListView(current.list, current.showLetter);
+        })
+      }
     },
     methods: {
       // 将数据传递到父组件
-      selectRow(item) {
+      selectRow(item, index) {
         this.listModel = item.id
           this.show = false;
           if (!this.disabled) {
-            this.$emit('click', item)
+            this.$emit('click', item, index)
           }
       },
     }
@@ -121,7 +126,7 @@
     }
     .initials{
       position: fixed;
-      top: rem(0);
+      top: 50%;
       // padding-top:rem(60);
       right: rem(0);
       // height: 60%;
@@ -130,7 +135,7 @@
       font-size: rem(12);
       z-index: 99;
       background: rgba(145,145,145,0);
-      @include transform(translate(0, 50%));
+      @include transform(translate(0, -50%));
       img{
         width:rem(40)
       }
