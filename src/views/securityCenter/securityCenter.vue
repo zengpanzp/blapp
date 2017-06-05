@@ -44,11 +44,22 @@ export default {
   //   this.$router.replace('/securityCenter/myEmail')
   // },
   created() {
+    try {
+      // console.log((new Date()).toLocaleString() + deployName)
+      sa.track('$pageview', {
+        pageId: 'APP_安全中心',
+        categoryId: 'APP_User',
+        $title: 'APP_安全中心'
+      })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
     utils.isLogin().then(data => {
       let memberToken = data.member_token
       let member_id = data.member_id
       api.userCenter.getMyInformation({
-        member_token: memberToken
+        member_token: memberToken,
+        timestamp: utils.getTimeFormatToday()
       }).then(data => {
         let phoneNum = JSON.parse(data.body.obj).mobile
         if (phoneNum) {
@@ -87,7 +98,8 @@ export default {
         console.log(err)
       })
       api.userCenter.queryMemberRNAuthDetail({
-        memberId: member_id
+        memberId: member_id,
+        timestamp: utils.getTimeFormatToday()
       }).then(data => {
         this.realNameAuthType = JSON.parse(data.body.obj).realNameAuthType
       })
@@ -101,29 +113,32 @@ export default {
   },
   methods: {
     exit() {
-      this.$modal({
-      title: '提示',
-      content: '确认要退出？',
-      buttons: [
-        { text: '取消', onClick: function() {} },
-        { text: '确定', onClick: function() {} },
-      ]
-    })
-    // this.$modal({
-    //     title: '提示',
-    //     content: '确认要退出？',
-    //     buttons: [{
-    //       text: '取消',
-    //       onClick: () => {
-    //         this.$toast('取消')
-    //       }
-    //     }, {
-    //       text: '确定',
-    //       onClick: () => {
-    //         this.$toast('确定')
-    //       }
-    //     }]
+    //   this.$modal({
+    //   title: '提示',
+    //   content: '确认要退出？',
+    //   buttons: [
+    //     { text: '取消', onClick: function() {} },
+    //     { text: '确定', onClick: function() {} },
+    //   ]
     // })
+    this.$modal({
+        title: '提示',
+        content: '确认要退出？',
+        buttons: [{
+          text: '取消',
+          onClick: () => {
+            this.$toast('取消退出')
+          }
+        }, {
+          text: '确定',
+          onClick: () => {
+            this.$toast('退出成功')
+            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+              pageId: 'homepage/pro'
+            })
+          }
+        }]
+    })
     },
     authen() {
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
