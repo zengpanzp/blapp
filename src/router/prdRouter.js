@@ -215,7 +215,7 @@ export const prdRouter = [
   },
   /* 陈鹏 我的评价 */
   {
-    path: '/myEvaluation',
+    path: '/myEvaluation/:orderNo',
     meta: {
       title: '我的评价'
     },
