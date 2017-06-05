@@ -1,0 +1,62 @@
+@import "src/sass/tobe/function";
+.pay_success{
+  padding-top: rem(100);
+  background: #fff;
+  height: 100%;
+  .success-pay {
+    background: #3ea2ff;
+    text-align: center;
+    padding: rem(2.625*31.25) 0;
+  }
+  .success-pay-button {
+    padding: rem(1.5*31.25) rem(0.9375*31.25);
+    display: flex;
+    justify-content: space-between;
+  }
+  .success-pay-first {
+     color: #fff;
+     font-size: rem(2.25*31.25);
+     margin-bottom: rem(3.5*31.25);
+   }
+  .success-pay-select {
+    width: rem(3.25*31.25);
+    vertical-align: rem(-.8*31.25);
+  }
+  .success-pay-second {
+    font-size: rem(1.375*31.25);
+    color: rgba(255, 255, 255, .6);
+    margin-bottom: rem(1.375*31.25);
+  }
+  .font-color-yellow {
+    color: #FF8B4B !important;
+  }
+
+  .font-color-yellow {
+    color: #fff600;
+  }
+  .success-pay-third {
+    color: rgba(255, 255, 255, .6);
+  }
+  .success-pay-button button {
+    width: 47.8%;
+    height: rem(2.625*31.25);
+    background: none;
+    border: rem(1.5) solid #3ea2ff;
+    color: #3ea2ff;
+  }
+  .corner, .corner>input {
+    -webkit-border-radius: rem(.375*31.25);
+    border-radius: rem(.375*31.25);
+  }
+  .success-pay-button button[disabled='disabled'] {
+    color: #999999;
+    border-color: #cccccc;
+  }
+  .success-pay-button button {
+    width: 47.8%;
+    height: rem(2.625*31.25);
+    background: none;
+    border: rem(1.5) solid #3ea2ff;
+    color: #3ea2ff;
+  }
+}
