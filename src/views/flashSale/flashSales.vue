@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <iframe v-if="miniUrl" :src="miniUrl" id="Iframe" frameborder="0" scrolling="no" style="border:0px; width:100%; height: 1334px;"></iframe>
+      <!-- <iframe v-if="miniUrl" :src="miniUrl.replace(/^http:/, '')" id="Iframe" frameborder="0" scrolling="yes" style="border:0px; width:100%; min-height: 20rem;"></iframe> -->
       <!-- end -->
       <!-- 闪购商品列表 -->
       <div class="flash-list">
