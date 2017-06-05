@@ -320,7 +320,6 @@
         })
       },
       changeTab(index, item) {
-        this.tabsModel = index
         this.type = item.type
         window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
           type: item.orderType
