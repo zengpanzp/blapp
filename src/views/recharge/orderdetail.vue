@@ -27,7 +27,7 @@
         <div v-if="orderDetail.payMetSid==2">货到付款</div>
       </li>
       <li class="bill-company">
-        <img src="./i/icons/icon-play.png"> {{orderDetail.jigouName}}
+        <img v-bind:src="iconImage"> {{orderDetail.jigouName}}
       </li>
     </ul>
     <ul class="bill-bottom">
@@ -63,10 +63,26 @@
         type: "sf",
         leftTime: "",
         toShow: true,
-        disable: false
+        disable: false,
+        typeObj: {
+          20: "sf",  // 水费
+          21: "dl",  // 电费
+          22: "mq",  // 煤气
+          9: "ds",   // 电视
+          12: "tt"   // 铁通
+        },
+        imgs: {
+          "sf": require("./i/icons/icon-water.png"),     // 水费图片
+          "dl": require("./i/icons/icon-electric.png"),  // 电费
+          "mq": require("./i/icons/icon-coal.png"),      // 煤气
+          "ds": require("./i/icons/icon-linetv.png"),    // 电视
+          "tt": require("./i/icons/icon-linetv.png")     // 铁通
+        }
       }
     },
-    computed: {
+    beforeRouteLeave (to, from, next) {
+      clearInterval(window._PAY_SETINTERVAL_ID);
+      next()
     },
     created() {
       let orderNo = this.$route.params.orderNo;
@@ -82,6 +98,7 @@
           let json = JSON.parse(data.body.obj);
           console.log(json)
           this.orderDetail = json;
+          this.iconImage = this.imgs[this.typeObj[this.orderDetail.orderTypeCode]];
           this.$loading.close();
           window._PAY_SETINTERVAL_ID = setInterval(function() {
             if (current.orderDetail.orderStatus == '1001') {
@@ -118,7 +135,6 @@
         };
       },
       getTime: function (limit, max) {
-        console.log(limit)
         if (!max) {
           max = 2;
         }
