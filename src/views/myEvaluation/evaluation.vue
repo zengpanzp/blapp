@@ -88,7 +88,8 @@ export default {
     if (this.memberId) {
       this.loginflag = true
     }
-    api.queryAdDeploy(JSON.stringify({
+    if (!this.$route.params.orderNo) {
+      api.queryAdDeploy(JSON.stringify({
                 'otherresource': {
                     'resourceId': "1223,1225"
                 },
@@ -134,6 +135,7 @@ export default {
     }, err => {
       console.log(err)
     })
+    }
   },
   activated() {
     // sensor analytics
@@ -148,7 +150,14 @@ export default {
       console.log("sa error => " + err);
     }
   },
+  mounted() {
+    window.currentPageReload = this.currentPageReload
+  },
   methods: {
+    // 刷新
+    currentPageReload() {
+      this.$router.go(0)
+    },
     // 切换tab
     changeTab(index, type) {
       this.pageNum = 1
@@ -162,6 +171,7 @@ export default {
       this.busy = true
       this.noRows = false
       let orderNo = decodeURIComponent(this.$route.params.orderNo)
+      console.log(orderNo)
       if (!orderNo) {
         api.queryComnentByorder({
           orderNo: orderNo
@@ -435,49 +445,49 @@ export default {
         },
     // 评价晒单
     commentShow(order, product) {
-      let params = {
+      let reqData = {
         order: order,
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addcomment',
-        params: params
+        params: JSON.stringify(reqData)
       })
     },
     // 查看评价
     seeComment(id, product) {
-      let params = {
+      let reqData = {
         comId: id,
         type: 'show',
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: params
+        params: JSON.stringify(reqData)
       })
     },
     // 追加晒单
     commentAfter(id, product) {
-      let params = {
+      let reqData = {
         comId: id,
         type: 'pic',
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: params
+        params: JSON.stringify(reqData)
       })
     },
     // 追加评价
     againComment(id, product) {
-      let params = {
+      let reqData = {
         comId: id,
         type: 'again',
         product: product
       }
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'addCommentAgain',
-        params: params
+        params: JSON.stringify(reqData)
       })
     }
   },

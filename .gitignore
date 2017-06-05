@@ -16,3 +16,4 @@ test/unit/coverage
 /_mac/
 /.idea/
 /codestyles/
+/databaseSettings.xml
