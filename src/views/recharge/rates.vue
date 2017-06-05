@@ -144,7 +144,6 @@
               } else { // 只支持条码
                 this.hasShow2 = false;
               }
-              debugger
               if (!jigouCode && !jigouName) {
                 this.$set(this.receiveCompanyItem, "id", json.typecode[0])
                 console.log("111")

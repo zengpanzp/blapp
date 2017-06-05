@@ -17,7 +17,7 @@
             </li>
           </ul>
           <ul class="record-list" v-if="dataJson">
-            <li class="record-detail" @click="toPay" v-for="(item,key) in dataJson" v-if="key==0&&item.Result_code=='200'">
+            <li class="record-detail" @click="toPay" v-for="item in results" v-if="item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
               <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
@@ -64,19 +64,27 @@
             this.dataJson = json;
             console.log(json)
             delete this.dataJson.Result_code;
+            let results = [];
             for (let obj in this.dataJson) {
                 if (this.dataJson[obj].date) {
                   this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
                 }
+                if (this.dataJson[obj].Result_code == "200") {
+                  results.unshift(this.dataJson[obj]);
+                } else {
+                  results.push(this.dataJson[obj]);
+                }
             }
-            if (this.dataJson[0]) {
-              let first = this.dataJson[0];
+            console.log(results)
+            this.results = results;
+            if (results[0]) {
+              let first = results[0];
               this.queryData.canpay = first.canpay && first.canpay[0];
               // 条码
               this.queryData.tiaoma = first.code && first.code[0];
               this.queryData.price = first.price && first.price[0];
               this.queryData.total = first.total && first.total[0];
-              this.queryData.date = first.date & first.date;
+              this.queryData.date = first.date;
               this.queryData.fee = first.fee && first.fee[0];
               localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData));
             }

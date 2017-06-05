@@ -64,8 +64,10 @@
         typeObj: {
           1: "sf",  // 水费
           2: "dl",  // 电费
-          3: "mq"   // 煤气
-        },
+          3: "mq",   // 煤气
+          4: "ds",
+          5: "tt"
+        }
       }
     },
     computed: {
@@ -77,10 +79,6 @@
         this.queryData = queryData;
         console.log(queryData)
         this.fill();
-        utils.isLogin().then(user => {
-            console.log(user)
-            console.log(api)
-        });
     },
     watch: {
       '$route': 'fill'
@@ -134,7 +132,7 @@
       },
       // 去支付
       goPay() {
-          let current = this
+//          let current = this
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
             message: '加载中',
@@ -153,72 +151,72 @@
               t_dz: "02",
               code: this.queryData.tiaoma,
               dkhxm: user.member_name,
-              dkhzh: user.member_id,
+              dkhzh: user.memberId,
               type: this.typeObj[this.rateType],
               timestamp: timestamp,
               token: user.member_token
             }).then(data => {
                 let json = JSON.parse(data.body.obj);
                 console.log(json);
-                let createExpensesOrderRequestData = {
-                  outOrderNo: json.orderid,
-                  payMoney: parseFloat(this.queryData.total),
-                  orderSource: 1,
-                  orderTypeCode: this.getOrderTypeCode(this.typeObj[this.rateType]),
-                  accountDate: this.queryData.date.replace("-", ""),
-                  memberId: user.member_id,
-                  accountNo: this.queryData.tiaoma,
-                  jigouName: this.queryData.companyName,
-                  changeMoney: parseFloat(this.queryData.price),
-                  aliasSaleTime: json.orddate,
-                  orderPhone: user.mobile,
-                  serviceFee: this.queryData.fee ? this.queryData.fee : 0
-                }
+//                let createExpensesOrderRequestData = {
+//                  outOrderNo: json.orderid,
+//                  payMoney: parseFloat(this.queryData.total),
+//                  orderSource: 1,
+//                  orderTypeCode: this.getOrderTypeCode(this.typeObj[this.rateType]),
+//                  accountDate: this.queryData.date.replace("-", ""),
+//                  memberId: user.member_id,
+//                  accountNo: this.queryData.tiaoma,
+//                  jigouName: this.queryData.companyName,
+//                  changeMoney: parseFloat(this.queryData.price),
+//                  aliasSaleTime: json.orddate,
+//                  orderPhone: user.mobile,
+//                  serviceFee: this.queryData.fee ? this.queryData.fee : 0
+//                }
                 console.log(json.orderid);
                 // 创建账号账单
-                let createPaySubNoData = {
-                  paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
-                  jigouName: this.queryData.companyName,
-                  jigouCode: this.queryData.typecode,
-                  accountName: "APP",
-                  groupId: this.queryData.groupId,
-                  groupName: this.queryData.groupName,
-                  accountNo: this.queryData.code,
-                  timestamp: timestamp,
-                  member_token: user.member_token
-                }
-                api.recharge.createPaySubNo(createPaySubNoData).then(data => {
-                  console.log(data);
-                });
-                console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-                api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-                  console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-                  let resData = JSON.parse(data.body.obj)
-                  let order = {
-                    orderNo: resData.orderNo,
-                    outOrderNo: resData.outOrderNo,
-                    payMoney: resData.payMoney,
-                    orderTime: resData.orderTime,
-                    orderTypeCode: resData.orderTypeCode,
-                    activeTime: resData.activeTime,
-                    changeMoney: resData.changeMoney,
-                    omsNotifyUrl: resData.omsNotifyUrl,
-                    payType: resData.payType,
-                    accountNo: resData.accountNo
-                  }
-                  console.log(resData)
-                  require.ensure([], function(require) {
-                    let Pay = require('src/paymodel').default
-                    current.inlineLoading.close()
-                    Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
-                      console.log(data);
-                    }, (data) => {
-                      // 跳转到详情
-                      current.$router.push({ path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo });
-                    });
-                  }, 'Pay')
-                })
-                console.log(data);
+//                let createPaySubNoData = {
+//                  paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
+//                  jigouName: this.queryData.companyName,
+//                  jigouCode: this.queryData.typecode,
+//                  accountName: "APP",
+//                  groupId: this.queryData.groupId,
+//                  groupName: this.queryData.groupName,
+//                  accountNo: this.queryData.code,
+//                  timestamp: timestamp,
+//                  member_token: user.member_token
+//                }
+//                api.recharge.createPaySubNo(createPaySubNoData).then(data => {
+//                  console.log(data);
+//                });
+//                console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+//                api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+//                  console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+//                  let resData = JSON.parse(data.body.obj)
+//                  let order = {
+//                    orderNo: resData.orderNo,
+//                    outOrderNo: resData.outOrderNo,
+//                    payMoney: resData.payMoney,
+//                    orderTime: resData.orderTime,
+//                    orderTypeCode: resData.orderTypeCode,
+//                    activeTime: resData.activeTime,
+//                    changeMoney: resData.changeMoney,
+//                    omsNotifyUrl: resData.omsNotifyUrl,
+//                    payType: resData.payType,
+//                    accountNo: resData.accountNo
+//                  }
+//                  console.log(resData)
+//                  debugger
+//                  require.ensure([], function(require) {
+//                    let Pay = require('src/paymodel').default
+//                    current.inlineLoading.close()
+//                    Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
+//                      console.log(data);
+//                    }, (data) => {
+//                      // 跳转到详情
+//                      current.$router.push({ path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo });
+//                    });
+//                  }, 'Pay')
+//                })
             })
           });
       },
