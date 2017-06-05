@@ -133,9 +133,21 @@ export default {
           text: '确定',
           onClick: () => {
             this.$toast('退出成功')
-            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+            window.CTJSBridge.LoadAPI('BLLogoutAPIManager',{}, {
+              success:function(result){
+                console.log(result)
+                window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
               pageId: 'homepage/pro'
             })
+              },
+              fail:function(result){
+                console.log(result)
+              },
+              progress:function(result){
+                console.log(result)
+              }
+            });
+            
           }
         }]
     })
