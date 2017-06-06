@@ -63,23 +63,39 @@
           <!--更多游戏充值-->
           <div class="moreGame">
             <div class="gameFir">
-              <ul>
-                <li>充值类型
-                  <div :class="{'selected': rechargeMoreType == index}" v-for="(item, index) in ['直冲', '卡密']" @click="rechargeMoreType = index">{{ item }}</div>
-                </li>
-                <li @click="showMoreGameNameModel = true">游戏名称
-                  <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> <img class="more" src="./i/iphone/more.png">
-                </li>
-                <li v-show="rechargeMoreType == 0">充值账号
-                  <input type="text" v-model.trim="moreGameCount" placeholder="请输入游戏账号">
-                </li>
-                <li v-show="moreGameNumlist.length" @click="showMoreGameNumModel = true">充值面额
-                  <input type="text" placeholder="请选择充值面额" v-model="moreGameNum.name" disabled><img class="more" src="./i/iphone/more.png">
-                </li>
-                <li>购买数量
-                  <input type="text" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
-                </li>
-              </ul>
+              <div class="gameFir">
+                <ul>
+                  <li>充值类型
+                    <div :class="{'selected': rechargeMoreType == index}" v-for="(item, index) in ['直冲', '卡密']" @click="rechargeMoreType = index">{{ item }}</div>
+                  </li>
+                  <li @click="showMoreGameNameModel = true">游戏名称
+                    <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> <img class="more" src="./i/iphone/more.png">
+                  </li>
+                </ul>
+              </div>
+              <div class="gameFir new">
+                <ul>
+                  <li v-show="rechargeMoreType == 0">充值账号
+                    <input type="text" v-model.trim="moreGameCount" placeholder="请输入游戏账号">
+                  </li>
+                </ul>
+              </div>
+              <div class="gameFir top">
+                <ul>
+                  <li v-show="moreAreaList.length" @click="showMoreAreaModel = true">游戏区号
+                    <input type="text" placeholder="请选择游戏区号" v-model="moreGameArea.name" disabled><img class="more" src="./i/iphone/more.png">
+                  </li>
+                  <li v-show="moreGameServerList.length" @click="showMoreGameServerModel = true">游戏区服
+                    <input type="text" placeholder="请选择游戏服务器" v-model="moreGameServer.name" disabled><img class="more" src="./i/iphone/more.png">
+                  </li>
+                  <li v-show="moreGameNumlist.length" @click="showMoreGameNumModel = true">充值面额
+                    <input type="text" placeholder="请选择充值面额" v-model="moreGameNum.name" disabled><img class="more" src="./i/iphone/more.png">
+                  </li>
+                  <li>购买数量
+                    <input type="text" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </bl-tab-container-item>
@@ -115,6 +131,16 @@
       <!-- 更多游戏名称 -->
       <bl-sort-list-view @click="moreGameNameClick" :list="moreGameNamelist" :showLetter="false" v-show="showMoreGameNameModel" v-if="showMoreGameNameModel" v-model="moreGameName.id"></bl-sort-list-view>
     </bl-popup>
+
+    <bl-popup v-model="showMoreAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
+      <!-- 游戏区号 -->
+      <bl-sort-list-view @click="moreGameAreaClick" :list="moreAreaList" :showLetter="false" v-show="showMoreAreaModel" v-if="showMoreAreaModel" v-model="moreGameArea.id"></bl-sort-list-view>
+    </bl-popup>
+    <bl-popup v-model="showMoreGameServerModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
+      <!-- 游戏服务 -->
+      <bl-sort-list-view @click="moreGameServerClick" :list="moreGameServerList" :showLetter="false" v-show="showMoreGameServerModel" v-if="showMoreGameServerModel" v-model="moreGameServer.id"></bl-sort-list-view>
+    </bl-popup>
+
     <bl-popup v-model="showMoreGameNumModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 更多游戏购买面额 -->
       <bl-sort-list-view @click="moreGameNumClick" :list="moreGameNumlist" :showLetter="false" v-show="showMoreGameNumModel" v-if="showMoreGameNumModel" v-model="moreGameNum.id"></bl-sort-list-view>
@@ -184,8 +210,19 @@
         qq: '', // qq号
         qqNum: '', // qq充值数量
         qqPrice: 1, // QB充值单价
+
+        showMoreAreaModel: false, // 显示游戏区号
+        moreGameArea: {}, // 游戏区号
+        moreAreaList: [], // 更多游戏区号
+
+        showMoreGameServerModel: false, // 显示游戏区服
+        moreGameServer: {}, // 游戏服务
+        moreGameServerList: [], // 更多游戏区服
+
         moreGameLoad: false, // 更多游戏是否load(默认不load)
         moreGameCardNum: '', // 更多游戏充值数量
+
+        serverInfo: undefined
       }
     },
     components: {
@@ -215,7 +252,7 @@
           }
         })
       },
-      loadMoreGame() {
+      loadMoreGame(dtype) {
         this.inlineLoading = this.$toast({
           iconClass: 'preloader white',
           duration: 'loading',
@@ -224,18 +261,20 @@
         api.recharge.cplb({
           categorycode: '',
           format: 'json',
-          dtype: '3',
+          dtype: dtype,
           client_id: '11128'
         }).then(data => {
           this.inlineLoading.close()
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
             let gameInfoList = resData.gameInfo
+            console.log('查询全部游戏: ' + data.body.obj)
             console.warn(resData)
             let list = []
-            for (let item of gameInfoList) {
+            for (let [index, item] of gameInfoList.entries()) {
               list.push({
-                id: item.CategoryCode,
+                id: index,
+                categoryCode: item.CategoryCode,
                 name: item.CategoryName
               })
             }
@@ -461,6 +500,39 @@
           this.gameServerList = []
         }
       },
+
+      moreGameAreaFn(index) {
+        console.warn('watch moreGameArea.index 根据游戏区服联动:' + index)
+        if (this.serverInfo.GameRegion[index].GameServer && this.serverInfo.GameRegion[index].GameServer.length) {
+          let gameServerList = this.serverInfo.GameRegion[index].GameServer
+          let list = []
+          for (let [index, item] of gameServerList.entries()) {
+            list.push({
+              id: index,
+              ServerID: item.ServerID,
+              name: item.ServerName,
+              ServerValue: item.ServerValue
+            })
+          }
+          this.moreGameServerList = list
+          this.moreGameServer = this.moreGameServerList[0]
+        } else {
+          this.moreGameServerList = []
+          this.moreGameServer = {}
+        }
+      },
+
+      moreGameAreaClick(item, index) {
+        console.log(item, index)
+        this.showMoreAreaModel = false
+        this.moreGameArea = item
+        this.moreGameAreaFn(index)
+      },
+      moreGameServerClick(item, index) {
+        console.log(item, index)
+        this.showMoreGameServerModel = false
+        this.moreGameServer = item
+      },
       // 手机号码正则匹配
       testPhoneNum() {
         switch (this.tabItem.type) {
@@ -497,8 +569,8 @@
               console.log('获取游戏名称联动的信息==========:')
               console.dir(resData)
               this.gameAllData = resData // 获取到全部数据存储
-              this.gameAreaFn(0) // 游戏区号默认设第0个
-              if (resData.areas.area) {
+              if (resData.areas.area && resData.areas.area.length) {
+                this.gameAreaFn(0) // 游戏区号默认设第0个
                 let areasArr = resData.areas.area
                 let list = []
                 for (let item of areasArr) {
@@ -568,19 +640,26 @@
         this.currentPay = Number(val * this.moreGameCardNum).toFixed(2)
       },
       moreGameLoad(val) {
-        val && this.loadMoreGame()
+        val && this.loadMoreGame('3')
       },
-      'moreGameName.id'(val) {
+      'moreGameName.categoryCode'(val) {
+        this.inlineLoading = this.$toast({
+          iconClass: 'preloader white',
+          duration: 'loading',
+          className: 'loading-bg'
+        })
         api.recharge.cplb({
           categorycode: val,
           format: 'json',
           dtype: '3',
           client_id: '11128'
         }).then(data => {
+          this.inlineLoading.close()
           if (data.body.obj) {
             console.log('更多游戏查询联动: ' + data.body.obj)
             let resData = JSON.parse(data.body.obj)
-            if (resData.gameInfo) {
+            /* 充值金额判断 */
+            if (resData.gameInfo && resData.gameInfo.length) {
               let gameMoneyList = resData.gameInfo
               console.log(resData)
               let list = []
@@ -598,13 +677,42 @@
               this.moreGameNumlist = [] // 更多游戏区号
               this.currentPay = 0
             }
+            if (resData.serverInfo) {
+              this.serverInfo = resData.serverInfo
+              this.$nextTick(() => {
+                /* 游戏区服判断 */
+                if (this.serverInfo.GameRegion && this.serverInfo.GameRegion.length) {
+                  let list = []
+                  for (let [index, item] of this.serverInfo.GameRegion.entries()) {
+                    list.push({
+                      id: index,
+                      RegionID: item.RegionID,
+                      name: item.RegionName,
+                      RegionValue: item.RegionValue
+                    })
+                  }
+                  this.moreAreaList = list
+                  this.moreGameArea = this.moreAreaList[0]
+
+                  /* 找到区服设置当前服务 */
+                  this.moreGameAreaFn(0)
+                } else {
+                  this.moreAreaList = []
+                  this.moreGameArea = {}
+
+                  this.moreGameServerList = []
+                  this.moreGameServer = {}
+                }
+              });
+            }
           } else {
             this.$toast(data.body.msg)
           }
         })
       },
       rechargeMoreType(val) {
-        alert(val + '充值类型')
+        // alert(val + '充值类型')
+        this.loadMoreGame('1')
       }
     }
   };
