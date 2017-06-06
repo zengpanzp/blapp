@@ -169,6 +169,9 @@ export default {
       progress: data => {}
     })
   },
+  mounted() {
+    this.sensorAnalytics(this.$route.params.flashId)
+  },
   computed: {
     filterlistGoodsData() {
       return this.listGoodsData
@@ -323,6 +326,22 @@ export default {
         } catch (err) {
           console.log("sa error => " + err);
         }
+      }
+    },
+    // 埋点
+    sensorAnalytics(flashId) {
+      // sensor analytics
+      try {
+        console.log((new Date()).toLocaleString() + '闪购卖场埋点')
+        window.sa.track('$pageview', {
+          pageId: 'APP_闪购_' + flashId,
+          categoryId: 'APP_SpecificZone',
+          $title: 'APP_闪购_' + flashId,
+          flagType: '卖场id',
+          flagValue: String(flashId)
+        })
+      } catch (err) {
+        console.log("sa error => " + err);
       }
     }
   }

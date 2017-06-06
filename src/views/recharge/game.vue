@@ -10,7 +10,7 @@
           </bl-tab-item>
         </bl-navbar>
       </div>
-      <bl-tab-container class="gameWrap" :swipeable="true" style="min-height: 14rem;" v-model="tabsModel">
+      <bl-tab-container class="gameWrap" v-model="tabsModel">
         <bl-tab-container-item :id="0">
           <!--盛大游戏充值-->
           <div class="shengdaGame">
@@ -122,7 +122,7 @@
   </div>
 </template>
 <script>
-  import api from 'src/api'
+  import api from './api'
   import utils from 'src/utils'
   import CONST from 'src/const'
   export default {
@@ -173,34 +173,18 @@
 
         showMoreGameNameModel: false, // 显示更多游戏名称
         moreGameName: {}, // 更多游戏名称
-        moreGameNamelist: [{
-          id: 1,
-          name: 'test1'
-        }, {
-          id: 2,
-          name: 'test2'
-        }], // 更多游戏名称列表
+        moreGameNamelist: [], // 更多游戏名称列表
 
         showMoreGameNumModel: false, // 显示更多游戏购买面额
-        moreGameNum: {
-          id: 1,
-          name: 120,
-          price: 120
-        }, // 更多游戏购买面额
-        moreGameNumlist: [{
-          id: 1,
-          name: 120,
-          price: 120
-        }, {
-          id: 2,
-          name: 140,
-          price: 140
-        }], // 更多游戏名称
+        moreGameNum: {}, // 更多游戏购买面额
+        moreGameNumlist: [], // 更多游戏名称
 
         gameAllData: undefined, // 所以的盛大游戏名称
 
         qq: '', // qq号
         qqNum: '', // qq充值数量
+        qqPrice: 1, // QB充值单价
+        moreGameLoad: false, // 更多游戏是否load(默认不load)
         moreGameCardNum: '', // 更多游戏充值数量
       }
     },
@@ -211,8 +195,57 @@
       this.tabItem = this.tab[0]
       this.$loading.close()
       this.getGameDetail('game')
+      this.getQbPrice()
     },
     methods: {
+      // 获取QB充值单价
+      getQbPrice() {
+        api.recharge.cplb({
+          categorycode: 'AAJSUPTXQQ',
+          format: 'json',
+          dtype: '3',
+          client_id: '11128'
+        }).then(data => {
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            console.log(resData)
+            this.qqPrice = resData.gameInfo[0].ParPrice
+          } else {
+            this.$toast(data.body.msg)
+          }
+        })
+      },
+      loadMoreGame() {
+        this.inlineLoading = this.$toast({
+          iconClass: 'preloader white',
+          duration: 'loading',
+          className: 'loading-bg'
+        })
+        api.recharge.cplb({
+          categorycode: '',
+          format: 'json',
+          dtype: '3',
+          client_id: '11128'
+        }).then(data => {
+          this.inlineLoading.close()
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            let gameInfoList = resData.gameInfo
+            console.warn(resData)
+            let list = []
+            for (let item of gameInfoList) {
+              list.push({
+                id: item.CategoryCode,
+                name: item.CategoryName
+              })
+            }
+            this.moreGameNamelist = list // 更多游戏区号
+            this.moreGameName = this.moreGameNamelist[0]
+          } else {
+            this.$toast(data.body.msg)
+          }
+        })
+      },
       // 去支付
       goPay() {
         let current = this
@@ -232,7 +265,8 @@
             dsphh: this.tabItem.dsphh,
             dtype: this.getPayType(this.tabItem.type, this.password),
             str_snda: '0',
-            dlx: '01'
+            dlx: '01',
+            format: 'json'
           }
           /* TODO */
           if (this.tabItem.type == 'sd') {
@@ -244,46 +278,54 @@
           api.recharge.buyszkOrder(requestData).then(data => {
             console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
             if (data.body.obj) {
-              let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
               let resData = JSON.parse(data.body.obj)
-              let createExpensesOrderRequestData = {
-                outOrderNo: resData.orderid,
-                payMoney: parseFloat(this.currentActivePay),
-                orderSource: 1,
-                orderTypeCode: '10',
-                memberId: utils.ssdbGet('member_id'),
-                goodsName: goodsName,
-                phoneNo: utils.ssdbGet('member_mobile'),
-                price: this.currentSku,
-                count: 1,
-                accountNo: this.iphoneNum,
-                changeMoney: parseFloat(this.currentPay),
-                aliasSaleTime: resData.orddate,
-                orderPhone: utils.ssdbGet('member_mobile'),
-                serviceFee: Number(this.currentFee).toFixed(2)
-              }
-              console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-              api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-                console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-                let resData = JSON.parse(data.body.obj)
-                let order = {
-                  orderNo: resData.orderNo,
-                  outOrderNo: resData.outOrderNo,
-                  payMoney: resData.payMoney,
-                  orderTime: resData.orderTime,
-                  orderTypeCode: resData.orderTypeCode,
-                  activeTime: resData.activeTime,
-                  changeMoney: resData.changeMoney,
-                  omsNotifyUrl: resData.omsNotifyUrl,
-                  payType: resData.payType,
-                  accountNo: utils.dbGet('member_mobile')
+              if (resData.Result_code == "4002003") {
+                this.$modal({
+                  title: resData.msg
+                })
+                current.inlineLoading.close()
+              } else {
+                let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
+                let createExpensesOrderRequestData = {
+                  outOrderNo: resData.orderid,
+                  payMoney: parseFloat(this.currentPay),
+                  orderSource: 1,
+                  orderTypeCode: '15',
+                  memberId: utils.ssdbGet('member_id'),
+                  goodsName: goodsName,
+                  phoneNo: this.iphoneNum,
+                  price: parseFloat(this.currentPay),
+                  count: 1,
+                  accountNo: this.iphoneNum,
+                  changeMoney: parseFloat(this.currentPay),
+                  aliasSaleTime: resData.orddate,
+                  orderPhone: this.iphoneNum,
+                  content: `${this.iphoneNum}_0`,
+                  serviceFee: 0
                 }
-                require.ensure([], function(require) {
-                  let Pay = require('src/paymodel').default
-                  current.inlineLoading.close()
-                  Pay.goPay(order, '23')
-                }, 'Pay')
-              })
+                console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+                api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+                  console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+                  let resData = JSON.parse(data.body.obj)
+                  let order = {
+                    orderNo: resData.orderNo,
+                    outOrderNo: resData.outOrderNo,
+                    payMoney: resData.payMoney,
+                    orderTime: resData.orderTime,
+                    orderTypeCode: resData.orderTypeCode,
+                    activeTime: resData.activeTime,
+                    changeMoney: resData.changeMoney,
+                    omsNotifyUrl: resData.omsNotifyUrl,
+                    payType: resData.payType,
+                    accountNo: utils.dbGet('member_mobile')
+                  }
+                  require.ensure([], function(require) {
+                    let Pay = require('src/paymodel').default
+                    current.inlineLoading.close()
+                    Pay.goPay(order, '23')
+                  }, 'Pay')
+                })
+              }
             } else {
               this.$toast(data.body.msg)
               current.inlineLoading.close()
@@ -414,6 +456,9 @@
         } else {
           this.gameArea.id = ''
           this.areaList = []
+
+          this.gameServer.id = ''
+          this.gameServerList = []
         }
       },
       // 手机号码正则匹配
@@ -507,19 +552,59 @@
         if (val == 'sd') {
           this.currentPay = Number(this.rechargeMoney.price).toFixed(2)
         } else if (val == 'moreGame') {
+          this.moreGameLoad = true
           this.currentPay = Number(this.moreGameNum.price * this.moreGameCardNum).toFixed(2)
         } else if (val == 'qq') {
           this.currentPay = Number(this.qqNum).toFixed(2) || 0.00
         }
       },
       qqNum(val) {
-        this.currentPay = Number(val).toFixed(2)
+        this.currentPay = Number(val * this.qqPrice).toFixed(2)
       },
       moreGameCardNum(val) {
         this.currentPay = Number(val * this.moreGameNum.price).toFixed(2)
       },
       'moreGameNum.price'(val) {
         this.currentPay = Number(val * this.moreGameCardNum).toFixed(2)
+      },
+      moreGameLoad(val) {
+        val && this.loadMoreGame()
+      },
+      'moreGameName.id'(val) {
+        api.recharge.cplb({
+          categorycode: val,
+          format: 'json',
+          dtype: '3',
+          client_id: '11128'
+        }).then(data => {
+          if (data.body.obj) {
+            console.log('更多游戏查询联动: ' + data.body.obj)
+            let resData = JSON.parse(data.body.obj)
+            if (resData.gameInfo) {
+              let gameMoneyList = resData.gameInfo
+              console.log(resData)
+              let list = []
+              for (let [index, item] of gameMoneyList.entries()) {
+                list.push({
+                  id: index,
+                  categoryCode: item.CategoryCode,
+                  name: item.ProductFullName,
+                  price: item.ParPrice
+                })
+              }
+              this.moreGameNumlist = list // 更多游戏区号
+              this.moreGameNum = this.moreGameNumlist[0]
+            } else {
+              this.moreGameNumlist = [] // 更多游戏区号
+              this.currentPay = 0
+            }
+          } else {
+            this.$toast(data.body.msg)
+          }
+        })
+      },
+      rechargeMoreType(val) {
+        alert(val + '充值类型')
       }
     }
   };
