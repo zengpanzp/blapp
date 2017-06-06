@@ -38,7 +38,12 @@
     computed: {
     },
     created() {
-        this.$loading.close();
+      sa.track('$pageview', {
+        pageId: 'App_虚拟支付成功页',
+        categoryId: 'APP_Fees',
+        $title: "App_虚拟支付成功页"
+      });
+      this.$loading.close();
     },
 //    beforeRouteEnter(to, from, next) {
 //        debugger

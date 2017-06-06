@@ -4,7 +4,7 @@
     <div class="rates">
       <div class="content-wrap">
           <ul>
-            <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
+            <li class="title" :class="typeClass">{{typeName}}</li>
             <li @click.prevent="showCategory">条码
               <div class="name"><label>{{queryData.tiaoma}}</label></div>
             </li>
@@ -206,9 +206,13 @@
                       let Pay = require('src/paymodel').default
                       current.inlineLoading.close()
                       Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
-                        alert("成功!")
+                        sa.track('$pageview', {
+                          pageId: 'APP_虚拟页面_收银台',
+                          categoryId: 'APP_Fees',
+                          $title: "APP_虚拟页面_收银台"
+                        });
                         // 跳转到paysuccess
-//                        current.$router.push({path: "/recharge/paysuccess", params: JSON.parse(data)});
+                        current.$router.push({path: "/recharge/paysuccess", params: JSON.parse(data)});
                       }, (data) => {
                         // 跳转到详情
                         current.$router.push({path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo});
@@ -237,6 +241,12 @@
         } else if (val == 3) {
           this.typeClass = "icon-gas";
           this.typeName = "煤气费";
+        } else if (val == 4) {
+          this.typeClass = "icon-cabletv";
+          this.typeName = "有线电视";
+        } else if (val == 5) {
+          this.typeClass = "icon-tietong";
+          this.typeName = "铁通";
         }
         this.$loading.close()
       }

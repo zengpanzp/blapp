@@ -277,11 +277,6 @@
           this.typeClass = "icon-waitassess";
           this.typeName = "水费";
           window.CTJSBridge && window.CTJSBridge._setNativeTitle("水费");
-          sa.track('$pageview', {
-            pageId: 'APP_充值缴费首页',
-            categoryId: 'APP_Fees',
-            $title: 'APP_充值缴费首页',
-          });
         } else if (val == 2) {
           this.typeClass = "icon-electricity";
           this.typeName = "电费";
@@ -291,6 +286,11 @@
           this.typeName = "煤气费";
           window.CTJSBridge && window.CTJSBridge._setNativeTitle("煤气费");
         }
+        sa.track('$pageview', {
+          pageId: 'APP_' + this.typeName,
+          categoryId: 'APP_Fees',
+          $title: this.typeName
+        });
         this.$loading.close()
       }
     }

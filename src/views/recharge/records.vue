@@ -53,6 +53,11 @@
     },
     created() {
         window.CTJSBridge && window.CTJSBridge._setNativeTitle("缴费记录");
+        sa.track('$pageview', {
+          pageId: 'APP_生活缴费_缴费记录',
+          categoryId: 'APP_Fees',
+          $title: this.typeName
+        });
         // 1位水费 2为电费 3为煤气费
         this.rateType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));

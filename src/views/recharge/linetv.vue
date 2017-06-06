@@ -64,6 +64,11 @@
     created() {
       window.CTJSBridge && window.CTJSBridge._setNativeTitle("有线电视");
       this.fill();
+      sa.track('$pageview', {
+        pageId: 'APP_有线电视',
+        categoryId: 'APP_Fees',
+        $title: 'APP_有线电视',
+      });
       this.loadData();
     },
     watch: {
