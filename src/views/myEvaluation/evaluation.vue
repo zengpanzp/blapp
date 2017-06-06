@@ -88,7 +88,7 @@ export default {
     if (this.memberId) {
       this.loginflag = true
     }
-    if (!this.$route.params.orderNo) {
+    if (!this.$route.query.orderNo) {
       api.queryAdDeploy(JSON.stringify({
                 'otherresource': {
                     'resourceId': "1223,1225"
@@ -96,15 +96,20 @@ export default {
                 'activity': []
             })).then(data => {
       console.log("-------pic----" + data.body.obj)
+      this.$loading.close()
+      if (data.body.obj) {
       let resData = JSON.parse(data.body.obj)
-      if (resData) {
         for (let item of resData.obj.otherResource) {
-        if (item.resourceId === 1225) {
+          if (item.resourceId === 1225) {
           this.allSlides = item.advList
         }
         }
+      } else {
+        this.$toast({
+          position: 'bottom',
+          message: data.body.msg
+        })
       }
-      this.$loading.close()
       }, err => {
         console.log(err)
     })
@@ -170,13 +175,12 @@ export default {
     loadMore() {
       this.busy = true
       this.noRows = false
-      let orderNo = decodeURIComponent(this.$route.params.orderNo)
+      let orderNo = decodeURIComponent(this.$route.query.orderNo)
       console.log(orderNo)
       if (!orderNo) {
         api.queryComnentByorder({
           orderNo: orderNo
         }).then(data => {
-          if (data.body.obj) {
             console.log("----data orderNo-------" + data.body.obj)
             if (data.body.obj) {
               console.log("------data-----" + data.body.obj)
@@ -241,7 +245,6 @@ export default {
                 this.noRows = true
               }
             }
-          }
         }, err => {
           console.log(err)
         })
