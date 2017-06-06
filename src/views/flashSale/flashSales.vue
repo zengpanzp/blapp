@@ -31,7 +31,7 @@
             <div class="todynew-img">
               <div class="wumengcen" v-if="item.pictures">
                 <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="picturesUrl.replace(/^http:/, '')"></div>
-                <router-link @click.native="sensorAnalytics(item.flashId)" :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+                <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
                   <img v-lazy.container="{ src: picturesUrl.replace(/^http:/, ''), error: require('src/assets/icon_banner_loading.png') }" alt="">
                   <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
                 </router-link>
@@ -303,22 +303,6 @@ export default {
         return 1;
       }
       return 0;
-    },
-    // 埋点
-    sensorAnalytics(flashId) {
-      // sensor analytics
-      try {
-        console.log((new Date()).toLocaleString())
-        window.sa.track('$pageview', {
-          pageId: 'APP_闪购_' + flashId,
-          categoryId: 'APP_SpecificZone',
-          $title: 'APP_闪购_' + flashId,
-          flagType: '卖场id',
-          flagValue: String(flashId)
-        })
-      } catch (err) {
-        console.log("sa error => " + err);
-      }
     }
   },
   updated() {
