@@ -159,7 +159,7 @@ export default {
                 channel: "1",
                 pageNo: 1,
                 pageSize: "10",
-                isFilterCommons: "true"
+                isFilterCommons: "false"
               }
               api.userCenter.searchProductByIds({
                 clientIp: "0:0:0:0:0:0:0:1",
@@ -170,7 +170,7 @@ export default {
                 let resData = JSON.parse(data.body.obj)
                 let rows = resData.resultInfo.rows
                 let check = JSON.stringify(rows)
-                console.log(check)
+                console.log(check + '============')
                 if (rows) {
                   this.list = this.list.concat(rows)
                   this.busy = false
