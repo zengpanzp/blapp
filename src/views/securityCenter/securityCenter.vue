@@ -6,7 +6,7 @@
         <li>绑定手机 <i>{{ phoneNum }}</i></li>
         <router-link to="/securityCenter/myEmail"><li><i class="iconfont arrow-back"></i>修改邮箱<i>{{ email ? email : '暂无绑定' }}</i></li></router-link>
         <li @click="authen"><i class="iconfont arrow-back"></i>实名认证<i>{{ realNameAuthType >= 2 ? '认证信息已提交' : '未认证' }}</i></li>
-      </ul>  
+      </ul>
     </div>
    </div>
    <div class="section1">
@@ -14,9 +14,9 @@
       <ul>
         <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
         <li @click="checkPhone"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
-      </ul>  
+      </ul>
     </div>
-   </div>        
+   </div>
   <div class="btn-box">
     <bl-button @click="exit" class="btn-exit">退出当前帐号</bl-button>
   </div>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 export default {
 

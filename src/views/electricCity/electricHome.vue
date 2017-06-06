@@ -121,7 +121,7 @@
 </template>
 <script>
 import utils from 'src/utils'
-import api from 'src/api'
+import api from './api'
 export default {
 
   name: 'keepElectricHome',

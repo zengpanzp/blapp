@@ -6,17 +6,12 @@ import ScrollTo from 'scroll'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import VueResource from 'vue-resource'
-// import Validator from 'vue-validator'
 
 import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
 
 import 'src/utils'
-import 'src/api'
-import 'src/const'
-
-// Vue.use(Validator)
 
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
@@ -56,52 +51,6 @@ Vue.filter('stringSpace', function(value, num = 4) {
     t += l[i] + ((i + 1) % num == 0 && i + 1 != l.length ? " " : "");
   }
   return t
-})
-
-Vue.directive('scroll-fixed', function(el) {
-  let u = navigator.userAgent;
-  let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
-  if (!isAndroid) {
-    let [xx, yy, XX, YY, swipeX, swipeY] = []
-    let h = document.body.clientHeight || document.body.offsetHeight || window.innerHeight
-    let bodyScroll = (e) => {
-      e.preventDefault();
-    }
-    el.addEventListener('touchstart', function(e) {
-      xx = e.targetTouches[0].screenX;
-      yy = e.targetTouches[0].screenY;
-      swipeX = true;
-      swipeY = true;
-    }, false)
-    el.addEventListener('touchmove', function(e) {
-      XX = e.targetTouches[0].screenX;
-      YY = e.targetTouches[0].screenY;
-      if (swipeX && Math.abs(XX - xx) - Math.abs(YY - yy) > 0) {
-        // 左右滑动
-        // e.stopPropagation();
-        // e.preventDefault();
-        swipeY = false;
-      } else if (swipeY && Math.abs(XX - xx) - Math.abs(YY - yy) < 0) {
-        // 上下滑动
-        let nScrollHight = el.scrollHeight;
-        let nScrollTop = el.scrollTop;
-        // 到达底部
-        if (nScrollTop + h >= nScrollHight) {
-          // 下滑
-          if (YY <= yy) {
-            el.addEventListener('touchmove', bodyScroll(e), false);
-          }
-        }
-        // 到达顶部
-        if (nScrollTop === 0) {
-          // 下滑
-          if (YY >= yy) {
-            el.addEventListener('touchmove', bodyScroll(e), false);
-          }
-        }
-      }
-    }, false)
-  }
 })
 
 /* 返回顶部指令 */
@@ -256,12 +205,15 @@ jsBridgeReady("_maiDian", false, () => {
 let linkCssObj = document.getElementById('classLink')
   // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
-  if (document.querySelectorAll('.ant-transparent.white-bg').length === 0 && !meta.notLoading) {
+  if (Vue.$loading) {
+    Vue.$loading.close()
+  }
+  if (!meta.notLoading) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
-      message: '加载中',
+      // message: '加载中',
       duration: 'loading',
-      className: 'white-bg'
+      className: 'white-bg loading-bg'
     })
   }
   jsBridgeReady("_loginInfo", meta.isWeb, () => {

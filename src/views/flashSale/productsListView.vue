@@ -1,16 +1,16 @@
 <style lang="scss" src="./css/_productsListView.scss" scoped></style>
 <template>
   <div class="flash-list new">
-    <bl-scroll :enableRefresh="false" :onInfinite="onInfinite" :enableInfinite="isLoading" v-scroll-top v-scroll-fixed>
+    <bl-scroll :enableRefresh="false" :onInfinite="onInfinite" :enableInfinite="isLoading" v-scroll-top>
       <div class="quickbuy-active">
         <ul>
           <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
             <a href="javascript:;">
-              <img :src="picturesUrl" alt="">
+              <img :src="picturesUrl.replace(/^http:/, '')" alt="">
             </a>
             <div class="quickbuy-active-titles">
               <div class="active-store-logo" v-if="flashSalesGoods.brandList">
-                <img :src="flashSalesGoods.brandList[0].brandLogo" :alt="flashSalesGoods.brandList[0].brandNameCN">
+                <img :src="flashSalesGoods.brandList[0].brandLogo.replace(/^http:/, '')" :alt="flashSalesGoods.brandList[0].brandNameCN">
               </div>
               <div class="active-title-detail">
                 <div class="active-detail-container">
@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="quickbuy-log" v-if="picturesType === 16" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
-              <img :src="picturesUrl">
+              <img :src="picturesUrl.replace(/^http:/, '')">
             </div>
           </li>
         </ul>
@@ -40,7 +40,7 @@
               <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
                 <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
                 <div class="lazy-box">
-                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath, loading: require('src/assets/icon_banner_loading.png'), error: require('src/assets/icon_banner_loading.png') }" alt="">
+                  <img class="lazy" v-lazy="{ src: item[0].goodsImgPath.replace(/^http:/, ''), loading: require('src/assets/icon_banner_loading.png'), error: require('src/assets/icon_banner_loading.png') }" alt="">
                 </div>
                 <h3>{{ item[0].goodsMsg }}</h3>
                 <p><span class="price"><span>¥</span>{{ $route.params.isStart == 0 ? '???' : item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
@@ -168,6 +168,9 @@ export default {
       },
       progress: data => {}
     })
+  },
+  mounted() {
+    this.sensorAnalytics(this.$route.params.flashId)
   },
   computed: {
     filterlistGoodsData() {
@@ -323,6 +326,22 @@ export default {
         } catch (err) {
           console.log("sa error => " + err);
         }
+      }
+    },
+    // 埋点
+    sensorAnalytics(flashId) {
+      // sensor analytics
+      try {
+        console.log((new Date()).toLocaleString() + '闪购卖场埋点')
+        window.sa.track('$pageview', {
+          pageId: 'APP_闪购_' + flashId,
+          categoryId: 'APP_SpecificZone',
+          $title: 'APP_闪购_' + flashId,
+          flagType: '卖场id',
+          flagValue: String(flashId)
+        })
+      } catch (err) {
+        console.log("sa error => " + err);
       }
     }
   }

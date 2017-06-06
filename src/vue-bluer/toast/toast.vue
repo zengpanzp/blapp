@@ -51,6 +51,11 @@
       left: 50%;
       transform: translate(-50%, 0);
     }
+    &.bottomTop{
+      bottom: rem(50*3);
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
   }
 </style>
 

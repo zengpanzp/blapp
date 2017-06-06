@@ -23,7 +23,7 @@
   </div>
 </template>
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 import ScrollTo from 'scroll'
 let fnScroll = (el) => {
@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     fnSelect(index, item) {
-      if (item.categoryId === '9999162882') {
+      if (item.categoryName.indexOf('不定额') != -1) {
         this.eItem = item
         this.load = true
         this.cwrapTitle = item.categoryName

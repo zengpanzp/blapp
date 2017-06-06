@@ -156,7 +156,7 @@
 <script>
 import utils from 'src/utils'
 import CONST from 'src/const'
-import api from 'src/api'
+import api from './api'
 
 export default {
 
@@ -252,7 +252,6 @@ export default {
     },
     changeTab(index, type) {
       this.iphoneNum = ''
-      this.tabsModel = index
       this.focus = false
 
       this.payType = type
@@ -269,7 +268,11 @@ export default {
       if (this.tabsModel !== 0) {
         pattern = /^\d{8}$/;
       }
-      return pattern.test(num)
+      if (this.payType == 'kd') {
+        return pattern.test(num) && this.password !== ""
+      } else {
+        return pattern.test(num)
+      }
     },
     // 获取输入历史数据
     getHistoryNum() {

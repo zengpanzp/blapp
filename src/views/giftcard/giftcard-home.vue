@@ -27,7 +27,7 @@
         <div class="scroll-ul">
           <div class="list-contain" v-for="row in item.rows">
             <div class="list-img lazy-box" v-go-native-goods-detail="row[0]">
-              <img class="lazy" v-lazy.container="{ src: row[0].goodsImgPath }" />
+              <img class="lazy" v-lazy.container="{ src: row[0].goodsImgPath.replace(/^http:/, '') }" />
               <div class="no-pro" v-if="row[0].isAvailable == 0">无&nbsp;&nbsp;&nbsp;货</div>
             </div>
             <div class="list-text" v-go-native-goods-detail="row[0]">{{ row[0].productName }}</div>
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 export default {
 
