@@ -4,10 +4,12 @@
  * 请求集中在这个文件中
  */
 import Vue from 'vue'
-import URL from 'src/default-urlConfig'
-import { DEV_SERVICE } from 'src/api/dev-urlConfig'
 
-const baseUrl = process.env.NODE_ENV !== 'production' ? DEV_SERVICE : URL.SERVICE_BASE_URL
+let baseUrl = require('src/api/prd-urlConfig').SERVICE_BASE_URL
+
+if (process.env.NODE_ENV !== 'production') {
+  baseUrl = require('src/api/dev-urlConfig').DEV_SERVICE
+}
 
 export default {
   // 虚拟充值缴费的所有接口

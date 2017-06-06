@@ -17,3 +17,4 @@ test/unit/coverage
 /.idea/
 /codestyles/
 /databaseSettings.xml
+config/index.js

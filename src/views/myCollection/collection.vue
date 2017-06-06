@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 export default {
 

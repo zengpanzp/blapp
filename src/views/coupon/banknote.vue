@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import api from 'src/api/index'
+import api from './api/index'
 import close from './i/h5chacha.png'
 import two from './i/h5ewm.png'
 import three from './i/gx2.png'

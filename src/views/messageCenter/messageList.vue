@@ -35,7 +35,7 @@
 		                    <div class="os-detail" v-if="!(item.activityEndTime.time < nowTimeMillSeconds)" @click="goDetail(item.businessType)">
 		                        <a href="javascript:;">查看详情</a>
 		                    </div>
-                        </div>	                    
+                        </div>
 	                </bl-swipeout-item>
 	            </bl-swipeout>
 	            </ul>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import api from 'src/api/index'
+import api from './api/index'
 import utils from 'src/utils'
 export default {
 

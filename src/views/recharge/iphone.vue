@@ -136,7 +136,7 @@
 <script>
   import utils from 'src/utils'
   import CONST from 'src/const'
-  import api from 'src/api'
+  import api from './api'
   export default {
 
     name: 'iphone',

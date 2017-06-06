@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-    import api from 'src/api/index'
+    import api from './api/index'
     import utils from 'src/utils'
     import CONST from 'src/const'
   export default {

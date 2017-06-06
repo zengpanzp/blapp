@@ -202,8 +202,8 @@
         </div>
     </div>
 </template>
-// <script>
-import api from 'src/api/index'
+<script>
+import api from './api/index'
 import utils from 'src/utils'
 export default {
 
