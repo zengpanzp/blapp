@@ -187,6 +187,7 @@ export default {
           } else {
             this.goodsLoading = false
             this.$loading.close()
+            this.$toast(data.body.msg)
           }
         }).then(err => {
           console.log(err)
@@ -202,25 +203,29 @@ export default {
           member_token: memberToken,
           currentPage: currentPage
         }).then(data => {
-          this.$loading.close()
-          console.log(data)
-          this.currentPage = currentPage
-          let storeList = JSON.parse(data.body.obj).list
-          let totalPageNum = JSON.parse(data.body.obj).pages
-          console.log(storeList)
-            // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
-          if (currentPage <= totalPageNum) {
-            if (storeList && storeList.length) {
-              this.storeList = this.storeList.concat(storeList)
-              this.busyStore = false
+          if (data.body.obj) {
+            this.$loading.close()
+            console.log(data)
+            this.currentPage = currentPage
+            let storeList = JSON.parse(data.body.obj).list
+            let totalPageNum = JSON.parse(data.body.obj).pages
+            console.log(storeList)
+              // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
+            if (currentPage <= totalPageNum) {
+              if (storeList && storeList.length) {
+                this.storeList = this.storeList.concat(storeList)
+                this.busyStore = false
+              } else {
+                this.busyStore = true
+                this.storesLoading = false
+              }
             } else {
-              this.busyStore = true
               this.storesLoading = false
+              this.$loading.close()
+                // this.$toast('没有收藏的门店')
             }
           } else {
-            this.storesLoading = false
-            this.$loading.close()
-              // this.$toast('没有收藏的门店')
+            this.$toast(data.body.msg)
           }
         }).then(err => {
           console.log(err)
