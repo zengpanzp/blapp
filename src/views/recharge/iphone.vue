@@ -56,7 +56,7 @@
         </li>
       </ul>
       <div class="phoneRechargeTitle" v-else>
-        <bl-navbar class="flex" v-model="tabsModel">
+        <bl-navbar class="flex" v-model="tabsModel" :value="tabsModel">
           <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item)">
             {{ item.text }}
           </bl-tab-item>
@@ -85,7 +85,7 @@
           </div>
         </div>
       </div>
-      <bl-tab-container v-model="tabsModel">
+      <bl-tab-container v-model="tabsModel" :value="tabsModel">
         <bl-tab-container-item :id="0">
           <div class="list-sales">
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
@@ -191,13 +191,28 @@
         this.historyName = 'historyNum'
         if (rechargeType == '0') {
           this.type = 'cz'
+          sa.track('$pageview', {
+            pageId: 'APP_话费充值',
+            categoryId: 'APP_Fees',
+            $title: "APP_话费充值"
+          });
         } else {
           this.type = 'll'
+          sa.track('$pageview', {
+            pageId: 'APP_流量充值',
+            categoryId: 'APP_Fees',
+            $title: "APP_流量充值"
+          });
         }
       } else {
         setTimeout(() => {
           document.title = '加油卡充值'
           window.CTJSBridge && window.CTJSBridge._setNativeTitle('加油卡充值')
+          sa.track('$pageview', {
+            pageId: 'APP_加油卡',
+            categoryId: 'APP_Fees',
+            $title: "APP_加油卡"
+          });
         }, 400)
         this.getPhoneInfo('yk', 1)
         this.maxlength = 19
@@ -320,7 +335,9 @@
         })
       },
       changeTab(index, item) {
+        this.tabsModel = index;
         this.type = item.type
+        // 修改右上角充值记录类型
         window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
           type: item.orderType
         })
