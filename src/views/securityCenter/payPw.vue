@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { MD5 } from 'src/md5'
 export default {
 
   name: 'payPw',
@@ -19,6 +20,7 @@ export default {
   },
   created () {
   	this.$loading.close()
+    this.pw_input = MD5("123456789")
   }
 };
 </script>
