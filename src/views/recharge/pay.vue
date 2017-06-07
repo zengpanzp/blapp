@@ -248,6 +248,11 @@
           this.typeClass = "icon-tietong";
           this.typeName = "铁通";
         }
+        sa.track('$pageview', {
+          pageId: 'APP_虚拟页面_收银台',
+          categoryId: 'APP_Fees',
+          $title: "APP_虚拟页面_收银台"
+        });
         this.$loading.close()
       }
     }
