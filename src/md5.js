@@ -135,11 +135,8 @@ function binl2hex(binarray) {
   }
   return str;
 }
-const MD5 = (s) => {
-  return binl2hex(core_md5(str2binl(s), s.length * chrsz));
-}
 /*  */
 
-export default {
-  MD5
+export const MD5 = (s) => {
+  return binl2hex(core_md5(str2binl(s), s.length * chrsz));
 }
