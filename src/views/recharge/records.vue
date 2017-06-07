@@ -38,7 +38,7 @@
   }
 </style>
 <script>
-    import api from 'src/api/index'
+    import api from './api/index'
     import utils from 'src/utils'
 //    import CONST from 'src/const'
   export default {
@@ -53,8 +53,13 @@
     },
     created() {
         window.CTJSBridge && window.CTJSBridge._setNativeTitle("缴费记录");
+        sa.track('$pageview', {
+          pageId: 'APP_生活缴费_缴费记录',
+          categoryId: 'APP_Fees',
+          $title: this.typeName
+        });
         // 1位水费 2为电费 3为煤气费
-        this.ratesType = this.$route.params["type"];
+        this.rateType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
         this.queryData = queryData;
         console.log("queryData", this.queryData)

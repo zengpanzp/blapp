@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-    import api from 'src/api/index'
+    import api from './api/index'
     import utils from 'src/utils'
     import CONST from 'src/const'
   export default {
@@ -286,6 +286,11 @@
           this.typeName = "煤气费";
           window.CTJSBridge && window.CTJSBridge._setNativeTitle("煤气费");
         }
+        sa.track('$pageview', {
+          pageId: 'APP_' + this.typeName,
+          categoryId: 'APP_Fees',
+          $title: this.typeName
+        });
         this.$loading.close()
       }
     }

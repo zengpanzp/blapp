@@ -1,6 +1,5 @@
 @import "src/sass/tobe/function";
 .pay_success{
-  padding-top: rem(100);
   background: #fff;
   height: 100%;
   .success-pay {
@@ -24,7 +23,7 @@
   }
   .success-pay-second {
     font-size: rem(1.375*31.25);
-    color: rgba(255, 255, 255, .6);
+    color: rgba(255, 255, 255, .98);
     margin-bottom: rem(1.375*31.25);
   }
   .font-color-yellow {
@@ -35,7 +34,7 @@
     color: #fff600;
   }
   .success-pay-third {
-    color: rgba(255, 255, 255, .6);
+    color: rgba(255, 255, 255, .98);
   }
   .success-pay-button button {
     width: 47.8%;

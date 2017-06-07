@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 export default {
 
@@ -102,7 +102,8 @@ export default {
         // console.log((new Date()).toLocaleString() + deployName)
         sa.track('$pageview', {
           pageId: 'APP_我的收藏_' + saName,
-          categoryId: 'APP_User'
+          categoryId: 'APP_User',
+          $title: 'APP_我的收藏_' + saName
         })
       } catch (err) {
         console.log("sa error => " + err);
@@ -231,10 +232,34 @@ export default {
         message: message,
         storeType: storeType
       })
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'orselet',
-        params: params
-      })
+      console.log('######storeType:########' + storeType)
+      if (storeType == 1010 || storeType == 1020) {
+        // 1010:百货  1020:购物中心
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'shoppingCenter',
+          params: params
+        })
+      }
+      if (storeType == 1030) {
+        // 1030:奥特莱斯
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'orselet',
+          params: params
+        })
+      }
+      if (storeType == 2010 || storeType == 2020) {
+        // 2010:大卖场 2020:标超
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'standardSuperMarket',
+          params: params
+        })
+      } else if (storeType == 2030) {
+        // 2030:便利店
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'convenienceStores',
+          params: params
+        })
+      }
     }
   },
 };
