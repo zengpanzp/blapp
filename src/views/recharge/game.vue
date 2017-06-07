@@ -66,16 +66,16 @@
               <div class="gameFir">
                 <ul>
                   <li>充值类型
-                    <div :class="{'selected': rechargeMoreType == index}" v-for="(item, index) in ['直冲', '卡密']" @click="rechargeMoreType = index">{{ item }}</div>
+                    <div :class="{'selected': rechargeMoreType == item.dtype}" v-for="item in moreTab" @click="rechargeMoreType = item.dtype">{{ item.text }}</div>
                   </li>
                   <li @click="showMoreGameNameModel = true">游戏名称
                     <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> <img class="more" src="./i/iphone/more.png">
                   </li>
                 </ul>
               </div>
-              <div class="gameFir new">
+              <div class="gameFir new" v-show="rechargeMoreType == 0">
                 <ul>
-                  <li v-show="rechargeMoreType == 0">充值账号
+                  <li>充值账号
                     <input type="text" v-model.trim="moreGameCount" placeholder="请输入游戏账号">
                   </li>
                 </ul>
@@ -160,7 +160,7 @@
         inlineLoading: null,
         tabsModel: 0, // tab 默认第一个
         rechargeType: 0, // 充值类型,默认游戏账号
-        rechargeMoreType: 0, // 更多游戏充值类型, 默认直冲
+        rechargeMoreType: 3, // 更多游戏充值类型, 默认直冲
 
         tab: [{
           text: '盛大充值',
@@ -174,6 +174,14 @@
           text: '更多游戏',
           type: 'moreGame',
           dsphh: ''
+        }],
+
+        moreTab: [{
+          text: '直冲',
+          dtype: '3'
+        }, {
+          text: '卡密',
+          dtype: '1'
         }],
 
         iphoneNum: '', // 盛大充值账号
@@ -252,17 +260,25 @@
           }
         })
       },
-      loadMoreGame(dtype) {
+      loadMoreGame() {
+        let dtype = String(this.rechargeMoreType)
         this.inlineLoading = this.$toast({
           iconClass: 'preloader white',
           duration: 'loading',
           className: 'loading-bg'
         })
+        console.log('=========')
+        console.log(JSON.stringify({
+          categorycode: '',
+          format: 'json',
+          dtype: dtype,
+          client_id: '11125'
+        }))
         api.recharge.cplb({
           categorycode: '',
           format: 'json',
           dtype: dtype,
-          client_id: '11128'
+          client_id: '11125'
         }).then(data => {
           this.inlineLoading.close()
           if (data.body.obj) {
@@ -272,11 +288,13 @@
             console.warn(resData)
             let list = []
             for (let [index, item] of gameInfoList.entries()) {
-              list.push({
-                id: index,
-                categoryCode: item.CategoryCode,
-                name: item.CategoryName
-              })
+              if (item.UseType == dtype) {
+                list.push({
+                  id: index,
+                  categoryCode: item.CategoryCode,
+                  name: item.CategoryName
+                })
+              }
             }
             this.moreGameNamelist = list // 更多游戏区号
             this.moreGameName = this.moreGameNamelist[0]
@@ -640,7 +658,7 @@
         this.currentPay = Number(val * this.moreGameCardNum).toFixed(2)
       },
       moreGameLoad(val) {
-        val && this.loadMoreGame('3')
+        val && this.loadMoreGame()
       },
       'moreGameName.categoryCode'(val) {
         this.inlineLoading = this.$toast({
@@ -651,7 +669,7 @@
         api.recharge.cplb({
           categorycode: val,
           format: 'json',
-          dtype: '3',
+          dtype: String(this.rechargeMoreType),
           client_id: '11128'
         }).then(data => {
           this.inlineLoading.close()
@@ -711,8 +729,12 @@
         })
       },
       rechargeMoreType(val) {
-        // alert(val + '充值类型')
-        this.loadMoreGame('1')
+        this.moreAreaList = []
+        this.moreGameArea = {}
+
+        this.moreGameServerList = []
+        this.moreGameServer = {}
+        this.loadMoreGame()
       }
     }
   };

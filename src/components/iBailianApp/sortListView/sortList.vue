@@ -3,7 +3,8 @@
     <div class="letter" style="display: none;"></div>
     <div class="sort_box">
       <div class="sort_list" @click.prevent="selectRow(item, index)" v-for="(item, index) of list">
-        <div class="num_name">{{item.name}}<img :src="value == item.id ? require('./i/select.jpg') : require('./i/unselect.png')"></div>
+        <div class="num_name">{{item.name}}</div>
+        <img :src="value == item.id ? require('./i/select.jpg') : require('./i/unselect.png')">
       </div>
     </div>
 
@@ -86,9 +87,12 @@
     }
     .sort_box{
       width: 100%;
+      background-color: #fff;
     }
     .sort_list{
-      padding: 0 rem(30);
+      position: relative;
+      margin: 0 rem(30);
+      border-bottom: 1px solid #ddd;
       // div{
       //   display:inline-block;
       //   vertical-align:middle;
@@ -104,15 +108,15 @@
         top: 50%;
         @include transform(translate(0, -50%));
       }
-      height: rem(80);
-      line-height: rem(80);
+      height: rem(88);
+      line-height: rem(88);
       background:#fff;
     }
     .sort_list .num_name{
+      @include ellipsis(90%);
       color: #000;
       // width:rem(650);
       font-size: rem(28);
-      border-bottom: 1px solid #ddd;
       position:relative;
       color:#333;
     }
