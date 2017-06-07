@@ -73,7 +73,7 @@
                   </li>
                 </ul>
               </div>
-              <div class="gameFir new" v-show="rechargeMoreType == 0">
+              <div class="gameFir new" v-show="rechargeMoreType == 3">
                 <ul>
                   <li>充值账号
                     <input type="text" v-model.trim="moreGameCount" placeholder="请输入游戏账号">
@@ -173,7 +173,7 @@
         }, {
           text: '更多游戏',
           type: 'moreGame',
-          dsphh: ''
+          dsphh: '099588'
         }],
 
         moreTab: [{
@@ -249,7 +249,7 @@
           categorycode: 'AAJSUPTXQQ',
           format: 'json',
           dtype: '3',
-          client_id: '11128'
+          client_id: '11125'
         }).then(data => {
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
@@ -322,43 +322,59 @@
             dsphh: this.tabItem.dsphh,
             dtype: this.getPayType(this.tabItem.type, this.password),
             str_snda: '0',
-            dlx: '01',
             format: 'json'
           }
           /* TODO */
+
+          let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.ssdbGet('member_mobile') || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
+          let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
+
           if (this.tabItem.type == 'sd') {
+            phoneNo = this.iphoneNum
             requestData.str_snda = `${this.iphoneNum}|${this.rechargeType}|${this.gameName.name}|${this.gameName.id}|${this.gameArea.id}|${this.gameServer.id}|${this.rechargeMoney.pay}|${this.rechargeMoney.id}|${Number(this.rechargeMoney.price).toFixed(0)}`
           } else if (this.tabItem.type == 'qq') {
-            requestData.str_snda = `${this.qq}|00|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
+            requestData.decid = String(this.qq)
+            requestData.str_snda = `${this.qq}|1|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
+          } else if (this.tabItem.type == 'moreGame') {
+            /* 中间件接口需要的参数 */
+            payMoney = parseFloat(this.moreGameCardNum * this.moreGameNum.realPrice)
+            orderTypeCode = (this.rechargeMoreType == 1 ? '14' : '15')
+            count = this.moreGameCardNum
+
+            if (this.rechargeMoreType == 3) {
+              requestData.decid = this.moreGameCount
+              phoneNo = this.moreGameCount
+            } else {
+              requestData.decid = ''
+            }
+            requestData.str_snda = `${requestData.decid}|0|${this.moreGameNum.ProductCode || ''}|${this.moreGameArea.RegionID || ''}|${this.moreGameServer.ServerID || ''}|${this.rechargeMoreType}|${this.moreGameCardNum}`
           }
           console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
           api.recharge.buyszkOrder(requestData).then(data => {
             console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
             if (data.body.obj) {
               let resData = JSON.parse(data.body.obj)
-              if (resData.Result_code == "4002003") {
+              if (!resData.orderid) {
                 this.$modal({
                   title: resData.msg
                 })
                 current.inlineLoading.close()
               } else {
-                let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
                 let createExpensesOrderRequestData = {
                   outOrderNo: resData.orderid,
-                  payMoney: parseFloat(this.currentPay),
+                  payMoney: payMoney,
                   orderSource: 1,
-                  orderTypeCode: '15',
+                  orderTypeCode: orderTypeCode,
                   memberId: utils.ssdbGet('member_id'),
                   goodsName: goodsName,
-                  phoneNo: this.iphoneNum,
+                  phoneNo: phoneNo,
                   price: parseFloat(this.currentPay),
-                  count: 1,
-                  accountNo: this.iphoneNum,
+                  count: count,
+                  accountNo: `${requestData.decid}_0`,
                   changeMoney: parseFloat(this.currentPay),
                   aliasSaleTime: resData.orddate,
-                  orderPhone: this.iphoneNum,
-                  content: `${this.iphoneNum}_0`,
-                  serviceFee: 0
+                  orderPhone: requestData.decid,
+                  serviceFee: parseFloat(0).toFixed(2)
                 }
                 console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
                 api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
@@ -374,7 +390,7 @@
                     changeMoney: resData.changeMoney,
                     omsNotifyUrl: resData.omsNotifyUrl,
                     payType: resData.payType,
-                    accountNo: utils.dbGet('member_mobile')
+                    accountNo: phoneNo
                   }
                   require.ensure([], function(require) {
                     let Pay = require('src/paymodel').default
@@ -392,29 +408,12 @@
       },
       getPayType(orderType, password) {
         switch (orderType) {
-          case 'ydll':
-            return '150';
-          case 'ltll':
-            return '151';
-          case 'dxll':
-            return '152';
-          case 'yk':
-            return '143';
-          case 'cz':
-            return '02';
-
-          case 'gh':
-            return '00';
-          case 'fz':
-            return '08';
-          case 'xlt':
-            return '01';
           case 'sd':
             return '02';
           case 'qq':
             return '02';
-          case 'kd':
-            return '03' + password;
+          case 'moreGame':
+            return '02';
           default:
             return orderType;
         }
@@ -559,7 +558,11 @@
           case 'qq':
             return (String(this.qqNum).length && /^[0-9]*$/.test(this.qq))
           case 'moreGame':
-            return (String(this.moreGameCardNum).length && String(this.moreGameCount).length)
+            if (this.rechargeMoreType == 3) {
+              return (String(this.moreGameCardNum).length && String(this.moreGameCount).length)
+            } else {
+              return (String(this.moreGameCardNum).length)
+            }
           default:
             return ''
         }
@@ -640,7 +643,7 @@
       },
       'tabItem.type'(val) {
         if (val == 'sd') {
-          this.currentPay = Number(this.rechargeMoney.price).toFixed(2)
+          this.currentPay = Number(this.rechargeMoney.price || 0).toFixed(2)
         } else if (val == 'moreGame') {
           this.moreGameLoad = true
           this.currentPay = Number(this.moreGameNum.price * this.moreGameCardNum).toFixed(2)
@@ -670,7 +673,7 @@
           categorycode: val,
           format: 'json',
           dtype: String(this.rechargeMoreType),
-          client_id: '11128'
+          client_id: '11125'
         }).then(data => {
           this.inlineLoading.close()
           if (data.body.obj) {
@@ -685,8 +688,10 @@
                 list.push({
                   id: index,
                   categoryCode: item.CategoryCode,
-                  name: item.ProductFullName,
-                  price: item.ParPrice
+                  ProductCode: item.ProductCode,
+                  name: item.ParPrice,
+                  price: item.dwyj,
+                  realPrice: item.dzxj
                 })
               }
               this.moreGameNumlist = list // 更多游戏区号
