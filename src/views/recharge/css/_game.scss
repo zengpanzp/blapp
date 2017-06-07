@@ -22,12 +22,13 @@
         width: rem(50);
         right:rem(0);
       }
-      input{
+      .ganme-name, input{
         width: rem(550);
-        height: 80%;
         background: transparent;
         border: none;
         padding-left: rem(20);
+        color: #333;
+        text-align: left;
         &.spe{
           margin-left:rem(30);
         }
@@ -36,7 +37,6 @@
         width: rem(195);
         display: inline-block;
         border:1px solid #ddd;
-        height: rem(63);
         padding: 0 rem(20);
         line-height: rem(60);
         border-radius: rem(8);

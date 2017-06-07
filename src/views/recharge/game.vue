@@ -17,7 +17,9 @@
             <div class="gameFir">
               <ul>
                 <li @click="showGameNameModel = true">游戏名称
-                  <input type="text" placeholder="请选择游戏" v-model="gameName.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <div class="ganme-name">{{ gameName.name }}</div>
+                  <img class="more" src="./i/iphone/more.png">
+                </li>
                 <li>充值类型
                   <div :class="{'selected': rechargeType == index}" v-for="(item, index) in ['游戏账号', '盛大通行证']" @click="rechargeType = index">{{ item }}</div>
                 </li>
@@ -33,11 +35,17 @@
             <div class="gameFir top">
               <ul>
                 <li v-show="areaList.length" @click="showAreaModel = true">游戏区号
-                  <input type="text" placeholder="请选择游戏区号" v-model="gameArea.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <!-- <input type="text" placeholder="请选择游戏区号" v-model="gameArea.name" disabled> -->
+                  <div class="ganme-name">{{ gameArea.name }}</div>
+                  <img class="more" src="./i/iphone/more.png"></li>
                 <li v-show="gameServerList.length" @click="showGameServerModel = true">游戏区服
-                  <input type="text" placeholder="请选择游戏服务器" v-model="gameServer.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <!-- <input type="text" placeholder="请选择游戏服务器" v-model="gameServer.name" disabled> -->
+                  <div class="ganme-name">{{ gameServer.name }}</div>
+                  <img class="more" src="./i/iphone/more.png"></li>
                 <li v-show="rechargeMoneyList.length" @click="showRechargeMoneyModel = true">充值金额
-                  <input type="text" placeholder="请选择游戏金额" v-model="rechargeMoney.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <!-- <input type="text" placeholder="请选择游戏金额" v-model="rechargeMoney.name" disabled> -->
+                  <div class="ganme-name">{{ rechargeMoney.name }}</div>
+                  <img class="more" src="./i/iphone/more.png"></li>
               </ul>
             </div>
           </div>
@@ -69,7 +77,9 @@
                     <div :class="{'selected': rechargeMoreType == item.dtype}" v-for="item in moreTab" @click="rechargeMoreType = item.dtype">{{ item.text }}</div>
                   </li>
                   <li @click="showMoreGameNameModel = true">游戏名称
-                    <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> <img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameName.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                 </ul>
               </div>
@@ -83,13 +93,19 @@
               <div class="gameFir top">
                 <ul>
                   <li v-show="moreAreaList.length" @click="showMoreAreaModel = true">游戏区号
-                    <input type="text" placeholder="请选择游戏区号" v-model="moreGameArea.name" disabled><img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择游戏区号" v-model="moreGameArea.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameArea.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li v-show="moreGameServerList.length" @click="showMoreGameServerModel = true">游戏区服
-                    <input type="text" placeholder="请选择游戏服务器" v-model="moreGameServer.name" disabled><img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择游戏服务器" v-model="moreGameServer.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameServer.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li v-show="moreGameNumlist.length" @click="showMoreGameNumModel = true">充值面额
-                    <input type="text" placeholder="请选择充值面额" v-model="moreGameNum.name" disabled><img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择充值面额" v-model="moreGameNum.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameNum.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li>购买数量
                     <input type="text" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
@@ -111,39 +127,39 @@
     <!-- 盛大充值 -->
     <bl-popup v-model="showGameNameModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏名称 -->
-      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" v-show="showGameNameModel" v-if="showGameNameModel" v-model="gameName.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" v-show="showGameNameModel" v-if="gameName.name" v-model="gameName.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏区号 -->
-      <bl-sort-list-view @click="gameAreaClick" :list="areaList" :showLetter="false" v-show="showAreaModel" v-if="showAreaModel" v-model="gameArea.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameAreaClick" :list="areaList" :showLetter="false" v-show="showAreaModel" v-if="gameArea.name" v-model="gameArea.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showGameServerModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏服务 -->
-      <bl-sort-list-view @click="gameServerClick" :list="gameServerList" :showLetter="false" v-show="showGameServerModel" v-if="showGameServerModel" v-model="gameServer.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameServerClick" :list="gameServerList" :showLetter="false" v-show="showGameServerModel" v-if="gameServer.name" v-model="gameServer.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showRechargeMoneyModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏充值金额 -->
-      <bl-sort-list-view @click="rechargeMoneyClick" :list="rechargeMoneyList" :showLetter="false" v-show="showRechargeMoneyModel" v-if="showRechargeMoneyModel" v-model="rechargeMoney.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="rechargeMoneyClick" :list="rechargeMoneyList" :showLetter="false" v-show="showRechargeMoneyModel" v-if="rechargeMoney.name" v-model="rechargeMoney.id"></bl-sort-list-view>
     </bl-popup>
 
     <!-- 更多游戏 -->
     <bl-popup v-model="showMoreGameNameModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 更多游戏名称 -->
-      <bl-sort-list-view @click="moreGameNameClick" :list="moreGameNamelist" :showLetter="false" v-show="showMoreGameNameModel" v-if="showMoreGameNameModel" v-model="moreGameName.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameNameClick" :list="moreGameNamelist" :showLetter="false" v-show="showMoreGameNameModel" v-if="moreGameName.name" v-model="moreGameName.id"></bl-sort-list-view>
     </bl-popup>
 
     <bl-popup v-model="showMoreAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏区号 -->
-      <bl-sort-list-view @click="moreGameAreaClick" :list="moreAreaList" :showLetter="false" v-show="showMoreAreaModel" v-if="showMoreAreaModel" v-model="moreGameArea.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameAreaClick" :list="moreAreaList" :showLetter="false" v-show="showMoreAreaModel" v-if="moreGameArea.name" v-model="moreGameArea.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showMoreGameServerModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏服务 -->
-      <bl-sort-list-view @click="moreGameServerClick" :list="moreGameServerList" :showLetter="false" v-show="showMoreGameServerModel" v-if="showMoreGameServerModel" v-model="moreGameServer.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameServerClick" :list="moreGameServerList" :showLetter="false" v-show="showMoreGameServerModel" v-if="moreGameServer.name" v-model="moreGameServer.id"></bl-sort-list-view>
     </bl-popup>
 
     <bl-popup v-model="showMoreGameNumModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 更多游戏购买面额 -->
-      <bl-sort-list-view @click="moreGameNumClick" :list="moreGameNumlist" :showLetter="false" v-show="showMoreGameNumModel" v-if="showMoreGameNumModel" v-model="moreGameNum.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameNumClick" :list="moreGameNumlist" :showLetter="false" v-show="showMoreGameNumModel" v-if="moreGameNum.name" v-model="moreGameNum.id"></bl-sort-list-view>
     </bl-popup>
   </div>
 </template>

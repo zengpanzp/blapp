@@ -63,6 +63,7 @@
     z-index: 999;
     background: rgb(245,245,245);
     overflow:auto;
+    -webkit-overflow-scrolling: touch;
     .letter{
       width: rem(100);
       height: rem(100);
@@ -93,6 +94,9 @@
       position: relative;
       margin: 0 rem(30);
       border-bottom: 1px solid #ddd;
+      &:last-child{
+        border-bottom: 0;
+      }
       // div{
       //   display:inline-block;
       //   vertical-align:middle;
@@ -127,6 +131,7 @@
       padding-left: rem(40);
       color:#787878;
       font-size: rem(28);
+      background-color: #F8F8F8;
     }
     .initials{
       position: fixed;
