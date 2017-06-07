@@ -43,10 +43,8 @@ input {
 }
 
 .input { 
-  padding: 5px; 
   margin: 0; 
-  border: 1px 
-  solid #beceeb;
+  // border: 1px;
 }
 
 .clear { 
@@ -63,4 +61,43 @@ input {
 
 p {
   text-align: right;
+}
+
+.phone {
+  color: #aeaeae;
+  font-size: rem(28);
+  padding-bottom: rem(20);
+}
+
+.phone a {
+  color: #aeaeae;
+}
+
+.sms {
+  padding-left: rem(0)
+}
+
+.btn-confirm {
+  margin-top: rem(50);
+  height: rem(92);
+}
+
+.bl-button.disabled {
+  color: #fff;
+  background-color: #dddddd;
+  border-color: transparent;
+}
+
+.li-input{
+  input{
+    height: 100%;
+  }
+}
+.li-num{
+  width: rem(106*2);
+  text-align: center;
+  color: #ff0000;
+  margin: rem(16) rem(-20) rem(16) 0;
+  line-height: rem(60);
+  border-left: 1px solid #ccc
 }

@@ -13,7 +13,7 @@
      <div class="list">
       <ul>
         <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <router-link to="/securityCenter/payPw"><li @click="checkPhone"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
+        <router-link to="/securityCenter/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
       </ul>
     </div>
    </div>
@@ -159,22 +159,14 @@ export default {
                 console.log(result)
               }
             });
-            // utils.logOut().then(data => {
-            //   alert(2)
-            // })
           }
         }]
     })
     },
     authen() {
+      // native 实名认证页
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'authenticate'
-      })
-    },
-
-    checkPhone() {
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'checkPhone'
       })
     }
   }
