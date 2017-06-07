@@ -54,14 +54,22 @@ const goPay = function(order, type, sucCallback, failCallback) {
       window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequestData, {
         success: data => {
           console.log('native接口 调native收银台返回报文=============<br>' + data)
-          sucCallback(data);
+          sucCallback && sucCallback(data);
         },
         fail: error => {
           console.log(error)
           let errorData = JSON.parse(error)
           if (errorData.result == 'fail') {
             // 取消支付
-            failCallback(errorData)
+            failCallback && failCallback(errorData)
+            if (type == '23') {
+              window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                pageId: 'expensesorderdetail',
+                params: JSON.stringify({
+                  order: order.orderNo
+                })
+              })
+            }
           }
         }
       })
