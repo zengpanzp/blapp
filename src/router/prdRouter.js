@@ -226,6 +226,22 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/enterPw')), 'enterPw')
   },
+  /* 薛天玲 安全中心 支付密码 */
+  {
+    path: '/securityCenter/payPw',
+    meta: {
+      title: '我的支付密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/payPw')), 'payPw')
+  },
+    /* 薛天玲 安全中心 验证身份 */
+  {
+    path: '/securityCenter/checkPhone',
+    meta: {
+      title: '验证身份'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/checkPhone')), 'checkPhone')
+  },
   /* 陈鹏 我的评价 */
   {
     path: '/myEvaluation/:orderNo',
