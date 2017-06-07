@@ -56,7 +56,7 @@
         </li>
       </ul>
       <div class="phoneRechargeTitle" v-else>
-        <bl-navbar class="flex" v-model="tabsModel" :value="tabsModel">
+        <bl-navbar class="flex" v-model="tabsModel">
           <bl-tab-item class="flex-item" :id="index" v-for="(item, index) in tab" @click.native="changeTab(index, item)">
             {{ item.text }}
           </bl-tab-item>
@@ -85,7 +85,7 @@
           </div>
         </div>
       </div>
-      <bl-tab-container v-model="tabsModel" :value="tabsModel">
+      <bl-tab-container v-model="tabsModel">
         <bl-tab-container-item :id="0">
           <div class="list-sales">
             <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
@@ -335,7 +335,6 @@
         })
       },
       changeTab(index, item) {
-        this.tabsModel = index;
         this.type = item.type
         // 修改右上角充值记录类型
         window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
