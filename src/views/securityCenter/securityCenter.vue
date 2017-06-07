@@ -13,7 +13,7 @@
      <div class="list">
       <ul>
         <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <li @click="checkPhone"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
+        <router-link to="/securityCenter/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
       </ul>
     </div>
    </div>
@@ -61,38 +61,42 @@ export default {
         member_token: memberToken,
         timestamp: utils.getTimeFormatToday()
       }).then(data => {
-        let phoneNum = JSON.parse(data.body.obj).mobile
-        if (phoneNum) {
-          this.phoneNum += phoneNum.substring(0, 3)
-          for (let i = 0; i < 4; i++) {
-            this.phoneNum += '*'
+        if (data.body.obj) {
+          let phoneNum = JSON.parse(data.body.obj).mobile
+          if (phoneNum) {
+            this.phoneNum += phoneNum.substring(0, 3)
+            for (let i = 0; i < 4; i++) {
+              this.phoneNum += '*'
+            }
+            this.phoneNum += phoneNum.substring(phoneNum.length - 4, phoneNum.length)
           }
-          this.phoneNum += phoneNum.substring(phoneNum.length - 4, phoneNum.length)
-        }
-        let email = JSON.parse(data.body.obj).email
-        if (email) {
-          this.email += email.substring(0, 3);
-          var before = email.split('@')[0];
-          var after = email.split('@')[1];
-          if (before.length > 3) {
-              for (let i = 3; i < before.length; i++) {
-                  this.email += '*';
-              }
+          let email = JSON.parse(data.body.obj).email
+          if (email) {
+            this.email += email.substring(0, 3);
+            var before = email.split('@')[0];
+            var after = email.split('@')[1];
+            if (before.length > 3) {
+                for (let i = 3; i < before.length; i++) {
+                    this.email += '*';
+                }
+            }
+            this.email += '@';
+            for (let i = 0; i < after.length - 4; i++) {
+                this.email += '*';
+            }
+            this.email += email.substring(email.length - 4, email.length);
           }
-          this.email += '@';
-          for (let i = 0; i < after.length - 4; i++) {
-              this.email += '*';
+          let pwdStrength = JSON.parse(data.body.obj).pwdStrength
+          if (pwdStrength == 1) {
+            this.pwStatus = '弱'
           }
-          this.email += email.substring(email.length - 4, email.length);
-        }
-        let pwdStrength = JSON.parse(data.body.obj).pwdStrength
-        if (pwdStrength == 1) {
-          this.pwStatus = '弱'
-        }
-        if (pwdStrength == 2) {
-          this.pwStatus = '中'
-        } else if (pwdStrength == 3) {
-          this.pwStatus = '强'
+          if (pwdStrength == 2) {
+            this.pwStatus = '中'
+          } else if (pwdStrength == 3) {
+            this.pwStatus = '强'
+          }
+        } else {
+          this.$toast(data.body.msg)
         }
         }).then(err => {
         console.log(err)
@@ -101,13 +105,21 @@ export default {
         memberId: member_id,
         timestamp: utils.getTimeFormatToday()
       }).then(data => {
-        this.realNameAuthType = JSON.parse(data.body.obj).realNameAuthType
+        if (data.body.obj) {
+          this.realNameAuthType = JSON.parse(data.body.obj).realNameAuthType
+        } else {
+          this.$toast(data.body.msg)
+        }
       })
       api.userCenter.validPayPwd({
         memberId: member_id
       }).then(data => {
-        this.payStatus = JSON.parse(data.body.obj).status
-        console.log('###pwStatus:####' + this.payStatus)
+        if (data.body.obj) {
+          this.payStatus = JSON.parse(data.body.obj).status
+          console.log('###pwStatus:####' + this.payStatus)
+        } else {
+          this.$toast(data.body.msg)
+        }
       })
     })
   },
@@ -132,23 +144,29 @@ export default {
         }, {
           text: '确定',
           onClick: () => {
-            this.$toast('退出成功')
-            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-              pageId: 'homepage/pro'
-            })
+            window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
+              success: result => {
+                console.log(result)
+                this.$toast('退出成功!')
+                setTimeout(function () {
+                window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+                }, 2500)
+              },
+              fail: result => {
+                console.log(result)
+              },
+              progress: result => {
+                console.log(result)
+              }
+            });
           }
         }]
     })
     },
     authen() {
+      // native 实名认证页
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'authenticate'
-      })
-    },
-
-    checkPhone() {
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'checkPhone'
       })
     }
   }
