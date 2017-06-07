@@ -125,6 +125,22 @@ export default {
   },
   methods: {
     exit() {
+      window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+        title: "hahha",
+        message: "message",
+        buttons: [
+        {
+          title: "default"
+        }, {
+          title: "cancel",
+          style: "cancel"
+        }, {
+          title: "destructive",
+          style: "destructive"
+        }]
+      }, { success: data => {
+        console.log("success" + data)
+      }})
     //   this.$modal({
     //   title: '提示',
     //   content: '确认要退出？',
@@ -133,35 +149,35 @@ export default {
     //     { text: '确定', onClick: function() {} },
     //   ]
     // })
-    this.$modal({
-        title: '提示',
-        content: '确认要退出？',
-        buttons: [{
-          text: '取消',
-          onClick: () => {
-            this.$toast('取消退出')
-          }
-        }, {
-          text: '确定',
-          onClick: () => {
-            window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
-              success: result => {
-                console.log(result)
-                this.$toast('退出成功!')
-                setTimeout(function () {
-                window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
-                }, 2500)
-              },
-              fail: result => {
-                console.log(result)
-              },
-              progress: result => {
-                console.log(result)
-              }
-            });
-          }
-        }]
-    })
+    // this.$modal({
+    //     title: '提示',
+    //     content: '确认要退出？',
+    //     buttons: [{
+    //       text: '取消',
+    //       onClick: () => {
+    //         this.$toast('取消退出')
+    //       }
+    //     }, {
+    //       text: '确定',
+    //       onClick: () => {
+    //         window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
+    //           success: result => {
+    //             console.log(result)
+    //             this.$toast('退出成功!')
+    //             setTimeout(function () {
+    //             window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+    //             }, 2500)
+    //           },
+    //           fail: result => {
+    //             console.log(result)
+    //           },
+    //           progress: result => {
+    //             console.log(result)
+    //           }
+    //         });
+    //       }
+    //     }]
+    // })
     },
     authen() {
       // native 实名认证页
