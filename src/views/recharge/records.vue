@@ -48,7 +48,8 @@
     data() {
       return {
         rateType: 1,
-        dataJson: ''
+        dataJson: '',
+        results: []
       }
     },
     created() {
@@ -63,7 +64,7 @@
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
         this.queryData = queryData;
         console.log("queryData", this.queryData)
-      utils.isLogin().then(user => {
+        utils.isLogin().then(user => {
           api.recharge.getGoodsDetail(queryData).then(data => {
             let json = JSON.parse(data.body.obj);
             this.dataJson = json;
@@ -72,15 +73,17 @@
             let results = [];
             for (let obj in this.dataJson) {
                 if (this.dataJson[obj].date) {
-                  this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
+                    this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
                 }
                 if (this.dataJson[obj].Result_code == "200") {
-                  results.unshift(this.dataJson[obj]);
+                    results.unshift(this.dataJson[obj]);
                 } else {
-                  results.push(this.dataJson[obj]);
+                  console.log(results)
+                    if (!this.arrayContains(results, this.dataJson[obj])) {
+                      results.push(this.dataJson[obj]);
+                    }
                 }
             }
-            console.log(results)
             this.results = results;
             if (results[0]) {
               let first = results[0];
@@ -112,6 +115,19 @@
 //      });
 //    },
     methods: {
+      arrayContains(array, obj) {
+        if (array instanceof Array) {
+          for (var i = 0; i < array.length; i++) {
+            let item = array[i];
+            if (item.msg == obj.msg) {
+              return true;
+            }
+          }
+          return false;
+        } else {
+          return false;
+        }
+      },
       toPay() {
         this.$router.push({ path: "/recharge/pay/" + this.rateType });
       },

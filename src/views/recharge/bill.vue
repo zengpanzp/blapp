@@ -5,7 +5,7 @@
     <!--用来显示缴费分组-->
     <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
     <div v-show="toShow">
-      <div class="product-filter blue-bill-top">
+      <div id="toplist" class="product-filter blue-bill-top">
         <a @click.prevent="showCategory" href="javascript:;" class="more bill-class-add">+</a>
         <div class="itemauto">
           <ul>
