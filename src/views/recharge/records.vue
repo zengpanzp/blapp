@@ -24,7 +24,7 @@
             </li>
             <li class="record-detail" v-else="item.date">
               <span class="spe" v-bind:style="{ 'line-height': (item.msg.length>21?'':'70px')}">{{item.msg}}</span>
-              <span class="spe"><div class="billstatus finish"></div></span>
+              <span class="spe"><div class="billstatus finish">已完成</div></span>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
