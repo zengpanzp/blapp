@@ -257,6 +257,11 @@
       this.$loading.close()
       this.getGameDetail('game')
       this.getQbPrice()
+      sa.track('$pageview', {
+        pageId: 'APP_游戏充值',
+        categoryId: 'APP_Fees',
+        $title: "APP_游戏充值"
+      });
     },
     methods: {
       // 获取QB充值单价

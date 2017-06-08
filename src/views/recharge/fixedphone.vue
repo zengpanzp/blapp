@@ -204,7 +204,12 @@ export default {
     this.changeTab(0, this.tab[0].type)
     this.getHistoryNum()
     this.getPhoneInfo('dx', 1)
-    this.$loading.close()
+    this.$loading.close();
+    sa.track('$pageview', {
+      pageId: 'APP_固话_小灵通_宽带充值',
+      categoryId: 'APP_Fees',
+      $title: "APP_固话_小灵通_宽带充值"
+    });
   },
   methods: {
     getPhoneInfo(type, noConfirm = 0) {

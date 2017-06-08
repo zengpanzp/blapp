@@ -37,6 +37,11 @@ const goPay = function(order, type, sucCallback, failCallback) {
   let member_id = utils.ssdbGet('member_id')
   window.CTJSBridge && window.CTJSBridge.LoadMethod('ExposeJsApi', 'getServiceCfg', '', {
     success: data => {
+      sa.track('$pageview', {
+        pageId: 'APP_虚拟页面_收银台',
+        categoryId: 'APP_Fees',
+        $title: "APP_虚拟页面_收银台"
+      });
       let ServiceCfg = JSON.parse(data).ServiceCfg // 获取地址信息
       let payRequestData = {
         'MerOrderNo': order.outOrderNo,

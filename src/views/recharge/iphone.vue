@@ -340,7 +340,20 @@
         window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
           type: item.orderType
         })
-        this.getPhoneInfo(this.iphoneNum)
+        this.getPhoneInfo(this.iphoneNum);
+        if (index == 0) {
+          sa.track('$pageview', {
+            pageId: 'APP_话费充值',
+            categoryId: 'APP_Fees',
+            $title: "APP_话费充值"
+          });
+        } else {
+          sa.track('$pageview', {
+            pageId: 'APP_流量充值',
+            categoryId: 'APP_Fees',
+            $title: "APP_流量充值"
+          });
+        }
       },
       // 手机号码正则匹配
       testPhoneNum() {

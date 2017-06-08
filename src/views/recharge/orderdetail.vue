@@ -69,7 +69,12 @@
           21: "dl",  // 电费
           22: "mq",  // 煤气
           9: "ds",   // 电视
-          12: "tt"   // 铁通
+          12: "tt",   // 铁通
+          sf: "水费",
+          dl: "电费",
+          mq: "燃气",
+          ds: "有线电视",
+          tt: "铁通"
         },
         imgs: {
           "sf": require("./i/icons/icon-water.png"),     // 水费图片
@@ -87,6 +92,11 @@
     created() {
       let orderNo = this.$route.params.orderNo;
       this.type = this.$route.params.type;
+      sa.track('$pageview', {
+        pageId: 'APP_' + this.typeObj[this.type] + "_订单详情页",
+        categoryId: 'APP_Fees',
+        $title: 'APP_' + this.typeObj[this.type] + "_订单详情页"
+      });
       let current = this;
       utils.isLogin().then(user => {
         console.log(user)
