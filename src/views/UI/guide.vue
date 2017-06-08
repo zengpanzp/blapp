@@ -5,7 +5,7 @@
     <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.title" v-for="(item, index) in auiRouter">{{ index }}: {{ item.meta.title }}</router-link>
 
     <h3 class="second-title">prd路由</h3>
-    <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.title" v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
+    <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.title && item.path.indexOf('/securityCenter/') == -1 " v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
   </div>
 </template>
 

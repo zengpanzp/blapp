@@ -9,29 +9,29 @@
 				            <router-link tag="li" class="item-content" v-for="item in msgList" :to="{ path: '/messageList/' + item.value + '/' + encodeURI(item.label) }">
 			                    <a href="javascript:;" title="">
 			                        <div class="item-media" :class="{ 'red-cil': !item.isRead }">
-			                            
+
 			                            <img v-if="item.value == '1'" src="./i/mci_wuliu.png" alt="">
-			                           	                            
+
 			                            <img v-if="item.value == '3'" src="./i/mci_mdfw.png" alt="">
-			                           
+
 			                            <img v-if="item.value == '4'" src="./i/mci_tzmc.png" alt="">
-			                           
+
 			                            <img v-if="item.value == '5'" src="./i/mci_p.png" alt="">
-			                            
+
 			                            <img v-if="item.value == '202'" src="./i/mci_cx.png" alt="">
-			                            
-			                            <img v-if="item.value == '203'" src="./i/mci_mzc.png" alt="">	                        
+
+			                            <img v-if="item.value == '203'" src="./i/mci_mzc.png" alt="">
 			                        </div>
 			                        <div class="item-inner">
 			                            <div class="item-middle">
 			                                <div class="item-title-row">
 			                                    <div class="item-title">{{item.label}}</div>
 			                                    <span class="item-after newTitle"><span>{{item.time}}</span></span>
-			                          
+
 			                                    <div class="item-subtitle newInfo">{{item.newMsg.content}}</div>
-			                                    
+
 			                                    <div class="item-subtitle newInfo"></div>
-			                                    
+
 			                                </div>
 			                            </div>
 			                        </div>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import api from 'src/api/index'
+import api from './api/index'
 import utils from 'src/utils'
 export default {
 

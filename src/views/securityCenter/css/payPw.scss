@@ -1,0 +1,103 @@
+@import "src/sass/tobe/function";
+
+.section1 {
+  margin-top: rem(44);
+  padding: 0 rem(20);
+}
+
+.section1 li {
+  font-size: rem(28);
+  line-height: normal;
+  padding: 0 rem(20);
+  background: #fff;
+  line-height: rem(88);
+  border: 1px solid #e9e9e9;
+  color: #343434;
+  position: relative;
+}
+
+.section1 i {
+  color: #9e9e9e;
+  font-style: normal;
+  float: right;
+  padding:0 rem(3);
+}
+
+.modal-button {
+  font-size :rem(100)
+}
+
+input {
+  width: 100%;
+  padding-left: rem(55)
+}
+
+.bl-button.disabled {
+    color: #fff;
+    background-color: #dddddd;
+    border-color: transparent;
+}
+
+.text_above {
+  padding: rem(30) 0;
+}
+
+.input { 
+  margin: 0; 
+  // border: 1px;
+}
+
+.clear { 
+  position: absolute; 
+  font-size: rem(30);
+  padding: rem(10);
+  background: #dddddd;
+  border-radius: 50%;
+  color: #aeaeae;
+  left: rem(10);
+  top: 50%;
+  @include transform(translate(0, -50%));
+}
+
+p {
+  text-align: right;
+}
+
+.phone {
+  color: #aeaeae;
+  font-size: rem(28);
+  padding-bottom: rem(20);
+}
+
+.phone a {
+  color: #aeaeae;
+}
+
+.sms {
+  padding-left: rem(0)
+}
+
+.btn-confirm {
+  margin-top: rem(50);
+  height: rem(92);
+}
+
+.bl-button.disabled {
+  color: #fff;
+  background-color: #dddddd;
+  border-color: transparent;
+}
+
+.li-input{
+  input{
+    height: 100%;
+  }
+}
+.li-num{
+  width: rem(106*2);
+  text-align: center;
+  color: #ff0000;
+  margin: rem(16) rem(-20) rem(16) 0;
+  line-height: rem(60);
+  border-left: 1px solid #ccc
+}

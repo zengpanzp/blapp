@@ -109,7 +109,7 @@
 
 </style>
 <script>
-  import api from 'src/api/index'
+  import api from './api/index'
   import utils from 'src/utils'
   import CONST from 'src/const'
   export default {
@@ -163,6 +163,7 @@
           this.$set(this.receiveGroupItem, "id", this.currentGroupId, this.currentGroupName)
           this.groupList[0].active = true;
           api.recharge.queryPaySubNo({
+            "paymentType": "01,02,03",
             "member_token": user.member_token,
             "groupId": this.groupList[0].id,
             "timestamp": timestamp
@@ -170,7 +171,7 @@
             let json = JSON.parse(data.body.obj);
             console.log(json);
             json.list.forEach((obj) => {
-              this.$set(this.accountObj, "p" + obj.paymentType, obj);
+              this.$set(this.accountObj, obj.paymentType, obj);
             });
           });
         });

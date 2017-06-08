@@ -46,7 +46,7 @@
   </div>
 </template>
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 export default {
 
@@ -96,13 +96,14 @@ export default {
       this.$router.go(0)
     },
     changeTab(index, deployName) {
-      let saName = this.filterEleTabs[this.tabsModel].saName
+      let saName = this.filterEleTabs[this.tabsModel].deployName
       // sensor analytics商品详情埋点
       try {
-        console.log((new Date()).toLocaleString() + deployName)
+        // console.log((new Date()).toLocaleString() + deployName)
         sa.track('$pageview', {
           pageId: 'APP_我的收藏_' + saName,
-          categoryId: 'APP_User'
+          categoryId: 'APP_User',
+          $title: 'APP_我的收藏_' + saName
         })
       } catch (err) {
         console.log("sa error => " + err);
@@ -143,6 +144,7 @@ export default {
           member_token: memberToken,
           currentPage: Number(this.pageNum++)
         }).then(data => {
+          console.log(data)
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
             console.log(resData)
@@ -157,7 +159,7 @@ export default {
                 channel: "1",
                 pageNo: 1,
                 pageSize: "10",
-                isFilterCommons: "true"
+                isFilterCommons: "false"
               }
               api.userCenter.searchProductByIds({
                 clientIp: "0:0:0:0:0:0:0:1",
@@ -168,7 +170,7 @@ export default {
                 let resData = JSON.parse(data.body.obj)
                 let rows = resData.resultInfo.rows
                 let check = JSON.stringify(rows)
-                console.log(check)
+                console.log(check + '============')
                 if (rows) {
                   this.list = this.list.concat(rows)
                   this.busy = false
@@ -183,7 +185,9 @@ export default {
                 // this.$toast('没有收藏的商品')
             }
           } else {
+            this.goodsLoading = false
             this.$loading.close()
+            this.$toast(data.body.msg)
           }
         }).then(err => {
           console.log(err)
@@ -199,26 +203,32 @@ export default {
           member_token: memberToken,
           currentPage: currentPage
         }).then(data => {
-          this.$loading.close()
-          console.log(data)
-          this.currentPage = currentPage
-          let storeList = JSON.parse(data.body.obj).list
-          let totalPageNum = JSON.parse(data.body.obj).pages
-          console.log(storeList)
-            // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
-          if (currentPage <= totalPageNum) {
-            if (storeList && storeList.length) {
-              this.storeList = this.storeList.concat(storeList)
-              this.busyStore = false
+          if (data.body.obj) {
+            this.$loading.close()
+            console.log(data)
+            this.currentPage = currentPage
+            let storeList = JSON.parse(data.body.obj).list
+            let totalPageNum = JSON.parse(data.body.obj).pages
+            console.log(storeList)
+              // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
+            if (currentPage <= totalPageNum) {
+              if (storeList && storeList.length) {
+                this.storeList = this.storeList.concat(storeList)
+                this.busyStore = false
+              } else {
+                this.busyStore = true
+                this.storesLoading = false
+              }
             } else {
-              this.busyStore = true
               this.storesLoading = false
+              this.$loading.close()
+                // this.$toast('没有收藏的门店')
             }
           } else {
-            this.storesLoading = false
-            this.$loading.close()
-              // this.$toast('没有收藏的门店')
+            this.$toast(data.body.msg)
           }
+        }).then(err => {
+          console.log(err)
         })
       })
     },
@@ -227,10 +237,34 @@ export default {
         message: message,
         storeType: storeType
       })
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'orselet',
-        params: params
-      })
+      console.log('######storeType:########' + storeType)
+      if (storeType == 1010 || storeType == 1020) {
+        // 1010:百货  1020:购物中心
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'shoppingCenter',
+          params: params
+        })
+      }
+      if (storeType == 1030) {
+        // 1030:奥特莱斯
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'orselet',
+          params: params
+        })
+      }
+      if (storeType == 2010 || storeType == 2020) {
+        // 2010:大卖场 2020:标超
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'standardSuperMarket',
+          params: params
+        })
+      } else if (storeType == 2030) {
+        // 2030:便利店
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'convenienceStores',
+          params: params
+        })
+      }
     }
   },
 };

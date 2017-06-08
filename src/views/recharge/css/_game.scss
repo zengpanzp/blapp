@@ -22,12 +22,13 @@
         width: rem(50);
         right:rem(0);
       }
-      input{
-        width: rem(450);
-        height: 80%;
+      .ganme-name, input{
+        width: rem(550);
         background: transparent;
         border: none;
         padding-left: rem(20);
+        color: #333;
+        text-align: left;
         &.spe{
           margin-left:rem(30);
         }
@@ -36,7 +37,6 @@
         width: rem(195);
         display: inline-block;
         border:1px solid #ddd;
-        height: rem(63);
         padding: 0 rem(20);
         line-height: rem(60);
         border-radius: rem(8);
@@ -89,5 +89,17 @@
       border-top:1px solid #ddd;
       margin-top: rem(20);
     }
+  }
+}
+.sort-list{
+  width: 100%;
+}
+
+.limit-remind{
+  margin-top: rem(20);
+  .limit-text{
+    float: left;
+    font-size: rem(24);
+    color: #999;
   }
 }

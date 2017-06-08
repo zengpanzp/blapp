@@ -125,6 +125,11 @@ export const prdRouter = [
     path: '/recharge/pay/:type',
       component: r => require.ensure([], () => r(require('../views/recharge/pay')), 'pay')
   },
+  /* 神马 充值缴费 支付成功页面 */
+  {
+    path: '/recharge/paysuccess',
+      component: r => require.ensure([], () => r(require('../views/recharge/paysuccess')), 'paysuccess')
+  },
   /* 神马 充值缴费 缴费记录  type=1 水费  2 电费  3煤气 */
   {
     path: '/recharge/records/:type',
@@ -196,31 +201,54 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   },
-  /* 曾攀 我的评价 */
+  /* 薛天玲 安全中心 */
+  {
+    path: '/securityCenter',
+    meta: {
+      title: '安全中心',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/securityCenter')), 'securityCenter'),
+  },
+  /* 薛天玲 安全中心 邮箱 */
+  {
+    path: '/securityCenter/myEmail',
+    meta: {
+      title: '我的邮箱'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/myEmail')), 'myEmail')
+  },
+  /* 薛天玲 安全中心 登录密码 */
+  {
+    path: '/securityCenter/enterPw',
+    meta: {
+      title: '我的密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/enterPw')), 'enterPw')
+  },
+  /* 薛天玲 安全中心 支付密码 */
+  {
+    path: '/securityCenter/payPw',
+    meta: {
+      title: '我的支付密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/payPw')), 'payPw')
+  },
+    /* 薛天玲 安全中心 验证身份 */
+  {
+    path: '/securityCenter/checkPhone',
+    meta: {
+      title: '验证身份'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/checkPhone')), 'checkPhone')
+  },
+  /* 陈鹏 我的评价 */
   {
     path: '/myEvaluation',
     meta: {
       title: '我的评价'
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
-  },
-  /* 曾攀 查看评价 */
-  {
-    path: '/seeComment/:comId/:type/:product',
-    name: 'seeComment',
-    meta: {
-      title: '查看评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/myEvaluation/seeComment')), 'seeComment')
-  },
-  /* 曾攀 商品评价 */
-  {
-    path: '/goodComment/:order/:product',
-    name: 'goodComment',
-    meta: {
-      title: '商品评价'
-    },
-    component: r => require.ensure([], () => r(require('../views/myEvaluation/goodComment')), 'goodComment')
   },
   /* 郭健 联通专区 */
   {
@@ -229,5 +257,5 @@ export const prdRouter = [
       title: '联通专区'
     },
     component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
-  },
+  }
 ]

@@ -37,6 +37,11 @@ const goPay = function(order, type, sucCallback, failCallback) {
   let member_id = utils.ssdbGet('member_id')
   window.CTJSBridge && window.CTJSBridge.LoadMethod('ExposeJsApi', 'getServiceCfg', '', {
     success: data => {
+      sa.track('$pageview', {
+        pageId: 'APP_虚拟页面_收银台',
+        categoryId: 'APP_Fees',
+        $title: "APP_虚拟页面_收银台"
+      });
       let ServiceCfg = JSON.parse(data).ServiceCfg // 获取地址信息
       let payRequestData = {
         'MerOrderNo': order.outOrderNo,
@@ -51,18 +56,25 @@ const goPay = function(order, type, sucCallback, failCallback) {
         'SubId': "",
         'payType': order.payType ? order.payType : 0
       }
-      console.log('native接口 调native收银台上送报文=============<br>' + JSON.stringify(payRequestData))
       window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequestData, {
         success: data => {
           console.log('native接口 调native收银台返回报文=============<br>' + data)
-          sucCallback(data);
+          sucCallback && sucCallback(data);
         },
         fail: error => {
           console.log(error)
           let errorData = JSON.parse(error)
           if (errorData.result == 'fail') {
             // 取消支付
-            failCallback(errorData)
+            failCallback && failCallback(errorData)
+            if (type == '23') {
+              window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                pageId: 'expensesorderdetail',
+                params: JSON.stringify({
+                  order: order.orderNo
+                })
+              })
+            }
           }
         }
       })

@@ -42,7 +42,7 @@
     </div>
 </template>
 <script>
-    import api from 'src/api/index'
+    import api from './api/index'
     import utils from 'src/utils'
     import CONST from 'src/const'
   export default {
@@ -144,7 +144,6 @@
               } else { // 只支持条码
                 this.hasShow2 = false;
               }
-              debugger
               if (!jigouCode && !jigouName) {
                 this.$set(this.receiveCompanyItem, "id", json.typecode[0])
                 console.log("111")
@@ -287,6 +286,11 @@
           this.typeName = "煤气费";
           window.CTJSBridge && window.CTJSBridge._setNativeTitle("煤气费");
         }
+        sa.track('$pageview', {
+          pageId: 'APP_' + this.typeName,
+          categoryId: 'APP_Fees',
+          $title: this.typeName
+        });
         this.$loading.close()
       }
     }

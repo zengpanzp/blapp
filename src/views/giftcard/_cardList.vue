@@ -6,7 +6,7 @@
         <div class="cwrap-img" @click="searchSendor(item, index)">
           <a href="javascript:;" v-go-native-goods-detail="item">
             <div class="lazy-box">
-              <img class="lazy" v-lazy="{ src: item.goodsImgPath }" alt="">
+              <img class="lazy" v-lazy="{ src: item.goodsImgPath.replace(/^http:/, '') }" alt="">
             </div>
             <div class="cwrap-name">{{ item.productName }}</div>
             <div class="cwrap-lowg" v-if="item.isAvailable == 0">无货</div>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import api from 'src/api'
+import api from './api'
 import utils from 'src/utils'
 export default {
 

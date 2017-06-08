@@ -9,8 +9,6 @@ export default {
 
   name: 'Navbar',
 
-  props: {
-    value: {}
-  }
+  props: ['value']
 };
 </script>

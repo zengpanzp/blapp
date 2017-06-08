@@ -1,7 +1,7 @@
 <style lang="scss" src="./css/_flashSales.scss" scoped></style>
 <template>
   <div class="flash-sales">
-    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record v-scroll-fixed>
+    <bl-scroll :enableRefresh="false" :on-infinite="onInfinite" :enableInfinite="isLoading" id="container" v-scroll-top v-scroll-record>
       <!-- 轮播图 -->
       <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
@@ -11,8 +11,8 @@
           <li class="ovfs-item" :class="{ active: isActive == 'j' }" @click="selectCate('j', undefined, '今日上新')">
             <p>今日上新</p>
           </li>
-          <li class="ovfs-item" :class="{ active: isActive == flashCategories}" v-if="flashCategoriesName != '闪购首页'" v-for="({ flashCategories, flashCategoriesName }, index) in queryCate" @click="selectCate(flashCategories, flashCategories, flashCategoriesName)">
-            <p v-text="flashCategoriesName"></p>
+          <li class="ovfs-item" :class="{ active: isActive == item.flashCategories}" v-if="item.flashCategoriesName != '闪购首页'" v-for="(item, index) in queryCate" @click="selectCate(item.flashCategories, item.flashCategories, item.flashCategoriesName, item)">
+            <p v-text="item.flashCategoriesName"></p>
           </li>
           <li class="ovfs-item" :class="{ active: isActive == 'z' }" @click="selectCate('z', undefined, '最后疯抢')">
             <p>最后疯抢</p>
@@ -22,6 +22,7 @@
           </li>
         </ul>
       </div>
+      <!-- <iframe v-if="miniUrl" :src="miniUrl.replace(/^http:/, '')" id="Iframe" frameborder="0" scrolling="yes" style="border:0px; width:100%; min-height: 20rem;"></iframe> -->
       <!-- end -->
       <!-- 闪购商品列表 -->
       <div class="flash-list">
@@ -29,9 +30,9 @@
           <div class="todynew" v-for="item in filterGetFlashDetailData">
             <div class="todynew-img">
               <div class="wumengcen" v-if="item.pictures">
-                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="picturesUrl"></div>
-                <router-link @click.native="sensorAnalytics(item.flashId)" :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                  <img v-lazy.container="{ src: picturesUrl, error: require('src/assets/icon_banner_loading.png') }" alt="">
+                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="picturesUrl.replace(/^http:/, '')"></div>
+                <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+                  <img v-lazy.container="{ src: picturesUrl.replace(/^http:/, ''), error: require('src/assets/icon_banner_loading.png') }" alt="">
                   <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
                 </router-link>
                 <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
@@ -39,7 +40,7 @@
               <div class="D" v-if="isActive === 'z'" v-text="timeCoundDown(item.effectiveEnd)"></div>
               <div class="D" v-else-if="isActive === 'p'" v-text="timeCoundNotice(item.effectiveStart)"></div>
               <div class="bottom-todynew">
-                <div class="le-fonts"><img :src="item.brandList[0].brandLogo" :alt="item.brandList[0].brandNameCN"></div>
+                <div class="le-fonts"><img :src="item.brandList[0].brandLogo.replace(/^http:/, '')" :alt="item.brandList[0].brandNameCN"></div>
                 <div class="dd-fonts">
                   <div class="le2-fonts" v-text="item.flashName"></div>
                   <div class="tian-number" v-if="isActive === 'p' || isActive === 'z'"></div>
@@ -92,6 +93,7 @@ export default {
       allSlides: [],
       pages: 0, // 总页数
       getFlashDetailData: [], // 商品列表数据
+      queryCate: [], // 分类
       requestData: {
         channelid: 1,
         type: 1,
@@ -99,7 +101,8 @@ export default {
         pageSize: 10,
         parameter: 0,
         flashCategories: parseFloat(this.$route.query.flashCategories).toString() !== "NaN" ? String(this.$route.query.flashCategories) : ''
-      }
+      },
+      miniUrl: '', // CMS页面的URL
     }
   },
   created() {
@@ -119,6 +122,9 @@ export default {
         let resData = utils.transData(res)
         this.$nextTick(() => {
           this.queryCate = resData.list
+          if (this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
+            this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+          }
           this.loaded = true
           this.$loading.close()
         });
@@ -226,7 +232,15 @@ export default {
       })
     },
     /* 点击分类加载数据 */
-    selectCate(key, index, flashname) {
+    selectCate(key, index, flashname, item) {
+      if (item && item.miniList && item.miniList.length) {
+        this.miniUrl = item.miniList[0].miniUrl
+      } else {
+        this.miniUrl = ''
+      }
+      if (key == 'j' && this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
+        this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+      }
       this.inlineLoading = this.$toast({
         iconClass: 'preloader white',
         message: '加载中',
@@ -289,22 +303,6 @@ export default {
         return 1;
       }
       return 0;
-    },
-    // 埋点
-    sensorAnalytics(flashId) {
-      // sensor analytics
-      try {
-        console.log((new Date()).toLocaleString())
-        window.sa.track('$pageview', {
-          pageId: 'APP_闪购_' + flashId,
-          categoryId: 'APP_SpecificZone',
-          $title: 'APP_闪购_' + flashId,
-          flagType: '卖场id',
-          flagValue: String(flashId)
-        })
-      } catch (err) {
-        console.log("sa error => " + err);
-      }
     }
   },
   updated() {
