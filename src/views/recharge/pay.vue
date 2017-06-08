@@ -174,7 +174,7 @@
                   }
                   // 创建账号账单
                   let createPaySubNoData = {
-                    paymentType: "01,02,03",
+                    paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
                     jigouName: this.queryData.companyName,
                     jigouCode: this.queryData.typecode,
                     accountName: "APP",
@@ -207,7 +207,7 @@
                       current.inlineLoading.close()
                       Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
                         // 跳转到paysuccess
-                        current.$router.push({path: "/recharge/paysuccess", params: JSON.parse(data)});
+                        current.$router.push({path: "/recharge/paysuccess?money=" + data + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
                       }, (data) => {
                         // 跳转到详情
                         current.$router.push({path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo});
