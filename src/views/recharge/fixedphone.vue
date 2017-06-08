@@ -343,46 +343,50 @@ export default {
         console.log('this.currentFee: ' + this.currentFee)
         api.recharge.buyszkOrder(requestData).then(data => {
           console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-          let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
           let resData = JSON.parse(data.body.obj)
-          let createExpensesOrderRequestData = {
-            outOrderNo: resData.orderid,
-            payMoney: parseFloat(this.currentActivePay),
-            orderSource: 1,
-            orderTypeCode: '10',
-            memberId: utils.ssdbGet('member_id'),
-            goodsName: goodsName,
-            phoneNo: utils.ssdbGet('member_mobile'),
-            price: this.currentSku,
-            count: 1,
-            accountNo: this.iphoneNum,
-            changeMoney: parseFloat(this.currentPay),
-            aliasSaleTime: resData.orddate,
-            orderPhone: utils.ssdbGet('member_mobile'),
-            serviceFee: Number(this.currentFee).toFixed(2)
-          }
-          console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-          api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-            console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-            let resData = JSON.parse(data.body.obj)
-            let order = {
-              orderNo: resData.orderNo,
-              outOrderNo: resData.outOrderNo,
-              payMoney: resData.payMoney,
-              orderTime: resData.orderTime,
-              orderTypeCode: resData.orderTypeCode,
-              activeTime: resData.activeTime,
-              changeMoney: resData.changeMoney,
-              omsNotifyUrl: resData.omsNotifyUrl,
-              payType: resData.payType,
-              accountNo: utils.dbGet('member_mobile')
+          if (resData.orderid) {
+            let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
+            let createExpensesOrderRequestData = {
+              outOrderNo: resData.orderid,
+              payMoney: parseFloat(this.currentActivePay),
+              orderSource: 1,
+              orderTypeCode: '10',
+              memberId: utils.ssdbGet('member_id'),
+              goodsName: goodsName,
+              phoneNo: utils.ssdbGet('member_mobile'),
+              price: this.currentSku,
+              count: 1,
+              accountNo: this.iphoneNum,
+              changeMoney: parseFloat(this.currentPay),
+              aliasSaleTime: resData.orddate,
+              orderPhone: utils.ssdbGet('member_mobile'),
+              serviceFee: Number(this.currentFee).toFixed(2)
             }
-            require.ensure([], function(require) {
-              let Pay = require('src/paymodel').default
-              current.inlineLoading.close()
-              Pay.goPay(order, '23')
-            }, 'Pay')
-          })
+            console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+            api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+              console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+              let resData = JSON.parse(data.body.obj)
+              let order = {
+                orderNo: resData.orderNo,
+                outOrderNo: resData.outOrderNo,
+                payMoney: resData.payMoney,
+                orderTime: resData.orderTime,
+                orderTypeCode: resData.orderTypeCode,
+                activeTime: resData.activeTime,
+                changeMoney: resData.changeMoney,
+                omsNotifyUrl: resData.omsNotifyUrl,
+                payType: resData.payType,
+                accountNo: utils.dbGet('member_mobile')
+              }
+              require.ensure([], function(require) {
+                let Pay = require('src/paymodel').default
+                current.inlineLoading.close()
+                Pay.goPay(order, '23')
+              }, 'Pay')
+            })
+          } else {
+            this.$toast(resData.msg)
+          }
         })
       }
     },
