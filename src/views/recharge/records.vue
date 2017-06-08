@@ -4,7 +4,7 @@
     <div class="rates">
       <div class="content-wrap">
           <ul>
-            <li @click.prevent="showCategory">缴费账号
+            <li>缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>
             <!--	</ul>

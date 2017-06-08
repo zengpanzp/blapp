@@ -210,7 +210,7 @@
           this.typeChange = true;
           this.hasShow2 = false;
         }
-        this.$router.push({path: "/recharge/rates/" + this.rateType});
+        this.$router.go(-1);
       },
       // 选择缴费机构
       showListView() {
