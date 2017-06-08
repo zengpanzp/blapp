@@ -102,7 +102,7 @@ export default {
         for (let item of resData.obj.otherResource) {
           if (item.resourceId === 1225) {
           this.allSlides = item.advList
-        }
+          }
         }
       } else {
         this.$toast({
@@ -118,6 +118,7 @@ export default {
       channelId: 1
     }).then(data => {
       console.log("queryCount" + data)
+      this.$loading.close()
       if (data.body.obj) {
         let resData = JSON.parse(data.body.obj)
         console.log(resData)
@@ -140,7 +141,7 @@ export default {
     }, err => {
       console.log(err)
     })
-    }
+  }
   },
   activated() {
     // sensor analytics
@@ -162,6 +163,36 @@ export default {
     // 刷新
     currentPageReload() {
       this.$router.go(0)
+      if (!this.$route.query.orderNo) {
+        api.queryCount({
+          memberId: this.memberId,
+          channelId: 1
+        }).then(data => {
+          console.log("queryCount" + data)
+          this.$loading.close()
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            console.log(resData)
+            if (resData && resData.resultInfo) {
+              this.count = {
+                unCom: resData.resultInfo.neceCount,
+                finCom: resData.resultInfo.finishCount,
+                notAgain: resData.resultInfo.neceAgainCount,
+                replied: resData.resultInfo.replyCount,
+                notPic: resData.resultInfo.necePicCount,
+                hasPic: resData.resultInfo.havePicCount
+              }
+              this.filterEleTabs[0].num = this.count.unCom
+              this.filterEleTabs[1].num = this.count.notPic
+              this.filterEleTabs[2].num = this.count.finCom
+            }
+          } else {
+            this.$toast(data.body.msg)
+          }
+        }, err => {
+          console.log(err)
+        })
+      }
     },
     // 切换tab
     changeTab(index, type) {
@@ -175,76 +206,79 @@ export default {
     loadMore() {
       this.busy = true
       this.noRows = false
-      let orderNo = decodeURIComponent(this.$route.query.orderNo)
+      let orderNo = this.$route.query.orderNo
       console.log(orderNo)
-      if (!orderNo) {
+      if (orderNo) {
         api.queryComnentByorder({
           orderNo: orderNo
         }).then(data => {
-            console.log("----data orderNo-------" + data.body.obj)
-            if (data.body.obj) {
-              console.log("------data-----" + data.body.obj)
-              let resData = JSON.parse(data.body.obj)
-              if (resData.resultInfo) {
-                  this.pageNo = resData.resultInfo.pageNo
-                  let resRow = resData.resultInfo.rows
-                  if (resRow) {
-                    for (let i = 0; i < resRow.length; i++) {
-                            let orderNo = -1;
-                            if (resRow[i].orderNo) {
-                                orderNo = resRow[i].orderNo;
-                            }
-                            if (resRow[i].order_number) {
-                                orderNo = resRow[i].order_number;
-                            }
-                            let good = {
-                                id: resRow[i].id,
-                                orderTime: resRow[i].orderTime,
-                                orderNo: orderNo,
-                                goodsName: resRow[i].productName,
-                                pic: resRow[i].productPic,
-                                isAgain: resRow[i].isCanZP,
-                                isContent: resRow[i].commentAgain,
-                                isvalid: resRow[i].isvalid,
-                                ispic: resRow[i].ispic,
-                                product: encodeURIComponent(JSON.stringify({
-                                    pic: resRow[i].productPic,
-                                    goodsName: resRow[i].productName,
-                                    productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
-                                    supplyId: resRow[i].dshh,
-                                    merchantName: resRow[i].shopId,
-                                    tags: resRow[i].tags,
-                                    comment: this.getData(resRow[i])
-                                }).replace(/[\ud800-\udfff]/g, ''))
-                            }
-                            this.list = this.list.concat(good)
-                        }
-                    this.busy = false
-                    this.loading = true
-                    if (resRow.length < 10) {
-                      this.busy = true
-                      this.loading = false
-                      this.$toast({
-                        position: 'bottom',
-                        message: '没有了~'
-                      })
-                    }
-                  } else {
+          console.log("----data orderNo-------" + data.body.obj)
+          this.$loading.close()
+          if (data.body.obj) {
+            let resData = JSON.parse(data.body.obj)
+            if (resData.resultInfo) {
+                this.pageNo = resData.resultInfo.pageNo
+                let resRow = resData.resultInfo.rows
+                  if (!resRow && resData.resultInfo.length > 0) {
+                      resRow = resData.resultInfo;
+                  }
+                if (resRow) {
+                  for (let i = 0; i < resRow.length; i++) {
+                          let orderNo = -1;
+                          if (resRow[i].orderNo) {
+                              orderNo = resRow[i].orderNo;
+                          }
+                          if (resRow[i].order_number) {
+                              orderNo = resRow[i].order_number;
+                          }
+                          let good = {
+                              id: resRow[i].id,
+                              orderTime: resRow[i].orderTime,
+                              orderNo: orderNo,
+                              goodsName: resRow[i].productName,
+                              pic: resRow[i].productPic,
+                              isAgain: resRow[i].isCanZP,
+                              isContent: resRow[i].commentAgain,
+                              isvalid: resRow[i].isvalid,
+                              ispic: resRow[i].ispic,
+                              product: encodeURIComponent(JSON.stringify({
+                                  pic: resRow[i].productPic,
+                                  goodsName: resRow[i].productName,
+                                  productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
+                                  supplyId: resRow[i].dshh,
+                                  merchantName: resRow[i].shopId,
+                                  tags: resRow[i].tags,
+                                  comment: this.getData(resRow[i])
+                              }).replace(/[\ud800-\udfff]/g, ''))
+                          }
+                          this.list = this.list.concat(good)
+                      }
+                  this.busy = false
+                  this.loading = true
+                  if (resRow.length < 10) {
                     this.busy = true
                     this.loading = false
-                    if (resData.resultInfo.pageNo > 1) {
-                      this.$toast({
-                        position: 'bottom',
-                        message: '亲，没有数据了！'
-                      })
-                    } else {
-                      this.noRows = true
-                    }
+                    this.$toast({
+                      position: 'bottom',
+                      message: '没有了~'
+                    })
                   }
-              } else {
-                this.noRows = true
-              }
+                } else {
+                  this.busy = true
+                  this.loading = false
+                  if (resData.resultInfo.pageNo > 1) {
+                    this.$toast({
+                      position: 'bottom',
+                      message: '亲，没有数据了！'
+                    })
+                  } else {
+                    this.noRows = true
+                  }
+                }
+            } else {
+              this.noRows = true
             }
+          }
         }, err => {
           console.log(err)
         })
@@ -256,13 +290,17 @@ export default {
           pageSize: 10,
           pageNo: this.pageNum ++
       }).then(data => {
+        this.$loading.close()
         if (data.body.obj) {
           console.log("------data-----" + data.body.obj)
           let resData = JSON.parse(data.body.obj)
-          if (resData.resultInfo) {
+          if (resData && resData.resultInfo) {
               this.pageNo = resData.resultInfo.pageNo
               let resRow = resData.resultInfo.rows
-              if (resRow) {
+                if (!resRow && resData.resultInfo.length > 0) {
+                          resRow = resData.resultInfo;
+                }
+          if (resRow) {
                 for (let i = 0; i < resRow.length; i++) {
                         let orderNo = -1;
                         if (resRow[i].orderNo) {
@@ -303,7 +341,7 @@ export default {
                     message: '没有了~'
                   })
                 }
-              } else {
+                } else {
                 this.busy = true
                 this.loading = false
                 if (resData.resultInfo.pageNo > 1) {
@@ -314,7 +352,7 @@ export default {
                 } else {
                   this.noRows = true
                 }
-              }
+                }
           } else {
             this.noRows = true
           }
