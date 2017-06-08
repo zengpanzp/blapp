@@ -258,6 +258,41 @@ window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequ
     }
   })
 }
+
+// 弹框
+<!-- ios -->
+window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+  title: "title",
+  message: "message",
+  buttons: [
+  {
+    title: "default"
+  }, {
+    title: "cancel",
+    style: "cancel"
+  }, {
+    title: "destructive",
+    style: "destructive"
+  }]
+}, { success: data => {
+  console.log("####success#####" + data)
+}})
+
+<!-- android -->
+  window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+    title: "提示",
+    message: "确认要退出？",
+    buttons: [ "取消", "确定" ]
+  }, { success: data => {
+    debugger
+    console.log("####success#####" + data)
+    if (data.index == 0) {
+      alert("取消")
+    } else if (data.index == 1) {
+      alert("确定")
+    }
+  }
+})
 ======================================End
 ```
 
