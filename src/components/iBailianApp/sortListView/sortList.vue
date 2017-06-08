@@ -59,11 +59,6 @@
   .sortListView{
     width:100%;
     height: 100%;
-    position: fixed;
-    z-index: 999;
-    background: rgb(245,245,245);
-    overflow:auto;
-    -webkit-overflow-scrolling: touch;
     .letter{
       width: rem(100);
       height: rem(100);
@@ -88,7 +83,12 @@
     }
     .sort_box{
       width: 100%;
+      height: 100%;
       background-color: #fff;
+      z-index: 88;
+      position: fixed;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .sort_list{
       position: relative;
@@ -142,7 +142,7 @@
       width: rem(55);
       text-align: center;
       font-size: rem(12);
-      z-index: 99;
+      z-index: 1000;
       background: rgba(145,145,145,0);
       @include transform(translate(0, -50%));
       img{

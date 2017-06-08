@@ -668,11 +668,11 @@ export default function(a) {
 
           var _index = _this.index()
           if (_index == 0) {
-              $(".sortListView").blScrollTo();
+              $(".sort_box").blScrollTo();
           } else if (_index == 27) {
               var DefaultTop = $('#default').position().top;
               // $('html,body').animate({scrollTop: DefaultTop + 'px'}, 300); // 点击最后一个滚到#号
-              $(".sortListView").scrollTo({
+              $(".sort_box").scrollTo({
                   toT: DefaultTop
               })
           } else {
@@ -680,7 +680,7 @@ export default function(a) {
               if ($('#' + letter).length > 0) {
                   var LetterTop = $('#' + letter)[0].offsetTop;
                   if (LetterTop > 0) {
-                    $(".sortListView").blScrollTo({
+                    $(".sort_box").blScrollTo({
                         toT: LetterTop
                     })
                   }
