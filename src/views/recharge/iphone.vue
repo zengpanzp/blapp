@@ -65,7 +65,7 @@
       <div class="phoneRechargeItem">
         <div class="itemContent">
           <div class="item-titleRow">
-            <input id="number" class="item-titleRow" type="tel" :placeholder="placeholder" :maxlength="maxlength"
+            <input id="number" class="item-titleRow" type="tel" :placeholder="iphoneNum ? '' : placeholder" :maxlength="maxlength"
                    @focus="focus = true" v-model="iphoneNum">
             <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="emptyPhone"></i>
             <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone"

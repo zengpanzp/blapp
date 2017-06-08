@@ -68,6 +68,7 @@ export default {
         }
       ],
       type: '00',
+      urlList: [],
       allSlides: [],
       busy: false,
       pageNum: 1,
@@ -99,10 +100,21 @@ export default {
       this.$loading.close()
       if (data.body.obj) {
       let resData = JSON.parse(data.body.obj)
-        for (let item of resData.obj.otherResource) {
-          if (item.resourceId === 1225) {
-          this.allSlides = item.advList
-          }
+        if (resData && resData.obj.otherResource) {
+          for (let item of resData.obj.otherResource) {
+            if (item.resourceId === 1223) {
+              this.allSlides = item.advList
+            }
+            if (item.resourceId === 1225) {
+                if (item.advList && item.advList[0]) {
+                  let params = {
+                    popDownUrl: item.advList[0].jumpUrl,
+                    popDownTitle: item.advList[0].deployName
+                  }
+                  window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', params)
+                }
+            }
+         }
         }
       } else {
         this.$toast({
