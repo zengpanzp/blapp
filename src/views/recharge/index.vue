@@ -214,10 +214,10 @@ export default {
           }
         },
         fail: () => {
-          this.$toast({
-            position: 'bottomTop',
-            message: "识别条形码失败!"
-          });
+//          this.$toast({
+//            position: 'bottomTop',
+//            message: "识别条形码失败!"
+//          });
         }
       })
     }

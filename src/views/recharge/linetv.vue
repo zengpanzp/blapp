@@ -100,10 +100,10 @@
             }
           },
           fail: () => {
-            this.$toast({
-              position: 'bottom',
-              message: "识别条形码失败!"
-            });
+//            this.$toast({
+//              position: 'bottom',
+//              message: "识别条形码失败!"
+//            });
           }
         })
       },
