@@ -24,4 +24,8 @@ export default {
   queryCommentBytype: params => {
     return Vue.http.post(baseUrl + '/product/queryCommentByType.htm', params)
   },
+  // 查询待评价信息
+  queryComnentByorder: params => {
+    return Vue.http.post(baseUrl + '/product/queryOrderProductComment.htm', params)
+  }
 }
