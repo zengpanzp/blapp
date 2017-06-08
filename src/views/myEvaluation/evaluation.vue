@@ -102,19 +102,19 @@ export default {
       let resData = JSON.parse(data.body.obj)
         if (resData && resData.obj.otherResource) {
           for (let item of resData.obj.otherResource) {
-            if (item.resourceId === 1223) {
+            if (item.resourceId == 1223) {
               this.allSlides = item.advList
             }
-            if (item.resourceId === 1225) {
-                if (item.advList && item.advList[0]) {
+          }
+         if (resData.obj.otherResource[1]) {
+                if (resData.obj.otherResource[1].advList[0]) {
                   let params = {
-                    popDownUrl: item.advList[0].jumpUrl,
-                    popDownTitle: item.advList[0].deployName
+                    popDownUrl: resData.obj.otherResource[1].advList[0].jumpUrl,
+                    popDownTitle: resData.obj.otherResource[1].advList[0].deployName
                   }
                   window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', params)
                 }
-            }
-         }
+          }
         }
       } else {
         this.$toast({
