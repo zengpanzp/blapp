@@ -181,6 +181,7 @@ export default {
   			console.log("---gjDelete---" + obj);
   			var delLi = ev.target.parentNode.parentNode.parentNode;
   			delLi.remove();
+        this.$toast({position: "bottom", message: "~删除成功~"})
   		})
   	},
   	getTimeFormatToday9NOw: function () {
