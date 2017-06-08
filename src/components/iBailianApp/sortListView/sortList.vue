@@ -84,7 +84,7 @@
     .sort_box{
       width: 100%;
       height: 100%;
-      background-color: #fff;
+      background-color: #f8f8f8;
       z-index: 88;
       position: fixed;
       overflow:auto;
@@ -92,10 +92,11 @@
     }
     .sort_list{
       position: relative;
-      margin: 0 rem(30);
-      border-bottom: 1px solid #ddd;
+      padding: 0 rem(30);
       &:last-child{
-        border-bottom: 0;
+        .num_name{
+          border-bottom: 0;
+        }
       }
       // div{
       //   display:inline-block;
@@ -108,7 +109,7 @@
       img{
         width:rem(30);
         position:absolute;
-        right: rem(20);
+        right: rem(50);
         top: 50%;
         @include transform(translate(0, -50%));
       }
@@ -117,9 +118,9 @@
       background:#fff;
     }
     .sort_list .num_name{
-      @include ellipsis(90%);
+      @include ellipsis();
+      border-bottom: 1px solid #ddd;
       color: #000;
-      // width:rem(650);
       font-size: rem(28);
       position:relative;
       color:#333;
