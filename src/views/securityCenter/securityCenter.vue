@@ -130,10 +130,11 @@ export default {
         message: "确认要退出？",
         buttons: [
         {
-          title: "取消"
+          title: "取消",
+          style: "disabled"
         }, {
           title: "确定",
-          style: "destructive"
+          style: "highlighted"
         }]
       }, { success: data => {
         console.log("####success#####" + data)
