@@ -104,7 +104,7 @@ export default {
     };
   },
   created() {
-  	this.$loading.close()
+  	// this.$loading.close()
   	try {
         sa.track('$pageview', {
           pageId: 'APP_联通专区',
@@ -114,7 +114,6 @@ export default {
     } catch (err) {
     	console.log("sa error => " + err);
     }
-  	this.getTrafficList()
   	window.CTJSBridge.LoadMethod('ExposeJsApi', 'getIMEI', '', {
   			success: data => {
 	        	this.deviceId = JSON.parse(data).IMEI
@@ -122,6 +121,7 @@ export default {
 	        fail: () => {},
 	        progress: () => {}
   		})
+  	this.getTrafficList()
   },
   methods: {
   	getTrafficList() {
