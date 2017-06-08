@@ -202,7 +202,7 @@ export default {
           for (let i = 0; i < resData.list.length; i++) {
             resData.list[i].start = this.isStart(resData.list[i].effectiveStart)
           }
-          this.getFlashDetailData = this.getFlashDetailData.concat(resData.list)
+          this.getFlashDetailData.push.apply(this.getFlashDetailData, resData.list)
 
           if (this.getFlashDetailData.length < this.requestData.pageSize) {
             this.isLoading = false

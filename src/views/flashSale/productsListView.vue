@@ -286,7 +286,8 @@ export default {
             return
           } else {
             this.listPages = resData.resultInfo.pageModel.totalPage
-            this.listGoodsData = this.listGoodsData.concat(resData.resultInfo.pageModel.rows)
+            // this.listGoodsData = this.listGoodsData.concat(resData.resultInfo.pageModel.rows)
+            this.listGoodsData.push.apply(this.listGoodsData, resData.resultInfo.pageModel.rows)
             if (this.listGoodsData.length < this.requestData.pageSize) {
               this.isLoading = false
             } else {
