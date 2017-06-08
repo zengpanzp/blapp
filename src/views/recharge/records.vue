@@ -20,7 +20,7 @@
             <li class="record-detail" @click="toPay" v-for="item in results" v-if="item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
-              <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
+              <span><div class="billstatus">{{item.canpaymsg[0]=="未销账"?"未缴费":item.canpaymsg[0]}}</div></span>
             </li>
             <li class="record-detail" v-else="item.date">
               <span class="spe" v-bind:style="{ 'line-height': (item.msg.length>21?'':'70px')}">{{item.msg}}</span>
