@@ -126,21 +126,41 @@ export default {
   methods: {
     exit() {
       window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
-        title: "hahha",
-        message: "message",
+        title: "提示",
+        message: "确认要退出？",
         buttons: [
         {
-          title: "default"
+          title: "取消"
         }, {
-          title: "cancel",
-          style: "cancel"
-        }, {
-          title: "destructive",
+          title: "确定",
           style: "destructive"
         }]
       }, { success: data => {
-        console.log("success" + data)
-      }})
+        console.log("####success#####" + data)
+        let bd = JSON.parse(data)
+        let button = bd.buttonTitle
+        console.log(button)
+        if (button == "确定") {
+            window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
+              success: result => {
+                console.log(result)
+                this.$toast('退出成功!')
+                setTimeout(function () {
+                window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+                }, 2500)
+              },
+              fail: result => {
+                console.log(result)
+              },
+              progress: result => {
+                console.log(result)
+              }
+            });
+          } else if (button == "取消") {
+            this.$toast('button')
+          }
+        }
+      })
     //   this.$modal({
     //   title: '提示',
     //   content: '确认要退出？',
