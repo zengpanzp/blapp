@@ -97,7 +97,8 @@ export default {
             item.pheredText = pinPass
           })
           if (resData.body.cardList.length) {
-            this.cardList = this.cardList.concat(resData.body.cardList)
+            // this.cardList = this.cardList.concat(resData.body.cardList)
+            this.cardList.push.apply(this.cardList, resData.body.cardList)
           }
           if (resData.body.cardList && resData.body.cardList.length >= 10) {
             this.busy = false

@@ -289,7 +289,8 @@ export default {
         }
         let resData = window.JSON.parse(res.body.obj).resultInfo.pageModel.rows
         if (resData && resData.length) {
-          this.tabRows = this.tabRows.concat(resData)
+          // this.tabRows = this.tabRows.concat(resData)
+          this.tabRows.push.apply(this.tabRows, resData)
           this.busy = false
         } else {
           this.loading = false
