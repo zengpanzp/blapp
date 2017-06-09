@@ -108,7 +108,7 @@
                     <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li>购买数量
-                    <input type="text" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
+                    <input type="tel" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
                   </li>
                 </ul>
               </div>
