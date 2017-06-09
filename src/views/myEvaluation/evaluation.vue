@@ -31,7 +31,7 @@
     <div class="goods-no" v-if="noRows">
       <div class="no-text">评价晒单最多可获得30积分,积分可抵现哦!</div>
       <div class="no-des">可以去看看哪些想看的</div>
-      <bl-button type="outlineMain" inline size="small">去逛逛</bl-button>
+      <bl-button type="outlineMain" @click="goHome" inline size="small">去逛逛</bl-button>
     </div>
   </div>
 </template>
@@ -89,8 +89,12 @@ export default {
     if (this.memberId) {
       this.loginflag = true
     }
-    if (!this.$route.query.orderNo) {
-      api.queryAdDeploy(JSON.stringify({
+    if (this.$route.query.orderNo) {
+      this.type = -1
+      this.loadMore()
+      return
+    }
+    api.queryAdDeploy(JSON.stringify({
                 'otherresource': {
                     'resourceId': "1223,1225"
                 },
@@ -153,7 +157,6 @@ export default {
     }, err => {
       console.log(err)
     })
-  }
   },
   activated() {
     // sensor analytics
@@ -172,6 +175,9 @@ export default {
     window.currentPageReload = this.currentPageReload
   },
   methods: {
+    goHome() {
+      window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+    },
     // 刷新
     currentPageReload() {
       this.$router.go(0)
@@ -211,7 +217,7 @@ export default {
       this.pageNum = 1
       this.list = []
       this.type = type
-      console.log(type)
+      console.log(this.type)
       this.loadMore()
     },
     // 根据类型查询评论信息
