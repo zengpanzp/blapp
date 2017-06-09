@@ -259,8 +259,14 @@ window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequ
   })
 }
 
+// 返回首页
+
+setTimeout(function () {
+window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+}, 2500)
+
 // 弹框
-<!-- ios -->
+<!-- ios  style 不传值 默认为default--> 
 window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
   title: "title",
   message: "message",
@@ -269,10 +275,10 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
     title: "default"
   }, {
     title: "cancel",
-    style: "cancel"
+    style: "disabled"
   }, {
     title: "destructive",
-    style: "destructive"
+    style: "highlighted"
   }]
 }, { success: data => {
   console.log("####success#####" + data)

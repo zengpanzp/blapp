@@ -22,13 +22,17 @@ export default {
     queryMemberRNAuthDetail: params => {
       return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
     },
-    // 安全中心 验证登录密码强度
+    // 安全中心 验证登录密码
     validPayPwd: params => {
       return Vue.http.post(baseUrl + '/myInformation/validPayPwd.htm', params);
     },
     // 安全中心 修改邮箱
     modifyEmail: params => {
       return Vue.http.post(baseUrl + '/myInformation/modifyEmail.htm', params);
+    },
+    // 安全中心 修改支付密码
+    revisePayPwd: params => {
+      return Vue.http.post(baseUrl + '/myInformation/revisePayPwd.htm', params);
     },
   }
 }

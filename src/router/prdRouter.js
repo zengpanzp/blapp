@@ -226,13 +226,21 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/enterPw')), 'enterPw')
   },
-  /* 薛天玲 安全中心 支付密码 */
+  /* 薛天玲 安全中心 验证支付密码 */
   {
     path: '/securityCenter/payPw',
     meta: {
       title: '我的支付密码'
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/payPw')), 'payPw')
+  },
+  /* 薛天玲 安全中心 提交支付密码 */
+  {
+    path: '/securityCenter/submitPw',
+    meta: {
+      title: '我的密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/submitPw')), 'submitPw')
   },
     /* 薛天玲 安全中心 验证身份 */
   {
