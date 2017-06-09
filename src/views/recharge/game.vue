@@ -127,7 +127,7 @@
     <!-- 盛大充值 -->
     <bl-popup v-model="showGameNameModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏名称 -->
-      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" v-show="showGameNameModel" v-if="gameName.name" v-model="gameName.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" :showLetter="false" v-show="showGameNameModel" v-if="gameName.name" v-model="gameName.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏区号 -->
