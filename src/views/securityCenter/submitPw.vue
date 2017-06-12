@@ -74,6 +74,7 @@ export default {
   			}
   			utils.isLogin().then(data => {
   			  let memberToken = data.member_token
+          let member_id = data.member_id
   			  api.userCenter.getMyInformation({
   			    member_token: memberToken,
   			    timestamp: utils.getTimeFormatToday()
@@ -87,19 +88,31 @@ export default {
 		      		    });
 		      		    return;
 	  			    } else {
-	  			      api.userCenter.revisePayPwd({
-	  			      	memberId: this.$route.query.member_id,
-	  			      	newPwd: MD5(this.currentPw),
-	  			      	pwd: this.$route.query.pwd
-	  			      }).then(data => {
-	  			      	this.$toast({
-	  			      		message: '设置成功',
-	  			      		position: 'bottom'
-	  			      	})
-	  			      	setTimeout(() => {
-	  			      		this.$router.push('/securityCenter')
-	  			      	}, 3000)
-	  			      })
+                if (this.$route.query.pwd) {
+                  api.userCenter.revisePayPwd({
+                    memberId: this.$route.query.member_id,
+                    newPwd: MD5(this.currentPw),
+                    pwd: this.$route.query.pwd
+                  }).then(data => {
+                    if (data.body.obj) {
+                      this.$toast({
+                        message: '设置成功',
+                        position: 'bottom'
+                      })
+                      setTimeout(() => {
+                        this.$router.push('/securityCenter')
+                      }, 3000)
+                    } else {
+                      this.$toast(data.body.msg)
+                    }
+                  })
+                } else {
+                  // api.userCenter.setPayPwd({
+                  //   memberId: member_id,
+                  //   phoneNum: this.phoneNum
+                  // })
+                  alert('setPayPwd' + member_id)
+                }
 	  			    }
   				} else {
   					this.$toast(data.body.msg)

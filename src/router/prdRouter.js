@@ -250,6 +250,14 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/checkPhone')), 'checkPhone')
   },
+    /* 薛天玲 安全中心 支付密码 未实名认证 */
+  {
+    path: '/securityCenter/payPwAuth',
+    meta: {
+      title: '我的支付密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/payPwAuth')), 'payPwAuth')
+  },
   /* 陈鹏 我的评价 */
   {
     path: '/myEvaluation',

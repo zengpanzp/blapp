@@ -13,7 +13,7 @@
      <div class="list">
       <ul>
         <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <router-link to="/securityCenter/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
+        <li @click="payPw"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
       </ul>
     </div>
    </div>
@@ -108,7 +108,7 @@ export default {
         if (data.body.obj) {
           this.realNameAuthType = JSON.parse(data.body.obj).realNameAuthType
         } else {
-          this.$toast(data.body.msg)
+          // this.$toast(data.body.msg)
         }
       })
       api.userCenter.validPayPwd({
@@ -137,7 +137,7 @@ export default {
           style: "highlighted"
         }]
       }, { success: data => {
-        console.log("####success#####" + data)
+        console.log("####success#####" + JSON.parse(data))
         let bd = JSON.parse(data)
         let button = bd.buttonTitle
         console.log(button)
@@ -205,6 +205,13 @@ export default {
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'authenticate'
       })
+    },
+    payPw() {
+      if (this.payStatus == 0) {
+        this.$router.push('/securityCenter/payPw')
+      } else {
+        this.$router.push('/securityCenter/payPwAuth')
+      }
     }
   }
 };

@@ -34,5 +34,13 @@ export default {
     revisePayPwd: params => {
       return Vue.http.post(baseUrl + '/myInformation/revisePayPwd.htm', params);
     },
+    // 安全中心 支付密码修改 发送短信验证码
+    sendCodePayPwd: params => {
+      return Vue.http.post(baseUrl + '/myInformation/sendCodePayPwd.htm', params);
+    },
+    // 安全中心 支付密码修改 验证短信验证码
+    validCodePayPwd: params => {
+      return Vue.http.post(baseUrl + '/myInformation/validCodePayPwd.htm', params);
+    },
   }
 }
