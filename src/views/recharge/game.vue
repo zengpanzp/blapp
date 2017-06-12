@@ -108,7 +108,7 @@
                     <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li>购买数量
-                    <input type="text" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
+                    <input type="tel" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
                   </li>
                 </ul>
               </div>
@@ -127,7 +127,7 @@
     <!-- 盛大充值 -->
     <bl-popup v-model="showGameNameModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏名称 -->
-      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" v-show="showGameNameModel" v-if="gameName.name" v-model="gameName.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" :showLetter="false" v-show="showGameNameModel" v-if="gameName.name" v-model="gameName.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏区号 -->
@@ -333,97 +333,98 @@
             duration: 'loading',
             className: 'loading-bg'
           })
-
-          // 生成订单
-          let requestData = {
-            client_id: CONST.CLIENT_ID,
-            decid: this.iphoneNum,
-            ddgsl: '1',
-            dkhzh: utils.ssdbGet('member_id'),
-            dsphh: this.tabItem.dsphh,
-            dtype: this.getPayType(this.tabItem.type, this.password),
-            str_snda: '0',
-            format: 'json'
-          }
-          /* TODO */
-
-          let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.ssdbGet('member_mobile') || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
-          let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
-
-          if (this.tabItem.type == 'sd') {
-            phoneNo = this.iphoneNum
-            requestData.str_snda = `${this.iphoneNum}|${this.rechargeType}|${this.gameName.name}|${this.gameName.id}|${this.gameArea.id}|${this.gameServer.id}|${this.rechargeMoney.pay}|${this.rechargeMoney.id}|${Number(this.rechargeMoney.price).toFixed(0)}`
-          } else if (this.tabItem.type == 'qq') {
-            requestData.decid = String(this.qq)
-            requestData.str_snda = `${this.qq}|1|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
-          } else if (this.tabItem.type == 'moreGame') {
-            /* 中间件接口需要的参数 */
-            payMoney = parseFloat(this.moreGameCardNum * this.moreGameNum.realPrice)
-            orderTypeCode = (this.rechargeMoreType == 1 ? '14' : '15')
-            count = this.moreGameCardNum
-
-            if (this.rechargeMoreType == 3) {
-              requestData.decid = this.moreGameCount
-              phoneNo = this.moreGameCount
-            } else {
-              requestData.decid = ''
+          utils.isLogin().then(LoginInfo => {
+            // 生成订单
+            let requestData = {
+              client_id: CONST.CLIENT_ID,
+              decid: this.iphoneNum,
+              ddgsl: '1',
+              dkhzh: LoginInfo.member_id,
+              dsphh: this.tabItem.dsphh,
+              dtype: this.getPayType(this.tabItem.type, this.password),
+              str_snda: '0',
+              format: 'json'
             }
-            requestData.str_snda = `${requestData.decid}|0|${this.moreGameNum.ProductCode || ''}|${this.moreGameArea.RegionID || ''}|${this.moreGameServer.ServerID || ''}|${this.rechargeMoreType}|${this.moreGameCardNum}`
-          }
-          console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-          api.recharge.buyszkOrder(requestData).then(data => {
-            console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-            if (data.body.obj) {
-              let resData = JSON.parse(data.body.obj)
-              if (!resData.orderid) {
-                this.$modal({
-                  title: resData.msg
-                })
-                current.inlineLoading.close()
+            /* FINISH */
+
+            let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.ssdbGet('member_mobile') || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
+            let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
+
+            if (this.tabItem.type == 'sd') {
+              phoneNo = this.iphoneNum
+              requestData.str_snda = `${this.iphoneNum}|${this.rechargeType}|${this.gameName.name}|${this.gameName.id}|${this.gameArea.id}|${this.gameServer.id}|${this.rechargeMoney.pay}|${this.rechargeMoney.id}|${Number(this.rechargeMoney.price).toFixed(0)}`
+            } else if (this.tabItem.type == 'qq') {
+              requestData.decid = String(this.qq)
+              requestData.str_snda = `${this.qq}|1|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
+            } else if (this.tabItem.type == 'moreGame') {
+              /* 中间件接口需要的参数 */
+              payMoney = parseFloat(this.moreGameCardNum * this.moreGameNum.realPrice)
+              orderTypeCode = (this.rechargeMoreType == 1 ? '14' : '15')
+              count = this.moreGameCardNum
+
+              if (this.rechargeMoreType == 3) {
+                requestData.decid = this.moreGameCount
+                phoneNo = this.moreGameCount
               } else {
-                let createExpensesOrderRequestData = {
-                  outOrderNo: resData.orderid,
-                  payMoney: payMoney,
-                  orderSource: 1,
-                  orderTypeCode: orderTypeCode,
-                  memberId: utils.ssdbGet('member_id'),
-                  goodsName: goodsName,
-                  phoneNo: phoneNo,
-                  price: parseFloat(this.currentPay),
-                  count: count,
-                  accountNo: `${requestData.decid}_0`,
-                  changeMoney: parseFloat(this.currentPay),
-                  aliasSaleTime: resData.orddate,
-                  orderPhone: requestData.decid,
-                  serviceFee: parseFloat(0).toFixed(2)
-                }
-                console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-                api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-                  console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-                  let resData = JSON.parse(data.body.obj)
-                  let order = {
-                    orderNo: resData.orderNo,
-                    outOrderNo: resData.outOrderNo,
-                    payMoney: resData.payMoney,
-                    orderTime: resData.orderTime,
-                    orderTypeCode: resData.orderTypeCode,
-                    activeTime: resData.activeTime,
-                    changeMoney: resData.changeMoney,
-                    omsNotifyUrl: resData.omsNotifyUrl,
-                    payType: resData.payType,
-                    accountNo: phoneNo
-                  }
-                  require.ensure([], function(require) {
-                    let Pay = require('src/paymodel').default
-                    current.inlineLoading.close()
-                    Pay.goPay(order, '23')
-                  }, 'Pay')
-                })
+                requestData.decid = ''
               }
-            } else {
-              this.$toast(data.body.msg)
-              current.inlineLoading.close()
+              requestData.str_snda = `${requestData.decid}|0|${this.moreGameNum.ProductCode || ''}|${this.moreGameArea.RegionID || ''}|${this.moreGameServer.ServerID || ''}|${this.rechargeMoreType}|${this.moreGameCardNum}`
             }
+            console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+            api.recharge.buyszkOrder(requestData).then(data => {
+              console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+              if (data.body.obj) {
+                let resData = JSON.parse(data.body.obj)
+                if (!resData.orderid) {
+                  this.$modal({
+                    title: resData.msg
+                  })
+                  current.inlineLoading.close()
+                } else {
+                  let createExpensesOrderRequestData = {
+                    outOrderNo: resData.orderid,
+                    payMoney: payMoney,
+                    orderSource: 1,
+                    orderTypeCode: orderTypeCode,
+                    memberId: LoginInfo.member_id,
+                    goodsName: goodsName,
+                    phoneNo: phoneNo,
+                    price: parseFloat(this.currentPay),
+                    count: count,
+                    accountNo: `${requestData.decid}_0`,
+                    changeMoney: parseFloat(this.currentPay),
+                    aliasSaleTime: resData.orddate,
+                    orderPhone: requestData.decid,
+                    serviceFee: parseFloat(0).toFixed(2)
+                  }
+                  console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+                  api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+                    console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+                    let resData = JSON.parse(data.body.obj)
+                    let order = {
+                      orderNo: resData.orderNo,
+                      outOrderNo: resData.outOrderNo,
+                      payMoney: resData.payMoney,
+                      orderTime: resData.orderTime,
+                      orderTypeCode: resData.orderTypeCode,
+                      activeTime: resData.activeTime,
+                      changeMoney: resData.changeMoney,
+                      omsNotifyUrl: resData.omsNotifyUrl,
+                      payType: resData.payType,
+                      accountNo: phoneNo
+                    }
+                    require.ensure([], function(require) {
+                      let Pay = require('src/paymodel').default
+                      current.inlineLoading.close()
+                      Pay.goPay(order, '23')
+                    }, 'Pay')
+                  })
+                }
+              } else {
+                this.$toast(data.body.msg)
+                current.inlineLoading.close()
+              }
+            })
           })
         }
       },

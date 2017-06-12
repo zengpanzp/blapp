@@ -9,6 +9,9 @@ const goPay = function(order, type, sucCallback, failCallback) {
     payNo: order.accountNo,
     virtual: true
   }
+  if (type == '23' || type == '34' || type == '35' || type == '10' || type == '14') {
+    this.sendData.goURL = "#expensesorderdetailPage/" + order.orderNo;
+  }
   function formatOrderTime(saleTime) {
     let time = [];
     let saleTimeArray = saleTime.split(' ');
@@ -60,6 +63,12 @@ const goPay = function(order, type, sucCallback, failCallback) {
         success: data => {
           console.log('native接口 调native收银台返回报文=============<br>' + data)
           sucCallback && sucCallback(data);
+          window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+            pageId: 'paySuccess',
+            params: JSON.stringify({
+              pay: JSON.stringify(this.sendData)
+            })
+          })
         },
         fail: error => {
           console.log(error)
