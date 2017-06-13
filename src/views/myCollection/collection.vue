@@ -183,7 +183,8 @@ export default {
                 let check = JSON.stringify(rows)
                 console.log(check + '============')
                 if (rows) {
-                  this.list = this.list.concat(rows)
+                  // this.list = this.list.concat(rows)
+                  this.list.push.apply(this.list, rows)
                   this.busy = false
                 } else {
                   this.goodsLoading = false
@@ -224,7 +225,8 @@ export default {
               // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
             if (currentPage <= totalPageNum) {
               if (storeList && storeList.length) {
-                this.storeList = this.storeList.concat(storeList)
+                // this.storeList = this.storeList.concat(storeList)
+                this.storeList.push.apply(this.storeList, storeList)
                 this.busyStore = false
               } else {
                 this.busyStore = true
