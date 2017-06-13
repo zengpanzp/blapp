@@ -15,45 +15,55 @@
       </div>
       <div class='cbill-account list-block'>
         <ul>
-          <li class="swipeout" @click="go(accountObj.p20,1)">
-
-            <div class="icon-waitassess swipeout-content">
-              <div class='bill-pay-name'>
-                <div>水费</div>
-                <div style="color:#999" v-show="accountObj.p20&&accountObj.p20">{{accountObj.p20&&accountObj.p20.accountNo}}</div>
-              </div>
-              <div class='bill-pay-stadius-see'>
-                <span class="bill-account" v-if="accountObj.p20&&accountObj.p20">查看账单</span>
-                <span class="bill-account" style="color:#999" v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
-              </div>
-
-            </div>
-          </li>
-          <li class="swipeout" @click="go(accountObj.p21,2)">
-            <div class="icon-electricity swipeout-content">
-              <div class='bill-pay-name'>
-                <div>电费</div>
-                <div style="color:#999" v-show="accountObj.p21&&accountObj.p21">{{accountObj.p21&&accountObj.p21.accountNo}}</div>
-              </div>
-              <div class='bill-pay-stadius-go gray'>
-                <span class="bill-account"  v-if="accountObj.p21&&accountObj.p21">查看账单</span>
-                <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
-              </div>
-            </div>
-
-          </li>
-          <li class="swipeout" @click="go(accountObj.p22,3)">
-            <div class="icon-gas swipeout-content">
-              <div class='bill-pay-name'>
-                <div>煤气费</div>
-                <div style="color:#999" v-show="accountObj.p22&&accountObj.p22">{{accountObj.p22&&accountObj.p22.accountNo}}</div>
-              </div>
-              <div class='bill-pay-stadius-go gray'>
-                <span class="bill-account"  v-if="accountObj.p22&&accountObj.p22">查看账单</span>
-                <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
-              </div>
-            </div>
-
+          <li class="swipeout" @click="go(item)" v-for="item in accountList">
+            <bl-swipeout>
+              <bl-swipeout-item class="swipe-contain margin-b"  :right-menu-height="100" :disabled="swipeoutDisabled" transition-mode="follow">
+                <div slot="right-menu">
+                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('edit')">
+                    变更分组
+                  </bl-swipeout-button>
+                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('change')" >
+                    编辑
+                  </bl-swipeout-button>
+                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('delete')" >
+                    删除
+                  </bl-swipeout-button>
+                </div>
+                <div slot="content">
+                  <!--水费-->
+                  <div v-if="item.paymentType==20" class="icon-waitassess swipeout-content">
+                    <div class='bill-pay-name'>
+                      <div>水费</div>
+                      <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
+                    </div>
+                    <div class='bill-pay-stadius-see'>
+                      <span class="bill-account" v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account" style="color:#999" v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
+                    </div>
+                  </div>
+                  <div v-if="item.paymentType==21" class="icon-electricity swipeout-content">
+                    <div class='bill-pay-name'>
+                      <div>电费</div>
+                      <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
+                    </div>
+                    <div class='bill-pay-stadius-go gray'>
+                      <span class="bill-account"  v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
+                    </div>
+                  </div>
+                  <div v-if="item.paymentType==22" class="icon-gas swipeout-content">
+                    <div class='bill-pay-name'>
+                      <div>煤气费</div>
+                      <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
+                    </div>
+                    <div class='bill-pay-stadius-go gray'>
+                      <span class="bill-account"  v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
+                    </div>
+                  </div>
+                </div>
+              </bl-swipeout-item>
+            </bl-swipeout>
           </li>
         </ul>
       </div>
@@ -120,6 +130,7 @@
     },
     data() {
       return {
+        swipeoutDisabled: false,
         more: false, // 更多缴费
         loadGroup: false,
         toShow: true,
@@ -136,10 +147,11 @@
         currentGroupName: "", // 当前分组名称
         receiveGroupItem: {},
         typeObj: {
-          1: "sf",  // 水费
-          2: "dl",  // 电费
-          3: "mq"   // 煤气
-        }
+          20: "sf",  // 水费
+          21: "dl",  // 电费
+          22: "mq"   // 煤气
+        },
+        accountList: [] // 缴费账号
       }
     },
     watch: {
@@ -169,17 +181,42 @@
           }).then(data => {
             let json = JSON.parse(data.body.obj);
             console.log(json);
+            let waterCount = 0;
+            let gasCount = 0;
+            let dianCount = 0;
             json.list.forEach((obj) => {
                 if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
-                  this.$set(this.accountObj, "p" + obj.paymentType, obj);
+                    if (obj.paymentType == 20) {
+                        waterCount += 1;
+                    } else if (obj.paymentType == 21) {
+                      dianCount += 1;
+                    } else if (obj.paymentType == 22) {
+                      gasCount += 1;
+                    }
+                  this.accountList.push(obj);
                 }
             });
+            if (waterCount == 0) {
+              this.accountList.push({paymentType: 20});
+            }
+            if (dianCount == 0) {
+              this.accountList.push({paymentType: 21});
+            }
+            if (gasCount == 0) {
+              this.accountList.push({paymentType: 22});
+            }
           });
         });
       })
       this.$loading.close()
     },
     methods: {
+      onButtonClick (type) {
+        alert('on button click ' + type)
+      },
+      handleEvents (type) {
+        console.log('event: ', type)
+      },
       // 监听路由
       fill(to, from) {
         debugger;
@@ -208,7 +245,8 @@
         this.groupName = this.receiveGroupItem.groupName;
         this.toShow = true;
       },
-      go(obj, type) {
+      go(obj) {
+        let type = obj.paymentType;
         if (obj && obj.accountNo) {  // 查看账单
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
@@ -284,6 +322,11 @@
         }
       },
       selectItem(item, index) {
+        this.inlineLoading = this.$toast({
+          iconClass: 'preloader white',
+          message: '加载中',
+          duration: 'loading'
+        })
         this.currentGroupId = item.id;
         this.currentGroupName = item.groupName;
         let current = this;
@@ -292,18 +335,39 @@
         });
         this.$set(item, "active", true);
         let timestamp = utils.getTimeFormatToday();
+        this.accountList = [];
         api.recharge.queryPaySubNo({
           "member_token": this.memberToken,
-          "groupId": item.id,
+          "groupId": this.currentGroupId,
           "timestamp": timestamp
         }).then(data => {
+          this.inlineLoading.close();
           let json = JSON.parse(data.body.obj);
-          if (json.list.length == 0) {
-            this.accountObj = {}
-          }
+          console.log(json);
+          let waterCount = 0;
+          let gasCount = 0;
+          let dianCount = 0;
           json.list.forEach((obj) => {
-            this.$set(this.accountObj, "p" + obj.paymentType, obj);
+            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
+              if (obj.paymentType == 20) {
+                waterCount += 1;
+              } else if (obj.paymentType == 21) {
+                dianCount += 1;
+              } else if (obj.paymentType == 22) {
+                gasCount += 1;
+              }
+              this.accountList.push(obj);
+            }
           });
+          if (waterCount == 0) {
+            this.accountList.push({paymentType: 20});
+          }
+          if (dianCount == 0) {
+            this.accountList.push({paymentType: 21});
+          }
+          if (gasCount == 0) {
+            this.accountList.push({paymentType: 22});
+          }
         });
       }
     }

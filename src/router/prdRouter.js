@@ -43,10 +43,10 @@ export const prdRouter = [
   },
   /* 神马 签到 日签 */
   {
-    path: '/daysign',
+    path: '/sign/daysign',
       meta: {
-    title: '签到'
-  },
+        title: '签到'
+      },
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */

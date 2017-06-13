@@ -1,8 +1,12 @@
-@charset "utf-8";//cp
+@charset "utf-8";
 @import "src/sass/tobe/function";
+@import "src/sass/tobe/ext/animate/fade";
 body {
     background-color: #f7f7f7;
 }
+@include animate-fadeInUpBig
+@include animate-fadeOutDownBig
+/*我的测试*/
 // 日签
 .daysign{
   .end{
