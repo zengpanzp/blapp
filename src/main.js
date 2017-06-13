@@ -12,6 +12,7 @@ import router from './router'
 import bluer from './vue-bluer'
 
 import 'src/utils'
+import 'src/sass/comm.scss'
 
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
 

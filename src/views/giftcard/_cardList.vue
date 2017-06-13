@@ -91,7 +91,8 @@ export default {
           this.$emit('finish')
           if (resRows && resRows.length) {
             this.busy = false
-            this.list = this.list.concat(resRows)
+            // this.list = this.list.concat(resRows)
+            this.list.push.apply(this.list, resRows)
             if (resRows.length < 10) {
               this.busy = true
               this.loading = false

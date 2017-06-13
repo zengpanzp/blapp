@@ -93,7 +93,18 @@ export default {
   },
   methods: {
     currentPageReload() {
-      this.$router.go(0)
+      let deployName = this.$route.query.deployName
+      switch (deployName) {
+        case 'goods':
+          this.tabsModel = '0'
+          break;
+        case 'stores':
+          this.tabsModel = '1'
+          break;
+        default:
+          this.tabsModel = '1'
+      }
+      this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
     },
     changeTab(index, deployName) {
       let saName = this.filterEleTabs[this.tabsModel].deployName

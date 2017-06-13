@@ -65,7 +65,7 @@
       <div class="phoneRechargeItem">
         <div class="itemContent">
           <div class="item-titleRow">
-            <input id="number" class="item-titleRow" type="tel" :placeholder="placeholder" :maxlength="maxlength"
+            <input id="number" class="item-titleRow" type="tel" :placeholder="iphoneNum ? '' : placeholder" :maxlength="maxlength"
                    @focus="focus = true" v-model="iphoneNum">
             <i class="img_icon icon_emptycon btnHidden" v-show="iphoneNum !== '' && focus" @click="emptyPhone"></i>
             <div class="txl" v-show="iphoneNum == '' || !focus" @click="nativePhone"
@@ -340,7 +340,20 @@
         window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'setType', {
           type: item.orderType
         })
-        this.getPhoneInfo(this.iphoneNum)
+        this.getPhoneInfo(this.iphoneNum);
+        if (index == 0) {
+          sa.track('$pageview', {
+            pageId: 'APP_话费充值',
+            categoryId: 'APP_Fees',
+            $title: "APP_话费充值"
+          });
+        } else {
+          sa.track('$pageview', {
+            pageId: 'APP_流量充值',
+            categoryId: 'APP_Fees',
+            $title: "APP_流量充值"
+          });
+        }
       },
       // 手机号码正则匹配
       testPhoneNum() {
@@ -447,55 +460,59 @@
             console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
             console.log('this.type: ' + this.type)
             console.log(this.type.indexOf('ll'))
-            let goodsName = this.phoneCheck + this.currentSku + (this.type.indexOf('ll') >= 0 ? 'M' : '元')
-            switch (this.type) {
-              case 'yk':
-                goodsName += "加油充值卡"
-                break
-              default:
-                goodsName += "手机充值卡"
-                break
-            }
             let resData = JSON.parse(data.body.obj)
-            console.log('this.currentFee: ' + this.currentFee)
-            let createExpensesOrderRequestData = {
-              outOrderNo: resData.orderid,
-              payMoney: parseFloat(this.currentActivePay),
-              orderSource: 1,
-              orderTypeCode: this.getOrderTypeCode(this.type),
-              memberId: utils.ssdbGet('member_id'),
-              goodsName: goodsName,
-              phoneNo: this.iphoneNum,
-              price: this.currentSku,
-              count: 1,
-              accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
-              changeMoney: parseFloat(this.currentPay),
-              aliasSaleTime: resData.orddate,
-              orderPhone: this.iphoneNum,
-              serviceFee: Number(this.currentFee).toFixed(2)
-            }
-            console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-            api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-              console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-              let resData = JSON.parse(data.body.obj)
-              let order = {
-                orderNo: resData.orderNo,
-                outOrderNo: resData.outOrderNo,
-                payMoney: resData.payMoney,
-                orderTime: resData.orderTime,
-                orderTypeCode: resData.orderTypeCode,
-                activeTime: resData.activeTime,
-                changeMoney: resData.changeMoney,
-                omsNotifyUrl: resData.omsNotifyUrl,
-                payType: resData.payType,
-                accountNo: this.iphoneNum
+            if (resData.orderid) {
+              let goodsName = this.phoneCheck + this.currentSku + (this.type.indexOf('ll') >= 0 ? 'M' : '元')
+              switch (this.type) {
+                case 'yk':
+                  goodsName += "加油充值卡"
+                  break
+                default:
+                  goodsName += "手机充值卡"
+                  break
               }
-              require.ensure([], function(require) {
-                let Pay = require('src/paymodel').default
-                current.inlineLoading.close()
-                Pay.goPay(order, '23')
-              }, 'Pay')
-            })
+              console.log('this.currentFee: ' + this.currentFee)
+              let createExpensesOrderRequestData = {
+                outOrderNo: resData.orderid,
+                payMoney: parseFloat(this.currentActivePay),
+                orderSource: 1,
+                orderTypeCode: this.getOrderTypeCode(this.type),
+                memberId: utils.ssdbGet('member_id'),
+                goodsName: goodsName,
+                phoneNo: this.iphoneNum,
+                price: this.currentSku,
+                count: 1,
+                accountNo: `${this.iphoneNum}_${this.phoneCheck}`,
+                changeMoney: parseFloat(this.currentPay),
+                aliasSaleTime: resData.orddate,
+                orderPhone: this.iphoneNum,
+                serviceFee: Number(this.currentFee).toFixed(2)
+              }
+              console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+              api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+                console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+                let resData = JSON.parse(data.body.obj)
+                let order = {
+                  orderNo: resData.orderNo,
+                  outOrderNo: resData.outOrderNo,
+                  payMoney: resData.payMoney,
+                  orderTime: resData.orderTime,
+                  orderTypeCode: resData.orderTypeCode,
+                  activeTime: resData.activeTime,
+                  changeMoney: resData.changeMoney,
+                  omsNotifyUrl: resData.omsNotifyUrl,
+                  payType: resData.payType,
+                  accountNo: this.iphoneNum
+                }
+                require.ensure([], function(require) {
+                  let Pay = require('src/paymodel').default
+                  current.inlineLoading.close()
+                  Pay.goPay(order, '23')
+                }, 'Pay')
+              })
+            } else {
+              this.$toast(resData.msg)
+            }
           })
         }
       },

@@ -4,7 +4,7 @@
     <div class="rates">
       <div class="content-wrap">
           <ul>
-            <li @click.prevent="showCategory">缴费账号
+            <li>缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>
             <!--	</ul>
@@ -20,11 +20,11 @@
             <li class="record-detail" @click="toPay" v-for="item in results" v-if="item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
-              <span><div class="billstatus">{{item.canpaymsg[0]}}</div></span>
+              <span><div class="billstatus">{{item.canpaymsg[0]=="未销账"?"未缴费":item.canpaymsg[0]}}</div></span>
             </li>
             <li class="record-detail" v-else="item.date">
               <span class="spe" v-bind:style="{ 'line-height': (item.msg.length>21?'':'70px')}">{{item.msg}}</span>
-              <span class="spe"><div class="billstatus finish"></div></span>
+              <span class="spe"><div class="billstatus finish">已完成</div></span>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
@@ -48,7 +48,8 @@
     data() {
       return {
         rateType: 1,
-        dataJson: ''
+        dataJson: '',
+        results: []
       }
     },
     created() {
@@ -63,7 +64,7 @@
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
         this.queryData = queryData;
         console.log("queryData", this.queryData)
-      utils.isLogin().then(user => {
+        utils.isLogin().then(user => {
           api.recharge.getGoodsDetail(queryData).then(data => {
             let json = JSON.parse(data.body.obj);
             this.dataJson = json;
@@ -72,15 +73,17 @@
             let results = [];
             for (let obj in this.dataJson) {
                 if (this.dataJson[obj].date) {
-                  this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
+                    this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
                 }
                 if (this.dataJson[obj].Result_code == "200") {
-                  results.unshift(this.dataJson[obj]);
+                    results.unshift(this.dataJson[obj]);
                 } else {
-                  results.push(this.dataJson[obj]);
+                  console.log(results)
+                    if (!this.arrayContains(results, this.dataJson[obj])) {
+                      results.push(this.dataJson[obj]);
+                    }
                 }
             }
-            console.log(results)
             this.results = results;
             if (results[0]) {
               let first = results[0];
@@ -112,6 +115,19 @@
 //      });
 //    },
     methods: {
+      arrayContains(array, obj) {
+        if (array instanceof Array) {
+          for (var i = 0; i < array.length; i++) {
+            let item = array[i];
+            if (item.msg == obj.msg) {
+              return true;
+            }
+          }
+          return false;
+        } else {
+          return false;
+        }
+      },
       toPay() {
         this.$router.push({ path: "/recharge/pay/" + this.rateType });
       },

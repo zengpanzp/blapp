@@ -5,7 +5,7 @@
     <!--用来显示缴费分组-->
     <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
     <div v-show="toShow">
-      <div class="product-filter blue-bill-top">
+      <div id="toplist" class="product-filter blue-bill-top">
         <a @click.prevent="showCategory" href="javascript:;" class="more bill-class-add">+</a>
         <div class="itemauto">
           <ul>
@@ -170,7 +170,9 @@
             let json = JSON.parse(data.body.obj);
             console.log(json);
             json.list.forEach((obj) => {
-              this.$set(this.accountObj, "p" + obj.paymentType, obj);
+                if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
+                  this.$set(this.accountObj, "p" + obj.paymentType, obj);
+                }
             });
           });
         });
@@ -233,22 +235,31 @@
           }
           // 获取内容
           api.recharge.getGoodsDetail(queryData).then(data => {
-            debugger;
             let json = JSON.parse(data.body.obj);
             delete json.Result_code;
+            let results = [];
             for (let obj in json) {
-              console.log(json[obj].date)
               if (json[obj].date) {
                 json[obj].date = json[obj].date.toString().substring(0, 4) + '-' + json[obj].date.toString().substring(4);
               }
+              if (json[obj].Result_code == "200") {
+                results.unshift(json[obj]);
+              } else {
+                results.push(json[obj]);
+              }
             }
-            queryData.canpay = json[0].canpay[0];
-            // 条码
-            queryData.tiaoma = json[0].code[0];
-            queryData.price = json[0].price[0];
-            queryData.total = json[0].total[0];
-            queryData.date = json[0].date;
-            queryData.fee = json[0].fee[0];
+            console.log(results)
+            this.results = results;
+            if (results[0]) {
+              let first = results[0];
+              queryData.canpay = first.canpay && first.canpay[0];
+              // 条码
+              queryData.tiaoma = first.code && first.code[0];
+              queryData.price = first.price && first.price[0];
+              queryData.total = first.total && first.total[0];
+              queryData.date = first.date;
+              queryData.fee = first.fee && first.fee[0];
+            }
             this.inlineLoading.close();
             localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData))
             this.$router.push({path: "/recharge/pay/" + type});
