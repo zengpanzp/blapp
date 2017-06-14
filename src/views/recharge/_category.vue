@@ -176,8 +176,11 @@
           })
         },
         selectGroup(item, $index) {
-            debugger
           let that = this;
+          let isUpdate = this.$route.query.isUpdate; // 是否是变更分组过来的
+          if (isUpdate == "update") {
+              item.update = isUpdate;
+          }
           // 让所有的没有选中样式
           this.groupList.forEach(function(item) {
             that.$set(item, 'active', false);

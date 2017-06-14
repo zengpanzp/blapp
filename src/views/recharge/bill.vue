@@ -15,17 +15,17 @@
       </div>
       <div class='cbill-account list-block'>
         <ul>
-          <li class="swipeout" @click="go(item)" v-for="item in accountList">
+          <li class="swipeout ligo" @click="go(item,$event)" v-for="item in accountList">
             <bl-swipeout>
-              <bl-swipeout-item class="swipe-contain margin-b"  :right-menu-height="100" :disabled="swipeoutDisabled" transition-mode="follow">
+              <bl-swipeout-item class="swipe-contain margin-b"  :right-menu-height="100" :disabled="swipeoutDisabled" auto-close-on-button-click="false" transition-mode="follow">
                 <div slot="right-menu">
-                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('edit')">
+                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('change',item)">
                     变更分组
                   </bl-swipeout-button>
-                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('change')" >
+                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('edit',item)" >
                     编辑
                   </bl-swipeout-button>
-                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('delete')" >
+                  <bl-swipeout-button class="menubtn" @click.native="onButtonClick('delete',item)" >
                     删除
                   </bl-swipeout-button>
                 </div>
@@ -72,6 +72,7 @@
       <transition name="fade">
         <bl-home-menu class="homeMenu" v-if="more"></bl-home-menu>
       </transition>
+      <bl-modal  v-show="visible" :visible="visible" title="删除账号将删除所有缴费信息" :buttons="buttons"></bl-modal>
     </div>
   </div>
 </template>
@@ -130,6 +131,13 @@
     },
     data() {
       return {
+        buttons: [{
+          text: "确定",
+          onClick: this.delete
+        }, {text: "取消",
+          onClick: this.cancel
+        }],
+        visible: false,  // 弹出删除提示层
         swipeoutDisabled: false,
         more: false, // 更多缴费
         loadGroup: false,
@@ -211,15 +219,101 @@
       this.$loading.close()
     },
     methods: {
-      onButtonClick (type) {
-        alert('on button click ' + type)
+      cancel() {
+        this.visible = false;
       },
-      handleEvents (type) {
-        console.log('event: ', type)
+      update() {
+        api.recharge.deletePaySubNo({
+          accountNo: this.updateItem.accountNo,
+          jigouName: this.updateItem.jigouName,
+          paymentType: this.updateItem.paymentType,
+          accountName: this.updateItem.accountName,
+          groupId: this.updateItem.groupId,
+          groupName: this.updateItem.groupName,
+          member_token: this.memberToken,
+          subscribeIds: this.subscribeId,
+          deleteType: "all",
+          timestamp: utils.getTimeFormatToday()
+        }).then(data => {
+          console.log(data)
+          let result = JSON.parse(data.body.obj);
+          if (result.resCode == "00100000") {
+            this.$toast({
+              position: 'bottom',
+              message: "变更分组成功!"
+            });
+            this.accountList.forEach((item) => {
+              // 将该信息的账号清空
+              if (item.subscribeId == this.subscribeId) {
+                item.accountNo = "";
+              }
+            });
+          } else {
+            this.$toast({
+              position: 'bottom',
+              message: result.msg
+            });
+          }
+        });
+      },
+      // 删除账号信息
+      delete() {
+        this.visible = false;
+        api.recharge.deletePaySubNo({
+          member_token: this.memberToken,
+          subscribeIds: this.subscribeId,
+          deleteType: "all",
+          timestamp: utils.getTimeFormatToday()
+        }).then(data => {
+            console.log(data)
+            let result = JSON.parse(data.body.obj);
+            if (result.resCode == "00100000") {
+              this.$toast({
+                position: 'bottom',
+                message: "账号信息删除成功!"
+              });
+              this.accountList.forEach((item) => {
+                  // 将该信息的账号清空
+                  if (item.subscribeId == this.subscribeId) {
+                    item.accountNo = "";
+                  }
+              });
+            } else {
+              this.$toast({
+                position: 'bottom',
+                message: result.msg
+              });
+            }
+        });
+      },
+      // 滑出的按钮操作
+      onButtonClick (type, item) {
+        if (type == "delete") {  // 删除账单信息
+          if (!item.subscribeId) {
+            this.$toast({
+              position: 'bottom',
+              message: "没有账号信息可以删除!"
+            });
+          } else {
+            this.subscribeId = item.subscribeId;
+            this.visible = true; // 弹出提示层消息
+          }
+        }
+        if (type == "change") {  // 变更分组
+          if (!item.subscribeId) {
+            this.$toast({
+              position: 'bottom',
+              message: "没有账号信息可以变更!"
+            });
+          } else {
+            this.subscribeId = item.subscribeId;
+            this.updateItem = item;
+            this.showCategory("update"); // 表示的是更新分组
+          }
+        }
       },
       // 监听路由
       fill(to, from) {
-        debugger;
         if (to && to.fullPath.indexOf("category") == "-1") {
           this.toShow = true;
           this.loadGroup = false;
@@ -233,10 +327,14 @@
         this.more = true;
       },
       // 选择缴费分组
-      showCategory() {
+      showCategory(msg) {
         this.toShow = false;
         this.loadGroup = true;
-        this.$router.push({path: "/recharge/bill/category"});
+        if (msg) { // 是变更分组
+          this.$router.push({path: "/recharge/bill/category?isUpdate=" + msg});
+        } else {
+          this.$router.push({path: "/recharge/bill/category"});
+        }
       },
       // 获得选择的分组
       getGroup(item) {
@@ -244,9 +342,30 @@
         this.groupId = this.receiveGroupItem.id;
         this.groupName = this.receiveGroupItem.groupName;
         this.toShow = true;
+        if (item.update == "update") { // 进行变更分组操作
+          this.update();
+        }
       },
-      go(obj) {
+      go(obj, $event) {
+          console.log($event)
+        if ($event.target.className.indexOf("menubtn") >= 0) {
+            return false;
+        }
         let type = obj.paymentType;
+        let typeVal = 0;
+        type = parseInt(type);
+        switch (type) {
+          case 20 :
+            typeVal = 1;
+            break;
+          case 21 :
+            typeVal = 2;
+            break;
+          case 22 :
+            typeVal = 3;
+            break;
+        }
+        console.log(obj, typeVal)
         if (obj && obj.accountNo) {  // 查看账单
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
@@ -300,7 +419,7 @@
             }
             this.inlineLoading.close();
             localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData))
-            this.$router.push({path: "/recharge/pay/" + type});
+            this.$router.push({path: "/recharge/pay/" + typeVal});
           })
         } else {                     // 去缴费
           let jigouCode, jigouName;
@@ -310,7 +429,7 @@
           }
           this.$router.push(
             {
-              path: "/recharge/rates/" + type,
+              path: "/recharge/rates/" + typeVal,
               query: {
                 groupId: this.currentGroupId,
                 groupName: this.currentGroupName,
