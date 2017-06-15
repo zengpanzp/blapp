@@ -13,7 +13,7 @@
      <div class="list">
       <ul>
         <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <li @click="payPw"><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li>
+        <router-link to="/securityCenter/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link>
       </ul>
     </div>
    </div>
@@ -108,7 +108,7 @@ export default {
         if (data.body.obj) {
           this.realNameAuthType = JSON.parse(data.body.obj).realNameAuthType
         } else {
-          // this.$toast(data.body.msg)
+          this.$toast(data.body.msg)
         }
       })
       api.userCenter.validPayPwd({
@@ -125,23 +125,25 @@ export default {
   },
   methods: {
     exit() {
-      window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
-        title: "提示",
-        message: "确认要退出？",
-        buttons: [
-        {
-          title: "取消",
-          style: "disabled"
+    //   this.$modal({
+    //   title: '提示',
+    //   content: '确认要退出？',
+    //   buttons: [
+    //     { text: '取消', onClick: function() {} },
+    //     { text: '确定', onClick: function() {} },
+    //   ]
+    // })
+    this.$modal({
+        title: '提示',
+        content: '确认要退出？',
+        buttons: [{
+          text: '取消',
+          onClick: () => {
+            this.$toast('取消退出')
+          }
         }, {
-          title: "确定",
-          style: "highlighted"
-        }]
-      }, { success: data => {
-        console.log("####success#####" + JSON.parse(data))
-        let bd = JSON.parse(data)
-        let button = bd.buttonTitle
-        console.log(button)
-        if (button == "确定") {
+          text: '确定',
+          onClick: () => {
             window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
               success: result => {
                 console.log(result)
@@ -157,61 +159,15 @@ export default {
                 console.log(result)
               }
             });
-          } else if (button == "取消") {
-            this.$toast('button')
           }
-        }
-      })
-    //   this.$modal({
-    //   title: '提示',
-    //   content: '确认要退出？',
-    //   buttons: [
-    //     { text: '取消', onClick: function() {} },
-    //     { text: '确定', onClick: function() {} },
-    //   ]
-    // })
-    // this.$modal({
-    //     title: '提示',
-    //     content: '确认要退出？',
-    //     buttons: [{
-    //       text: '取消',
-    //       onClick: () => {
-    //         this.$toast('取消退出')
-    //       }
-    //     }, {
-    //       text: '确定',
-    //       onClick: () => {
-    //         window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
-    //           success: result => {
-    //             console.log(result)
-    //             this.$toast('退出成功!')
-    //             setTimeout(function () {
-    //             window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
-    //             }, 2500)
-    //           },
-    //           fail: result => {
-    //             console.log(result)
-    //           },
-    //           progress: result => {
-    //             console.log(result)
-    //           }
-    //         });
-    //       }
-    //     }]
-    // })
+        }]
+    })
     },
     authen() {
       // native 实名认证页
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'authenticate'
       })
-    },
-    payPw() {
-      if (this.payStatus == 0) {
-        this.$router.push('/securityCenter/payPw')
-      } else {
-        this.$router.push('/securityCenter/payPwAuth')
-      }
     }
   }
 };

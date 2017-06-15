@@ -126,8 +126,8 @@
     padding-left: rem(9);
     overflow: hidden;
     // width: rem(694);
-    height: rem(166);
-    border-bottom: rem(2) solid #e9e9e9;
+    // height: rem(166);
+    border-bottom: rem(4) solid #e9e9e9;
     box-sizing: border-box;
 }
 
@@ -164,7 +164,7 @@
 }
 
 #mc .list-block .item-content a:after {
-    left: 3.875rem
+    left: rem(140)
 }
 
 #mc .list-block .item-content .item-media {
@@ -646,14 +646,14 @@
     height: 100%;
     width: rem(118);
     background-color: #CCCCCC;
-    font-size: rem(30);
+    font-size: rem(29);
     color: #FFFFFF;
-    display: -webkit-inline-box;
-    display: -moz-inline-box;
-    display: inline-box;
-    display: -webkit-inline-flex;
-    display: -moz-inline-flex;
-    display: inline-flex;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: flex;
     -webkit-box-pack: center;
     -moz-box-pack: center;
     box-pack: center;
@@ -665,7 +665,8 @@
     box-align: center;
     -webkit-align-items: center;
     -moz-align-items: center;
-    align-items: center
+    align-items: center;
+    float: left;
 }
 
 #mc .swiper-owern .vebtn.remove-btn {

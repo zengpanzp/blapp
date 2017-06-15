@@ -147,6 +147,7 @@ body,html{
 /* 返回顶部 */
 .gotop{
   @extend %gotop;
+  background-image: url('./base64/bottom-top.png');
 }
 
 /* 懒加载 */

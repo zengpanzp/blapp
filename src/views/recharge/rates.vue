@@ -177,10 +177,10 @@
               }
             },
             fail: () => {
-              this.$toast({
-                position: 'bottomTop',
-                message: "识别条形码失败!"
-              });
+//              this.$toast({
+//                position: 'bottomTop',
+//                message: "识别条形码失败!"
+//              });
             }
           })
       },
@@ -196,7 +196,6 @@
       },
       // 获得子组件选择的机构
       getCompany(item) {
-          console.log(item)
         this.receiveCompanyItem = item;
           console.log(this.receiveCompanyItem)
         this.loadListView = false;
@@ -210,7 +209,7 @@
           this.typeChange = true;
           this.hasShow2 = false;
         }
-        this.$router.push({path: "/recharge/rates/" + this.rateType});
+        this.$router.go(-1);
       },
       // 选择缴费机构
       showListView() {
@@ -234,7 +233,6 @@
             return false;
           }
           let timestamp = utils.getTimeFormatToday();
-          console.log(timestamp)
           let queryData = {
             client_id: CONST.CLIENT_ID,
             t_dz: "02",
@@ -249,7 +247,7 @@
             year: new Date().getFullYear().toString(),
             month: (new Date().getMonth() + 1).toString(),
             code: this.account,
-            timestamp: utils.getTimeFormatToday(),
+            timestamp: timestamp,
             acctoken: this.memberToken,
             token: this.memberToken
         }

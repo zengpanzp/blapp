@@ -17,7 +17,9 @@
             <div class="gameFir">
               <ul>
                 <li @click="showGameNameModel = true">游戏名称
-                  <input type="text" placeholder="请选择游戏" v-model="gameName.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <div class="ganme-name">{{ gameName.name }}</div>
+                  <img class="more" src="./i/iphone/more.png">
+                </li>
                 <li>充值类型
                   <div :class="{'selected': rechargeType == index}" v-for="(item, index) in ['游戏账号', '盛大通行证']" @click="rechargeType = index">{{ item }}</div>
                 </li>
@@ -33,11 +35,17 @@
             <div class="gameFir top">
               <ul>
                 <li v-show="areaList.length" @click="showAreaModel = true">游戏区号
-                  <input type="text" placeholder="请选择游戏区号" v-model="gameArea.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <!-- <input type="text" placeholder="请选择游戏区号" v-model="gameArea.name" disabled> -->
+                  <div class="ganme-name">{{ gameArea.name }}</div>
+                  <img class="more" src="./i/iphone/more.png"></li>
                 <li v-show="gameServerList.length" @click="showGameServerModel = true">游戏区服
-                  <input type="text" placeholder="请选择游戏服务器" v-model="gameServer.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <!-- <input type="text" placeholder="请选择游戏服务器" v-model="gameServer.name" disabled> -->
+                  <div class="ganme-name">{{ gameServer.name }}</div>
+                  <img class="more" src="./i/iphone/more.png"></li>
                 <li v-show="rechargeMoneyList.length" @click="showRechargeMoneyModel = true">充值金额
-                  <input type="text" placeholder="请选择游戏金额" v-model="rechargeMoney.name" disabled><img class="more" src="./i/iphone/more.png"></li>
+                  <!-- <input type="text" placeholder="请选择游戏金额" v-model="rechargeMoney.name" disabled> -->
+                  <div class="ganme-name">{{ rechargeMoney.name }}</div>
+                  <img class="more" src="./i/iphone/more.png"></li>
               </ul>
             </div>
           </div>
@@ -69,11 +77,13 @@
                     <div :class="{'selected': rechargeMoreType == item.dtype}" v-for="item in moreTab" @click="rechargeMoreType = item.dtype">{{ item.text }}</div>
                   </li>
                   <li @click="showMoreGameNameModel = true">游戏名称
-                    <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> <img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择游戏" v-model="moreGameName.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameName.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                 </ul>
               </div>
-              <div class="gameFir new" v-show="rechargeMoreType == 0">
+              <div class="gameFir new" v-show="rechargeMoreType == 3">
                 <ul>
                   <li>充值账号
                     <input type="text" v-model.trim="moreGameCount" placeholder="请输入游戏账号">
@@ -83,16 +93,22 @@
               <div class="gameFir top">
                 <ul>
                   <li v-show="moreAreaList.length" @click="showMoreAreaModel = true">游戏区号
-                    <input type="text" placeholder="请选择游戏区号" v-model="moreGameArea.name" disabled><img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择游戏区号" v-model="moreGameArea.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameArea.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li v-show="moreGameServerList.length" @click="showMoreGameServerModel = true">游戏区服
-                    <input type="text" placeholder="请选择游戏服务器" v-model="moreGameServer.name" disabled><img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择游戏服务器" v-model="moreGameServer.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameServer.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li v-show="moreGameNumlist.length" @click="showMoreGameNumModel = true">充值面额
-                    <input type="text" placeholder="请选择充值面额" v-model="moreGameNum.name" disabled><img class="more" src="./i/iphone/more.png">
+                    <!-- <input type="text" placeholder="请选择充值面额" v-model="moreGameNum.name" disabled> -->
+                    <div class="ganme-name">{{ moreGameNum.name }}</div>
+                    <img class="more" src="./i/iphone/more.png">
                   </li>
                   <li>购买数量
-                    <input type="text" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
+                    <input type="tel" placeholder="请输入充值卡数量" v-model.number="moreGameCardNum">
                   </li>
                 </ul>
               </div>
@@ -111,39 +127,39 @@
     <!-- 盛大充值 -->
     <bl-popup v-model="showGameNameModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏名称 -->
-      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" v-show="showGameNameModel" v-if="showGameNameModel" v-model="gameName.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameNameClick" :list="gameNamelist" :showLetter="false" v-show="showGameNameModel" v-if="gameName.name" v-model="gameName.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏区号 -->
-      <bl-sort-list-view @click="gameAreaClick" :list="areaList" :showLetter="false" v-show="showAreaModel" v-if="showAreaModel" v-model="gameArea.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameAreaClick" :list="areaList" :showLetter="false" v-show="showAreaModel" v-if="gameArea.name" v-model="gameArea.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showGameServerModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏服务 -->
-      <bl-sort-list-view @click="gameServerClick" :list="gameServerList" :showLetter="false" v-show="showGameServerModel" v-if="showGameServerModel" v-model="gameServer.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="gameServerClick" :list="gameServerList" :showLetter="false" v-show="showGameServerModel" v-if="gameServer.name" v-model="gameServer.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showRechargeMoneyModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏充值金额 -->
-      <bl-sort-list-view @click="rechargeMoneyClick" :list="rechargeMoneyList" :showLetter="false" v-show="showRechargeMoneyModel" v-if="showRechargeMoneyModel" v-model="rechargeMoney.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="rechargeMoneyClick" :list="rechargeMoneyList" :showLetter="false" v-show="showRechargeMoneyModel" v-if="rechargeMoney.name" v-model="rechargeMoney.id"></bl-sort-list-view>
     </bl-popup>
 
     <!-- 更多游戏 -->
     <bl-popup v-model="showMoreGameNameModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 更多游戏名称 -->
-      <bl-sort-list-view @click="moreGameNameClick" :list="moreGameNamelist" :showLetter="false" v-show="showMoreGameNameModel" v-if="showMoreGameNameModel" v-model="moreGameName.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameNameClick" :list="moreGameNamelist" :showLetter="false" v-show="showMoreGameNameModel" v-if="moreGameName.name" v-model="moreGameName.id"></bl-sort-list-view>
     </bl-popup>
 
     <bl-popup v-model="showMoreAreaModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏区号 -->
-      <bl-sort-list-view @click="moreGameAreaClick" :list="moreAreaList" :showLetter="false" v-show="showMoreAreaModel" v-if="showMoreAreaModel" v-model="moreGameArea.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameAreaClick" :list="moreAreaList" :showLetter="false" v-show="showMoreAreaModel" v-if="moreGameArea.name" v-model="moreGameArea.id"></bl-sort-list-view>
     </bl-popup>
     <bl-popup v-model="showMoreGameServerModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 游戏服务 -->
-      <bl-sort-list-view @click="moreGameServerClick" :list="moreGameServerList" :showLetter="false" v-show="showMoreGameServerModel" v-if="showMoreGameServerModel" v-model="moreGameServer.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameServerClick" :list="moreGameServerList" :showLetter="false" v-show="showMoreGameServerModel" v-if="moreGameServer.name" v-model="moreGameServer.id"></bl-sort-list-view>
     </bl-popup>
 
     <bl-popup v-model="showMoreGameNumModel" :modal="false" position="right" class="sort-list" :style="{ 'min-height': wrapperHeight() + 'px' }">
       <!-- 更多游戏购买面额 -->
-      <bl-sort-list-view @click="moreGameNumClick" :list="moreGameNumlist" :showLetter="false" v-show="showMoreGameNumModel" v-if="showMoreGameNumModel" v-model="moreGameNum.id"></bl-sort-list-view>
+      <bl-sort-list-view @click="moreGameNumClick" :list="moreGameNumlist" :showLetter="false" v-show="showMoreGameNumModel" v-if="moreGameNum.name" v-model="moreGameNum.id"></bl-sort-list-view>
     </bl-popup>
   </div>
 </template>
@@ -173,7 +189,7 @@
         }, {
           text: '更多游戏',
           type: 'moreGame',
-          dsphh: ''
+          dsphh: '099588'
         }],
 
         moreTab: [{
@@ -241,6 +257,11 @@
       this.$loading.close()
       this.getGameDetail('game')
       this.getQbPrice()
+      sa.track('$pageview', {
+        pageId: 'APP_游戏充值',
+        categoryId: 'APP_Fees',
+        $title: "APP_游戏充值"
+      });
     },
     methods: {
       // 获取QB充值单价
@@ -249,7 +270,7 @@
           categorycode: 'AAJSUPTXQQ',
           format: 'json',
           dtype: '3',
-          client_id: '11128'
+          client_id: '11125'
         }).then(data => {
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
@@ -312,109 +333,109 @@
             duration: 'loading',
             className: 'loading-bg'
           })
-
-          // 生成订单
-          let requestData = {
-            client_id: CONST.CLIENT_ID,
-            decid: this.iphoneNum,
-            ddgsl: '1',
-            dkhzh: utils.ssdbGet('member_id'),
-            dsphh: this.tabItem.dsphh,
-            dtype: this.getPayType(this.tabItem.type, this.password),
-            str_snda: '0',
-            dlx: '01',
-            format: 'json'
-          }
-          /* TODO */
-          if (this.tabItem.type == 'sd') {
-            requestData.str_snda = `${this.iphoneNum}|${this.rechargeType}|${this.gameName.name}|${this.gameName.id}|${this.gameArea.id}|${this.gameServer.id}|${this.rechargeMoney.pay}|${this.rechargeMoney.id}|${Number(this.rechargeMoney.price).toFixed(0)}`
-          } else if (this.tabItem.type == 'qq') {
-            requestData.str_snda = `${this.qq}|00|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
-          }
-          console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-          api.recharge.buyszkOrder(requestData).then(data => {
-            console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-            if (data.body.obj) {
-              let resData = JSON.parse(data.body.obj)
-              if (resData.Result_code == "4002003") {
-                this.$modal({
-                  title: resData.msg
-                })
-                current.inlineLoading.close()
-              } else {
-                let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
-                let createExpensesOrderRequestData = {
-                  outOrderNo: resData.orderid,
-                  payMoney: parseFloat(this.currentPay),
-                  orderSource: 1,
-                  orderTypeCode: '15',
-                  memberId: utils.ssdbGet('member_id'),
-                  goodsName: goodsName,
-                  phoneNo: this.iphoneNum,
-                  price: parseFloat(this.currentPay),
-                  count: 1,
-                  accountNo: this.iphoneNum,
-                  changeMoney: parseFloat(this.currentPay),
-                  aliasSaleTime: resData.orddate,
-                  orderPhone: this.iphoneNum,
-                  content: `${this.iphoneNum}_0`,
-                  serviceFee: 0
-                }
-                console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-                api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-                  console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-                  let resData = JSON.parse(data.body.obj)
-                  let order = {
-                    orderNo: resData.orderNo,
-                    outOrderNo: resData.outOrderNo,
-                    payMoney: resData.payMoney,
-                    orderTime: resData.orderTime,
-                    orderTypeCode: resData.orderTypeCode,
-                    activeTime: resData.activeTime,
-                    changeMoney: resData.changeMoney,
-                    omsNotifyUrl: resData.omsNotifyUrl,
-                    payType: resData.payType,
-                    accountNo: utils.dbGet('member_mobile')
-                  }
-                  require.ensure([], function(require) {
-                    let Pay = require('src/paymodel').default
-                    current.inlineLoading.close()
-                    Pay.goPay(order, '23')
-                  }, 'Pay')
-                })
-              }
-            } else {
-              this.$toast(data.body.msg)
-              current.inlineLoading.close()
+          utils.isLogin().then(LoginInfo => {
+            // 生成订单
+            let requestData = {
+              client_id: CONST.CLIENT_ID,
+              decid: this.iphoneNum,
+              ddgsl: '1',
+              dkhzh: LoginInfo.member_id,
+              dsphh: this.tabItem.dsphh,
+              dtype: this.getPayType(this.tabItem.type, this.password),
+              str_snda: '0',
+              format: 'json'
             }
+            /* FINISH */
+
+            let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.ssdbGet('member_mobile') || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
+            let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
+
+            if (this.tabItem.type == 'sd') {
+              phoneNo = this.iphoneNum
+              requestData.str_snda = `${this.iphoneNum}|${this.rechargeType}|${this.gameName.name}|${this.gameName.id}|${this.gameArea.id}|${this.gameServer.id}|${this.rechargeMoney.pay}|${this.rechargeMoney.id}|${Number(this.rechargeMoney.price).toFixed(0)}`
+            } else if (this.tabItem.type == 'qq') {
+              requestData.decid = String(this.qq)
+              requestData.str_snda = `${this.qq}|1|AAJSUPTXQQ001CZ|||3|${this.qqNum}`
+            } else if (this.tabItem.type == 'moreGame') {
+              /* 中间件接口需要的参数 */
+              payMoney = parseFloat(this.moreGameCardNum * this.moreGameNum.realPrice)
+              orderTypeCode = (this.rechargeMoreType == 1 ? '14' : '15')
+              count = this.moreGameCardNum
+
+              if (this.rechargeMoreType == 3) {
+                requestData.decid = this.moreGameCount
+                phoneNo = this.moreGameCount
+              } else {
+                requestData.decid = ''
+              }
+              requestData.str_snda = `${requestData.decid}|0|${this.moreGameNum.ProductCode || ''}|${this.moreGameArea.RegionID || ''}|${this.moreGameServer.ServerID || ''}|${this.rechargeMoreType}|${this.moreGameCardNum}`
+            }
+            console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+            api.recharge.buyszkOrder(requestData).then(data => {
+              console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+              if (data.body.obj) {
+                let resData = JSON.parse(data.body.obj)
+                if (!resData.orderid) {
+                  this.$modal({
+                    title: resData.msg
+                  })
+                  current.inlineLoading.close()
+                } else {
+                  let createExpensesOrderRequestData = {
+                    outOrderNo: resData.orderid,
+                    payMoney: payMoney,
+                    orderSource: 1,
+                    orderTypeCode: orderTypeCode,
+                    memberId: LoginInfo.member_id,
+                    goodsName: goodsName,
+                    phoneNo: phoneNo,
+                    price: parseFloat(this.currentPay),
+                    count: count,
+                    accountNo: `${requestData.decid}_0`,
+                    changeMoney: parseFloat(this.currentPay),
+                    aliasSaleTime: resData.orddate,
+                    orderPhone: requestData.decid,
+                    serviceFee: parseFloat(0).toFixed(2)
+                  }
+                  console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+                  api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+                    console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+                    let resData = JSON.parse(data.body.obj)
+                    let order = {
+                      orderNo: resData.orderNo,
+                      outOrderNo: resData.outOrderNo,
+                      payMoney: resData.payMoney,
+                      orderTime: resData.orderTime,
+                      orderTypeCode: resData.orderTypeCode,
+                      activeTime: resData.activeTime,
+                      changeMoney: resData.changeMoney,
+                      omsNotifyUrl: resData.omsNotifyUrl,
+                      payType: resData.payType,
+                      accountNo: phoneNo
+                    }
+                    require.ensure([], function(require) {
+                      let Pay = require('src/paymodel').default
+                      current.inlineLoading.close()
+                      Pay.goPay(order, '23')
+                    }, 'Pay')
+                  })
+                }
+              } else {
+                this.$toast(data.body.msg)
+                current.inlineLoading.close()
+              }
+            })
           })
         }
       },
       getPayType(orderType, password) {
         switch (orderType) {
-          case 'ydll':
-            return '150';
-          case 'ltll':
-            return '151';
-          case 'dxll':
-            return '152';
-          case 'yk':
-            return '143';
-          case 'cz':
-            return '02';
-
-          case 'gh':
-            return '00';
-          case 'fz':
-            return '08';
-          case 'xlt':
-            return '01';
           case 'sd':
             return '02';
           case 'qq':
             return '02';
-          case 'kd':
-            return '03' + password;
+          case 'moreGame':
+            return '02';
           default:
             return orderType;
         }
@@ -559,7 +580,11 @@
           case 'qq':
             return (String(this.qqNum).length && /^[0-9]*$/.test(this.qq))
           case 'moreGame':
-            return (String(this.moreGameCardNum).length && String(this.moreGameCount).length)
+            if (this.rechargeMoreType == 3) {
+              return (String(this.moreGameCardNum).length && String(this.moreGameCount).length)
+            } else {
+              return (String(this.moreGameCardNum).length)
+            }
           default:
             return ''
         }
@@ -640,7 +665,7 @@
       },
       'tabItem.type'(val) {
         if (val == 'sd') {
-          this.currentPay = Number(this.rechargeMoney.price).toFixed(2)
+          this.currentPay = Number(this.rechargeMoney.price || 0).toFixed(2)
         } else if (val == 'moreGame') {
           this.moreGameLoad = true
           this.currentPay = Number(this.moreGameNum.price * this.moreGameCardNum).toFixed(2)
@@ -670,7 +695,7 @@
           categorycode: val,
           format: 'json',
           dtype: String(this.rechargeMoreType),
-          client_id: '11128'
+          client_id: '11125'
         }).then(data => {
           this.inlineLoading.close()
           if (data.body.obj) {
@@ -685,8 +710,10 @@
                 list.push({
                   id: index,
                   categoryCode: item.CategoryCode,
-                  name: item.ProductFullName,
-                  price: item.ParPrice
+                  ProductCode: item.ProductCode,
+                  name: item.ParPrice,
+                  price: item.dwyj,
+                  realPrice: item.dzxj
                 })
               }
               this.moreGameNumlist = list // 更多游戏区号

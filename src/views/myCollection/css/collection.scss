@@ -39,6 +39,7 @@
   }
   .goods-title{
     // height: rem(100);
+    margin-bottom: rem(20);
     font-size: rem(28);
     color: #313131;
     @include clamp;

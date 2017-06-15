@@ -166,7 +166,7 @@ input[type=number] {
     box-shadow: none;
     text-align: right;
     font-size: rem(2*31.25);
-    position: absolute;
+    position: relative;
     right: 0;
     text-align: center;
     z-index: 10
@@ -748,14 +748,21 @@ span.solid-miner-circle {
   box-sizing: border-box
 }
 
-
-
 .blue-bill-top {
   background: #3ea3ff;
   border: none;
-  height: rem(.87*31.25)
+  height: rem(.87*31.25);
 }
-
+#toplist::-webkit-scrollbar
+{
+  width: 30px;
+  background: #fff;
+}
+.blue-bill-top::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  backgroundr: #F5F5F5;
+}
 .blue-bill-top a.bill-class-add {
   border: none;
   background: #3ea3ff;

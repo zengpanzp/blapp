@@ -188,7 +188,7 @@
           // 设置当前样式
           this.$set(item, 'active', true);
           this.$parent.toShow = true;
-          this.$router.push({path: "/recharge/rates/" + this.type});
+          this.$router.go(-1);
         }
     }
   };
