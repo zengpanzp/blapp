@@ -93,7 +93,18 @@ export default {
   },
   methods: {
     currentPageReload() {
-      this.$router.go(0)
+      let deployName = this.$route.query.deployName
+      switch (deployName) {
+        case 'goods':
+          this.tabsModel = '0'
+          break;
+        case 'stores':
+          this.tabsModel = '1'
+          break;
+        default:
+          this.tabsModel = '1'
+      }
+      this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
     },
     changeTab(index, deployName) {
       let saName = this.filterEleTabs[this.tabsModel].deployName
@@ -172,7 +183,8 @@ export default {
                 let check = JSON.stringify(rows)
                 console.log(check + '============')
                 if (rows) {
-                  this.list = this.list.concat(rows)
+                  // this.list = this.list.concat(rows)
+                  this.list.push.apply(this.list, rows)
                   this.busy = false
                 } else {
                   this.goodsLoading = false
@@ -213,7 +225,8 @@ export default {
               // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
             if (currentPage <= totalPageNum) {
               if (storeList && storeList.length) {
-                this.storeList = this.storeList.concat(storeList)
+                // this.storeList = this.storeList.concat(storeList)
+                this.storeList.push.apply(this.storeList, storeList)
                 this.busyStore = false
               } else {
                 this.busyStore = true

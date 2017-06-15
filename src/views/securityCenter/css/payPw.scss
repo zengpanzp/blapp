@@ -88,16 +88,19 @@ p {
   border-color: transparent;
 }
 
-.li-input{
+.li-input {
   input{
     height: 100%;
   }
 }
-.li-num{
+.li-num {
   width: rem(106*2);
   text-align: center;
   color: #ff0000;
   margin: rem(16) rem(-20) rem(16) 0;
   line-height: rem(60);
-  border-left: 1px solid #ccc
+  border-left: 1px solid #ccc;
+  &.disabled{
+    color: #999;
+  }
 }

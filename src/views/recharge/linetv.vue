@@ -59,11 +59,8 @@
         isCantouch: true // 默认不可以点击
       }
     },
-    computed: {
-    },
     created() {
       window.CTJSBridge && window.CTJSBridge._setNativeTitle("有线电视");
-      this.fill();
       sa.track('$pageview', {
         pageId: 'APP_有线电视',
         categoryId: 'APP_Fees',
@@ -74,11 +71,6 @@
     watch: {
       '$route': 'fill',
        type(val) {
-         this.$loading = this.$toast({
-           iconClass: 'preloader white',
-           message: '加载中',
-           duration: 'loading'
-         });
           this.loadData();
         },
         account(val) {
@@ -108,7 +100,6 @@
         })
       },
       next() {
-        debugger;
         if (this.account == "") {
           this.$toast({
             position: 'bottom',
@@ -157,6 +148,11 @@
       },
       loadData() {
         this.account = "";
+        this.$loading2 = this.$toast({
+          iconClass: 'preloader white',
+          message: '加载中',
+          duration: 'loading'
+        });
         // 查询缴费分组
         utils.isLogin().then(user => {
           console.log(user);
@@ -193,7 +189,7 @@
             });
             console.log(list)
             this.companyList = list;
-            this.$loading.close();
+            this.$loading2.close();
           })
         });
       },
@@ -205,12 +201,12 @@
       },
       // 获得子组件选择的机构
       getCompany(item) {
-        console.log(item)
         this.receiveCompanyItem = item;
-        console.log(this.receiveCompanyItem)
         this.loadListView = false;
         this.toShow = true;
-        this.$router.push({path: "/recharge/linetv"});
+        this.$router.go(-1);
+        this.$loading.close();
+        console.log("come in")
       },
       tabSelect() {
          this.select = !this.select;
@@ -218,6 +214,7 @@
       },
       // 监听路由
       fill(to, from) {
+        this.$loading.close();
         if (to && to.fullPath.indexOf("company") == "-1") {
           this.toShow = true;
           this.loadListView = false;
