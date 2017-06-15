@@ -8,7 +8,7 @@
         <div class="goods-box" v-infinite-scroll="loadGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="goods-item flex" v-for="item in list" v-go-native-goods-detail="item">
             <div class="goods-img lazy-box">
-              <img class="lazy" v-lazy="{ src: item.goodsImgPath }">
+              <img class="lazy" v-lazy="{ src: item.goodsImgPath.replace(/^http:/, '') }">
             </div>
             <div class="goods-des flex-item">
               <div class="goods-title">{{ item.goodsMsg }}</div>
@@ -159,7 +159,7 @@ export default {
                 channel: "1",
                 pageNo: 1,
                 pageSize: "10",
-                isFilterCommons: "false"
+                isFilterCommons: "true"
               }
               api.userCenter.searchProductByIds({
                 clientIp: "0:0:0:0:0:0:0:1",
