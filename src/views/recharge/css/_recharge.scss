@@ -49,7 +49,22 @@
 .right-input:-moz-placeholder {
     color: #bbbbbb !important
 }
-
+.addAccount{
+  height: rem(80);
+  line-height: rem(80);
+  width: rem(700);
+  background: #fff;
+  margin: 0 auto;
+  position: fixed;
+  bottom:rem(10);
+  left: 50%;
+  margin-left: rem(-350);
+  border-radius: rem(10);
+  border:rem(1.5) solid #d0111a;
+  color:#d0111a;
+  text-align: center;
+  font-size: rem(28);
+}
 .right-input::-moz-placeholder {
     color: #bbbbbb !important
 }

@@ -120,6 +120,15 @@ export const prdRouter = [
       {path: 'company'}
     ]
   },
+  /* 神马 充值缴费 添加缴费账号 */
+  {
+    path: '/recharge/addAccount',
+      component: r => require.ensure([], () => r(require('../views/recharge/addAccount')), 'addAccount'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
+    {path: 'company'}
+  ]
+  },
   /* 神马 充值缴费 支付页面  type=1 水费  2 电费  3煤气 */
   {
     path: '/recharge/pay/:type',

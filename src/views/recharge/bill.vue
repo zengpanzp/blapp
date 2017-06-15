@@ -31,33 +31,33 @@
                 </div>
                 <div slot="content">
                   <!--水费-->
-                  <div v-if="item.paymentType==20" class="icon-waitassess swipeout-content">
+                  <div v-if="item.paymentType==20 || item.paymentType=='01'" class="cwater icon-waitassess swipeout-content">
                     <div class='bill-pay-name'>
                       <div>水费</div>
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
-                    <div class='bill-pay-stadius-see'>
-                      <span class="bill-account" v-if="item.accountNo">查看账单</span>
-                      <span class="bill-account" style="color:#999" v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
+                    <div class='bill-pay-stadius-go gray'>
+                      <span class="bill-account" style="color:#666" v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
-                  <div v-if="item.paymentType==21" class="icon-electricity swipeout-content">
+                  <div v-if="item.paymentType==21 || item.paymentType=='02'" class="cdianfei icon-electricity swipeout-content">
                     <div class='bill-pay-name'>
                       <div>电费</div>
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account"  v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">查看账单</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
-                  <div v-if="item.paymentType==22" class="icon-gas swipeout-content">
+                  <div v-if="item.paymentType==22 || item.paymentType=='03'" class="cgas icon-gas swipeout-content">
                     <div class='bill-pay-name'>
                       <div>煤气费</div>
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account"  v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">查看账单</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -74,6 +74,7 @@
       </transition>
       <bl-modal  v-show="visible" :visible="visible" title="删除账号将删除所有缴费信息" :buttons="buttons"></bl-modal>
     </div>
+    <div @click="addAccount" class="addAccount">绑定账号,下次直接付账单</div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -180,7 +181,8 @@
           this.groupList = json.list;
           this.currentGroupId = this.groupList[0].id;
           this.currentGroupName = this.groupList[0].groupName;
-          this.$set(this.receiveGroupItem, "id", this.currentGroupId, this.currentGroupName)
+          this.$set(this.receiveGroupItem, "id", this.currentGroupId)
+          this.$set(this.receiveGroupItem, "groupName", this.currentGroupName)
           this.groupList[0].active = true;
           api.recharge.queryPaySubNo({
             "member_token": user.member_token,
@@ -193,12 +195,12 @@
             let gasCount = 0;
             let dianCount = 0;
             json.list.forEach((obj) => {
-                if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
-                    if (obj.paymentType == 20) {
+                if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
+                    if (obj.paymentType == 20 || obj.paymentType == "01") {
                         waterCount += 1;
-                    } else if (obj.paymentType == 21) {
+                    } else if (obj.paymentType == 21 || obj.paymentType == "02") {
                       dianCount += 1;
-                    } else if (obj.paymentType == 22) {
+                    } else if (obj.paymentType == 22 || obj.paymentType == "03") {
                       gasCount += 1;
                     }
                   this.accountList.push(obj);
@@ -223,35 +225,50 @@
         this.visible = false;
       },
       update() {
+        // 变更分组
+        // 先删除账号账单信息
+        // 再重新创建到对应的分组下面
         api.recharge.deletePaySubNo({
-          accountNo: this.updateItem.accountNo,
-          jigouName: this.updateItem.jigouName,
-          paymentType: this.updateItem.paymentType,
-          accountName: this.updateItem.accountName,
-          groupId: this.updateItem.groupId,
-          groupName: this.updateItem.groupName,
           member_token: this.memberToken,
           subscribeIds: this.subscribeId,
-          deleteType: "all",
+          deleteType: "part",
           timestamp: utils.getTimeFormatToday()
         }).then(data => {
           console.log(data)
           let result = JSON.parse(data.body.obj);
           if (result.resCode == "00100000") {
-            this.$toast({
-              position: 'bottom',
-              message: "变更分组成功!"
-            });
-            this.accountList.forEach((item) => {
-              // 将该信息的账号清空
-              if (item.subscribeId == this.subscribeId) {
-                item.accountNo = "";
+              console.log("updateItem", this.updateItem)
+              // 创建账号账单
+              let createPaySubNoData = {
+                paymentType: this.updateItem.paymentType,
+                jigouName: this.updateItem.jigouName,
+                jigouCode: this.updateItem.jigouCode,
+                accountName: this.updateItem.accountName,
+                groupId: this.receiveGroupItem.id,
+                groupName: this.receiveGroupItem.groupName,
+                accountNo: this.updateItem.accountNo,
+                timestamp: utils.getTimeFormatToday(),
+                member_token: this.memberToken,
               }
-            });
+              api.recharge.createPaySubNo(createPaySubNoData).then(data => {
+                console.log(data);
+                let result = JSON.parse(data.body.obj);
+                if (result.resCode == "00100000") {
+                  this.$toast({
+                    position: 'bottom',
+                    message: "变更分组成功!"
+                  });
+                } else {
+                  this.$toast({
+                    position: 'bottom',
+                    message: result.msg
+                  });
+                }
+              });
           } else {
             this.$toast({
               position: 'bottom',
-              message: result.msg
+              message: "变更分组失败!"
             });
           }
         });
@@ -262,20 +279,46 @@
         api.recharge.deletePaySubNo({
           member_token: this.memberToken,
           subscribeIds: this.subscribeId,
-          deleteType: "all",
+          deleteType: "part",
           timestamp: utils.getTimeFormatToday()
         }).then(data => {
             console.log(data)
             let result = JSON.parse(data.body.obj);
             if (result.resCode == "00100000") {
               this.$toast({
-                position: 'bottom',
+                position: 'bottomTop',
                 message: "账号信息删除成功!"
               });
               this.accountList.forEach((item) => {
                   // 将该信息的账号清空
                   if (item.subscribeId == this.subscribeId) {
-                    item.accountNo = "";
+                      let count = 0;
+                      if (item.paymentType == "01" || item.paymentType == 20) { // 水费
+                        count = this.$el.querySelectorAll(".cwater").length
+                        if (count > 1) {
+                            this.accountList.splice(this.accountList.indexOf(item), 1);
+                        } else {
+                          item.accountNo = "";
+                        }
+                      }
+                      if (item.paymentType == "02" || item.paymentType == 21) { // 电费
+                        count = this.$el.querySelectorAll(".cdianfei").length
+                        console.log(count)
+                        if (count > 1) {
+                            console.log("index", this.accountList.indexOf(item))
+                          this.accountList.splice(this.accountList.indexOf(item), 1);
+                        } else {
+                          item.accountNo = "";
+                        }
+                      }
+                      if (item.paymentType == "03" || item.paymentType == 22) { // 煤气
+                        count = this.$el.querySelectorAll(".cgas").length
+                        if (count > 1) {
+                          this.accountList.splice(this.accountList.indexOf(item), 1);
+                        } else {
+                          item.accountNo = "";
+                        }
+                    }
                   }
               });
             } else {
@@ -297,6 +340,19 @@
           } else {
             this.subscribeId = item.subscribeId;
             this.visible = true; // 弹出提示层消息
+          }
+        }
+        if (type == "edit") {  // 编辑账号信息
+          if (!item.subscribeId) {
+            this.$toast({
+              position: 'bottom',
+              message: "没有账号信息可以编辑!"
+            });
+          } else {
+            this.subscribeId = item.subscribeId;
+            utils.dbSet("BL_UPDATE_ACCOUNT_INFO", JSON.stringify(item));
+            // 去更新账号信息
+            this.$router.push({path: "/recharge/addAccount?isUpdate=true"});
           }
         }
         if (type == "change") {  // 变更分组
@@ -326,6 +382,10 @@
       showMore() {
         this.more = true;
       },
+      // 跳转到新增账号页面
+      addAccount() {
+        this.$router.push({path: "/recharge/addAccount"});
+      },
       // 选择缴费分组
       showCategory(msg) {
         this.toShow = false;
@@ -338,9 +398,10 @@
       },
       // 获得选择的分组
       getGroup(item) {
-        this.receiveGroupItem = item;
-        this.groupId = this.receiveGroupItem.id;
-        this.groupName = this.receiveGroupItem.groupName;
+        this.currentGroupId = item.id;
+        this.currentGroupName = item.groupName;
+        this.$set(this.receiveGroupItem, "id", item.id);
+        this.$set(this.receiveGroupItem, "groupName", item.groupName);
         this.toShow = true;
         if (item.update == "update") { // 进行变更分组操作
           this.update();
@@ -356,12 +417,15 @@
         type = parseInt(type);
         switch (type) {
           case 20 :
+          case 1 :
             typeVal = 1;
             break;
           case 21 :
+          case 2 :
             typeVal = 2;
             break;
           case 22 :
+          case 3 :
             typeVal = 3;
             break;
         }
@@ -448,6 +512,8 @@
         })
         this.currentGroupId = item.id;
         this.currentGroupName = item.groupName;
+        this.$set(this.receiveGroupItem, "id", item.id);
+        this.$set(this.receiveGroupItem, "groupName", item.groupName);
         let current = this;
         this.groupList.forEach((obj) => {
           current.$set(obj, "active", false);
@@ -467,25 +533,25 @@
           let gasCount = 0;
           let dianCount = 0;
           json.list.forEach((obj) => {
-            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
-              if (obj.paymentType == 20) {
+            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
+              if (obj.paymentType == 20 || obj.paymentType == "01") {
                 waterCount += 1;
-              } else if (obj.paymentType == 21) {
+              } else if (obj.paymentType == 21 || obj.paymentType == "02") {
                 dianCount += 1;
-              } else if (obj.paymentType == 22) {
+              } else if (obj.paymentType == 22 || obj.paymentType == "03") {
                 gasCount += 1;
               }
               this.accountList.push(obj);
             }
           });
           if (waterCount == 0) {
-            this.accountList.push({paymentType: 20});
+            this.accountList.push({paymentType: "01"});
           }
           if (dianCount == 0) {
-            this.accountList.push({paymentType: 21});
+            this.accountList.push({paymentType: "02"});
           }
           if (gasCount == 0) {
-            this.accountList.push({paymentType: 22});
+            this.accountList.push({paymentType: "03"});
           }
         });
       }

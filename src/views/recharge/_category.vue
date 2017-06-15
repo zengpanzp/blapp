@@ -35,7 +35,7 @@
       return {
         visible: false, // 是否弹出编辑
         groupName: "",
-        type: 1,  // 1为水  2为电  3为煤
+        type: 1,  // 0为新增 1为水  2为电  3为煤
         groupList: [],
         buttons: [{
             text: "确定"

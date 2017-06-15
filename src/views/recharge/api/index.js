@@ -56,11 +56,11 @@ export default {
     },
     // 删除账号
     deletePaySubNo: params => {
-      return Vue.http.post(baseUrl + '/member/memberCenter/updatePaySubNos.htm', params);
+      return Vue.http.post(baseUrl + '/myInformation/deletePaySubNos.htm', params);
     },
     // 更新账号信息
     updatePaySubNo: params => {
-      return Vue.http.post(baseUrl + '/member/memberCenter/updatePaySubNo.htm', params);
+      return Vue.http.post(baseUrl + '/myInformation/updatePaySubNo.htm', params);
     },
     // 查询我的分组名称
     queryPaySubNo: params => {
