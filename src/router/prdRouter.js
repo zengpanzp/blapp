@@ -242,7 +242,7 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/checkPhone')), 'checkPhone')
   },
-  /* 陈鹏 我的评价 */
+  /* 曾攀 我的评价 */
   {
     path: '/myEvaluation',
     meta: {
@@ -257,5 +257,13 @@ export const prdRouter = [
       title: '联通专区'
     },
     component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
+  },
+  /* 曾攀 会员权益 */
+  {
+    path: '/memberBenefit',
+    meta: {
+      title: '会员权益'
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/memberBenefit')), 'memberBenefit')
   }
 ]
