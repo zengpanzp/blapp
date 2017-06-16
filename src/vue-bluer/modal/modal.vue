@@ -300,6 +300,7 @@
     watch: {
       "visible" (val) {
         this.showVisible = val;
+        console.log(val)
       }
     },
     methods: {
@@ -316,6 +317,7 @@
       }
     },
     mounted() {
+        console.log(this.buttons)
       this.halfHeight = -(this.$refs.modal.offsetHeight / 2) + 'px'
     }
   }

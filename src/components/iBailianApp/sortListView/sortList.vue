@@ -59,10 +59,6 @@
   .sortListView{
     width:100%;
     height: 100%;
-    position: fixed;
-    z-index: 999;
-    background: rgb(245,245,245);
-    overflow:auto;
     .letter{
       width: rem(100);
       height: rem(100);
@@ -87,12 +83,21 @@
     }
     .sort_box{
       width: 100%;
-      background-color: #fff;
+      height: 100%;
+      background-color: #f8f8f8;
+      z-index: 88;
+      position: fixed;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .sort_list{
       position: relative;
-      margin: 0 rem(30);
-      border-bottom: 1px solid #ddd;
+      padding: 0 rem(30);
+      &:last-child{
+        .num_name{
+          border-bottom: 0;
+        }
+      }
       // div{
       //   display:inline-block;
       //   vertical-align:middle;
@@ -104,7 +109,7 @@
       img{
         width:rem(30);
         position:absolute;
-        right: rem(20);
+        right: rem(50);
         top: 50%;
         @include transform(translate(0, -50%));
       }
@@ -113,9 +118,9 @@
       background:#fff;
     }
     .sort_list .num_name{
-      @include ellipsis(90%);
+      @include ellipsis();
+      border-bottom: 1px solid #ddd;
       color: #000;
-      // width:rem(650);
       font-size: rem(28);
       position:relative;
       color:#333;
@@ -127,6 +132,7 @@
       padding-left: rem(40);
       color:#787878;
       font-size: rem(28);
+      background-color: #F8F8F8;
     }
     .initials{
       position: fixed;
@@ -137,7 +143,7 @@
       width: rem(55);
       text-align: center;
       font-size: rem(12);
-      z-index: 99;
+      z-index: 1000;
       background: rgba(145,145,145,0);
       @include transform(translate(0, -50%));
       img{

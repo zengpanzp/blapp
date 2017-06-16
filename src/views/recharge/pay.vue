@@ -174,7 +174,7 @@
                   }
                   // 创建账号账单
                   let createPaySubNoData = {
-                    paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
+                    paymentType: "0" + current.rateType,
                     jigouName: this.queryData.companyName,
                     jigouCode: this.queryData.typecode,
                     accountName: "APP",
@@ -206,13 +206,8 @@
                       let Pay = require('src/paymodel').default
                       current.inlineLoading.close()
                       Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
-                        sa.track('$pageview', {
-                          pageId: 'APP_虚拟页面_收银台',
-                          categoryId: 'APP_Fees',
-                          $title: "APP_虚拟页面_收银台"
-                        });
                         // 跳转到paysuccess
-                        current.$router.push({path: "/recharge/paysuccess", params: JSON.parse(data)});
+                        current.$router.push({path: "/recharge/paysuccess?money=" + data + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
                       }, (data) => {
                         // 跳转到详情
                         current.$router.push({path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo});
@@ -248,11 +243,6 @@
           this.typeClass = "icon-tietong";
           this.typeName = "铁通";
         }
-        sa.track('$pageview', {
-          pageId: 'APP_虚拟页面_收银台',
-          categoryId: 'APP_Fees',
-          $title: "APP_虚拟页面_收银台"
-        });
         this.$loading.close()
       }
     }

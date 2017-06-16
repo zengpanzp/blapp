@@ -4,7 +4,7 @@
  * 有时候我们需要从 store 中的 state 中派生出一些状态，例如对列表进行过滤并计数,可以认为是 store 的计算属性,
 *  getters: {
       doneTodos: state => {
-        return state.todos.filter(todo => todo.done)
+        return state.todos.filter(item => item.done)
       }
     }
  */

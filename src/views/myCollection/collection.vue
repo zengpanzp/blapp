@@ -8,7 +8,7 @@
         <div class="goods-box" v-infinite-scroll="loadGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="goods-item flex" v-for="item in list" v-go-native-goods-detail="item">
             <div class="goods-img lazy-box">
-              <img class="lazy" v-lazy="{ src: item.goodsImgPath }">
+              <img class="lazy" v-lazy="{ src: item.goodsImgPath.replace(/^http:/, '') }">
             </div>
             <div class="goods-des flex-item">
               <div class="goods-title">{{ item.goodsMsg }}</div>
@@ -93,7 +93,18 @@ export default {
   },
   methods: {
     currentPageReload() {
-      this.$router.go(0)
+      let deployName = this.$route.query.deployName
+      switch (deployName) {
+        case 'goods':
+          this.tabsModel = '0'
+          break;
+        case 'stores':
+          this.tabsModel = '1'
+          break;
+        default:
+          this.tabsModel = '1'
+      }
+      this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
     },
     changeTab(index, deployName) {
       let saName = this.filterEleTabs[this.tabsModel].deployName
@@ -159,7 +170,7 @@ export default {
                 channel: "1",
                 pageNo: 1,
                 pageSize: "10",
-                isFilterCommons: "false"
+                isFilterCommons: "true"
               }
               api.userCenter.searchProductByIds({
                 clientIp: "0:0:0:0:0:0:0:1",

@@ -757,13 +757,11 @@
 
 %gotop {
     position: fixed;
-    display: none;
     right: rem(20);
     bottom: rem(142);
-    z-index: 20;
     width: rem(72);
     height: rem(72);
-    background-image: inline-image("base64/bottom-top.png");
+    // background-image: inline-image("base64/bottom-top.png");
     background-repeat: no-repeat;
     background-size: contain;
     z-index: 1002;

@@ -43,10 +43,10 @@ export const prdRouter = [
   },
   /* 神马 签到 日签 */
   {
-    path: '/daysign',
+    path: '/sign/daysign',
       meta: {
-    title: '签到'
-  },
+        title: '签到'
+      },
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */
@@ -119,6 +119,15 @@ export const prdRouter = [
       {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
       {path: 'company'}
     ]
+  },
+  /* 神马 充值缴费 添加缴费账号 */
+  {
+    path: '/recharge/addAccount',
+      component: r => require.ensure([], () => r(require('../views/recharge/addAccount')), 'addAccount'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
+    {path: 'company'}
+  ]
   },
   /* 神马 充值缴费 支付页面  type=1 水费  2 电费  3煤气 */
   {
@@ -258,7 +267,7 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/payPwAuth')), 'payPwAuth')
   },
-  /* 陈鹏 我的评价 */
+  /* 曾攀 我的评价 */
   {
     path: '/myEvaluation',
     meta: {
@@ -301,5 +310,12 @@ export const prdRouter = [
   {
     path: '/ECP',
     component: r => require.ensure([], () => r(require('../views/myWallet/ECP')), 'ECP')
+  /* 曾攀 会员权益 */
+  {
+    path: '/memberBenefit',
+    meta: {
+      title: '会员权益'
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/memberBenefit')), 'memberBenefit')
   }
 ]

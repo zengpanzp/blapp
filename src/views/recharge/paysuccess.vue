@@ -2,19 +2,24 @@
 <!--水电煤缴费成功-->
 <template>
   <div class="pay_success">
-    <div class='success-pay'>
-      <p class='success-pay-first'>
-        <img class='success-pay-select' src='./i/icons/payok.png'>
-        支付成功
-      </p>
-      <p class='success-pay-second'>
-        缴费金额：<label class='font-color-yellow'>￥58.00</label>
-      </p>
-      <p class='success-pay-third'>实际到账时间已销账机构处理为准</p>
-    </div>
-    <div class='success-pay-button'>
-      <button type='button' class='corner'> 查看订单</button>
-      <button type='button' disabled='disabled' class='corner'> 返回缴费中心</button>
+    <div class="success-container margin-config">
+      <div class="head">
+        <div class="success-logo"></div>
+        <div>交易成功</div>
+      </div>
+      <div class="order-info">
+        <div>充值订单：</div>
+        <div>{{orderNo}}</div>
+      </div>
+      <div class="order-info">
+        <div>支付金额：：</div>
+        <div>¥{{money}}</div>
+      </div>
+      <div class="remind">充值成功后预计能快速到账，请注意查收短信，遇系统繁忙等情况可能会延时到账。</div>
+      <div class="button-box">
+        <div class="left-button" @click="recharge"><a>继续充值</a></div>
+        <div class="right-button" @click="goOrderDetail"><a>查看订单</a></div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,11 +38,16 @@
 
     data() {
       return {
+          money: 0,
+          orderNo: "",
+          type: "sf"
       }
     },
-    computed: {
-    },
     created() {
+      window.CTJSBridge && window.CTJSBridge._setNativeTitle("支付成功");
+      this.money = this.$route.query.money
+      this.orderNo = this.$route.query.orderNo
+      this.type = this.$route.query.type
       sa.track('$pageview', {
         pageId: 'App_虚拟支付成功页',
         categoryId: 'APP_Fees',
@@ -54,6 +64,12 @@
 //      });
 //    },
     methods: {
+     recharge() {
+       this.$router.push({path: "/recharge"});
+     },
+     goOrderDetail() {
+       this.$router.push({path: "/recharge/orderdetail/" + this.type + "/" + this.orderNo});
+     }
     }
   }
 </script>
