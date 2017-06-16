@@ -18,7 +18,7 @@
           <div class="goods-btn-group">
             <bl-button type="outlineMain" inline size="small" @click="commentShow(item.orderNo,item.product)" v-if="type == '00'||item.isvalid == -1">评价晒单</bl-button>
             <bl-button type="outlineMain" inline size="small" @click="commentAfter(item.id,item.product)" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">追加晒单</bl-button>
-            <bl-button type="outlineMain" inline size="small" @click="seeComment(item.id,item.product)" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'">
+            <bl-button type="outlineMain" inline size="small" @click="seeComment(item.id,item.product)" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'|| models[i].isContent">
               查看评价
             </bl-button>
             <bl-button type="outlineMain" inline size="small" @click="againComment(item.id,item.product)" v-else>
@@ -233,7 +233,10 @@ export default {
           console.log("----data orderNo-------" + data.body.obj)
           this.$loading.close()
           if (data.body.obj) {
-            let resData = JSON.parse(data.body.obj)
+            let obj = JSON.stringify(data.body.obj).replace(/http:\/\//g, "https://")
+            let msg = JSON.parse(obj);
+            console.log("-----hh---" + msg)
+            let resData = JSON.parse(msg)
             if (resData.resultInfo) {
                 this.pageNo = resData.resultInfo.pageNo
                 let resRow = resData.resultInfo.rows
@@ -308,10 +311,13 @@ export default {
           pageSize: 10,
           pageNo: this.pageNum ++
       }).then(data => {
+        console.log("------Bytype-----" + data.body.obj)
         this.$loading.close()
         if (data.body.obj) {
-          console.log("------data-----" + data.body.obj)
-          let resData = JSON.parse(data.body.obj)
+          let obj = JSON.stringify(data.body.obj).replace(/http:\/\//g, "https://")
+          let msg = JSON.parse(obj);
+          console.log("-----hh---" + msg);
+          let resData = JSON.parse(msg)
           if (resData && resData.resultInfo) {
               this.pageNo = resData.resultInfo.pageNo
               let resRow = resData.resultInfo.rows

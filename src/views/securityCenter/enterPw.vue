@@ -28,7 +28,7 @@ export default {
   	this.$loading.close()
   },
   methods: {
-  	confirm () {
+  	confirm() {
   		alert(this.currentPw)
   	}
   }

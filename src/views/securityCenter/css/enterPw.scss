@@ -84,12 +84,8 @@ input {
 
 .input:valid + .clear { display: inline; }
 
-// .back-transition { 
-//   transition: transform .5s ease;
-// }
-// .back-enter{
-//   transform: translate(100%,0);
-// }
-// .back-leave {
-//   transform: translate(-100%,0);
-// }
+.middle {
+  text-align: center;
+  font-size: larger;
+  padding: rem(30) 0;
+}
