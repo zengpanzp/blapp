@@ -309,7 +309,7 @@
               accountNo: this.account,
               timestamp: timestamp,
               member_token: this.memberToken,
-              mobile: this.phone
+              contactPhone: this.phone
             }
             api.recharge.updatePaySubNo(updatePaySubNoData).then(data => {
               console.log(data);
@@ -343,7 +343,7 @@
               accountNo: this.account,
               timestamp: timestamp,
               member_token: this.memberToken,
-              mobile: this.phone
+              contactPhone: this.phone
             }
             api.recharge.createPaySubNo(createPaySubNoData).then(data => {
               console.log(data);
