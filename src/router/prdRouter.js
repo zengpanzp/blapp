@@ -273,5 +273,33 @@ export const prdRouter = [
       title: '联通专区'
     },
     component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
+  },
+  /* 郭健 我的钱包 */
+  {
+    path: '/myWallet',
+    meta: {
+      title: '我的钱包'
+    },
+    component: r => require.ensure([], () => r(require('../views/myWallet/myWallet')), 'myWallet')
+  },
+  /* 郭健 我的钱包 我的余额 */
+  {
+    path: '/balance',
+    component: r => require.ensure([], () => r(require('../views/myWallet/balance')), 'balance')
+  },
+  /* 郭健 我的钱包 我的余额 余额明细 */
+  {
+    path: '/balanceList',
+    component: r => require.ensure([], () => r(require('../views/myWallet/balanceList')), 'balanceList')
+  },
+  /* 郭健 我的钱包 我的积分 */
+  {
+    path: '/points',
+    component: r => require.ensure([], () => r(require('../views/myWallet/points')), 'points')
+  },
+  /* 郭健 我的钱包 我的ECP */
+  {
+    path: '/ECP',
+    component: r => require.ensure([], () => r(require('../views/myWallet/ECP')), 'ECP')
   }
 ]
