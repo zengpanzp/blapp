@@ -310,6 +310,7 @@ export const prdRouter = [
   {
     path: '/ECP',
     component: r => require.ensure([], () => r(require('../views/myWallet/ECP')), 'ECP')
+  },
   /* 曾攀 会员权益 */
   {
     path: '/memberBenefit',
