@@ -101,4 +101,4 @@ export default {
 </script>
 
 <style lang="scss" src="./css/payPw.scss" scoped>
-</style>	
+</style>

@@ -317,5 +317,13 @@ export const prdRouter = [
       title: '会员权益'
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/memberBenefit')), 'memberBenefit')
+  },
+  /* 曾攀 更多权益 */
+  {
+    path: '/blprivilegeClub',
+    meta: {
+      title: '更多权益',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
   }
 ]
