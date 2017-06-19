@@ -89,7 +89,7 @@ export default {
     	'rightCode': powerId
     })).then(data => {
     	this.$loading.close()
-    	console.log("----powerId------" + data.body.obj)
+      console.log("----powerId------" + data.body.obj)
     	if (data.body.obj) {
     	let obj = JSON.parse(data.body.obj)
     		let sub = '';
