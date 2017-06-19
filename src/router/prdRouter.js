@@ -43,10 +43,10 @@ export const prdRouter = [
   },
   /* 神马 签到 日签 */
   {
-    path: '/daysign',
+    path: '/sign/daysign',
       meta: {
-    title: '签到'
-  },
+        title: '签到'
+      },
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */
@@ -119,6 +119,15 @@ export const prdRouter = [
       {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
       {path: 'company'}
     ]
+  },
+  /* 神马 充值缴费 添加缴费账号 */
+  {
+    path: '/recharge/addAccount',
+      component: r => require.ensure([], () => r(require('../views/recharge/addAccount')), 'addAccount'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
+    {path: 'company'}
+  ]
   },
   /* 神马 充值缴费 支付页面  type=1 水费  2 电费  3煤气 */
   {
@@ -274,6 +283,34 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
   },
+  /* 郭健 我的钱包 */
+  {
+    path: '/myWallet',
+    meta: {
+      title: '我的钱包'
+    },
+    component: r => require.ensure([], () => r(require('../views/myWallet/myWallet')), 'myWallet')
+  },
+  /* 郭健 我的钱包 我的余额 */
+  {
+    path: '/balance',
+    component: r => require.ensure([], () => r(require('../views/myWallet/balance')), 'balance')
+  },
+  /* 郭健 我的钱包 我的余额 余额明细 */
+  {
+    path: '/balanceList',
+    component: r => require.ensure([], () => r(require('../views/myWallet/balanceList')), 'balanceList')
+  },
+  /* 郭健 我的钱包 我的积分 */
+  {
+    path: '/points',
+    component: r => require.ensure([], () => r(require('../views/myWallet/points')), 'points')
+  },
+  /* 郭健 我的钱包 我的ECP */
+  {
+    path: '/ECP',
+    component: r => require.ensure([], () => r(require('../views/myWallet/ECP')), 'ECP')
+  },
   /* 曾攀 会员权益 */
   {
     path: '/memberBenefit',
@@ -281,5 +318,13 @@ export const prdRouter = [
       title: '会员权益'
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/memberBenefit')), 'memberBenefit')
+  },
+  /* 曾攀 更多权益 */
+  {
+    path: '/blprivilegeClub',
+    meta: {
+      title: '更多权益',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
   }
 ]

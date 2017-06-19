@@ -104,7 +104,6 @@ export default {
     };
   },
   created() {
-  	this.$loading.close()
   	try {
         sa.track('$pageview', {
           pageId: 'APP_联通专区',
@@ -146,6 +145,7 @@ export default {
 	            mobile: this.mobile,
 	            deviceId: this.deviceId
 	  		}).then(data => {
+	  			this.$loading.close();
 	  			$(".block").hide();
 	  			if (data.body.obj) {
 	  				let obj = JSON.parse(data.body.obj);
@@ -160,11 +160,10 @@ export default {
 		  			}
 	  			}
 	  			this.$nextTick(() => {
-	  				this.$loading.close();
 	  				for (var i = 0; i < this.llList.length; i++) {
-	  					if (this.llList[i].remainTimes <= '0') {
-	  						$(".llitem-right a").addClass("unicom-disabled")
-	  					}
+	  					// if (this.llList[i].remainTimes <= '0') {
+	  					// 	$(".llitem-right a").addClass("unicom-disabled")
+	  					// }
 	  					if ((this.llList[i].exchangedTimes && parseInt(this.llList[i].exchangedTimes) > 0 && parseInt(this.llList[i].remainTimes) <= 0)) {
 	  							$(".llitem-right a").html("已领取")
 	  					}

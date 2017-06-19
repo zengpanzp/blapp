@@ -1,17 +1,20 @@
 <style lang="scss" src="./css/_index.scss" scoped></style>
+
 <!--日签-->
 <template>
 
   <div class="daysign">
-    <div class="overlay" v-show="showOverlay"></div>
+    <div class="overlay test" v-show="showOverlay"></div>
     <section class="dheader">
       <div class="tips">
-        <div>积分攒着当钱花</div>
-        <div>线上线下都可花</div>
+        <div>{{message1}}</div>
+        <div>{{message2}}</div>
       </div>
       <div class="line"></div>
-      <div class="tips2">本月已获得2次抽奖 <img src="./i/date.png" class="dateImg"></div>
-      <div class="tips2 other">我的积分 3444 （可抵现34.44元） </div>
+      <div class="tips2" v-if="!isLogin">本月可参与抽奖次数：<label style="color:#398be0">【请登录】</label></div>
+      <div class="tips2" v-else="isLogin">本月已获得2次抽奖 <img src="./i/date.png" class="dateImg"></div>
+      <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
+      <div class="tips2 other" v-if="isLogin">我的积分： 4344 (可抵现46.34)</div>
       <div class="btnSign">
           签 到<img src="./i/signed.png">
       </div>
@@ -175,7 +178,8 @@
     <div class="end" style="text-align: center">
       <img  :src="require('src/assets/icon_end.png')">
     </div>
-    <section class="fixed"  v-show="showOverlay">
+    <transition appear appear-active-class="fadeInUpBig"  name="fadeInDown" enter-active-class="fadeInUpBig" leave-active-class="fadeOutDownBig">
+        <section class="fixed" v-if="showOverlay">
       <img src="./i/close.png" class="close" @click="close">
       <div class="title">
         <div>只差一步</div>
@@ -207,31 +211,86 @@
         <div class="clearfix"></div>
       </ul>
     </section>
+    </transition>
   </div>
 </template>
 <script>
-//  import api from 'src/api/index'
-//  import utils from 'src/utils'
+  import api from './api/index'
+  import utils from 'src/utils'
   export default {
     name: 'daysign',
     data() {
       return {
-          showOverlay: true
+          showOverlay: false,
+          message1: "天天积分，惊喜抽奖",
+          message2: "福利齐上阵，购物更优惠",
+          isLogin: true
       }
     },
     computed: {
-      fillAllSlides() {
-        return this.banner
-      }
     },
     created() {
+       window.$$vue = this;
       this.$loading.close()
+      api.sign.queryAdDeploy({
+        otherresource: {
+          resourceId: '237300,237301,237302,237304,237306,237307,237310,237311,237320,1604,1605,1606,1607,1608,1609,1610,1611,1612,1613,1614,1615,1616,1617,1618,1619,1620,1621,1624'
+        }
+      }).then(res => {
+        let resData = JSON.parse(res.body.obj).obj.otherResource
+        console.log(resData)
+      })
+      utils.isLogin(false).then(user => {
+          this.memberId = user.member_id;
+          this.memberToken = user.member_token;
+          if (this.memberId && this.memberToken) { // 已经登录
+            console.log("已登录")
+            this.isLogin = true;
+            // 查询用户是否有签到资格
+          } else {
+              this.isLogin = false;
+              console.log("未登录")
+          }
+      });
+      // 查询商品
+//      api.sign.lotteryCallback({
+//      });
+      console.log(api)
     },
     mounted() {
     },
     methods: {
       close() {
         this.showOverlay = false;
+      },
+      // 查询签到资格
+      getSignQualification() {
+        api.sign.signInQualification({
+          channelId: "",
+          member_token: this.memberToken
+        }).then(data => {
+          console.log(data)
+        });
+      },
+      // 代理登录
+      loginProxy($event) {
+          if ($event.target.className == "blogin") {
+            utils.isLogin(true).then(user => {
+              this.memberId = user.member_id;
+              this.memberToken = user.member_token;
+              // 重新请求签到资格
+              this.getSignQualification();
+            })
+          }
+      },
+      // 主动登录
+      login() {
+        utils.isLogin(true).then(user => {
+          this.memberId = user.member_id;
+          this.memberToken = user.member_token;
+          // 重新请求签到资格
+          this.getSignQualification();
+        })
       }
     }
   };

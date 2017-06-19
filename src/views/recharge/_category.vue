@@ -35,7 +35,7 @@
       return {
         visible: false, // 是否弹出编辑
         groupName: "",
-        type: 1,  // 1为水  2为电  3为煤
+        type: 1,  // 0为新增 1为水  2为电  3为煤
         groupList: [],
         buttons: [{
             text: "确定"
@@ -176,8 +176,11 @@
           })
         },
         selectGroup(item, $index) {
-            debugger
           let that = this;
+          let isUpdate = this.$route.query.isUpdate; // 是否是变更分组过来的
+          if (isUpdate == "update") {
+              item.update = isUpdate;
+          }
           // 让所有的没有选中样式
           this.groupList.forEach(function(item) {
             that.$set(item, 'active', false);

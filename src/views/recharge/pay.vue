@@ -174,7 +174,7 @@
                   }
                   // 创建账号账单
                   let createPaySubNoData = {
-                    paymentType: current.getOrderTypeCode(current.typeObj[current.rateType]),
+                    paymentType: "0" + current.rateType,
                     jigouName: this.queryData.companyName,
                     jigouCode: this.queryData.typecode,
                     accountName: "APP",
