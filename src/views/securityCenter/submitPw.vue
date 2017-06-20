@@ -107,11 +107,12 @@ export default {
                     }
                   })
                 } else {
-                  // api.userCenter.setPayPwd({
-                  //   memberId: member_id,
-                  //   phoneNum: this.phoneNum
-                  // })
-                  alert('setPayPwd' + member_id)
+                  // 忘记密码 验证 pwd 
+                  api.userCenter.setPayPwd({
+                    memberId: member_id,
+                    phoneNum: this.phoneNum
+                  })
+                  console.log('setPayPwd' + member_id)
                 }
 	  			    }
   				} else {
