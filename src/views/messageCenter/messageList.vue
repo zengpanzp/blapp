@@ -41,6 +41,11 @@
 	            </ul>
 	        </div>
 	    </div>
+      <div id="empty" class="empty messageEmpty" style="display: none">
+        还没有消息
+        <!--<p>可以去看看那些想看的</p>-->
+        <!--<a href="#homepage/home">去逛逛</a>-->
+      </div>
 	    <div class="infinite-layer" v-if="loading">
 	      <div class="infinite-preloader"></div>
 	      <div>加载中...</div>
@@ -76,6 +81,7 @@ export default {
 		this.noRows = false
 	  	let list = [];
 	  	this.typeId = this.$route.params.typeId;
+      window.CTJSBridge._setNativeTitle(this.$route.params.title);
 	  	utils.isLogin().then(data => {
 	  		let memberId = data.member_id;
 	  		api.messageCenter.getMessage({
@@ -112,6 +118,9 @@ export default {
 			  	} else {
 			  		this.loading = false
 			  	}
+          if (obj.totalPage == 0) {
+            $("#empty").show();
+          }
 	  		})
 	  		api.messageCenter.operateMessage({
 	  			"obj": JSON.stringify({
@@ -212,7 +221,22 @@ export default {
 	          pageId: 'pointsDetail'
 	      	})
       	}
-  	}
-  }
+  	},
+    clearAll: function () {
+      api.messageCenter.operateMessage({
+        "obj": JSON.stringify({
+        "memberNo": this.memberId,
+        "operation": "2",
+        "businessType": this.typeId
+      })}).then(data => {
+        $("#mc").html("");
+        this.$toast({position: "bottom", message: "~消息已清空~"})
+        $("#empty").show();
+      })
+    }
+  },
+  mounted() {
+    window.clearAll = this.clearAll
+  },
 };
 </script>

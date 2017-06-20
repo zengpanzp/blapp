@@ -33,7 +33,7 @@
             <div class="list-text" v-go-native-goods-detail="row[0]">{{ row[0].productName }}</div>
             <div class="list-pay">
               <div class="paynum"><span>¥</span>{{ row[0].marketPrice }}</div>
-              <div class="pay-log-no" v-if="row.isAvailable == 0"></div>
+              <div class="pay-log-no" v-if="row[0].isAvailable == 0"></div>
               <div class="pay-log" v-else @click="addCard(row[0].goodsId, row[0])"></div>
             </div>
           </div>

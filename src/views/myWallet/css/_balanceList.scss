@@ -1,0 +1,129 @@
+@charset "utf-8";
+@import "src/sass/tobe/function";
+.integral-menu {
+  height: rem(76)
+}
+
+.integral-menu li {
+  float: left;
+  width: 50%;
+  height: rem(76);
+  line-height: rem(76);
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #efeff4
+}
+
+.integral-menu li a {
+  display: inline-block;
+  padding: 0 rem(30.6);
+  color: #999999;
+  height: rem(76);
+  min-width: rem(176)
+}
+
+.new .select-integral {
+  border-bottom: rem(1) solid #999999;
+  color: #333
+}
+
+// .integral-list {
+//   margin-top: rem(-2);
+//   padding: 0 rem(27);
+//   background: #fff;
+//   border-top: rem(2) solid #dedede
+// }
+
+.top-money {
+  background: #FFFFFF;
+  padding: rem(54) 0
+}
+
+.top-money div:first-child {
+  color: #666666;
+  text-align: center
+}
+
+.top-money div:last-child {
+  color: #e6133c;
+  font-size: rem(40);
+  text-align: center;
+  margin-top: rem(21.6)
+}
+
+.integral-list {
+  margin-top: rem(-2);
+  padding: 0 rem(27);
+  background: #fff;
+  border-top: rem(2) solid #dedede
+}
+
+.integral-list li {
+  padding: rem(18) 0;
+  border-bottom: rem(2) solid #eeeeee;
+  overflow: hidden;
+  width: 100%;
+}
+
+.integral-way {
+  height: 2.65rem;
+  width: 2.65rem;
+  display: block;
+  float: left;
+  line-height: 2.65rem;
+  text-align: center;
+  color: #fff;
+  border-radius: .25rem;
+  margin-right: .625rem;
+}
+
+.integral-details {
+  overflow: hidden;
+}
+
+.integral-details p {
+  font-size: rem(22);
+  margin-top: rem(18);
+  color: #666666;
+  overflow: hidden;
+}
+
+.integral-details .integral-details-title {
+  margin-top: 0;
+  color: #333333
+}
+
+.integral-num-container {
+  font-size: rem(20);
+  margin-top: rem(-3.6);
+}
+
+.integral-detail-num {
+  font-size: 1rem;
+  color: #e6133c;
+  font-weight: 700;
+  margin-right: 0.3125rem;
+  vertical-align: middle;
+}
+
+.integral-up-back {
+  // background: url(../../images/new_store/integral-up.png) no-repeat 85% 30%;
+  background-size: 20%;
+}
+
+.fr{
+	float: right;
+}
+
+.new .font-color-red{color:#e6133c!important}
+
+.empty {
+width: 80%;
+line-height: rem(60);
+margin: 0 auto;
+text-align: center;
+color: #494949;
+padding-top: rem(288);
+font-size: rem(30);
+}
