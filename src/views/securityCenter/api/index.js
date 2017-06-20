@@ -42,5 +42,9 @@ export default {
     validCodePayPwd: params => {
       return Vue.http.post(baseUrl + '/myInformation/validCodePayPwd.htm', params);
     },
+    // 安全中心 支付密码修改 忘记密码 提交密码
+    setPayPwd: params => {
+      return Vue.http.post(baseUrl + '/myInformation/setPayPwd.htm', params);
+    },
   }
 }

@@ -125,25 +125,22 @@ export default {
   },
   methods: {
     exit() {
-    //   this.$modal({
-    //   title: '提示',
-    //   content: '确认要退出？',
-    //   buttons: [
-    //     { text: '取消', onClick: function() {} },
-    //     { text: '确定', onClick: function() {} },
-    //   ]
-    // })
-    this.$modal({
-        title: '提示',
-        content: '确认要退出？',
-        buttons: [{
-          text: '取消',
-          onClick: () => {
-            this.$toast('取消退出')
-          }
+      window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+        title: "提示",
+        message: "确认要退出？",
+        buttons: [
+        {
+          title: "取消"
         }, {
-          text: '确定',
-          onClick: () => {
+          title: "确定",
+          style: "highlighted"
+        }]
+      }, { success: data => {
+        console.log("####success#####" + data)
+        let bd = JSON.parse(data)
+        let button = bd.buttonTitle
+        console.log(button)
+        if (button == "确定") {
             window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
               success: result => {
                 console.log(result)
@@ -159,9 +156,11 @@ export default {
                 console.log(result)
               }
             });
+          } else if (button == "取消") {
+            // this.$toast('取消')
           }
-        }]
-    })
+        }
+      })
     },
     authen() {
       // native 实名认证页
