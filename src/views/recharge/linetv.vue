@@ -189,6 +189,7 @@
             });
             console.log(list)
             this.companyList = list;
+            this.$loading.close();
             this.$loading2.close();
           })
         });
