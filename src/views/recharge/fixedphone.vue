@@ -233,13 +233,22 @@ export default {
           let resData = JSON.parse(data.body.obj)
           if (resData.sku) {
             let list = []
-            for (let [index, val] of resData.sku.entries()) {
+            // for (let [index, val] of resData.sku.entries()) {
+            //   list.push({
+            //     mainPrice: val,
+            //     salePrice: resData.price2[index],
+            //     activePay: resData.price[index],
+            //     item: resData.item[index],
+            //     fee: resData.fee[index]
+            //   })
+            // }
+            for (var i = 0; i < resData.sku.length; i++) {
               list.push({
-                mainPrice: val,
-                salePrice: resData.price2[index],
-                activePay: resData.price[index],
-                item: resData.item[index],
-                fee: resData.fee[index]
+                mainPrice: resData.sku[i],
+                salePrice: resData.price2[i],
+                activePay: resData.price[i],
+                item: resData.item[i],
+                fee: resData.fee[i]
               })
             }
             this.moneyList = list

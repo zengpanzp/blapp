@@ -113,7 +113,6 @@
         top: 50%;
         @include transform(translate(0, -50%));
       }
-      height: rem(88);
       line-height: rem(88);
       background:#fff;
     }

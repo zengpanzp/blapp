@@ -308,12 +308,21 @@
             console.log('查询全部游戏: ' + data.body.obj)
             console.warn(resData)
             let list = []
-            for (let [index, item] of gameInfoList.entries()) {
-              if (item.UseType == dtype) {
+            // for (let [index, item] of gameInfoList.entries()) {
+            //   if (item.UseType == dtype) {
+            //     list.push({
+            //       id: index,
+            //       categoryCode: item.CategoryCode,
+            //       name: item.CategoryName
+            //     })
+            //   }
+            // }
+            for (var i = 0; i < gameInfoList.length; i++) {
+              if (gameInfoList[i].UseType == dtype) {
                 list.push({
-                  id: index,
-                  categoryCode: item.CategoryCode,
-                  name: item.CategoryName
+                  id: i,
+                  categoryCode: gameInfoList[i].CategoryCode,
+                  name: gameInfoList[i].CategoryName
                 })
               }
             }
@@ -545,12 +554,20 @@
         if (this.serverInfo.GameRegion[index].GameServer && this.serverInfo.GameRegion[index].GameServer.length) {
           let gameServerList = this.serverInfo.GameRegion[index].GameServer
           let list = []
-          for (let [index, item] of gameServerList.entries()) {
+          // for (let [index, item] of gameServerList.entries()) {
+          //   list.push({
+          //     id: index,
+          //     ServerID: item.ServerID,
+          //     name: item.ServerName,
+          //     ServerValue: item.ServerValue
+          //   })
+          // }
+          for (var i = 0; i < gameServerList.length; i++) {
             list.push({
-              id: index,
-              ServerID: item.ServerID,
-              name: item.ServerName,
-              ServerValue: item.ServerValue
+              id: i,
+              ServerID: gameServerList[i].ServerID,
+              name: gameServerList[i].ServerName,
+              ServerValue: gameServerList[i].ServerValue
             })
           }
           this.moreGameServerList = list
@@ -638,11 +655,20 @@
                 let consumesArr = consumeData.quantity.split(',')
                 let consumesPriceArr = consumeData.price.split(',')
                 let moneyListArr = []
-                for (let [index, item] of consumesArr.entries()) {
+                // for (let [index, item] of consumesArr.entries()) {
+                //   moneyListArr.push({
+                //     id: item,
+                //     name: `${item} ${moneyName}`,
+                //     price: consumesPriceArr[index],
+                //     pay: moneyPayId,
+                //     moneyName: moneyName
+                //   })
+                // }
+                for (let i = 0; i < consumesArr.length; i++) {
                   moneyListArr.push({
-                    id: item,
-                    name: `${item} ${moneyName}`,
-                    price: consumesPriceArr[index],
+                    id: consumesArr[i],
+                    name: `${consumesArr[i]} ${moneyName}`,
+                    price: consumesPriceArr[i],
                     pay: moneyPayId,
                     moneyName: moneyName
                   })
@@ -706,14 +732,24 @@
               let gameMoneyList = resData.gameInfo
               console.log(resData)
               let list = []
-              for (let [index, item] of gameMoneyList.entries()) {
+              // for (let [index, item] of gameMoneyList.entries()) {
+              //   list.push({
+              //     id: index,
+              //     categoryCode: item.CategoryCode,
+              //     ProductCode: item.ProductCode,
+              //     name: item.ParPrice,
+              //     price: item.dwyj,
+              //     realPrice: item.dzxj
+              //   })
+              // }
+              for (var i = 0; i < gameMoneyList.length; i++) {
                 list.push({
-                  id: index,
-                  categoryCode: item.CategoryCode,
-                  ProductCode: item.ProductCode,
-                  name: item.ParPrice,
-                  price: item.dwyj,
-                  realPrice: item.dzxj
+                  id: i,
+                  categoryCode: gameMoneyList[i].CategoryCode,
+                  ProductCode: gameMoneyList[i].ProductCode,
+                  name: gameMoneyList[i].ParPrice,
+                  price: gameMoneyList[i].dwyj,
+                  realPrice: gameMoneyList[i].dzxj
                 })
               }
               this.moreGameNumlist = list // 更多游戏区号
@@ -728,12 +764,20 @@
                 /* 游戏区服判断 */
                 if (this.serverInfo.GameRegion && this.serverInfo.GameRegion.length) {
                   let list = []
-                  for (let [index, item] of this.serverInfo.GameRegion.entries()) {
+                  // for (let [index, item] of this.serverInfo.GameRegion.entries()) {
+                  //   list.push({
+                  //     id: index,
+                  //     RegionID: item.RegionID,
+                  //     name: item.RegionName,
+                  //     RegionValue: item.RegionValue
+                  //   })
+                  // }
+                  for (var i = 0; i < this.serverInfo.GameRegion.length; i++) {
                     list.push({
-                      id: index,
-                      RegionID: item.RegionID,
-                      name: item.RegionName,
-                      RegionValue: item.RegionValue
+                      id: i,
+                      RegionID: this.serverInfo.GameRegion[i].RegionID,
+                      name: this.serverInfo.GameRegion[i].RegionName,
+                      RegionValue: this.serverInfo.GameRegion[i].RegionValue
                     })
                   }
                   this.moreAreaList = list
