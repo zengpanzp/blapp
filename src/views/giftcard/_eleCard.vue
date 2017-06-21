@@ -69,8 +69,8 @@ export default {
     addCart() {
       if (this.inputData >= 10 && this.inputData <= 1000) {
         utils.isLogin().then(data => {
-          let memberId = utils.ssdbGet('member_id')
-          let memberToken = utils.ssdbGet('member_token')
+          let memberId = utils.dbGet('userInfo').member_id
+          let memberToken = utils.dbGet('userInfo').member_token
           let goodsId = '1166100'
           if (window.location.host == 'mh5.st.bl.com') {
             goodsId = '1042900'

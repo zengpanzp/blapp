@@ -102,8 +102,8 @@
         // 查询缴费分组
         utils.isLogin().then(user => {
             let timestamp = utils.getTimeFormatToday();
-            this.memberId = utils.ssdbGet('member_id')
-            this.memberToken = utils.ssdbGet('member_token')
+            this.memberId = utils.dbGet('userInfo').member_id
+            this.memberToken = utils.dbGet('userInfo').member_token
             api.recharge.queryMyGroup({
               timestamp: timestamp,
               member_token: this.memberToken

@@ -77,7 +77,7 @@
           <div class="phoneRechargeItem">
             <div class="item-content">
               <div class="flex">
-                <div class="text-node">固定电话 021-</div>
+                <div class="text-node">固定电话021-</div>
                 <div class="flex-item">
                   <input class="numInput" type="tel" placeholder="请输入固定电话" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
@@ -90,7 +90,7 @@
           <div class="phoneRechargeItem">
             <div class="item-content">
               <div class="flex">
-                <div class="text-node">小灵通号 021-</div>
+                <div class="text-node">小灵通号021-</div>
                 <div class="flex-item">
                   <input class="numInput" type="tel" placeholder="请输入小灵通号(仅限电信)" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
@@ -219,26 +219,36 @@ export default {
           message: '加载中',
           duration: 'loading'
         })
+        console.log(utils.dbGet('userInfo').member_token + '--------------------------')
         let requestData = {
           client_id: CONST.CLIENT_ID,
           mobile: type,
           timestamp: utils.getTimeFormatToday(),
           format: "json",
           t_dz: CONST.T_DZ,
-          token: utils.ssdbGet('member_token'),
+          token: utils.dbGet('userInfo').member_token,
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()
           let resData = JSON.parse(data.body.obj)
           if (resData.sku) {
             let list = []
-            for (let [index, val] of resData.sku.entries()) {
+            // for (let [index, val] of resData.sku.entries()) {
+            //   list.push({
+            //     mainPrice: val,
+            //     salePrice: resData.price2[index],
+            //     activePay: resData.price[index],
+            //     item: resData.item[index],
+            //     fee: resData.fee[index]
+            //   })
+            // }
+            for (var i = 0; i < resData.sku.length; i++) {
               list.push({
-                mainPrice: val,
-                salePrice: resData.price2[index],
-                activePay: resData.price[index],
-                item: resData.item[index],
-                fee: resData.fee[index]
+                mainPrice: resData.sku[i],
+                salePrice: resData.price2[i],
+                activePay: resData.price[i],
+                item: resData.item[i],
+                fee: resData.fee[i]
               })
             }
             this.moneyList = list
@@ -332,25 +342,25 @@ export default {
         // 把输入历史数据保存到localStore
         utils.dbSet(this.historyName, this.historyNum)
 
-        // 生成订单
-        let requestData = {
-          client_id: CONST.CLIENT_ID,
-          decid: this.iphoneNum,
-          ddgsl: '1',
-          dkhzh: utils.ssdbGet('member_id'),
-          dsphh: this.currentItem,
-          dtype: this.getPayType(this.payType, this.password),
-          str_snda: '0',
-          format: 'json',
-          dlx: '01'
-        }
-        console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-        console.log('this.currentFee: ' + this.currentFee)
-        api.recharge.buyszkOrder(requestData).then(data => {
-          console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-          let resData = JSON.parse(data.body.obj)
-          if (resData.orderid) {
-            utils.isLogin().then(user => {
+        utils.isLogin().then(user => {
+          // 生成订单
+          let requestData = {
+            client_id: CONST.CLIENT_ID,
+            decid: this.iphoneNum,
+            ddgsl: '1',
+            dkhzh: user.member_id,
+            dsphh: this.currentItem,
+            dtype: this.getPayType(this.payType, this.password),
+            str_snda: '0',
+            format: 'json',
+            dlx: '01'
+          }
+          console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+          console.log('this.currentFee: ' + this.currentFee)
+          api.recharge.buyszkOrder(requestData).then(data => {
+            console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+            let resData = JSON.parse(data.body.obj)
+            if (resData.orderid) {
               let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
               let createExpensesOrderRequestData = {
                 outOrderNo: resData.orderid,
@@ -390,11 +400,11 @@ export default {
                   Pay.goPay(order, '23')
                 }, 'Pay')
               })
-            }, () => {})
-          } else {
-            this.$toast(resData.msg)
-          }
-        })
+            } else {
+              this.$toast(resData.msg)
+            }
+          })
+        }, () => {})
       }
     },
     getPayType(orderType, password) {
