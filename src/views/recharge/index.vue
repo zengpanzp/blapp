@@ -62,15 +62,18 @@ export default {
           console.log(json);
           json.list.forEach((obj, i) => {
             // 水电煤的
-            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
+            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
               switch (obj.paymentType) {
                 case "20" :  // 水费
+                case "01" :  // 水费
                     this.queryBill(obj, 1);
                     break;
                 case "21" :  // 电费
+                case "02" :  // 水费
                   this.queryBill(obj, 2);
                   break;
                 case "22" :  // 煤气
+                case "03" :  // 水费
                   this.queryBill(obj, 3);
                   break;
               }
