@@ -46,5 +46,9 @@ export default {
     setPayPwd: params => {
       return Vue.http.post(baseUrl + '/myInformation/setPayPwd.htm', params);
     },
+    // 安全中心 登录密码修改
+    modifyPassword: params => {
+      return Vue.http.post(baseUrl + '/myInformation/modifyPassword.htm', params);
+    },
   }
 }
