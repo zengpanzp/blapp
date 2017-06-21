@@ -89,8 +89,22 @@ export default {
               sysid: '1103'
             }).then(data => {
               if (data.body.obj) {
-                alert(0)
-              } else {
+                  window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
+                    success: result => {
+                      console.log(result)
+                      // this.$toast('退出成功!')
+                      setTimeout(function () {
+                       window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController')
+                      }, 2500)
+                    },
+                    fail: result => {
+                      console.log(result)
+                    },
+                    progress: result => {
+                      console.log(result)
+                    }
+                  });
+                } else {
                 this.$toast(data.body.msg)
               }
             })
