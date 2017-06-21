@@ -8,7 +8,7 @@
         </div>
       </div>
     </form>
-    <bl-card-list style="margin-top: 0.25rem" :jumpId="$route.query.jumpId" :searchWord="searchWord"></bl-card-list>
+    <bl-card-list style="padding-top: 0.25rem" :jumpId="$route.query.jumpId" :searchWord="searchWord"></bl-card-list>
     <bl-shop-card></bl-shop-card>
   </div>
 </template>
