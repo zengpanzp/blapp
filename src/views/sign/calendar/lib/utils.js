@@ -73,8 +73,12 @@ module.exports = {
     getThisYear: function () {
         return new Date().getFullYear();
     },
-    getThisMonth: function () {
-        return new Date().getMonth() + 1;
+    getThisMonth: function (startDate) {
+        if (startDate) {
+          return new Date(startDate).getMonth() + 1;
+        } else {
+          return new Date().getMonth() + 1;
+        }
     },
     /**
      * Get all date's data you want.
@@ -170,7 +174,7 @@ module.exports = {
         var self = this;
         var all = [];
         for (var i = 0; i < months; i++) {
-            var thisMonth = self.getThisMonth() + i;
+            var thisMonth = self.getThisMonth(isCompleteMonth) + i;
             var thisYear = self.getThisYear();
             var num = 0;
             if (thisMonth > 12 && thisMonth <= 24) {

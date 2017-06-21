@@ -37,7 +37,7 @@
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account" style="color:#666" v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account" style="color:#666" v-if="item.accountNo">立即缴费</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -47,7 +47,7 @@
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">立即缴费</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -57,7 +57,7 @@
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">查看账单</span>
+                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">立即缴费</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -434,7 +434,7 @@
             typeVal = 3;
             break;
         }
-        if (obj && obj.accountNo) {  // 查看账单
+        if (obj && obj.accountNo) {  // 立即缴费
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
             message: '加载中',

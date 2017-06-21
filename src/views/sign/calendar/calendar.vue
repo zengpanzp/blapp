@@ -1,65 +1,70 @@
 <style lang="scss" src="./_index.scss" scoped></style>
 <template>
   <div class="BLCalendar">
-    <div class="vue-calendar" data-index="0">
-        <div class="vue-calendar-backdrop" v-show="showCalendar" @click.prevent="closeCalendar"></div>
-        <div class="vue-calendar-content" v-show="showCalendar" transition="vue-component-calendar-content" id="vueCalendarTemplate">
-            <div class="vue-calendar-content-title-wrapper" id="topHeight1">
-                <div class="premonth" @click="getPreMonthSignList">{{preMonth}}</div>
-                <div class="curmonth">{{curMonth}}</div>
-                <div class="curyear">{{curYear}}</div>
-                <div class="nextmonth" @click="getNextMonthSignList">{{nextMonth}}</div>
-                <!--<div class="month-bar" id="monthBar-$index" :class="{'first-month-bar': $index == 0}">{{item.month}}</div>-->
-            </div>
-            <div class="week-bar" id="topHeight2">
-                <ul>
-                    <li class="weekend">日</li>
-                    <li>一</li>
-                    <li>二</li>
-                    <li>三</li>
-                    <li>四</li>
-                    <li>五</li>
-                    <li class="weekend">六</li>
-                </ul>
-            </div>
-            <div id="scrollPanelWrapper">
-                <div class="vue-calendar-date-wrapper" id="scrollPanel">
-                    <div v-for="item in panel" track-by="$index" data-index="$index" class="month-panel">
-                        <div class="month-list">
-                            <ul>
-                                <li @click.prevent="selectedFunc" v-for="day in item.days" track-by="$index" date-sec="new Date(day).getTime() || ''" :class="{'selected-star': isStartDate == new Date(day).getTime(),
-//                                            'selected-end': isEndDate == new Date(day).getTime(),
-//                                            'selected-line': isStartDate < new Date(day).getTime() && new Date(day).getTime() < isEndDate,
-//                                            'disabled': today > new Date(day).getTime() || new Date(day).getTime() > lastDay,
-                                            'without-text': withoutText,
-                                            'border-radius': borderRadius,
-                                            'selected-is-today': isToday(day),
-                                            'selected-tips-hasLottery': hasLottery(day),
-                                            'selected-tips-lottery-day': showLotteryDay(day),
-                                            'selected-is-today2': isToday(day) && hasSigned(day),
-                                            'selected-tips-hasLottery2': hasLottery(day) && hasSigned(day),
-                                            'selected-tips-lottery-day2': showLotteryDay(day) && hasSigned(day)
+      <div class="vue-calendar-backdrop" v-if="showCalendar"  @click.prevent="closeCalendar"></div>
+      <div class="vue-calendar" data-index="0">
+          <transition name="slide-fade" appear appear-class="slide-fade">
+            <div v-if="showCalendar">
+              <div class="vue-calendar-content"    id="vueCalendarTemplate">
+                  <div class="vue-calendar-content-title-wrapper" id="topHeight1">
+                      <div class="premonth" @click="getPreMonthSignList">{{preMonth}}</div>
+                      <div class="curmonth">{{curMonth}}</div>
+                      <div class="curyear">{{curYear}}</div>
+                      <div class="nextmonth" @click="getNextMonthSignList">{{nextMonth}}</div>
+                      <!--<div class="month-bar" id="monthBar-$index" :class="{'first-month-bar': $index == 0}">{{item.month}}</div>-->
+                  </div>
+                  <div class="week-bar" id="topHeight2">
+                      <ul>
+                          <li class="weekend">日</li>
+                          <li>一</li>
+                          <li>二</li>
+                          <li>三</li>
+                          <li>四</li>
+                          <li>五</li>
+                          <li class="weekend">六</li>
+                      </ul>
+                  </div>
+                  <div id="scrollPanelWrapper">
+                      <div class="vue-calendar-date-wrapper" id="scrollPanel">
+                          <div v-for="item in panel"  class="month-panel">
+                              <div class="month-list">
+                                  <ul>
+                                      <li @click.prevent="selectedFunc" v-for="day in item.days" date-sec="new Date(day).getTime() || ''" :class="{'selected-star': isStartDate == new Date(day).getTime(),
+      //                                            'selected-end': isEndDate == new Date(day).getTime(),
+      //                                            'selected-line': isStartDate < new Date(day).getTime() && new Date(day).getTime() < isEndDate,
+      //                                            'disabled': today > new Date(day).getTime() || new Date(day).getTime() > lastDay,
+                                                  'without-text': withoutText,
+                                                  'border-radius': borderRadius,
+                                                  'selected-is-today': isToday(day),
+                                                  'selected-tips-hasLottery': hasLottery(day),
+                                                  'selected-tips-lottery-day': showLotteryDay(day),
+                                                  'selected-is-today2': isToday(day) && hasSigned(day),
+                                                  'selected-tips-hasLottery2': hasLottery(day) && hasSigned(day),
+                                                  'selected-tips-lottery-day2': showLotteryDay(day) && hasSigned(day)
 
-                                        }" data-date-format="convertDateFormatValue(day)">
-                                    <div class="dd" :class="{
-                                        'selected-hasLottery': hasLottery(day),
-                                        'selected-lotteryDay': showLotteryDay(day),
-                                        'selected-is-today': isToday(day),
-                                        'signed': hasSigned(day)
-                                    }">
-                                      {{convertDateFormatDisplay(day)}}
-                                      <i></i>
-                                    </div><i></i>
-                                    <span class="holiday"></span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                                              }" data-date-format="convertDateFormatValue(day)">
+                                          <div class="dd" :class="{
+                                              'selected-hasLottery': hasLottery(day),
+                                              'selected-lotteryDay': showLotteryDay(day),
+                                              'selected-is-today': isToday(day),
+                                              'signed': hasSigned(day)
+                                          }">
+                                            {{convertDateFormatDisplay(day)}}
+                                            <i></i>
+                                          </div><i></i>
+                                          <!--<span class="holiday"></span>-->
+                                      </li>
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div @click.prevent="closeCalendar" class="closeCalendar"><img src="./i/close.png"></div>
             </div>
-        </div>
-      <div @click.prevent="closeCalendar" class="closeCalendar"><img src="./i/close.png"></div>
-    </div>
+          </transition>
+      </div>
+
     <!--<vue-component-tips></vue-component-tips>-->
   </div>
 </template>
@@ -94,21 +99,21 @@
             endDate: String, // 结束日期
             isDoubleCheck: { // 支持单选或者双选
                 type: Boolean,
-                default: true
+                default: false
             },
             isHoliday: { // 是否显示节日名称
                 type: Boolean,
-                default: true
+                default: false
             },
             isVication: { // 是否显示假期提醒
                 type: Boolean,
-                default: true
+                default: false
             }
         },
         data() {
             return {
                 fixedMonthbar: utils.getFirstMonthName(this.maxDate),
-                panel: utils.getAllPanelData(this.maxDate),
+                panel: utils.getAllPanelData(this.maxDate, this.startDate),
                 preMonth: this.getPreMonth(this.startDate).preMonth,  // 上一个月
                 curMonth: this.currentDate(this.startDate).curMonth, // 当前月份
                 nextMonth: this.currentDate(this.startDate).nextMonth, // 下一个月份
@@ -121,66 +126,70 @@
                 selectBefore: null,
                 withoutText: null,
                 borderRadius: null,
-                isToday(day) {
-                    console.log(utils.dateFormat('yyyy-MM-dd', day))
-                    if (day != '') {
-                      return utils.isToday(utils.dateFormat('yyyy-MM-dd', day))
-                    } else {
-                        return false;
-                    }
-                },
-                // 是否已签到
-                hasSigned(day) {
-                  let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-                  for (let i = 0; i < this.signInList.length; i++) {
-                      let dayStr = this.signInList[i] > 10 ? this.signInList[i] : ("0" + this.signInList[i]);
-                      let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
-                      if (lotteryDate == formatDate) {
-                          return true;
-                      }
-                  }
-                },
-                // 是否已抽奖
-                hasLottery(day) {
-                  let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-                  for (let i = 0; i < this.lotteryList.length; i++) {
-                    let dayStr = this.lotteryList[i].day > 10 ? this.lotteryList[i].day : ("0" + this.lotteryList[i].day);
-                    let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
-                    if (lotteryDate == formatDate) {
-                      return true;
-                    }
-                  }
-                },
-                // 抽奖日
-                showLotteryDay(day) {
-                  let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-                  for (let i = 0; i < this.afterLotteryList.length; i++) {
-                    let dayStr = this.afterLotteryList[i] > 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
-                    let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
-                    if (lotteryDate == formatDate) {
-                      return true;
-                    }
-                  }
-                },
-                judgeIsWork: function(day) {
-                    return utils.judgeIsWork(day)
-                },
                 panelState: 0,
                 items: null,
                 currentIndex: -1,
-                headerHeight: 0,
-                targets: document.querySelectorAll(".month-bar")
+                headerHeight: 0
             }
         },
-        created() {
-            console.log("monthStrs", this.monthStrs)
-           console.log("list", this.list)
+        watch: {
+          startDate(val) {
+              this.panel = [];
+            this.panel = utils.getAllPanelData(this.maxDate, this.startDate);
+            // 设置当前月份即可
+            this.curMonthInt = this.currentDate(this.startDate).curMonthInt;
+          }
+        },
+        computed: {
         },
         methods: {
+          isToday: function(day) {
+            if (day != '') {
+              return utils.isToday(utils.dateFormat('yyyy-MM-dd', day))
+            } else {
+              return false;
+            }
+          },
+          // 是否已签到
+          hasSigned: function(day) {
+            let formatDate = utils.dateFormat('yyyy-MM-dd', day);
+            for (let i = 0; i < this.signInList.length; i++) {
+              let dayStr = this.signInList[i] > 10 ? this.signInList[i] : ("0" + this.signInList[i]);
+              let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
+              if (lotteryDate == formatDate) {
+                return true;
+              }
+            }
+          },
+          // 是否已抽奖
+          hasLottery: function(day) {
+            let formatDate = utils.dateFormat('yyyy-MM-dd', day);
+            for (let i = 0; i < this.lotteryList.length; i++) {
+              let dayStr = this.lotteryList[i].day > 10 ? this.lotteryList[i].day : ("0" + this.lotteryList[i].day);
+              let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
+              if (lotteryDate == formatDate) {
+                return true;
+              }
+            }
+          },
+          // 抽奖日
+          showLotteryDay: function(day) {
+            let formatDate = utils.dateFormat('yyyy-MM-dd', day);
+            for (let i = 0; i < this.afterLotteryList.length; i++) {
+              let dayStr = this.afterLotteryList[i] > 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
+              let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
+//              console.log("formatDate", formatDate, lotteryDate)
+              if (lotteryDate == formatDate) {
+                console.log(true, lotteryDate, formatDate)
+                return true;
+              }
+            }
+          },
             // 查看上一个月的签到情况
             getPreMonthSignList() {
               let months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
               let month = this.getPreMonth(this.startDate).preMonthInt;
+              console.log("pre", month)
               if (month >= 0) {
                 this.curMonth = months[month];
                 this.nextMonth = months[month + 1];
@@ -191,8 +200,6 @@
                 } else {
                   this.preMonth = months[month - 1];
                 }
-                console.log(this.CLA)
-                this.CLA.init();
                 this.$emit("click", month + 1);
               }
             },
@@ -200,7 +207,7 @@
             getNextMonthSignList() {
               let months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
               let month = parseInt(this.currentDate(this.startDate).curMonthInt);
-              console.log(month)
+              console.log("next", month)
               if (month >= 0) {
                 this.curMonth = months[month];
                 this.nextMonth = months[month + 1];
@@ -211,13 +218,14 @@
                 } else {
                   this.preMonth = months[month - 1];
                 }
-                this.CLA.init();
+//                this.ready();
                 this.$emit("click", month + 1);
               }
             },
             // 当前月份
             currentDate(date) {
               let arr = date.split('-');
+              console.log(date)
               let year = arr[0];
               let month = arr[1]; // 获取当前日期的月份
               let strs = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
@@ -256,7 +264,6 @@
               let t2 = year2 + '-' + month2 + '-' + day2;
               let strs = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
               let finalMonth = parseInt(month2) - 1;
-              console.log("begin3")
               return {
                   preMonthInt: finalMonth,
                   preMonth: strs[finalMonth],
@@ -288,7 +295,6 @@
              * 日历点选后的状态管理，管理所有的点击状态
              * @param  {Object} $event click event
              * @return {Void}
-             */
             selectedFunc: function($event) {
                 var t = this;
                 var styleName = $event.currentTarget.getAttribute('class') || "";
@@ -332,6 +338,7 @@
                     t.borderRadius = true;
                 }
             },
+             */
 
             /**
              * 点击关闭日历显示
@@ -343,67 +350,8 @@
             createTips: function (instance, text) {
                 //  above/below 气泡的位置 可不传，默认为above
                 this.showTips(text)
-            },
-
-        },
-        ready() {
-            var self = this;
-            var CAL = {
-                init: function() {
-                    console.log("开始执行")
-                    this.renderUI();
-                    this.bindUI();
-                },
-
-                renderUI: function() {
-                    this.calScrollHeight();
-                    this.renderScrollWithIscroll();
-                },
-
-                bindUI: function() {
-                    var that = this;
-                    self.$watch('showCalendar', function(val) {
-                        if (val) {
-                            that.calScrollHeight();
-                            window.setTimeout(function() {
-//                                myScroll && myScroll.destroy();
-                                that.renderScrollWithIscroll();
-                            }, 100);
-                        }
-                    })
-                },
-
-                calScrollHeight: function(type) { // 计算滚动区域的高度
-                    var doc = document;
-                    var cal = doc.getElementById('vueCalendarTemplate').clientHeight;
-                    var ele1 = doc.getElementById('topHeight1').clientHeight;
-                    var ele2 = doc.getElementById('topHeight2').clientHeight;
-//                    var ele3 = doc.getElementById('fixedBarEle').clientHeight;
-                    var height = cal - ele1 - ele2;
-                    doc.getElementById('scrollPanelWrapper').style.height = height + 'px';
-                    self.targets = document.querySelectorAll(".month-bar")
-                },
-
-                renderScrollWithIscroll: function() { // 滚动使用iScroll渲染
-                    var months = document.getElementsByClassName('month-panel').length;
-                    var panelHeightArray = [];
-                    for (var i = 0; i < months; i++) {
-                        panelHeightArray.push(document.getElementsByClassName('month-panel')[i].clientHeight);
-                    }
-
-                    var panelAbsPosi = [];
-                    var tmpArr = [];
-
-                    for (var k = 0; k < panelHeightArray.length; k++) {
-                        tmpArr.push(panelHeightArray[k])
-                        panelAbsPosi[k] = tmpArr.reduce(function(a, b) {
-                            return a + b;
-                        });
-                    }
-                }
             }
-            self.CLA = CAL;
-            CAL.init();
+
         }
     }
 </script>
