@@ -77,7 +77,7 @@
           <div class="phoneRechargeItem">
             <div class="item-content">
               <div class="flex">
-                <div class="text-node">固定电话 021-</div>
+                <div class="text-node">固定电话021-</div>
                 <div class="flex-item">
                   <input class="numInput" type="tel" placeholder="请输入固定电话" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
@@ -90,7 +90,7 @@
           <div class="phoneRechargeItem">
             <div class="item-content">
               <div class="flex">
-                <div class="text-node">小灵通号 021-</div>
+                <div class="text-node">小灵通号021-</div>
                 <div class="flex-item">
                   <input class="numInput" type="tel" placeholder="请输入小灵通号(仅限电信)" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
@@ -219,13 +219,14 @@ export default {
           message: '加载中',
           duration: 'loading'
         })
+        console.log(utils.dbGet('userInfo').member_token + '--------------------------')
         let requestData = {
           client_id: CONST.CLIENT_ID,
           mobile: type,
           timestamp: utils.getTimeFormatToday(),
           format: "json",
           t_dz: CONST.T_DZ,
-          token: utils.ssdbGet('member_token'),
+          token: utils.dbGet('userInfo').member_token,
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()

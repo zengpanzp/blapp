@@ -246,7 +246,7 @@
             timestamp: timestamp,
             format: "json",
             t_dz: CONST.T_DZ,
-            token: utils.ssdbGet('member_token'),
+            token: utils.dbGet('userInfo').member_token,
           }
           api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
             let resData = JSON.parse(data.body.obj)
@@ -304,7 +304,7 @@
           timestamp: timestamp,
           format: "json",
           t_dz: CONST.T_DZ,
-          token: utils.ssdbGet('member_token')
+          token: utils.dbGet('userInfo').member_token
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()
@@ -441,13 +441,13 @@
           let timestamp = utils.getTimeFormatToday();
           let requestData = {
             client_id: CONST.CLIENT_ID,
-            token: utils.ssdbGet('member_token'),
+            token: utils.dbGet('userInfo').member_token,
             mobile: this.iphoneNum,
             sku: this.currentSku,
             item: this.currentItem,
             dkhxm: this.useName,
             dkhdh: this.iphoneNum,
-            dkhzh: utils.ssdbGet('member_id'),
+            dkhzh: utils.dbGet('userInfo').member_id,
             dxtype: this.getPayType(this.type),
             num: '1',
             timestamp: timestamp,
@@ -477,7 +477,7 @@
                 payMoney: parseFloat(this.currentActivePay),
                 orderSource: 1,
                 orderTypeCode: this.getOrderTypeCode(this.type),
-                memberId: utils.ssdbGet('member_id'),
+                memberId: utils.dbGet('userInfo').member_id,
                 goodsName: goodsName,
                 phoneNo: this.iphoneNum,
                 price: this.currentSku,

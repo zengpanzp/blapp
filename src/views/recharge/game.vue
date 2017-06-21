@@ -347,7 +347,7 @@
             }
             /* FINISH */
 
-            let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.ssdbGet('member_mobile') || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
+            let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.dbGet('userInfo').member_mobile || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
             let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
 
             if (this.tabItem.type == 'sd') {
