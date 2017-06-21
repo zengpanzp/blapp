@@ -170,6 +170,7 @@
         currentItem: '', // 货号
         currentSku: '', // 面值
         currentFee: 0, // 支付费用
+        currentNum: '1',
         useName: '',
 
         moneyListModel: 0,
@@ -246,18 +247,28 @@
             timestamp: timestamp,
             format: "json",
             t_dz: CONST.T_DZ,
-            token: utils.ssdbGet('member_token'),
+            token: utils.dbGet('userInfo').member_token,
           }
           api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
             let resData = JSON.parse(data.body.obj)
             let list = []
-            for (let [index, val] of resData.sku.entries()) {
+            // for (let [index, val] of resData.sku.entries()) {
+            //   list.push({
+            //     mainPrice: val,
+            //     salePrice: resData.price2[index],
+            //     activePay: resData.price[index],
+            //     item: resData.item[index],
+            //     fee: resData.fee[index]
+            //   })
+            // }
+            for (var i = 0; i < resData.sku.length; i++) {
               list.push({
-                mainPrice: val,
-                salePrice: resData.price2[index],
-                activePay: resData.price[index],
-                item: resData.item[index],
-                fee: resData.fee[index]
+                mainPrice: resData.sku[i],
+                salePrice: resData.price2[i],
+                activePay: resData.price[i],
+                item: resData.item[i],
+                fee: resData.fee[i],
+                num: resData.num[i]
               })
             }
             this.moneyList = list
@@ -266,6 +277,7 @@
             this.currentSku = this.moneyList[0].mainPrice
             this.currentActivePay = this.moneyList[0].activePay
             this.currentFee = this.moneyList[0].fee
+            this.currentNum = String(this.moneyList[0].num)
             this.moneyListModel = 0
 
             let msg = resData.msg.split("|")[1]
@@ -304,7 +316,7 @@
           timestamp: timestamp,
           format: "json",
           t_dz: CONST.T_DZ,
-          token: utils.ssdbGet('member_token')
+          token: utils.dbGet('userInfo').member_token
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()
@@ -312,13 +324,23 @@
           this.phoneCheck = resData.msg
           if (resData.sku) {
             let list = []
-            for (let [index, val] of resData.sku.entries()) {
+            // for (let [index, val] of resData.sku.entries()) {
+            //   list.push({
+            //     mainPrice: val,
+            //     salePrice: resData.price2[index],
+            //     activePay: resData.price[index],
+            //     item: resData.item[index],
+            //     fee: resData.fee[index]
+            //   })
+            // }
+            for (var i = 0; i < resData.sku.length; i++) {
               list.push({
-                mainPrice: val,
-                salePrice: resData.price2[index],
-                activePay: resData.price[index],
-                item: resData.item[index],
-                fee: resData.fee[index]
+                mainPrice: resData.sku[i],
+                salePrice: resData.price2[i],
+                activePay: resData.price[i],
+                item: resData.item[i],
+                fee: resData.fee[i],
+                num: resData.num[i]
               })
             }
             this.flowList = list
@@ -327,6 +349,7 @@
             this.currentSku = this.flowList[0].mainPrice
             this.currentActivePay = this.flowList[0].activePay
             this.currentFee = this.flowList[0].fee
+            this.currentNum = String(this.flowList[0].num)
             this.flowListModel = 0
           } else {
             this.currentPay = 0
@@ -401,6 +424,7 @@
           this.currentActivePay = item.activePay
           this.currentPay = item.salePrice
           this.currentFee = item.fee
+          this.currentNum = String(item.num)
         }
       },
       flowSelectPrice(index, item) {
@@ -411,6 +435,7 @@
           this.currentActivePay = item.activePay
           this.currentPay = item.salePrice
           this.currentFee = item.fee
+          this.currentNum = String(item.num)
         }
       },
       // 去支付
@@ -441,15 +466,15 @@
           let timestamp = utils.getTimeFormatToday();
           let requestData = {
             client_id: CONST.CLIENT_ID,
-            token: utils.ssdbGet('member_token'),
+            token: utils.dbGet('userInfo').member_token,
             mobile: this.iphoneNum,
             sku: this.currentSku,
             item: this.currentItem,
             dkhxm: this.useName,
             dkhdh: this.iphoneNum,
-            dkhzh: utils.ssdbGet('member_id'),
+            dkhzh: utils.dbGet('userInfo').member_id,
             dxtype: this.getPayType(this.type),
-            num: '1',
+            num: this.currentNum,
             timestamp: timestamp,
             format: "json",
             t_dz: CONST.T_DZ,
@@ -477,7 +502,7 @@
                 payMoney: parseFloat(this.currentActivePay),
                 orderSource: 1,
                 orderTypeCode: this.getOrderTypeCode(this.type),
-                memberId: utils.ssdbGet('member_id'),
+                memberId: utils.dbGet('userInfo').member_id,
                 goodsName: goodsName,
                 phoneNo: this.iphoneNum,
                 price: this.currentSku,

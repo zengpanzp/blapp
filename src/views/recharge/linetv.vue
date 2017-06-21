@@ -158,8 +158,8 @@
           console.log(user);
           let timestamp = utils.getTimeFormatToday();
           console.log(user.mobile)
-          this.memberId = utils.ssdbGet('member_id')
-          this.memberToken = utils.ssdbGet('member_token')
+          this.memberId = utils.dbGet('userInfo').member_id
+          this.memberToken = utils.dbGet('userInfo').member_token
           // 查询缴费机构
           api.recharge.queryLineTVAndTieTongCompany({
             client_id: CONST.CLIENT_ID,
@@ -189,6 +189,7 @@
             });
             console.log(list)
             this.companyList = list;
+            this.$loading.close();
             this.$loading2.close();
           })
         });
