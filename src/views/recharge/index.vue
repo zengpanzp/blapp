@@ -55,7 +55,7 @@ export default {
         this.groupList = json.list;
         api.recharge.queryPaySubNo({
           "member_token": user.member_token,
-          "groupId": this.groupList[0].id,
+          "groupId": this.groupList&&this.groupList[0].id,
           "timestamp": timestamp
         }).then(data => {
           let json = JSON.parse(data.body.obj);
