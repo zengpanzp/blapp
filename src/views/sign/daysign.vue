@@ -21,7 +21,7 @@
       <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
       <div class="btnSign" @click="sign" v-show="!signed">
-        {{signText}}<img v-show="signed" src="./i/signed.png"> <span v-show="!signed">+6</span>
+        {{signText}}<img v-show="signed" src="./i/signed.png"> <span v-show="!signed">+{{signPoint}}</span>
       </div>
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
@@ -121,6 +121,7 @@
             pageIndex: 1,
             allPage: 0
           },
+          signPoint: 0, // 签到赠送的积分
           myPoints: 0, // 我的积分
           closeTop: 0,   // 关闭按钮距离顶部的距离
           showSignRemark: false, // 是否弹出签到说明提示框
@@ -227,6 +228,7 @@
                 if (data.body.resCode == "00100000") {
                   let json = JSON.parse(data.body.obj);
                   this.signRemark = json.signRemark;
+                  this.signPoint = json.signPoint;
                   console.log(json)
                   // singStatus 0-不可签到 1-可签到，未签到，2-已签到
                   this.changeStatus(json);
@@ -250,31 +252,42 @@
     mounted() {
     },
     methods: {
+      hasLottery(signStatus, lotteryStatus) {
+
+      },
       // 根据状态改变页面操作
       changeStatus(obj) {
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
-          obj.signStatus = 0;
+//          obj.signStatus = 0;
+        this.needSignNum = obj.needSignNum;
+        let lotteryStatus = obj.lotteryStatus;
+        this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
         if (obj.signStatus == 0) {  // 没有签到资格
           this.showOverlay = true;
         } else if (obj.signStatus == 1) { // 未签到
-
-        } else if (obj.signStatus == 2) { // 已经签到
-          this.signed = true; // 设置已经签到
-          this.signText = ""  // 隐藏
-          this.needSignNum = obj.needSignNum;
-          this.lotteryCount = obj.acquiredLottery; // 抽奖次数
+          this.signed = false; // 设置未签到
           // 判断是否有抽奖机会
-          if (obj.needSignNum > 0) {
+          if (lotteryStatus == 1) {
+            this.signed = true; // 设置已经签到
+            this.signText = ""  // 隐藏
             this.message1 = "再连续签到" + obj.needSignNum + "天";
             this.message2 = "就能获得1次抽奖机会";
-          } else {
+          }
+        } else if (obj.signStatus == 2) { // 已经签到
+          // 判断是否有抽奖机会
+          if (lotteryStatus == 0) {
+            this.signed = true; // 设置已经签到
+            this.signText = ""  // 隐藏
+            this.message1 = "厉害！又拿到积分啦";
+            this.message2 = "感觉赚了一个亿~";
+          } else if (lotteryStatus == 2) {
             // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
-            if (obj.lotteryStatus == 1) {
+            if (lotteryStatus == 1) {
               this.canLottery = true;
               this.lotteryText = "去抽奖"
               this.message1 = "恭喜您！";
-              this.message2 = "获得1次抽奖机会";
+              this.message2 = "获得" + this.lotteryCount + "次抽奖机会";
             } else if (obj.lotteryStatus == 2) {
               this.canLottery = false;
               this.lotteryText = "已抽奖"
