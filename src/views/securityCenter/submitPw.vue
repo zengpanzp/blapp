@@ -2,7 +2,7 @@
 <div class="enterPw">
 	<div class="section1">
 		<ul>
-			<li><b class="iconfont lock clear"></b><input maxlength="8" type="password" placeholder="支付密码" v-model="currentPw"></li>
+			<li><b class="iconfont lock"></b><input maxlength="8" type="password" placeholder="支付密码" v-model="currentPw"></li>
 		</ul>
 	</div>
 	<div class="btn-box">
@@ -104,7 +104,10 @@ export default {
                         this.$router.push('/securityCenter')
                       }, 3000)
                     } else {
-                      this.$toast(data.body.msg)
+                      this.$toast({
+                        message: 'data.body.msg',
+                        position: 'bottom'
+                      })
                     }
                   })
                 } else {
@@ -124,13 +127,19 @@ export default {
                         this.$router.push('/securityCenter')
                       }, 3000)
                     } else {
-                      this.$toast(data.body.msg)
+                      this.$toast({
+                        message: 'data.body.msg',
+                        position: 'bottom'
+                      })
                     }
                   })
                 }
 	  			    }
   				} else {
-  					this.$toast(data.body.msg)
+  					this.$toast({
+              message: 'data.body.msg',
+              position: 'bottom'
+            })
   				}
   			    }).then(err => {
   			    console.log(err)
