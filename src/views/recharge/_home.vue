@@ -17,12 +17,12 @@ export default {
     return {
       list: [{
         url: 'recharge/iphone/0',
-        type: '23, 34',
+        type: '23,34',
         icon: 'icon-waitpay',
         text: '手机充值'
       }, {
         url: 'recharge/iphone/1',
-        type: '23, 34',
+        type: '23,34',
         icon: 'icon-waitreceive',
         text: '流量充值'
       }, {
@@ -47,17 +47,17 @@ export default {
         text: '煤气费'
       }, {
         url: 'recharge/linetv',
-        type: '9, 12',
+        type: '9,12',
         icon: 'icon-cabletv',
         text: '有线电视'
       }, {
         url: 'recharge/game',
-        type: '14, 15',
+        type: '14,15',
         icon: 'icon-play',
         text: '游戏'
       }, {
         url: 'recharge/iphone/0?type=petrol',
-        type: '35, ',
+        type: '35',
         icon: 'icon-card',
         text: '加油卡'
       }]
