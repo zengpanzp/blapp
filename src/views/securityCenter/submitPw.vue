@@ -23,7 +23,8 @@ export default {
     return {
     	// memberToken: '',
     	currentPw: '',
-    	member_id: ''
+    	member_id: '',
+      phoneNum: ''
     };
   },
   created () {
@@ -80,8 +81,8 @@ export default {
   			    timestamp: utils.getTimeFormatToday()
   			  }).then(data => {
   			    if (data.body.obj) {
-  			    	let phoneNum = JSON.parse(data.body.obj).mobile
-		      		if (phoneNum.indexOf(this.currentPw) != -1) {
+  			    	this.phoneNum = JSON.parse(data.body.obj).mobile
+		      		if (this.phoneNum.indexOf(this.currentPw) != -1) {
 		      		    this.$toast({
 		      		    	message: "不允许与手机号中6位数字相同，请重新输入！",
 		      		    	position: "bottom"
@@ -107,11 +108,25 @@ export default {
                     }
                   })
                 } else {
-                  // api.userCenter.setPayPwd({
-                  //   memberId: member_id,
-                  //   phoneNum: this.phoneNum
-                  // })
-                  alert('setPayPwd' + member_id)
+                  // 忘记密码 验证pwd
+                  console.log('###memberId:' + member_id + 'phoneNum' + this.phoneNum + 'pwd' + this.currentPw)
+                  api.userCenter.setPayPwd({
+                    memberId: member_id,
+                    phoneNum: this.phoneNum,
+                    pwd: MD5(this.currentPw)
+                  }).then(data => {
+                    if (data.body.obj) {
+                      this.$toast({
+                        message: '设置成功',
+                        position: 'bottom'
+                      })
+                      setTimeout(() => {
+                        this.$router.push('/securityCenter')
+                      }, 3000)
+                    } else {
+                      this.$toast(data.body.msg)
+                    }
+                  })
                 }
 	  			    }
   				} else {

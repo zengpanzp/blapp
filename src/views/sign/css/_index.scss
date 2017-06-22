@@ -1,14 +1,46 @@
 @charset "utf-8";
 @import "src/sass/tobe/function";
 @import "src/sass/tobe/ext/animate/fade";
+@import "src/sass/tobe/ext/animate/slide";
 body {
     background-color: #f7f7f7;
 }
 @include animate-fadeInUpBig
 @include animate-fadeOutDownBig
+@include animate-slideInDown
+@include animate-slideOutUp
 /*我的测试*/
 // 日签
 .daysign{
+  .remark{
+    text-align: center;
+    width: rem(710);
+    position: fixed;
+    left: 50%;
+    margin-left: rem(-352.5);
+    font-size: rem(28);
+    line-height: rem(50);
+    z-index: 2000;
+    .signRemark{
+      background: #fff;
+      padding:rem(10) rem(30) rem(30) rem(30);
+      border-radius: rem(10);
+      .title{
+        width: 100%;
+        text-align: center;
+        font-size: rem(32);
+        color:#333;
+        margin-top: rem(35);
+        margin-bottom: rem(20);
+      }
+    }
+    .close{
+      width: rem(90);
+      position: relative;
+      margin-top:rem(70);
+      height: rem(90);
+    }
+  }
   .end{
     text-align: center;
     img{
@@ -78,10 +110,10 @@ body {
     }
     .bottom{
       margin-top: rem(30);
-      height: rem(510);
+      height: rem(410);
       position: relative;
       li{
-        height:rem(250);
+        //height:rem(250);
         text-align: center;
         img{
           right: auto;
@@ -141,6 +173,22 @@ body {
         width: rem(50);
         height: rem(33.4);
       }
+      span{
+        position: absolute;
+        top: rem(-10);
+        right: rem(35);
+      }
+    }
+    .signText{
+      position: absolute;
+      width: rem(750);
+      height: rem(88);
+      line-height: rem(88);
+      color: #333;
+      font-size: rem(36);
+      text-align: center;
+      left: 0;
+      top: rem(357);
     }
     .tips2{
       position: absolute;
@@ -148,7 +196,7 @@ body {
       top:rem(221);
       font-family: PingFangSC-Regular;
       font-size: rem(28);
-      color: #666;
+      color: #000;
       letter-spacing: 0;
       line-height: rem(28);
       .dateImg{
@@ -163,9 +211,10 @@ body {
         font-size: rem(24);
         letter-spacing: 0;
         top:rem(465);
-        width: rem(360);
+        width: rem(460);
+        text-align: center;
         left: 50%;
-        margin-left: rem(-180);
+        margin-left: rem(-230);
       }
     }
     .line{
@@ -191,7 +240,8 @@ body {
         box-flex:1;
         -webkit-box-flex:1;
         font-size: rem(24);
-        color:#666;
+        line-height: rem(55);
+        color:#fff;
         text-align: center;
         img{
           width: rem(90);
@@ -209,24 +259,25 @@ body {
       position: relative;
       float: left;
       width: rem(350);
-      height: rem(200);
+      //height: rem(220);
       background: #f9f9f9;
       font-size: rem(24);
-      .name{
-        font-family: PingFang-SC-Medium;
-        color: #333;
-        padding: rem(20) 0 0 rem(20);
+      &:nth-child(2n+1){
+        margin-right: rem(10);
       }
-      .desc{
-        color:#666;
-        padding: 0 rem(20);
-      }
+      margin-bottom: rem(10);
+      //.name{
+      //  font-family: PingFang-SC-Medium;
+      //  color: #333;
+      //  padding: rem(20) 0 0 rem(20);
+      //}
+      //.desc{
+      //  color:#666;
+      //  padding: 0 rem(20);
+      //}
       img {
-        width: rem(131);
-        height: rem(131);
-        position: absolute;
-        top:rem(44);
-        right: rem(8);
+        //top:rem(44);
+        //right: rem(8);
       }
     }
     &::after{
@@ -330,6 +381,24 @@ body {
         text-align: center;
         vertical-align: middle;
       }
+      &:last-child{
+        height: rem(60);
+        width: 100%;
+      }
+      .similar{
+        width: rem(74);
+        height: rem(32);
+        background: #FFF;
+        border: 1px solid #BBBBBB;
+        border-radius: 6px;
+        text-align: center;
+        font-size: rem(20);
+        line-height: rem(32);
+        position: absolute;
+        bottom: rem(10);
+        right: rem(20);
+        color:#666;
+      }
       .name{
         width: rem(325);
         height: rem(66);
@@ -338,6 +407,11 @@ body {
         margin-top: rem(10);
         font-size: rem(24);
         color:#666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         &.money{
           height: rem(40);
           line-height: rem(28);

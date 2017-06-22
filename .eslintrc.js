@@ -43,6 +43,9 @@ module.exports = {
     'no-mixed-spaces-and-tabs': 0,
     'no-tabs': 0,
     'indent': 0,
-    'camelcase': 0
+    'camelcase': 0,
+    "new-cap": 0,
+    "one-var": 0,
+    "no-cond-assign": 0
   }
 }

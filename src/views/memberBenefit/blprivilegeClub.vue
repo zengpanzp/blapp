@@ -2,12 +2,12 @@
 <template>
 <div>
 		<div class="hm-container">
-			<div class="head-menu">
+			<div class="head-menu flex-space flex-m">
 				<div class="menu-name">
 					权益对比
 				</div>
-				<div class="menu">
-					<div class="menuli" v-for="({power, name}, index) in list" :class="{select: powerId == power}" @click="powerId = power">{{ name }}
+				<div class="menu flex-item flex-space flex-m">
+					<div class="menuli flex-item" v-for="({power, name}, index) in list" :class="{select: powerId == power}" @click="powerId = power">{{ name }}
 						<div class="trigle"></div>
 					</div>
 				</div>
@@ -284,7 +284,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="bottom-end">
+		<div class="bottom-end flex-c-m">
 			<div class="line"></div>
 			End
 			<div class="line"></div>

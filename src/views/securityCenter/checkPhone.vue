@@ -115,25 +115,6 @@ export default {
         }]
       }, { success: data => {
         console.log('confirmed!')
-        // api.userCenter.sendCodePayPwd({
-        //   phoneNum: this.phoneNum,
-        //   type: '3'
-        // }).then(data => {
-        //   if (data.body.obj) {
-        //     let resData = JSON.parse(data.body.obj).result_msg
-        //     console.log(resData)
-        //     this.$toast({
-        //       message: resData,
-        //       position: 'bottom'
-        //     })
-        //   } else {
-        //     this.$toast({
-        //       message: data.body.msg,
-        //       position: 'bottom'
-        //     })
-        //   }
-        //   console.log(data)
-        // })
         }
       })
     }
