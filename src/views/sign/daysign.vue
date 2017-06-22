@@ -25,7 +25,7 @@
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
       </div>
-      <div class="signText" v-show="signed && needSignNum>0">
+      <div class="signText" v-show="signed && needSignNum>0 && !canLottery">
          太棒了！离抽奖惊喜又进一步
       </div>
       <div class="tips2 other2">没有省不下的钱，只有不坚持的签</div>
@@ -121,7 +121,7 @@
             pageIndex: 1,
             allPage: 0
           },
-          signPoint: 0, // 签到赠送的积分
+          signPoint: 5, // 签到赠送的积分
           myPoints: 0, // 我的积分
           closeTop: 0,   // 关闭按钮距离顶部的距离
           showSignRemark: false, // 是否弹出签到说明提示框
@@ -228,6 +228,7 @@
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
+          console.log("aaaa")
           if (this.memberId && this.memberToken) { // 已经登录
             this.isLogin = true;
             // 查询签到日历
@@ -259,8 +260,26 @@
             })
           } else {
             this.isLogin = false;
-            console.log("未登录")
+            console.log("未登录");
+            // 查询用户是否有签到资格
+            this.getSignQualification((data) => {
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.signRemark = json.signRemark;
+                this.signPoint = json.signPoint;
+                console.log(json)
+                // singStatus 0-不可签到 1-可签到，未签到，2-已签到
+                this.changeStatus(json);
+              } else {
+                this.$toast({
+                  position: 'bottom',
+                  message: data.body.msg
+                });
+              }
+            })
           }
+        }).then(err => {
+            console.log("未登录", err)
         });
       },
       // 根据状态改变页面操作
