@@ -106,7 +106,26 @@ Vue.directive('go-native-goods-detail', {
   }
 
 })
+/* 跳转到native商品相似页 */
+Vue.directive('go-native-goods-similar', {
 
+  bind: function(el, binding) {
+    let args = {
+      goodsSid: binding.value.sid,
+      goodsName: binding.value.goods_sales_name,
+      salePrice: binding.value.sale_price,
+      imgUrlString: binding.value.url,
+      isGiftGoods: binding.modifiers.isGiftGoods || false
+    }
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (!el.getAttribute('disabled')) {
+        window.CTJSBridge.LoadMethod('SeeSimilar', 'seeSimilarViewController', args)
+      }
+    }, false)
+  }
+
+})
 /* 资源位跳转 */
 Vue.directive('go-native-resource', {
 

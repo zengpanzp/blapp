@@ -382,6 +382,24 @@ body {
         text-align: center;
         vertical-align: middle;
       }
+      &:last-child{
+        height: rem(60);
+        width: 100%;
+      }
+      .similar{
+        width: rem(74);
+        height: rem(32);
+        background: #FFF;
+        border: rem(1) solid #BBBBBB;
+        border-radius: 6px;
+        text-align: center;
+        font-size: rem(20);
+        line-height: rem(32);
+        position: absolute;
+        bottom: rem(10);
+        right: rem(20);
+        color:#666;
+      }
       .name{
         width: rem(325);
         height: rem(66);

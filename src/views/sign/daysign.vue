@@ -6,9 +6,8 @@
   <div class="daysign" v-infinite-scroll="fetchLikeList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="overlay test" v-show="showOverlay"></div>
     <div class="overlay" v-show="showSignRemark"></div>
-    <bl-calendar v-if="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
-                  :is-double-check.sync=true :is-vication.sync=true>
-
+    <bl-calendar v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
+                :is-double-check.sync=true :is-vication.sync=true>
     </bl-calendar>
     <section class="dheader" :style="{'background-image':'url('+signBg+')'}">
       <div class="tips">
@@ -31,7 +30,7 @@
       </div>
       <div class="tips2 other2">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu">
-        <li v-for="item in iconMenu">
+        <li v-for="item in iconMenu" v-go-native-resource="item">
           <img :src="item.advList[0].mediaUrl">
           <div>{{item.advList[0].deployName.substring(0,4)}}</div>
         </li>
@@ -67,8 +66,9 @@
         <div class="pic"><img :src="item.url" class="dateImg"></div>
         <div class="name">{{item.goods_sales_name}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.sale_price}}</span></div>
+        <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
       </li>
-      <li  v-show="!busy" style="width: 100%">
+      <li  v-show="!busy" class="loadMore">
         <div class="infinite-layer">
           <div class="infinite-preloader"></div>
           <div>加载中...</div>
@@ -95,10 +95,10 @@
         <div>只差一步</div>
         <div class="tip">完成任意1次消费即可获得签到资格!</div>
       </div>
-      <div class="gobuy">去买买买</div>
+      <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <ul class="top-menu bottom" v-show="noSignList.length>0">
-        <li v-for="item in noSignList">
+        <li v-for="item in noSignList" v-go-native-resource="item">
           <!--<div class="name">经理经理的说法</div>-->
           <!--<div class="desc">df的说法</div>-->
           <img :src="item.advList[0].mediaUrl">
@@ -141,13 +141,14 @@
           showOverlay: false, // 无签到资格弹出
           message1: "天天积分，惊喜抽奖",
           message2: "福利齐上阵，购物更优惠",
-          isLogin: true,
+          isLogin: false,
           iconMenu: [], // 头部小icon菜单导航
           signBg: "", // 签到页背景图片
           recommendList: [],
           noSignList: [], // 无签到资格的资源推荐,
           bigGoodsList: [], // 大图的商品推荐
-          signRemark: ''    // 签到说明
+          signRemark: '',    // 签到说明
+          signRuleCode: '', // 抽奖规则ID
       }
     },
     components: {
@@ -167,45 +168,51 @@
       let month = (date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : ("0" + (date.getMonth() + 1));
       this.startDate = year + "-" + month + "-" + "01";
       this.endDate = year + "-" + month + "-" + new Date(year, month, 0).getDate();
-      api.sign.queryAdDeploy({
-        otherresource: {
-          resourceId: '9001,9002,9003,9004,9005,9006,9007,9008,9009,9010,9011,9012,9013,9014,9015,9016,9017'
-        }
-      }).then(res => {
-        this.$loading.close()
-        let resData = JSON.parse(res.body.obj).obj.otherResource;
-        // icon菜单
-        for (let i = 0; i < 5; i++) {
-            this.iconMenu.push(resData[i]);
-        }
-        for (let i = 5; i < 9; i++) {
-          this.recommendList.push(resData[i]);
-        }
-        let bigGoods = [];
-        for (let i = 9; i < 12; i++) {
-          let arr = resData[i].advList;
-          console.log("arr", arr)
-          let obj = {}
-          obj.list = [];
-          for (let j = 0; j < arr.length; j++) {
-            if (j == 0) {
-              obj.big = arr[0];
-            } else {
-              obj.list.push(arr[j]);
-            }
+      this.fecthData();
+    },
+    mounted() {
+    },
+    methods: {
+      fecthData() {
+        api.sign.queryAdDeploy({
+          otherresource: {
+            resourceId: '9001,9002,9003,9004,9005,9006,9007,9008,9009,9010,9011,9012,9013,9014,9015,9016,9017'
           }
-          console.log(obj)
-          bigGoods.push(obj);
-        }
-        this.bigGoodsList = bigGoods;
-        // 无签到资格的资源位
-        for (let i = 13; i < 17; i++) {
-          this.noSignList.push(resData[i]);
-        }
-        this.signBg = resData[12].advList[0].mediaUrl;
-        console.log(resData)
-      })
-      utils.isLogin(false).then(user => {
+        }).then(res => {
+          this.$loading.close()
+          let resData = JSON.parse(res.body.obj).obj.otherResource;
+          // icon菜单
+          for (let i = 0; i < 5; i++) {
+            this.iconMenu.push(resData[i]);
+          }
+          for (let i = 5; i < 9; i++) {
+            this.recommendList.push(resData[i]);
+          }
+          let bigGoods = [];
+          for (let i = 9; i < 12; i++) {
+            let arr = resData[i].advList;
+            console.log("arr", arr)
+            let obj = {}
+            obj.list = [];
+            for (let j = 0; j < arr.length; j++) {
+              if (j == 0) {
+                obj.big = arr[0];
+              } else {
+                obj.list.push(arr[j]);
+              }
+            }
+            console.log(obj)
+            bigGoods.push(obj);
+          }
+          this.bigGoodsList = bigGoods;
+          // 无签到资格的资源位
+          for (let i = 13; i < 17; i++) {
+            this.noSignList.push(resData[i]);
+          }
+          this.signBg = resData[12].advList[0].mediaUrl;
+          console.log(resData)
+        })
+        utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
           console.log(this.memberToken)
@@ -217,48 +224,40 @@
             api.sign.getScores({
               member_token: this.memberToken
             }).then(data => {
-                console.log(data);
-                if (data.body.resCode == "00100000") {
-                    let json = JSON.parse(data.body.obj);
-                    this.myPoints = json.points;
-                }
+              console.log(data);
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.myPoints = json.points;
+              }
             });
             // 查询用户是否有签到资格
             this.getSignQualification((data) => {
-                if (data.body.resCode == "00100000") {
-                  let json = JSON.parse(data.body.obj);
-                  this.signRemark = json.signRemark;
-                  this.signPoint = json.signPoint;
-                  console.log(json)
-                  // singStatus 0-不可签到 1-可签到，未签到，2-已签到
-                  this.changeStatus(json);
-                } else {
-                  this.$toast({
-                    position: 'bottom',
-                    message: data.body.msg
-                  });
-                }
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.signRemark = json.signRemark;
+                this.signPoint = json.signPoint;
+                console.log(json)
+                // singStatus 0-不可签到 1-可签到，未签到，2-已签到
+                this.changeStatus(json);
+              } else {
+                this.$toast({
+                  position: 'bottom',
+                  message: data.body.msg
+                });
+              }
             })
           } else {
-              this.isLogin = false;
-              console.log("未登录")
+            this.isLogin = false;
+            console.log("未登录")
           }
-      });
-      // 查询商品
-//      api.sign.lotteryCallback({
-//      });
-      console.log(api)
-    },
-    mounted() {
-    },
-    methods: {
-      hasLottery(signStatus, lotteryStatus) {
-
+        });
       },
       // 根据状态改变页面操作
-      changeStatus(obj) {
+      changeStatus(obj, flag) {
+        this.signStatus = obj.signStatus;
+        this.signRuleCode = obj.signExtendRuleCode; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
-//          obj.signStatus = 0;
+//          obj.signStatus = 1;
         this.needSignNum = obj.needSignNum;
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
@@ -268,30 +267,41 @@
         } else if (obj.signStatus == 1) { // 未签到
           this.signed = false; // 设置未签到
           // 判断是否有抽奖机会
-          if (lotteryStatus == 1) {
-            this.signed = true; // 设置已经签到
-            this.signText = ""  // 隐藏
+          if (lotteryStatus == 0) {  // 未签到 不可抽奖
+            this.message1 = "积分攒着当钱花";
+            this.message2 = "线上线下都可花";
+          }
+          if (lotteryStatus == 1) {  // 未签到可抽奖
             this.message1 = "再连续签到" + obj.needSignNum + "天";
             this.message2 = "就能获得1次抽奖机会";
           }
         } else if (obj.signStatus == 2) { // 已经签到
+          if (flag == 1) {
+            this.myPoints += this.signPoint; // 积分累加
+          }
+          this.signed = true; // 设置已经签到
           // 判断是否有抽奖机会
-          if (lotteryStatus == 0) {
-            this.signed = true; // 设置已经签到
-            this.signText = ""  // 隐藏
-            this.message1 = "厉害！又拿到积分啦";
-            this.message2 = "感觉赚了一个亿~";
-          } else if (lotteryStatus == 2) {
-            // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
-            if (lotteryStatus == 1) {
-              this.canLottery = true;
-              this.lotteryText = "去抽奖"
-              this.message1 = "恭喜您！";
-              this.message2 = "获得" + this.lotteryCount + "次抽奖机会";
-            } else if (obj.lotteryStatus == 2) {
-              this.canLottery = false;
-              this.lotteryText = "已抽奖"
+          if (lotteryStatus == 0) { // 已签到不可抽奖
+            if (this.needSignNum > 0) { // 是否n日后可以抽奖
+              this.signText = ""  // 隐藏
+              this.message1 = "再连续签到" + this.needSignNum + "天";
+              this.message2 = "就能获得1次抽奖机会";
+            } else {
+              this.signText = ""  // 隐藏
+              this.message1 = "厉害！又拿到积分啦";
+              this.message2 = "感觉赚了一个亿~";
             }
+          } else if (lotteryStatus == 1) { // 已签到可抽奖
+            // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
+            this.canLottery = true;
+            this.lotteryText = "去抽奖"
+            this.message1 = "恭喜您！";
+            this.message2 = "获得1次抽奖机会";
+          } else {
+            this.canLottery = false;
+            this.lotteryText = "已抽奖"
+            this.message1 = "恭喜您！";
+            this.message2 = "已完成本次抽奖";
           }
         }
       },
@@ -307,7 +317,6 @@
         } else {
           month2 = new Date().getMonth() + 1;
         }
-        console.log(month2)
         api.sign.querysignInCalendar({
           member_token: this.memberToken,
           month: month2,
@@ -366,19 +375,59 @@
         utils.isLogin(true).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
-          // 重新请求签到资格
-          this.getSignQualification((data) => {
-
-          });
+          if (this.memberToken) {
+            this.isLogin = true;
+            // 查询签到日历
+            this.getCalendarHistory();
+            // 获得我的积分
+            api.sign.getScores({
+              member_token: this.memberToken
+            }).then(data => {
+              console.log(data);
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.myPoints = json.points;
+              }
+            });
+            // 查询用户是否有签到资格
+            this.getSignQualification((data) => {
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.signRemark = json.signRemark;
+                this.signPoint = json.signPoint;
+                console.log(json)
+                // singStatus 0-不可签到 1-可签到，未签到，2-已签到
+                this.changeStatus(json);
+              } else {
+                this.$toast({
+                  position: 'bottom',
+                  message: data.body.msg
+                });
+              }
+            })
+          }
         })
+      },
+      // 跳转到首页
+      goIndex() {
+        window.location.href = "blmodule://ibaiLian/home"
       },
       // 按钮点击去抽奖
       lottery() {
-        console.log("去抽奖")
+          let signRuleCode = this.signRuleCode; // 抽奖规则id
+          // 跳转到cordova页面
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+            pageId: 'lucky',
+            params: {
+              coupon: null,
+              ruleId: signRuleCode,
+              isSigninFlag: "Y"
+            }
+          })
       },
       // 进行签到
       sign() {
-          if (!this.signed) {
+          if (!this.signed && this.signStatus != 0) {
               api.sign.signIn({
                 buld: "3000",
                 channelId: "1",
@@ -386,7 +435,8 @@
               }).then(data => {
                   let json = JSON.parse(data.body.obj)
                   if (data.resCode == "00100000") {
-                     this.changeStatus(json);
+                     this.getCalendarHistory();
+                     this.changeStatus(json, 1); // 让积分累加
                   } else {
                     this.$toast({
                       position: 'bottom',
@@ -394,6 +444,11 @@
                     });
                   }
               });
+          } else {
+            this.$toast({
+              position: 'bottom',
+              message: "您还没有签到资格!"
+            });
           }
       }
     }

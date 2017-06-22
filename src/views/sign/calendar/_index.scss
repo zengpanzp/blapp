@@ -12,7 +12,7 @@
 .vue-calendar{
   .closeCalendar{
     position: fixed;
-    top:84%;
+    top:85%;
     z-index: 89;
     left: 50%;
     width: rem(90);
@@ -211,20 +211,22 @@
                     position: relative;
                     display: inline-block;
                     font-size: rem(30);
-                    width: rem(80);
+                    width: rem(56);
+                    height: rem(56);
+                    line-height: rem(60);
                     &.signed{
                       background: #ddd;
-                      border-radius: rem(56);
+                      border-radius: rem(60);
                     }
                     //height: rem(56);
                     &.selected {
                       &-hasLottery, &-lotteryDay{
                         i:after {
                           border-radius: rem(10);
-                          bottom:rem(15);
+                          bottom:rem(4);
                           position: absolute;
                           content: '.';
-                          left:rem(35);
+                          left:rem(25);
                           width: rem(5);
                           height: rem(5);
                           background: #666;
@@ -233,12 +235,12 @@
                       &-is-today{
                         i:after {
                           border-radius: rem(10);
-                          bottom:rem(15);
+                          bottom:rem(4);
                           position: absolute;
                           content: '.';
                           width: rem(5);
                           height: rem(5);
-                          left:rem(35);
+                          left:rem(25);
                           background: #d0111a;
                         }
                       }
@@ -329,7 +331,7 @@
                       border-radius: 0.06rem 0 0 0.06rem;
                       i:after {
                         position: absolute;
-                        bottom:rem(-40);
+                        bottom:rem(-50);
                         left: rem(18);
                         font-size: rem(20);
                         content: '已抽奖';
@@ -337,7 +339,7 @@
                     }
                     &-tips-hasLottery2 {
                       i:after {
-                        bottom:rem(-50);
+                        bottom:rem(-40);
                       }
                     }
                     &-tips-lottery-day{
@@ -345,7 +347,7 @@
                       border-radius: 0.06rem 0 0 0.06rem;
                       i:after {
                         position: absolute;
-                        bottom:rem(-40);
+                        bottom:rem(-35);
                         left: rem(18);
                         font-size: rem(20);
                         content: '抽奖日';
@@ -453,19 +455,17 @@
         }
     }
 }
-.vue-component-calendar-content-transition {
-    -webkit-transition: all ease-in-out 0.3s;
-    transition: all ease-in-out 0.3s;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all .8s ease;
+  z-index: 5000;
 }
-.vue-component-calendar-content-enter,
-.vue-component-calendar-content-leave {
-    -webkit-transform: translate3d(0, 100%, 0);
-    transform: translate3d(0, 100%, 0);
+.slide-fade-leave-active {
+  transition: all .8s;
 }
-.expand-enter,.expand-leave {
-    opacity: 0;
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
+.slide-fade-enter, .slide-fade-leave-active {
+  transform: translateY(-2000px);
+  opacity: 0;
+  z-index: 4000;
 }
