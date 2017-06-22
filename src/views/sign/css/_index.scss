@@ -295,7 +295,7 @@ body {
     -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
     padding-bottom: rem(10);
     margin: rem(20) rem(20);
-    border-bottom: rem(1.5) solid #eee;
+    border-bottom: 1px solid #eee;
     //height: rem(440);
     li:first-child{
       img{
@@ -367,7 +367,7 @@ body {
   }
   /*猜你喜欢商品推荐*/
   .goodsList{
-    border-bottom:rem(1.5) solid #ddd;
+    border-bottom:1px solid #ddd;
     margin: rem(20);
     li{
       float: left;

@@ -30,7 +30,7 @@
       </div>
       <div class="tips2 other2">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu">
-        <li v-for="item in iconMenu" v-go-native-resource="item">
+        <li v-for="item in iconMenu" v-go-native-resource="item.advList[0]">
           <img :src="item.advList[0].mediaUrl">
           <div>{{item.advList[0].deployName.substring(0,4)}}</div>
         </li>
@@ -39,7 +39,7 @@
     </section>
     <!--四个资源位-->
     <ul class="top-menu">
-      <li v-for="item in recommendList" v-go-native-resource="item">
+      <li v-for="item in recommendList" v-go-native-resource="item.advList[0]">
         <!--<div class="name">{{item.advList[0].deployName}}</div>-->
         <!--<div class="desc">{{item.advList[0].pName}}</div>-->
         <img  :src="item.advList[0].mediaUrl">
@@ -98,7 +98,7 @@
       <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <ul class="top-menu bottom" v-show="noSignList.length>0">
-        <li v-for="item in noSignList" v-go-native-resource="item" class="lazyload">
+        <li v-for="item in noSignList" v-go-native-resource="item.advList[0]" class="lazyload">
           <!--<div class="name">经理经理的说法</div>-->
           <!--<div class="desc">df的说法</div>-->
           <img v-lazy="{src: item.advList[0].mediaUrl}">
@@ -484,25 +484,27 @@
           $title: 'APP_签到有奖',
         });
         if (!this.signed && this.signStatus != 0) {
+          utils.isLogin(true).then(user => {
+            this.memberId = user.member_id;
+            this.memberToken = user.member_token;
             api.sign.signIn({
               buld: "3000",
               channelId: "1",
               member_token: this.memberToken
             }).then(data => {
-                let json = JSON.parse(data.body.obj)
-                debugger;
-                if (data.body.resCode == "00100000") {
-                   this.getCalendarHistory();
-                   console.log(json)
-                  debugger
-                   this.changeStatus(json, 1); // 让积分累加
-                } else {
-                  this.$toast({
-                    position: 'bottom',
-                    message: json.msg
-                  });
-                }
+              let json = JSON.parse(data.body.obj)
+              if (data.body.resCode == "00100000") {
+                this.getCalendarHistory();
+                console.log(json)
+                this.changeStatus(json, 1); // 让积分累加
+              } else {
+                this.$toast({
+                  position: 'bottom',
+                  message: json.msg
+                });
+              }
             });
+          })
         } else {
           this.$toast({
             position: 'bottom',
