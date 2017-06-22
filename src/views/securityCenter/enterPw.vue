@@ -67,17 +67,6 @@ export default {
             message: '输入的新密码和旧密码不能一致,请重新输入！'
           })
         } else {
-          // test password strength
-          // // debugger
-          // let strongRegex = /^(?![a-zA-Z0-9]+$)(?![^a-zA-Z/D]+$)(?![^0-9/D]+$).{9,20}$/
-          // let mediumRegex = /^(?![0-9]+$)(?![a-zA-Z]+$)(?!([^(0-9a-zA-Z)]|[\(\)])+$)([^(0-9a-zA-Z)]|[\(\)]|[a-zA-Z]|[0-9]){9,}$/
-          // if (strongRegex.exec(this.newPw) && mediumRegex.exec(this.newPw)) {
-          //   this.pwdStrength = '3'
-          // } else if (mediumRegex.exec(this.newPw)) {
-          //   this.pwdStrength = '2'
-          // } else {
-          //   this.pwdStrength = '1'
-          // }
           utils.isLogin().then(data => {
             let memberToken = data.member_token
             api.userCenter.modifyPassword({
@@ -89,13 +78,18 @@ export default {
               sysid: '1103'
             }).then(data => {
               if (data.body.obj) {
+                this.$toast({
+                  position: 'bottom',
+                  message: '修改密码成功，自动退出'
+                })
+                setTimeout(() => {
                   window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
                     success: result => {
                       console.log(result)
                       // this.$toast('退出成功!')
                       setTimeout(function () {
                        window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController')
-                      }, 2500)
+                      }, 1500)
                     },
                     fail: result => {
                       console.log(result)
@@ -103,9 +97,19 @@ export default {
                     progress: result => {
                       console.log(result)
                     }
-                  });
+                  })
+                }, 2000)
                 } else {
-                this.$toast(data.body.msg)
+                  console.log("####success#####" + data.body.msg)
+                  window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+                    title: "提示",
+                    message: data.body.msg,
+                    buttons: [
+                    {
+                      title: "确定",
+                      style: "highlighted"
+                    }]
+                  })
               }
             })
           })
