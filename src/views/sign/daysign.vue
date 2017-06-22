@@ -5,7 +5,7 @@
 
   <div class="daysign" v-infinite-scroll="fetchLikeList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="overlay test" v-show="showOverlay"></div>
-    <div class="overlay" v-show="showSignRemark"></div>
+    <div class="overlay" v-show="showSignRemark" style="z-index: 9997"></div>
     <bl-calendar v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
                 :is-double-check.sync=true :is-vication.sync=true>
     </bl-calendar>
@@ -80,7 +80,7 @@
     </div>
     <!--签到说明-->
     <transition v-on:enter="enter" active-class="slideInDown"  name="slideInDown" enter-active-class="slideInDown" leave-active-class="slideOutUp">
-      <div class="remark" v-show="showSignRemark">
+      <div class="remark" v-show="showSignRemark" style="z-index: 9998">
         <div class="signRemark">
             <div class="title">签到说明</div>
             <div v-html="unescape(signRemark)"></div>
@@ -229,7 +229,6 @@
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
-          console.log("aaaa")
           if (this.memberId && this.memberToken) { // 已经登录
             this.isLogin = true;
             // 查询签到日历
@@ -259,28 +258,25 @@
                 });
               }
             })
-          } else {
-            this.isLogin = false;
-            console.log("未登录");
-            // 查询用户是否有签到资格
-            this.getSignQualification((data) => {
-              if (data.body.resCode == "00100000") {
-                let json = JSON.parse(data.body.obj);
-                this.signRemark = json.signRemark;
-                this.signPoint = json.signPoint;
-                console.log(json)
-                // singStatus 0-不可签到 1-可签到，未签到，2-已签到
-                this.changeStatus(json);
-              } else {
-                this.$toast({
-                  position: 'bottom',
-                  message: data.body.msg
-                });
-              }
-            })
           }
-        }).then(err => {
-            console.log("未登录", err)
+        }, () => {
+          this.isLogin = false;
+          // 查询用户是否有签到资格
+          this.getSignQualification((data) => {
+            if (data.body.resCode == "00100000") {
+              let json = JSON.parse(data.body.obj);
+              this.signRemark = json.signRemark;
+              this.signPoint = json.signPoint;
+              console.log(json)
+              // singStatus 0-不可签到 1-可签到，未签到，2-已签到
+              this.changeStatus(json);
+            } else {
+              this.$toast({
+                position: 'bottom',
+                message: data.body.msg
+              });
+            }
+          })
         });
       },
       // 根据状态改变页面操作
@@ -408,7 +404,7 @@
       },
       // 主动登录
       login() {
-        utils.isLogin(true).then(user => {
+        utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
           if (this.memberToken) {
