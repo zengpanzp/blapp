@@ -101,7 +101,7 @@ export default {
                         position: 'bottom'
                       })
                       setTimeout(() => {
-                        this.$router.push('/securityCenter')
+                        this.$router.push('./securityCenter')
                       }, 3000)
                     } else {
                       this.$toast({

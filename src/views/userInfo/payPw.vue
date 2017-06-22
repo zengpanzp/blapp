@@ -7,7 +7,7 @@
         <b class="iconfont lock clear"></b>
         <input maxlength="6" type="password" placeholder="支付密码" v-model="pw_input">
       </li>
-  		<router-link to="/securityCenter/checkPhone"><p class="forget-password">忘记密码>&nbsp;&nbsp;</p></router-link>
+  		<router-link to="/userInfo/checkPhone"><p class="forget-password">忘记密码>&nbsp;&nbsp;</p></router-link>
     </p>
     </form>
 	</div>

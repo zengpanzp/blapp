@@ -212,60 +212,60 @@ export const prdRouter = [
   },
   /* 薛天玲 安全中心 */
   {
-    path: '/securityCenter',
+    path: '/userInfo/securityCenter',
     meta: {
       title: '安全中心',
       notLoading: true
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/securityCenter')), 'securityCenter'),
+    component: r => require.ensure([], () => r(require('../views/userInfo/securityCenter')), 'securityCenter'),
   },
   /* 薛天玲 安全中心 邮箱 */
   {
-    path: '/securityCenter/myEmail',
+    path: '/userInfo/myEmail',
     meta: {
       title: '我的邮箱'
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/myEmail')), 'myEmail')
+    component: r => require.ensure([], () => r(require('../views/userInfo/myEmail')), 'myEmail')
   },
   /* 薛天玲 安全中心 登录密码 */
   {
-    path: '/securityCenter/enterPw',
+    path: '/userInfo/enterPw',
     meta: {
       title: '我的密码'
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/enterPw')), 'enterPw')
+    component: r => require.ensure([], () => r(require('../views/userInfo/enterPw')), 'enterPw')
   },
   /* 薛天玲 安全中心 验证支付密码 */
   {
-    path: '/securityCenter/payPw',
+    path: '/userInfo/payPw',
     meta: {
       title: '我的支付密码'
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/payPw')), 'payPw')
+    component: r => require.ensure([], () => r(require('../views/userInfo/payPw')), 'payPw')
   },
   /* 薛天玲 安全中心 提交支付密码 */
   {
-    path: '/securityCenter/submitPw',
+    path: '/userInfo/submitPw',
     meta: {
       title: '我的密码'
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/submitPw')), 'submitPw')
+    component: r => require.ensure([], () => r(require('../views/userInfo/submitPw')), 'submitPw')
   },
     /* 薛天玲 安全中心 验证身份 */
   {
-    path: '/securityCenter/checkPhone',
+    path: '/userInfo/checkPhone',
     meta: {
       title: '验证身份'
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/checkPhone')), 'checkPhone')
+    component: r => require.ensure([], () => r(require('../views/userInfo/checkPhone')), 'checkPhone')
   },
     /* 薛天玲 安全中心 支付密码 未实名认证 */
   {
-    path: '/securityCenter/payPwAuth',
+    path: '/userInfo/payPwAuth',
     meta: {
       title: '我的支付密码'
     },
-    component: r => require.ensure([], () => r(require('../views/securityCenter/payPwAuth')), 'payPwAuth')
+    component: r => require.ensure([], () => r(require('../views/userInfo/payPwAuth')), 'payPwAuth')
   },
   /* 曾攀 我的评价 */
   {
