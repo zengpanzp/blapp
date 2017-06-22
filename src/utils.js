@@ -106,20 +106,23 @@ const isLogin = (login = true) => {
         } else {
           localStorage.removeItem('userInfo', res)
           console.log('没有登录')
-          login && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
-            success: data => {
-              let resData = JSON.parse(data)
-              localStorage.setItem('userInfo', data)
-              resolve(resData)
-            },
-            fail: () => {
-              reject()
-            }
-          })
+          reject()
+          if (login) {
+            window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
+              success: data => {
+                let resData = JSON.parse(data)
+                localStorage.setItem('userInfo', data)
+                resolve(resData)
+              },
+              fail: () => {
+                reject()
+              }
+            })
+          } else {
+            reject()
+          }
         }
-      },
-      fail: () => { reject() },
-      progress: () => {}
+      }
     })
   })
 }
