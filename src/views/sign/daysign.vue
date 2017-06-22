@@ -42,7 +42,7 @@
       <li v-for="item in recommendList" v-go-native-resource="item">
         <!--<div class="name">{{item.advList[0].deployName}}</div>-->
         <!--<div class="desc">{{item.advList[0].pName}}</div>-->
-        <img :src="item.advList[0].mediaUrl">
+        <img  :src="item.advList[0].mediaUrl">
       </li>
       <div class="clearfix"></div>
     </ul>
@@ -52,8 +52,8 @@
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
       <li v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
-        <div class="goods">
-          <img :src="goodsItem.mediaUrl" class="dateImg">
+        <div class="goods lazyload">
+          <img  v-lazy="{src: goodsItem.mediaUrl}" class="dateImg">
           <div class="name">{{goodsItem.deployName}}</div>
           <div class="name money"><label>￥</label>{{goodsItem.sale_price}}</div>
         </div>
@@ -63,7 +63,7 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-go-native-goods-detail="item">
-        <div class="pic"><img :src="item.url" class="dateImg"></div>
+        <div class="pic lazyload"><img v-lazy="{src: item.url}" class="dateImg"></div>
         <div class="name">{{item.goods_sales_name}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.sale_price}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
@@ -79,11 +79,11 @@
       <img  :src="require('src/assets/icon_end.png')">
     </div>
     <!--签到说明-->
-    <transition active-class="slideInDown"  name="slideInDown" enter-active-class="slideInDown" leave-active-class="slideOutUp">
+    <transition v-on:enter="enter" active-class="slideInDown"  name="slideInDown" enter-active-class="slideInDown" leave-active-class="slideOutUp">
       <div class="remark" v-show="showSignRemark">
         <div class="signRemark">
             <div class="title">签到说明</div>
-            <div v-html="signRemark"></div>
+            <div v-html="unescape(signRemark)"></div>
         </div>
         <img src="./i/close.png" :style="{top: closeTop}" class="close" @click.prevent="closeRemark">
       </div>
@@ -98,10 +98,10 @@
       <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <ul class="top-menu bottom" v-show="noSignList.length>0">
-        <li v-for="item in noSignList" v-go-native-resource="item">
+        <li v-for="item in noSignList" v-go-native-resource="item" class="lazyload">
           <!--<div class="name">经理经理的说法</div>-->
           <!--<div class="desc">df的说法</div>-->
-          <img :src="item.advList[0].mediaUrl">
+          <img v-lazy="{src: item.advList[0].mediaUrl}">
         </li>
         <div class="clearfix"></div>
       </ul>
@@ -157,6 +157,11 @@
     computed: {
     },
     created() {
+      sa.track('$pageview', {
+        pageId: 'APP_签到有奖',
+        categoryId: 'APP_User',
+        $title: 'APP_签到有奖',
+      });
       let self = this;
       // 供app 调用弹出签到说明
       window.BLAlertSignConfirm = () => {
@@ -173,6 +178,17 @@
     mounted() {
     },
     methods: {
+      unescape(html) {
+        let e = document.createElement('div');
+        e.innerHTML = html;
+        return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+      },
+      enter() {
+        // 动态计算高度
+        let height = this.$el.querySelector(".remark").offsetHeight;
+        this.$el.querySelector(".remark").style.top = "50%";
+        this.$el.querySelector(".remark").style.marginTop = "-" + height / 2 + "px";
+      },
       fecthData() {
         api.sign.queryAdDeploy({
           otherresource: {
@@ -191,7 +207,6 @@
           let bigGoods = [];
           for (let i = 9; i < 12; i++) {
             let arr = resData[i].advList;
-            console.log("arr", arr)
             let obj = {}
             obj.list = [];
             for (let j = 0; j < arr.length; j++) {
@@ -201,7 +216,6 @@
                 obj.list.push(arr[j]);
               }
             }
-            console.log(obj)
             bigGoods.push(obj);
           }
           this.bigGoodsList = bigGoods;
@@ -210,12 +224,10 @@
             this.noSignList.push(resData[i]);
           }
           this.signBg = resData[12].advList[0].mediaUrl;
-          console.log(resData)
         })
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
-          console.log(this.memberToken)
           if (this.memberId && this.memberToken) { // 已经登录
             this.isLogin = true;
             // 查询签到日历
@@ -224,7 +236,6 @@
             api.sign.getScores({
               member_token: this.memberToken
             }).then(data => {
-              console.log(data);
               if (data.body.resCode == "00100000") {
                 let json = JSON.parse(data.body.obj);
                 this.myPoints = json.points;
@@ -263,6 +274,11 @@
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
         if (obj.signStatus == 0) {  // 没有签到资格
+          sa.track('$pageview', {
+            pageId: 'APP_签到弹层',
+            categoryId: 'APP_User',
+            $title: 'APP_签到弹层',
+          });
           this.showOverlay = true;
         } else if (obj.signStatus == 1) { // 未签到
           this.signed = false; // 设置未签到
@@ -410,46 +426,70 @@
       },
       // 跳转到首页
       goIndex() {
+        sa.track('clickButton', {
+          pageId: 'APP_签到有奖',
+          buttonName: "去买买买",
+          buttonPage: "签到弹层",
+          categoryId: 'APP_User',
+          $title: 'APP_签到有奖',
+        });
         window.location.href = "blmodule://ibaiLian/home"
       },
       // 按钮点击去抽奖
       lottery() {
-          let signRuleCode = this.signRuleCode; // 抽奖规则id
-          // 跳转到cordova页面
-          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-            pageId: 'lucky',
-            params: {
-              coupon: null,
-              ruleId: signRuleCode,
-              isSigninFlag: "Y"
-            }
+        sa.track('clickButton', {
+          pageId: 'APP_签到有奖',
+          buttonName: "去抽奖",
+          buttonPage: "签到页",
+          categoryId: 'APP_User',
+          $title: 'APP_签到有奖',
+        });
+        let signRuleCode = this.signRuleCode; // 抽奖规则id
+        // 跳转到cordova页面
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'lucky',
+          params: JSON.stringify({
+            coupon: null,
+            ruleId: signRuleCode,
+            isSigninFlag: "Y"
           })
+        })
       },
       // 进行签到
       sign() {
-          if (!this.signed && this.signStatus != 0) {
-              api.sign.signIn({
-                buld: "3000",
-                channelId: "1",
-                member_token: this.memberToken
-              }).then(data => {
-                  let json = JSON.parse(data.body.obj)
-                  if (data.resCode == "00100000") {
-                     this.getCalendarHistory();
-                     this.changeStatus(json, 1); // 让积分累加
-                  } else {
-                    this.$toast({
-                      position: 'bottom',
-                      message: json.msg
-                    });
-                  }
-              });
-          } else {
-            this.$toast({
-              position: 'bottom',
-              message: "您还没有签到资格!"
+        sa.track('clickButton', {
+          pageId: 'APP_签到有奖',
+          buttonName: "签到",
+          buttonPage: "签到页",
+          categoryId: 'APP_User',
+          $title: 'APP_签到有奖',
+        });
+        if (!this.signed && this.signStatus != 0) {
+            api.sign.signIn({
+              buld: "3000",
+              channelId: "1",
+              member_token: this.memberToken
+            }).then(data => {
+                let json = JSON.parse(data.body.obj)
+                debugger;
+                if (data.body.resCode == "00100000") {
+                   this.getCalendarHistory();
+                   console.log(json)
+                  debugger
+                   this.changeStatus(json, 1); // 让积分累加
+                } else {
+                  this.$toast({
+                    position: 'bottom',
+                    message: json.msg
+                  });
+                }
             });
-          }
+        } else {
+          this.$toast({
+            position: 'bottom',
+            message: "您还没有签到资格!"
+          });
+        }
       }
     }
   };
