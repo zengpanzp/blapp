@@ -19,7 +19,7 @@
       <div class="tips2" v-else="isLogin">本月已获得{{lotteryCount}}次抽奖 <img src="./i/date.png" @click="showCalendar = true" class="dateImg"></div>
       <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
-      <div class="btnSign" @click="sign" v-show="!signed">
+      <div class="btnSign" @click="sign" v-show="!signed && !canLottery">
         {{signText}}<img v-show="signed" src="./i/signed.png"> <span v-show="!signed">+{{signPoint}}</span>
       </div>
       <div class="btnSign" @click="lottery" v-show="canLottery">
