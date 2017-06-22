@@ -13,7 +13,7 @@
           </ul>
         </div>
       </div>
-      <div class='cbill-account list-block'>
+      <div class='cbill-account list-block max-list-height'>
         <ul>
           <li class="swipeout ligo" @click="go(item,$event)" v-for="item in accountList">
             <bl-swipeout>
@@ -159,6 +159,11 @@
           20: "sf",  // 水费
           21: "dl",  // 电费
           22: "mq"   // 煤气
+        },
+        typeObj2: {
+          1: "sf",  // 水费
+          2: "dl",  // 电费
+          3: "mq"   // 煤气
         },
         accountList: [] // 缴费账号
       }
@@ -414,7 +419,7 @@
         }
         let type = obj.paymentType;
         let typeVal = 0;
-        type = parseInt(type);
+        typeVal = parseInt(type);
         switch (type) {
           case 20 :
           case 1 :
@@ -429,7 +434,6 @@
             typeVal = 3;
             break;
         }
-        console.log(obj, typeVal)
         if (obj && obj.accountNo) {  // 查看账单
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
@@ -440,7 +444,7 @@
           let queryData = {
             client_id: CONST.CLIENT_ID,
             t_dz: "02",
-            type: this.typeObj[type],
+            type: this.typeObj2[typeVal],
             codetype: obj.accountNo.length >= 24 ? "01" : "02",
             dkhzh: this.memberId,
             groupId: obj.groupId,

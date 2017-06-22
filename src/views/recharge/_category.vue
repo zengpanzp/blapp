@@ -83,7 +83,7 @@
                 // 修改分类名称
                 utils.isLogin().then(user => {
                     let timestamp = utils.getTimeFormatToday();
-                    let memberToken = utils.ssdbGet('member_token');
+                    let memberToken = utils.dbGet('userInfo').member_token;
                     api.recharge.updateMyGroup({
                         "member_token": memberToken,
                         "groupName": this.item.groupName,
@@ -122,7 +122,7 @@
             // 添加分类名称
             utils.isLogin().then(user => {
               let timestamp = utils.getTimeFormatToday();
-              let memberToken = utils.ssdbGet('member_token');
+              let memberToken = utils.dbGet('userInfo').member_token;
               api.recharge.createMyGroup({
                 "member_token": memberToken,
                 "groupName": this.newGroupName,
@@ -152,7 +152,7 @@
           // 添加分类名称
           utils.isLogin().then(user => {
               let timestamp = utils.getTimeFormatToday();
-              let memberToken = utils.ssdbGet('member_token');
+              let memberToken = utils.dbGet('userInfo').member_token;
               api.recharge.deleteMyGroup({
                 "member_token": memberToken,
                 "id": item.id,

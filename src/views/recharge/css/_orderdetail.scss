@@ -87,11 +87,11 @@
     margin-bottom: rem(20);
     background: #fff;
     font-weight: 200;
-    border-bottom: rem(1) solid #ddd;
+    border-bottom: 1px solid #ddd;
     li{
       height: rem(80);
       line-height: rem(80);
-      border-bottom: rem(1) solid #ddd;
+      border-bottom: 1px solid #ddd;
       &:last-child{
         border: none;
       }

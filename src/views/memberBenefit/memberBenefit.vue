@@ -80,9 +80,9 @@ export default {
     }
   },
   created() {
-    this.memberToken = utils.ssdbGet('member_token')
-    this.memberId = utils.ssdbGet('member_id')
-    this.member_mobile = utils.ssdbGet('member_mobile')
+    this.memberToken = utils.dbGet('userInfo').member_token
+    this.memberId = utils.dbGet('userInfo').member_id
+    this.member_mobile = utils.dbGet('userInfo').member_mobile
     console.log(this.memberToken)
   //	let powerId = this.$route.params.powerId
     let powerId = '004'

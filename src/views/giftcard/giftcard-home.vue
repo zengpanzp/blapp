@@ -33,7 +33,7 @@
             <div class="list-text" v-go-native-goods-detail="row[0]">{{ row[0].productName }}</div>
             <div class="list-pay">
               <div class="paynum"><span>¥</span>{{ row[0].marketPrice }}</div>
-              <div class="pay-log-no" v-if="row.isAvailable == 0"></div>
+              <div class="pay-log-no" v-if="row[0].isAvailable == 0"></div>
               <div class="pay-log" v-else @click="addCard(row[0].goodsId, row[0])"></div>
             </div>
           </div>
@@ -80,13 +80,13 @@ export default {
     }).then(data => {
       let resData = JSON.parse(data.body.obj)
       for (let item of resData.obj.otherResource) {
-        if (item.resourceId === 3040031) {
+        if (item.resourceId == 3040031) {
           this.allSlides = item.advList
         }
-        if (item.resourceId === 3040032) {
+        if (item.resourceId == 3040032) {
           this.themeIcon = item.advList
         }
-        if (item.resourceId === 3040033) {
+        if (item.resourceId == 3040033) {
           this.cardTheme = item.advList
         }
       }

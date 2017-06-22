@@ -45,7 +45,7 @@ export const prdRouter = [
   {
     path: '/sign/daysign',
       meta: {
-        title: '签到'
+        title: '每日福利'
       },
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },

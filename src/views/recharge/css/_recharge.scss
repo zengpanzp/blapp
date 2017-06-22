@@ -4,7 +4,9 @@
     color: #fff !important
 }
 
-
+*{
+  -webkit-overflow-scrolling: touch;
+}
 .icon-waitassess {
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAAU1QTFRFX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtAAAAX7Lt9068HgAAAG50Uk5T2f21pxFLzxN5RMYZlt5TFNsmVOa3Jw9kiiSlKozLTm33otqQ76n0If6/4GbdBpi2FTeENNTj4jUiLLrB2BDSrnuAbtC0Nuv1fNHO4QcSGgVwfYXIHvz2A3go7WvM8HUEeiUw8sP6Fyn5+AL7AQDmWW8ZAAACNklEQVRIx53XV1fjMBAGULb33iu9996X3tIgJCENAoFgx23+/+PalrMb5JE09veS8ZHuOXIsS3KHI47dP9RvS9qdDklbFQCqMfHggIsHBmNhexi8DNtxcBVYqjFw/SDAB/XI2GxAKw0zKj6B/zmJiOtnbfisHgkXG9Ae0cBxXIO7qUXAZYPDRpmMizngkytScQ3CqRHxDwPBhk7Cl+eA5fySgjcBzyYBLzcFuLmsxIJB4wPncRbEOVTga0uCrWspPt4BWXaOZXgL5NmSYOmgkYG349QfUOUoJcKnoM6pAM8WCLgwi+LxOaBkLoXhEtBSQvD6BRFfrIfxFVBzFcL2CBmP2DyeJqjmWzaJpnmcVduPTxxt1SuyPN5VWiPtdsvcc6tdHo8pMev5wa3GeNxUYuuF221pyLt3HhP+r+dLzruEX8XA7vwIfnl8A/Tc8HgtAl7j8YZKrH76fBiUGzxWTe1C3u30i5vcLbyowA+8TvdZvchjc14+vb65fR6yg8q8GXolZ6TYPxA9ZfVM+H3O30rsS6/HG/aYb/PIMjQhtl/9N/g7u5jA1rCMaJ68euS3fwlmSAZderdx+3Pcb/0d3NY2vm6bK5hNskXnfWBXTMGOMbWA4Mf+7tnaTBamhBudXkH0a8d5dhTUFV2yxe7tIzr3b//b35OeDPSk5GkndcWZJD0ptJNp5VHKHu1Dad+oTTk+ar1dIdrVq1GPzFqp5w7tKWmRvjHKnd2JigVWJdHdWRZ9Y/wF5e3cMTdmkIgAAAAASUVORK5CYII=') rem(.25*31.25) center no-repeat;
   background-size: .6rem;
@@ -60,7 +62,7 @@
   left: 50%;
   margin-left: rem(-350);
   border-radius: rem(10);
-  border:rem(1.5) solid #d0111a;
+  border:1px solid #d0111a;
   color:#d0111a;
   text-align: center;
   font-size: rem(28);
@@ -341,7 +343,6 @@ span.solid-miner-circle {
 .bill-histroy {
     padding: 0 0.75rem
 }
-
 .bill-histroy li {
     padding: 1.0625rem 0;
     display: -webkit-box;
@@ -642,7 +643,9 @@ span.solid-miner-circle {
 }
 
 .list-block {
-    padding: 0
+    padding: 0;
+    max-height: 60%;
+    overflow: hidden;
 }
 
 .line-tv-box ul li {
@@ -812,4 +815,8 @@ span.solid-miner-circle {
 }
 .new .blue-bill-top ul .bill-select a {
   color: #fff;
+}
+.max-list-height{
+  max-height: rem(800);
+  overflow: scroll;
 }

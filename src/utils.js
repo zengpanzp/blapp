@@ -5,12 +5,16 @@ import Vue from 'vue'
  */
 const dbGet = (name) => {
   let value = localStorage.getItem(name)
-  if (/^\{.*\}$/.test(value)) value = JSON.parse(value)
+  if (/^\{.*\}$/.test(value)) {
+    value = JSON.parse(value)
+  }
   return value
 }
 
 const dbSet = (name, value) => {
-  if (typeof value === typeof {}) value = JSON.stringify(value)
+  if (typeof value === typeof {}) {
+    value = JSON.stringify(value)
+  }
   return localStorage.setItem(name, value)
 }
 
@@ -24,12 +28,16 @@ const dbRemove = (name) => {
  */
 const ssdbGet = (name) => {
   let value = sessionStorage.getItem(name)
-  if (/^\{.*\}$/.test(value)) value = JSON.parse(value)
+  if (/^\{.*\}$/.test(value)) {
+    value = JSON.parse(value)
+  }
   return value
 }
 
 const ssdbSet = (name, value) => {
-  if (typeof value === typeof {}) value = JSON.stringify(value)
+  if (typeof value === typeof {}) {
+    value = JSON.stringify(value)
+  }
   return sessionStorage.setItem(name, value)
 }
 
@@ -89,24 +97,19 @@ const isLogin = (login = true) => {
   return new Promise((resolve, reject) => {
     window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
       success: res => {
-        let resData = transData(res)
+        let resData = JSON.parse(res)
         console.log(resData)
         if (resData.member_id && resData.member_token) {
-          ssdbSet('member_id', resData.member_id)
-          ssdbSet('member_token', resData.member_token)
-          ssdbSet('member_mobile', resData.mobile)
+          localStorage.setItem('userInfo', res)
           console.log('已经登录')
           resolve(resData)
         } else {
-          ssdbRemove('member_id')
-          ssdbRemove('member_token')
+          localStorage.removeItem('userInfo', res)
           console.log('没有登录')
           login && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
             success: data => {
-              let resData = transData(data)
-              ssdbSet('member_id', resData.member_id)
-              ssdbSet('member_token', resData.member_token)
-              ssdbSet('member_mobile', resData.mobile)
+              let resData = JSON.parse(data)
+              localStorage.setItem('userInfo', data)
               resolve(resData)
             },
             fail: () => {

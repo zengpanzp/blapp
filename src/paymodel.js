@@ -37,7 +37,7 @@ const goPay = function(order, type, sucCallback, failCallback) {
     discountAmt = order.changeMoney;
   }
 
-  let member_id = utils.ssdbGet('member_id')
+  let member_id = utils.dbGet('userInfo').member_id
   window.CTJSBridge && window.CTJSBridge.LoadMethod('ExposeJsApi', 'getServiceCfg', '', {
     success: data => {
       sa.track('$pageview', {

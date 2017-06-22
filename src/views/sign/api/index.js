@@ -14,25 +14,33 @@ if (process.env.NODE_ENV !== 'production') {
 export default {
   // 签到
   sign: {
+    // 我的积分
+    getScores: params => {
+      return Vue.http.post(baseUrl + '/memberPoint/queryMemberPoint.htm', params);
+    },
+    // 猜你喜欢
+    guessLike: params => {
+      return Vue.http.post(baseUrl + '/recommend/appgl.htm', params);
+    },
     // 查询用户是否有抽奖资格
     lotteryQualification: params => {
-      return Vue.http.post(baseUrl + '/memberSignIn/signIn/lotteryQualification.htm', params);
+      return Vue.http.post(baseUrl + '/signIn/lotteryQualification.htm', params);
     },
     // 查询签到日历
     querysignInCalendar: params => {
-      return Vue.http.post(baseUrl + '/memberSignIn/signInHistory/querysignInCalendar.htm', params);
+      return Vue.http.post(baseUrl + '/signInHistory/querysignInCalendar.htm', params);
     },
     // 查询用户是否有签到资格
     signInQualification: params => {
-      return Vue.http.post(baseUrl + '/memberSignIn/signIn/signInQualification.htm', params);
+      return Vue.http.post(baseUrl + '/signIn/signInQualification.htm', params);
     },
     // 签到抽奖促销回调接口
     lotteryCallback: params => {
-      return Vue.http.post(baseUrl + '/memberSignIn/signIn/lotteryCallback', params);
+      return Vue.http.post(baseUrl + '/signIn/lotteryCallback', params);
     },
     // 签到接口
     signIn: params => {
-      return Vue.http.post(baseUrl + '/memberSignIn/signIn/signIn.htm', params);
+      return Vue.http.post(baseUrl + '/signIn/signIn.htm', params);
     },
     // 查询资源位
     queryAdDeploy: params => {

@@ -85,7 +85,7 @@ export default {
     };
   },
   created() {
-    this.memberId = utils.ssdbGet('member_id')
+    this.memberId = utils.dbGet('userInfo').member_id
     if (this.memberId) {
       this.loginflag = true
     }
