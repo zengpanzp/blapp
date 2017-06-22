@@ -101,13 +101,13 @@
         display: inline-block;
         padding: 0 rem(15);
         border-radius: rem(8) ;
-        border:rem(1) solid #c3c3c3;
+        border: 1px solid #c3c3c3;
         @include common;
         width: auto;
         margin-right: rem(15);
         &.selected{
           color:#3ea2ff;
-          border:rem(1) solid #3ea2ff;
+          border: 1px solid #3ea2ff;
           background:#ebf5ff;
         }
       }
