@@ -1,10 +1,10 @@
 <style lang="scss" src="./_index.scss" scoped></style>
 <template>
   <div class="BLCalendar">
-      <div class="vue-calendar-backdrop" v-if="showCalendar"  @click.prevent="closeCalendar"></div>
+      <div class="vue-calendar-backdrop" v-if="showCalendar" @touchmove.prevent  @click.prevent="closeCalendar"></div>
       <div class="vue-calendar" data-index="0">
           <transition name="slide-fade" appear appear-class="slide-fade">
-            <div v-if="showCalendar">
+            <div v-if="showCalendar" @touchmove.prevent>
               <div class="vue-calendar-content"    id="vueCalendarTemplate">
                   <div class="vue-calendar-content-title-wrapper" id="topHeight1">
                       <div class="premonth" @click="getPreMonthSignList">{{preMonth}}</div>

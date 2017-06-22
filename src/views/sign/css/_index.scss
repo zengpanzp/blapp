@@ -17,9 +17,7 @@ body {
     width: rem(710);
     position: fixed;
     left: 50%;
-    margin-left: rem(-350);
-    width: rem(710);
-    top:rem(200);
+    margin-left: rem(-352.5);
     font-size: rem(28);
     line-height: rem(50);
     z-index: 2000;
@@ -39,7 +37,7 @@ body {
     .close{
       width: rem(90);
       position: relative;
-      margin-top:rem(80);
+      margin-top:rem(70);
       height: rem(90);
     }
   }
@@ -213,9 +211,10 @@ body {
         font-size: rem(24);
         letter-spacing: 0;
         top:rem(465);
-        width: rem(360);
+        width: rem(460);
+        text-align: center;
         left: 50%;
-        margin-left: rem(-180);
+        margin-left: rem(-230);
       }
     }
     .line{
@@ -390,7 +389,7 @@ body {
         width: rem(74);
         height: rem(32);
         background: #FFF;
-        border: rem(1) solid #BBBBBB;
+        border: 1px solid #BBBBBB;
         border-radius: 6px;
         text-align: center;
         font-size: rem(20);
