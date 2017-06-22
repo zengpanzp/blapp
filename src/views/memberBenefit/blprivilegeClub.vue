@@ -7,7 +7,7 @@
 					权益对比
 				</div>
 				<div class="menu">
-					<div class="menuli" v-for="({power, name}, index) in list" :class="{select: powerId == power}" @click="powerId = power">{{ name }}
+					<div class="menuli" v-for="({power, name}, index) in list" :class="{select:powerId == power}" @click="powerId = power">{{ name }}
 						<div class="trigle"></div>
 					</div>
 				</div>
