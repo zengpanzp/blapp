@@ -152,36 +152,43 @@
           },
           // 是否已签到
           hasSigned: function(day) {
-            let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-            for (let i = 0; i < this.signInList.length; i++) {
-              let dayStr = this.signInList[i] > 10 ? this.signInList[i] : ("0" + this.signInList[i]);
-              let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
-              if (lotteryDate == formatDate) {
-                return true;
+            if (day != '') {
+              let formatDate = utils.dateFormat('yyyy-MM-dd', day);
+              for (let i = 0; i < this.signInList.length; i++) {
+                let dayStr = this.signInList[i] > 10 ? this.signInList[i] : ("0" + this.signInList[i]);
+                let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
+                if (lotteryDate == formatDate) {
+                  return true;
+                }
               }
             }
           },
           // 是否已抽奖
           hasLottery: function(day) {
-            let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-            for (let i = 0; i < this.lotteryList.length; i++) {
-              let dayStr = this.lotteryList[i].day > 10 ? this.lotteryList[i].day : ("0" + this.lotteryList[i].day);
-              let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
-              if (lotteryDate == formatDate) {
-                return true;
+            if (day != '') {
+              let formatDate = utils.dateFormat('yyyy-MM-dd', day);
+              for (let i = 0; i < this.lotteryList.length; i++) {
+                let dayStr = this.lotteryList[i].day > 10 ? this.lotteryList[i].day : ("0" + this.lotteryList[i].day);
+                let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
+                if (lotteryDate == formatDate) {
+                  return true;
+                }
               }
             }
           },
           // 抽奖日
           showLotteryDay: function(day) {
-            let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-            for (let i = 0; i < this.afterLotteryList.length; i++) {
-              let dayStr = this.afterLotteryList[i] > 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
-              let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
-//              console.log("formatDate", formatDate, lotteryDate)
-              if (lotteryDate == formatDate) {
-                console.log(true, lotteryDate, formatDate)
-                return true;
+            if (day != '') {
+              let formatDate = utils.dateFormat('yyyy-MM-dd', day);
+              console.log("begin", formatDate)
+              for (let i = 0; i < this.afterLotteryList.length; i++) {
+                let dayStr = this.afterLotteryList[i] > 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
+                let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
+                //              console.log("formatDate", formatDate, lotteryDate)
+                if (lotteryDate == formatDate) {
+                  console.log(true, lotteryDate, formatDate)
+                  return true;
+                }
               }
             }
           },

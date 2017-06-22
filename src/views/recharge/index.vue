@@ -7,7 +7,7 @@
         <p>扫一扫</p>
       </a>
       <router-link :to="{ path: 'recharge/bill' }" class="wallet-hd-cell">
-        <span class="ss-icon" v-show="billCount>0">{{billCount}}</span>
+        <span class="ss-icon" v-show="billCount>0 && hasFinish">{{billCount}}</span>
         <img class="hd-cell-icon" src="./i/index/bill-index-icon2.png" alt="">
         <p>付账单</p>
       </router-link>
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       show: false,
+      hasFinish: false,
       billCount: 0,  // 未交账单计数
       typeObj: {
         1: "sf",  // 水费

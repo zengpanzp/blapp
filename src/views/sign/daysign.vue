@@ -19,18 +19,18 @@
       <div class="tips2" v-else="isLogin">本月已获得{{lotteryCount}}次抽奖 <img src="./i/date.png" @click="showCalendar = true" class="dateImg"></div>
       <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
-      <div class="btnSign" @click="sign" v-show="!signed">
+      <div class="btnSign" @click="sign" v-show="!signed && !canLottery">
         {{signText}}<img v-show="signed" src="./i/signed.png"> <span v-show="!signed">+{{signPoint}}</span>
       </div>
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
       </div>
-      <div class="signText" v-show="signed && needSignNum>0">
+      <div class="signText" v-show="signed && needSignNum>0 && !canLottery">
          太棒了！离抽奖惊喜又进一步
       </div>
       <div class="tips2 other2">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu">
-        <li v-for="item in iconMenu" v-go-native-resource="item">
+        <li v-for="item in iconMenu" v-go-native-resource="item.advList[0]">
           <img :src="item.advList[0].mediaUrl">
           <div>{{item.advList[0].deployName.substring(0,4)}}</div>
         </li>
@@ -39,7 +39,7 @@
     </section>
     <!--四个资源位-->
     <ul class="top-menu">
-      <li v-for="item in recommendList" v-go-native-resource="item">
+      <li v-for="item in recommendList" v-go-native-resource="item.advList[0]">
         <!--<div class="name">{{item.advList[0].deployName}}</div>-->
         <!--<div class="desc">{{item.advList[0].pName}}</div>-->
         <img  :src="item.advList[0].mediaUrl">
@@ -98,7 +98,7 @@
       <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <ul class="top-menu bottom" v-show="noSignList.length>0">
-        <li v-for="item in noSignList" v-go-native-resource="item" class="lazyload">
+        <li v-for="item in noSignList" v-go-native-resource="item.advList[0]" class="lazyload">
           <!--<div class="name">经理经理的说法</div>-->
           <!--<div class="desc">df的说法</div>-->
           <img v-lazy="{src: item.advList[0].mediaUrl}">
@@ -121,7 +121,7 @@
             pageIndex: 1,
             allPage: 0
           },
-          signPoint: 0, // 签到赠送的积分
+          signPoint: 5, // 签到赠送的积分
           myPoints: 0, // 我的积分
           closeTop: 0,   // 关闭按钮距离顶部的距离
           showSignRemark: false, // 是否弹出签到说明提示框
@@ -201,6 +201,7 @@
           for (let i = 0; i < 5; i++) {
             this.iconMenu.push(resData[i]);
           }
+          console.log(this.iconMenu)
           for (let i = 5; i < 9; i++) {
             this.recommendList.push(resData[i]);
           }
@@ -228,6 +229,7 @@
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
+          console.log("aaaa")
           if (this.memberId && this.memberToken) { // 已经登录
             this.isLogin = true;
             // 查询签到日历
@@ -259,8 +261,26 @@
             })
           } else {
             this.isLogin = false;
-            console.log("未登录")
+            console.log("未登录");
+            // 查询用户是否有签到资格
+            this.getSignQualification((data) => {
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.signRemark = json.signRemark;
+                this.signPoint = json.signPoint;
+                console.log(json)
+                // singStatus 0-不可签到 1-可签到，未签到，2-已签到
+                this.changeStatus(json);
+              } else {
+                this.$toast({
+                  position: 'bottom',
+                  message: data.body.msg
+                });
+              }
+            })
           }
+        }).then(err => {
+            console.log("未登录", err)
         });
       },
       // 根据状态改变页面操作
@@ -268,7 +288,7 @@
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.signExtendRuleCode; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
-//          obj.signStatus = 1;
+        obj.signStatus = 0;
         this.needSignNum = obj.needSignNum;
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
@@ -465,25 +485,38 @@
           $title: 'APP_签到有奖',
         });
         if (!this.signed && this.signStatus != 0) {
+          utils.isLogin(true).then(user => {
+            this.memberId = user.member_id;
+            this.memberToken = user.member_token;
+            this.isLogin = true;
             api.sign.signIn({
               buld: "3000",
               channelId: "1",
               member_token: this.memberToken
             }).then(data => {
-                let json = JSON.parse(data.body.obj)
-                debugger;
-                if (data.body.resCode == "00100000") {
-                   this.getCalendarHistory();
-                   console.log(json)
-                  debugger
-                   this.changeStatus(json, 1); // 让积分累加
-                } else {
-                  this.$toast({
-                    position: 'bottom',
-                    message: json.msg
-                  });
-                }
+              let json = JSON.parse(data.body.obj);
+              if (data.body.resCode == "00100000") {
+                // 获得我的积分
+                api.sign.getScores({
+                  member_token: this.memberToken
+                }).then(data => {
+                  console.log(data);
+                  if (data.body.resCode == "00100000") {
+                    let json = JSON.parse(data.body.obj);
+                    this.myPoints = json.points;
+                  }
+                });
+                this.getCalendarHistory();
+                console.log(json)
+                this.changeStatus(json, 1); // 让积分累加
+              } else {
+                this.$toast({
+                  position: 'bottom',
+                  message: json.msg
+                });
+              }
             });
+          })
         } else {
           this.$toast({
             position: 'bottom',
