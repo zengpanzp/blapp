@@ -201,6 +201,7 @@
           for (let i = 0; i < 5; i++) {
             this.iconMenu.push(resData[i]);
           }
+          console.log(this.iconMenu)
           for (let i = 5; i < 9; i++) {
             this.recommendList.push(resData[i]);
           }
@@ -287,7 +288,7 @@
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.signExtendRuleCode; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
-//          obj.signStatus = 1;
+        obj.signStatus = 0;
         this.needSignNum = obj.needSignNum;
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
@@ -487,13 +488,24 @@
           utils.isLogin(true).then(user => {
             this.memberId = user.member_id;
             this.memberToken = user.member_token;
+            this.isLogin = true;
             api.sign.signIn({
               buld: "3000",
               channelId: "1",
               member_token: this.memberToken
             }).then(data => {
-              let json = JSON.parse(data.body.obj)
+              let json = JSON.parse(data.body.obj);
               if (data.body.resCode == "00100000") {
+                // 获得我的积分
+                api.sign.getScores({
+                  member_token: this.memberToken
+                }).then(data => {
+                  console.log(data);
+                  if (data.body.resCode == "00100000") {
+                    let json = JSON.parse(data.body.obj);
+                    this.myPoints = json.points;
+                  }
+                });
                 this.getCalendarHistory();
                 console.log(json)
                 this.changeStatus(json, 1); // 让积分累加
