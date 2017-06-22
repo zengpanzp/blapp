@@ -80,13 +80,13 @@ export default {
     }).then(data => {
       let resData = JSON.parse(data.body.obj)
       for (let item of resData.obj.otherResource) {
-        if (item.resourceId === 3040031) {
+        if (item.resourceId == 3040031) {
           this.allSlides = item.advList
         }
-        if (item.resourceId === 3040032) {
+        if (item.resourceId == 3040032) {
           this.themeIcon = item.advList
         }
-        if (item.resourceId === 3040033) {
+        if (item.resourceId == 3040033) {
           this.cardTheme = item.advList
         }
       }
