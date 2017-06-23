@@ -306,11 +306,15 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
 // 区：data[kBLAddressSelectPickerViewDistrict][kBLAddressSelectPickerViewAreasNm]
 
   window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', {
-    title: "title",
+    title: "aaaa",
     limitedProvinceIds: []
   }, {
     success: data => {
-      console.log(data)
+      // let resData = JSON.parse(data)
+      let province = JSON.parse(data).kBLAddressSelectPickerViewProvince.nm
+      let city = JSON.parse(data).kBLAddressSelectPickerViewCity.nm
+      let distirct = JSON.parse(data).kBLAddressSelectPickerViewDistrict.nm
+      console.log('####province:  ' + province + '#####city:  ' + city + '####distirct: ' + distirct)
     },
     fail: data => {
       console.log(data)
