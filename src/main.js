@@ -113,10 +113,10 @@ Vue.directive('go-native-goods-similar', {
     let args = {
       pageId: 'similar',
       params: JSON.stringify({
-        goodsSid: binding.value.sid,
-        goodsName: binding.value.goods_sales_name,
-        salePrice: binding.value.sale_price,
-        imgUrlString: binding.value.url,
+        goodsSid: binding.value.goodsid,
+        goodsName: binding.value.goodsName,
+        salePrice: binding.value.goodsPrice,
+        imgUrlString: binding.value.goodsImageUrl,
         isGiftGoods: binding.modifiers.isGiftGoods || false
       })
     }
