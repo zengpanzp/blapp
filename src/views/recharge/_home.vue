@@ -74,7 +74,9 @@ export default {
           type: type,
           url: url
         }, {})
-      }, () => {})
+      }, (res) => {
+        console.log(res)
+      })
     }
   }
 };

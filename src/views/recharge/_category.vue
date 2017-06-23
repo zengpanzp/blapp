@@ -136,6 +136,9 @@
                       groupName: obj.groupName
                     });
                     this.newGroupName = "";
+                    // 进行默认选中添加的分组
+                    let item = this.groupList[this.groupList.length - 1];
+                    this.selectGroup(item, this.groupList.length - 1);
                 } else {
                   this.$toast({
                     position: 'bottom',

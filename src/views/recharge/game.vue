@@ -595,10 +595,10 @@
           case 'sd':
             return this.iphoneNum.length
           case 'qq':
-            return (String(this.qqNum).length && /^[0-9]*$/.test(this.qq))
+            return (this.qqNum && this.qq && /^[0-9]*$/.test(this.qq) && /^[0-9]*$/.test(this.qqNum))
           case 'moreGame':
             if (this.rechargeMoreType == 3) {
-              return (String(this.moreGameCardNum).length && String(this.moreGameCount).length)
+              return (this.moreGameCardNum && this.moreGameCount && /^[0-9]*$/.test(this.moreGameCardNum))
             } else {
               return (String(this.moreGameCardNum).length)
             }
@@ -700,10 +700,15 @@
         }
       },
       qqNum(val) {
-        this.currentPay = Number(val * this.qqPrice).toFixed(2)
+        console.log(isNaN(val))
+        if (!isNaN(val)) {
+          this.currentPay = Number(val * this.qqPrice).toFixed(2)
+        }
       },
       moreGameCardNum(val) {
-        this.currentPay = Number(val * this.moreGameNum.price).toFixed(2)
+        if (!isNaN(val)) {
+          this.currentPay = Number(val * this.moreGameNum.price).toFixed(2)
+        }
       },
       'moreGameNum.price'(val) {
         this.currentPay = Number(val * this.moreGameCardNum).toFixed(2)
