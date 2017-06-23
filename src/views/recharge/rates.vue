@@ -28,7 +28,7 @@
               </div>
             </li>
             <li>缴费账号
-              <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
+              <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" v-show="typeChange" src="./i/rates/icon_scan.png"></div>
             </li>
           </ul>
           <div class="phoneFixBottom">
