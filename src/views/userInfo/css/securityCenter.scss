@@ -17,8 +17,12 @@
   padding: 0 rem(20);
   background: #fff;
   line-height: rem(88);
-  border-bottom: 1px solid #e9e9e9;
+  border-bottom: 2px solid #e9e9e9;
   color: #343434;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .list i {
@@ -34,6 +38,10 @@
   font-size: rem(20);
 }
 
+.head {
+  line-height: rem(160);
+}
+
 .back-transition { 
   transition: transform .5s ease;
 }
@@ -42,4 +50,14 @@
 }
 .back-leave {
   transform: translate(-100%,0);
+}
+
+img {
+  height: rem(160);
+  width: rem(160);
+  padding: rem(20);
+}
+
+b {
+  float: right;
 }

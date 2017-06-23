@@ -210,6 +210,15 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   },
+  /* 薛天玲 设置 */
+  {
+    path: '/userInfo/myInfo',
+    meta: {
+      title: '设置',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/userInfo/myInfo')), 'myInfo'),
+  },
   /* 薛天玲 安全中心 */
   {
     path: '/userInfo/securityCenter',

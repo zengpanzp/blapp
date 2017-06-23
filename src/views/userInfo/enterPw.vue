@@ -2,7 +2,7 @@
 <div class="enterPw">
 	<div class="section1">
 		<ul>
-			<li><b class="iconfont lock"></b><input type="password" placeholder="当前密码" v-model="currentPw"><a class="iconfont close clear" @click="clear_currentPw"></li>
+			<li><b class="iconfont lock"></b><input type="password" placeholder="当前密码" v-model="currentPw"><a class="iconfont close clear" @click="clear_currentPw"></a></li>
 			<li><b class="iconfont lock"></b><input maxlength="20" type="password" v-model="newPw" placeholder="新密码(8-20位字符，至少包含数字和字母)"><a class="iconfont close clear" @click="clear_newPw"></a></li>
       <li class="levels" v-if="newPw"><span><b class="disabled" :class="{ 'low': pwdStrength == 1 }">弱</b><b class="disabled" :class="{ 'med': pwdStrength == 2 }">中</b><b class="disabled" :class="{ 'str': pwdStrength == 3 }">强</b></span></li>
 			<li><b class="iconfont lock"></b><input maxlength="20" type="password" v-model="newPwAgain" placeholder="确认新密码(8-20位字符，至少包含数字和字母)"><a class="iconfont close clear" @click="clear_newPwAgain"></a></li>

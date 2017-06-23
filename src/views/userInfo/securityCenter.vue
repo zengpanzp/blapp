@@ -4,17 +4,17 @@
      <div class="list">
       <ul>
         <li>绑定手机 <i>{{ phoneNum }}</i></li>
-        <router-link to="/userInfo/myEmail"><li><i class="iconfont arrow-back"></i>修改邮箱<i>{{ email ? email : '暂无绑定' }}</i></li></router-link>
-        <li @click="authen"><i class="iconfont arrow-back"></i>实名认证<i>{{ realNameAuthType >= 2 ? '认证信息已提交' : '未认证' }}</i></li>
+        <router-link to="/userInfo/myEmail"><li>修改邮箱<a><i class="iconfont arrow-back"></i><i>{{ email ? email : '暂无绑定' }}</i></a></li></router-link>
+        <li @click="authen">实名认证<a><i class="iconfont arrow-back"></i><i>{{ realNameAuthType >= 2 ? '认证信息已提交' : '未认证' }}</i></a></li>
       </ul>
     </div>
    </div>
    <div class="section1">
      <div class="list">
       <ul>
-        <router-link to="/userInfo/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <div v-if="payStatus == '0'"><router-link to="/userInfo/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
-        <div v-if="payStatus != '0'"><router-link to="/userInfo/payPwAuth"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
+        <router-link to="/userInfo/enterPw"><li>登录密码<a><i class="iconfont arrow-back"></i><i>密码强度: {{ pwStatus }}</i></a></li></router-link>
+        <div v-if="payStatus == '0'"><router-link to="/userInfo/payPw"><li>支付密码<a><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></a></li></router-link></div>
+        <div v-if="payStatus != '0'"><router-link to="/userInfo/payPwAuth"><li>支付密码<a><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></a></li></router-link></div>
       </ul>
     </div>
    </div>
