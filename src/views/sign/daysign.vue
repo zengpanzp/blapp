@@ -197,6 +197,7 @@
         }).then(res => {
           this.$loading.close()
           let resData = JSON.parse(res.body.obj).obj.otherResource;
+          console.log(resData)
           // icon菜单
           for (let i = 0; i < 5; i++) {
             this.iconMenu.push(resData[i]);
@@ -355,10 +356,12 @@
           year: new Date().getFullYear()
         }).then(data => {
             let json = JSON.parse(data.body.obj);
-            this.signInList = json.signInList;
-            this.lotteryList = json.lotterList;
-            this.afterLotteryList = json.afterLotterList;
-            console.log("日历", json)
+            if (data.body.resCode == "00100000") {
+              this.signInList = json.signInList;
+              this.lotteryList = json.lotterList;
+              this.afterLotteryList = json.afterLotterList;
+              console.log("日历", json)
+            }
         });
       },
       // 加载猜你喜欢的数据
@@ -396,7 +399,7 @@
       getSignQualification(callback) {
         api.sign.signInQualification({
           channelId: "1",
-          member_token: this.memberToken
+          member_token: this.memberToken ? this.memberToken : 0
         }).then(data => {
           console.log(data)
           callback(data)
@@ -404,40 +407,40 @@
       },
       // 主动登录
       login() {
-        utils.isLogin(false).then(user => {
+        utils.isLogin(true).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
-          if (this.memberToken) {
-            this.isLogin = true;
-            // 查询签到日历
-            this.getCalendarHistory();
-            // 获得我的积分
-            api.sign.getScores({
-              member_token: this.memberToken
-            }).then(data => {
-              console.log(data);
-              if (data.body.resCode == "00100000") {
-                let json = JSON.parse(data.body.obj);
-                this.myPoints = json.points;
-              }
-            });
-            // 查询用户是否有签到资格
-            this.getSignQualification((data) => {
-              if (data.body.resCode == "00100000") {
-                let json = JSON.parse(data.body.obj);
-                this.signRemark = json.signRemark;
-                this.signPoint = json.signPoint;
-                console.log(json)
-                // singStatus 0-不可签到 1-可签到，未签到，2-已签到
-                this.changeStatus(json);
-              } else {
-                this.$toast({
-                  position: 'bottom',
-                  message: data.body.msg
-                });
-              }
-            })
-          }
+          this.isLogin = true;
+          // 查询签到日历
+          this.getCalendarHistory();
+          // 获得我的积分
+          api.sign.getScores({
+            member_token: this.memberToken
+          }).then(data => {
+            console.log(data);
+            if (data.body.resCode == "00100000") {
+              let json = JSON.parse(data.body.obj);
+              this.myPoints = json.points;
+            }
+          });
+          // 查询用户是否有签到资格
+          this.getSignQualification((data) => {
+            if (data.body.resCode == "00100000") {
+              let json = JSON.parse(data.body.obj);
+              this.signRemark = json.signRemark;
+              this.signPoint = json.signPoint;
+              console.log(json)
+              // singStatus 0-不可签到 1-可签到，未签到，2-已签到
+              this.changeStatus(json);
+            } else {
+              this.$toast({
+                position: 'bottom',
+                message: data.body.msg
+              });
+            }
+          })
+        }, () => {
+            console.log("主动登录失败")
         })
       },
       // 跳转到首页
@@ -485,6 +488,17 @@
             this.memberId = user.member_id;
             this.memberToken = user.member_token;
             this.isLogin = true;
+            // 获得我的积分
+            api.sign.getScores({
+              member_token: this.memberToken
+            }).then(data => {
+              console.log(data);
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                this.myPoints = json.points;
+              }
+            });
+            this.getCalendarHistory();
             api.sign.signIn({
               buld: "3000",
               channelId: "1",
@@ -492,17 +506,6 @@
             }).then(data => {
               let json = JSON.parse(data.body.obj);
               if (data.body.resCode == "00100000") {
-                // 获得我的积分
-                api.sign.getScores({
-                  member_token: this.memberToken
-                }).then(data => {
-                  console.log(data);
-                  if (data.body.resCode == "00100000") {
-                    let json = JSON.parse(data.body.obj);
-                    this.myPoints = json.points;
-                  }
-                });
-                this.getCalendarHistory();
                 console.log(json)
                 this.changeStatus(json, 1); // 让积分累加
               } else {
