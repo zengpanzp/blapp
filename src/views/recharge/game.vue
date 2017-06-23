@@ -308,12 +308,21 @@
             console.log('查询全部游戏: ' + data.body.obj)
             console.warn(resData)
             let list = []
-            for (let [index, item] of gameInfoList.entries()) {
-              if (item.UseType == dtype) {
+            // for (let [index, item] of gameInfoList.entries()) {
+            //   if (item.UseType == dtype) {
+            //     list.push({
+            //       id: index,
+            //       categoryCode: item.CategoryCode,
+            //       name: item.CategoryName
+            //     })
+            //   }
+            // }
+            for (var i = 0; i < gameInfoList.length; i++) {
+              if (gameInfoList[i].UseType == dtype) {
                 list.push({
-                  id: index,
-                  categoryCode: item.CategoryCode,
-                  name: item.CategoryName
+                  id: i,
+                  categoryCode: gameInfoList[i].CategoryCode,
+                  name: gameInfoList[i].CategoryName
                 })
               }
             }
@@ -347,7 +356,7 @@
             }
             /* FINISH */
 
-            let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.ssdbGet('member_mobile') || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
+            let [payMoney, orderTypeCode, phoneNo, count] = [parseFloat(this.currentPay), '15', (utils.dbGet('userInfo').member_mobile || ''), 1] // 支付的金额, 订单编号, 充值账号(卡密则默认手机号码), 数量
             let goodsName = Number(this.currentPay).toFixed(0) + '元' + '游戏充值卡'
 
             if (this.tabItem.type == 'sd') {
@@ -545,12 +554,20 @@
         if (this.serverInfo.GameRegion[index].GameServer && this.serverInfo.GameRegion[index].GameServer.length) {
           let gameServerList = this.serverInfo.GameRegion[index].GameServer
           let list = []
-          for (let [index, item] of gameServerList.entries()) {
+          // for (let [index, item] of gameServerList.entries()) {
+          //   list.push({
+          //     id: index,
+          //     ServerID: item.ServerID,
+          //     name: item.ServerName,
+          //     ServerValue: item.ServerValue
+          //   })
+          // }
+          for (var i = 0; i < gameServerList.length; i++) {
             list.push({
-              id: index,
-              ServerID: item.ServerID,
-              name: item.ServerName,
-              ServerValue: item.ServerValue
+              id: i,
+              ServerID: gameServerList[i].ServerID,
+              name: gameServerList[i].ServerName,
+              ServerValue: gameServerList[i].ServerValue
             })
           }
           this.moreGameServerList = list
@@ -578,10 +595,10 @@
           case 'sd':
             return this.iphoneNum.length
           case 'qq':
-            return (String(this.qqNum).length && /^[0-9]*$/.test(this.qq))
+            return (this.qqNum && this.qq && /^[0-9]*$/.test(this.qq) && /^[0-9]*$/.test(this.qqNum))
           case 'moreGame':
             if (this.rechargeMoreType == 3) {
-              return (String(this.moreGameCardNum).length && String(this.moreGameCount).length)
+              return (this.moreGameCardNum && this.moreGameCount && /^[0-9]*$/.test(this.moreGameCardNum))
             } else {
               return (String(this.moreGameCardNum).length)
             }
@@ -638,11 +655,20 @@
                 let consumesArr = consumeData.quantity.split(',')
                 let consumesPriceArr = consumeData.price.split(',')
                 let moneyListArr = []
-                for (let [index, item] of consumesArr.entries()) {
+                // for (let [index, item] of consumesArr.entries()) {
+                //   moneyListArr.push({
+                //     id: item,
+                //     name: `${item} ${moneyName}`,
+                //     price: consumesPriceArr[index],
+                //     pay: moneyPayId,
+                //     moneyName: moneyName
+                //   })
+                // }
+                for (let i = 0; i < consumesArr.length; i++) {
                   moneyListArr.push({
-                    id: item,
-                    name: `${item} ${moneyName}`,
-                    price: consumesPriceArr[index],
+                    id: consumesArr[i],
+                    name: `${consumesArr[i]} ${moneyName}`,
+                    price: consumesPriceArr[i],
                     pay: moneyPayId,
                     moneyName: moneyName
                   })
@@ -674,10 +700,15 @@
         }
       },
       qqNum(val) {
-        this.currentPay = Number(val * this.qqPrice).toFixed(2)
+        console.log(isNaN(val))
+        if (!isNaN(val)) {
+          this.currentPay = Number(val * this.qqPrice).toFixed(2)
+        }
       },
       moreGameCardNum(val) {
-        this.currentPay = Number(val * this.moreGameNum.price).toFixed(2)
+        if (!isNaN(val)) {
+          this.currentPay = Number(val * this.moreGameNum.price).toFixed(2)
+        }
       },
       'moreGameNum.price'(val) {
         this.currentPay = Number(val * this.moreGameCardNum).toFixed(2)
@@ -706,14 +737,24 @@
               let gameMoneyList = resData.gameInfo
               console.log(resData)
               let list = []
-              for (let [index, item] of gameMoneyList.entries()) {
+              // for (let [index, item] of gameMoneyList.entries()) {
+              //   list.push({
+              //     id: index,
+              //     categoryCode: item.CategoryCode,
+              //     ProductCode: item.ProductCode,
+              //     name: item.ParPrice,
+              //     price: item.dwyj,
+              //     realPrice: item.dzxj
+              //   })
+              // }
+              for (var i = 0; i < gameMoneyList.length; i++) {
                 list.push({
-                  id: index,
-                  categoryCode: item.CategoryCode,
-                  ProductCode: item.ProductCode,
-                  name: item.ParPrice,
-                  price: item.dwyj,
-                  realPrice: item.dzxj
+                  id: i,
+                  categoryCode: gameMoneyList[i].CategoryCode,
+                  ProductCode: gameMoneyList[i].ProductCode,
+                  name: gameMoneyList[i].ParPrice,
+                  price: gameMoneyList[i].dwyj,
+                  realPrice: gameMoneyList[i].dzxj
                 })
               }
               this.moreGameNumlist = list // 更多游戏区号
@@ -728,12 +769,20 @@
                 /* 游戏区服判断 */
                 if (this.serverInfo.GameRegion && this.serverInfo.GameRegion.length) {
                   let list = []
-                  for (let [index, item] of this.serverInfo.GameRegion.entries()) {
+                  // for (let [index, item] of this.serverInfo.GameRegion.entries()) {
+                  //   list.push({
+                  //     id: index,
+                  //     RegionID: item.RegionID,
+                  //     name: item.RegionName,
+                  //     RegionValue: item.RegionValue
+                  //   })
+                  // }
+                  for (var i = 0; i < this.serverInfo.GameRegion.length; i++) {
                     list.push({
-                      id: index,
-                      RegionID: item.RegionID,
-                      name: item.RegionName,
-                      RegionValue: item.RegionValue
+                      id: i,
+                      RegionID: this.serverInfo.GameRegion[i].RegionID,
+                      name: this.serverInfo.GameRegion[i].RegionName,
+                      RegionValue: this.serverInfo.GameRegion[i].RegionValue
                     })
                   }
                   this.moreAreaList = list

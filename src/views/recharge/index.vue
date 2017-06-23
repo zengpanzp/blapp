@@ -7,7 +7,7 @@
         <p>扫一扫</p>
       </a>
       <router-link :to="{ path: 'recharge/bill' }" class="wallet-hd-cell">
-        <span class="ss-icon" v-show="billCount>0">{{billCount}}</span>
+        <span class="ss-icon" v-show="billCount>0 && hasFinish">{{billCount}}</span>
         <img class="hd-cell-icon" src="./i/index/bill-index-icon2.png" alt="">
         <p>付账单</p>
       </router-link>
@@ -33,6 +33,9 @@ export default {
   data() {
     return {
       show: false,
+      hasFinish: false,
+      allLength: 0,
+      billLength: 0,
       billCount: 0,  // 未交账单计数
       typeObj: {
         1: "sf",  // 水费
@@ -55,22 +58,26 @@ export default {
         this.groupList = json.list;
         api.recharge.queryPaySubNo({
           "member_token": user.member_token,
-          "groupId": this.groupList[0].id,
+          "groupId": this.groupList && this.groupList[0].id,
           "timestamp": timestamp
         }).then(data => {
           let json = JSON.parse(data.body.obj);
           console.log(json);
+          this.allLength = json.list.length;
           json.list.forEach((obj, i) => {
             // 水电煤的
-            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23") {
+            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
               switch (obj.paymentType) {
                 case "20" :  // 水费
+                case "01" :  // 水费
                     this.queryBill(obj, 1);
                     break;
                 case "21" :  // 电费
+                case "02" :  // 水费
                   this.queryBill(obj, 2);
                   break;
                 case "22" :  // 煤气
+                case "03" :  // 水费
                   this.queryBill(obj, 3);
                   break;
               }
@@ -131,6 +138,10 @@ export default {
           if (first.canpay && first.canpay[0]) { // 存在未交账单
             this.billCount += 1;
           }
+        }
+        this.billLength += 1;
+        if (this.billLength == this.allLength) {
+            this.hasFinish = true;
         }
       })
     },

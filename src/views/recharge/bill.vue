@@ -13,7 +13,7 @@
           </ul>
         </div>
       </div>
-      <div class='cbill-account list-block'>
+      <div class='cbill-account list-block max-list-height'>
         <ul>
           <li class="swipeout ligo" @click="go(item,$event)" v-for="item in accountList">
             <bl-swipeout>
@@ -159,6 +159,11 @@
           20: "sf",  // 水费
           21: "dl",  // 电费
           22: "mq"   // 煤气
+        },
+        typeObj2: {
+          1: "sf",  // 水费
+          2: "dl",  // 电费
+          3: "mq"   // 煤气
         },
         accountList: [] // 缴费账号
       }
@@ -403,6 +408,8 @@
         this.$set(this.receiveGroupItem, "id", item.id);
         this.$set(this.receiveGroupItem, "groupName", item.groupName);
         this.toShow = true;
+        this.selectItem(item, this.groupList.indexOf(item));
+        // selectGroup
         if (item.update == "update") { // 进行变更分组操作
           this.update();
         }
@@ -414,7 +421,7 @@
         }
         let type = obj.paymentType;
         let typeVal = 0;
-        type = parseInt(type);
+        typeVal = parseInt(type);
         switch (type) {
           case 20 :
           case 1 :
@@ -429,7 +436,6 @@
             typeVal = 3;
             break;
         }
-        console.log(obj, typeVal)
         if (obj && obj.accountNo) {  // 查看账单
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
@@ -437,10 +443,12 @@
             duration: 'loading'
           })
           let timestamp = utils.getTimeFormatToday();
+          let month = (new Date().getMonth() + 1).toString();
+          month = month > 10 ? month : ('0' + month)
           let queryData = {
             client_id: CONST.CLIENT_ID,
             t_dz: "02",
-            type: this.typeObj[type],
+            type: this.typeObj2[typeVal],
             codetype: obj.accountNo.length >= 24 ? "01" : "02",
             dkhzh: this.memberId,
             groupId: obj.groupId,
@@ -450,10 +458,12 @@
             format: "json",
             year: new Date().getFullYear().toString(),
             month: (new Date().getMonth() + 1).toString(),
+            date: new Date().getFullYear().toString() + "-" + month,
             code: obj.accountNo,
             timestamp: timestamp,
             token: this.memberToken
           }
+          console.log(month, new Date().getFullYear().toString() + "-" + month)
           // 获取内容
           api.recharge.getGoodsDetail(queryData).then(data => {
             let json = JSON.parse(data.body.obj);
@@ -464,7 +474,7 @@
                 json[obj].date = json[obj].date.toString().substring(0, 4) + '-' + json[obj].date.toString().substring(4);
               }
               if (json[obj].Result_code == "200") {
-                results.unshift(json[obj]);
+                results.push(json[obj]);
               } else {
                 results.push(json[obj]);
               }
@@ -482,6 +492,8 @@
               queryData.fee = first.fee && first.fee[0];
             }
             this.inlineLoading.close();
+            console.log("查询结果1", json)
+            console.log("查询结果", queryData)
             localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData))
             this.$router.push({path: "/recharge/pay/" + typeVal});
           })
