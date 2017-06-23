@@ -20,10 +20,13 @@
       <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
       <transition name="fadeOut" v-on:leave="tipsLeave"  enter-active-class="fadeOut">
-        <div class="btnSign" @click="sign" v-show="signed && !canLottery && toLeave">
+        <div class="btnSign" @click="sign" v-show="toLeave">
           <img src="./i/signed.png">
         </div>
       </transition>
+      <div class="btnSign" @click="sign" v-show="justSigned">
+        <img src="./i/signed.png">
+      </div>
       <div class="btnSign" @click="sign" v-show="!signed && !canLottery">
         {{signText}} <span v-show="!signed">+{{signPoint}}</span>
       </div>
@@ -340,6 +343,9 @@
               this.signText = ""  // 隐藏
               this.message1 = "厉害！又拿到积分啦";
               this.message2 = "感觉赚了一个亿~";
+              this.tipsEnter = true;
+              this.toLeave = true;
+              this.justSigned = true;
             }
           } else if (lotteryStatus == 1) { // 已签到可抽奖
             // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
@@ -510,6 +516,11 @@
           categoryId: 'APP_User',
           $title: 'APP_签到有奖',
         });
+        this.inlineLoading = this.$toast({
+          iconClass: 'preloader white',
+          message: '加载中',
+          duration: 'loading'
+        })
         utils.isLogin(true).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
@@ -529,20 +540,19 @@
                   channelId: "1",
                   member_token: this.memberToken
                 }).then(data => {
-                  if (data.body.resCode == "00100000") {
-                    // 获得我的积分
-                    api.sign.getScores({
-                      member_token: this.memberToken
-                    }).then(data => {
-                      console.log(data);
-                      if (data.body.resCode == "00100000") {
-                        let json = JSON.parse(data.body.obj);
-                        this.myPoints = json.points;
-                      }
-                    });
-                    // 查询签到日历
-                    this.getCalendarHistory();
-                  }
+                  // 获得我的积分
+                  api.sign.getScores({
+                    member_token: this.memberToken
+                  }).then(data => {
+                    console.log(data);
+                    if (data.body.resCode == "00100000") {
+                      let json = JSON.parse(data.body.obj);
+                      this.myPoints = json.points;
+                    }
+                  });
+                  // 查询签到日历
+                  this.getCalendarHistory();
+                  this.inlineLoading.close();
                 });
               }
             } else {
