@@ -63,7 +63,7 @@ export default {
             position: 'bottom'
           })
           setTimeout(() => {
-            this.$router.push('/userInfo/submitPw')
+            this.$router.push('/userCenter/submitPw')
           }, 2000)
         } else {
           this.$toast({

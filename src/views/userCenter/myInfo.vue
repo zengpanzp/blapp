@@ -4,9 +4,9 @@
      <div class="list">
       <ul>
         <li>头像<b><img src="../..//assets/headPic.jpg" /><i class="head iconfont arrow-back"></i></b></li>
-        <router-link to="/userInfo/myEmail"><li>昵称<i class="iconfont arrow-back"></i></li></router-link>
+        <router-link to="/userCenter/myEmail"><li>昵称<div>{{ nickName }}<i class="iconfont arrow-back"></i></div></li></router-link>
         <li>性别<i class="iconfont arrow-back"></i></li>
-        <li>出生日期</li>
+        <li>出生日期<i>{{ bday }}</i></li>
         <li>我的车牌<i class="iconfont arrow-back"></i></li>
         <li>其他个人资料<i class="iconfont arrow-back"></i></li>
       </ul>
@@ -15,8 +15,8 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li>地址管理<i class="iconfont arrow-back"></i></li>
-        <li>安全中心<i class="iconfont arrow-back"></i></li>
+        <li @click="address">地址管理<i class="iconfont arrow-back"></i></li>
+        <router-link to="/userCenter/securityCenter"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li>
       </ul>
     </div>
    </div>
@@ -30,9 +30,9 @@
 <!--    <div class="section1">
      <div class="list">
       <ul>
-        <router-link to="/userInfo/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <div v-if="payStatus == '0'"><router-link to="/userInfo/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
-        <div v-if="payStatus != '0'"><router-link to="/userInfo/payPwAuth"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
+        <router-link to="/userCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
+        <div v-if="payStatus == '0'"><router-link to="/userCenter/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
+        <div v-if="payStatus != '0'"><router-link to="/userCenter/payPwAuth"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
       </ul>
     </div>
    </div> -->
@@ -44,17 +44,44 @@
 </template>
 
 <script>
+import api from './api'
+import utils from 'src/utils'
 export default {
 
   name: 'myInfo',
 
   data () {
     return {
-
+    	bday: '',
+    	nickName: ''
     };
   },
   created () {
-  	this.$loading.close()
+  	utils.isLogin().then(data => {
+  	  let memberToken = data.member_token
+  	  // let member_id = data.member_id
+  	  api.userCenter.getMyInformation({
+  	    member_token: memberToken,
+  	    timestamp: utils.getTimeFormatToday()
+  	  }).then(data => {
+  	    if (data.body.obj) {
+  	    	this.nickName = JSON.parse(data.body.obj).nickName
+  	    	let y = JSON.parse(data.body.obj).birthYear
+  	    	let m = JSON.parse(data.body.obj).birthMonth
+  	    	let d = JSON.parse(data.body.obj).birthDay
+  	    	this.bday = y + '-' + m + '-' + d
+  	    	// 性别
+  	    	// api.
+  	    } else {
+  	    	this.$toast({
+  	    	  message: data.body.msg,
+  	    	  position: "bottom"
+  	    	})
+  	    }
+  	  }).then(err => {
+  	  	console.log(err)
+  	  })
+  	})
   },
   methods: {
     exit() {
@@ -96,10 +123,16 @@ export default {
       })
     },
     authen() {
-      // native 实名认证页
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'authenticate'
-      })
+		// native 实名认证页
+		window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+		  pageId: 'authenticate'
+		})
+    },
+    address () {
+    	// native 管理收货地址
+    	window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+    	  pageId: 'userAddress'
+    	})
     }
   }
 };
