@@ -133,7 +133,6 @@ export default {
       memberId: this.memberId,
       channelId: 1
     }).then(data => {
-      console.log("queryCount" + data)
       this.$loading.close()
       if (data.body.obj) {
         let resData = JSON.parse(data.body.obj)
@@ -180,7 +179,6 @@ export default {
     },
     // 刷新
     currentPageReload() {
-      this.$router.go(0)
       if (!this.$route.query.orderNo) {
         api.queryCount({
           memberId: this.memberId,
@@ -235,7 +233,7 @@ export default {
           if (data.body.obj) {
             let obj = JSON.stringify(data.body.obj).replace(/http:\/\//g, "https://")
             let msg = JSON.parse(obj);
-            console.log("-----hh---" + msg)
+            console.log("-----orderhh---" + msg)
             let resData = JSON.parse(msg)
             if (resData.resultInfo) {
                 this.pageNo = resData.resultInfo.pageNo
