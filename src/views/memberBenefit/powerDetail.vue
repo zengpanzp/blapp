@@ -1,4 +1,4 @@
-<style lang="scss" src="./css/memberBenefit.scss" scoped></style>
+<style lang="scss" src="./css/powerDetail.scss" scoped></style>
 <template>
   <div class="new">
    	<div class="freedom-top">
@@ -59,7 +59,7 @@ import api from './api'
 import utils from 'src/utils'
 export default {
 
-  name: 'memberBenefit',
+  name: 'powerDetail',
 
   data() {
     return {
