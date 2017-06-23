@@ -34,6 +34,8 @@ export default {
     return {
       show: false,
       hasFinish: false,
+      allLength: 0,
+      billLength: 0,
       billCount: 0,  // 未交账单计数
       typeObj: {
         1: "sf",  // 水费
@@ -61,6 +63,7 @@ export default {
         }).then(data => {
           let json = JSON.parse(data.body.obj);
           console.log(json);
+          this.allLength = json.list.length;
           json.list.forEach((obj, i) => {
             // 水电煤的
             if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
@@ -135,6 +138,10 @@ export default {
           if (first.canpay && first.canpay[0]) { // 存在未交账单
             this.billCount += 1;
           }
+        }
+        this.billLength += 1;
+        if (this.billLength == this.allLength) {
+            this.hasFinish = true;
         }
       })
     },

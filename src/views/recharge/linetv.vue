@@ -89,6 +89,8 @@
             data = JSON.parse(data);
             if (data.result == "success") {
               this.account = data.params;
+              // 拿到数据后进行查询
+              this.next();
             }
           },
           fail: () => {
