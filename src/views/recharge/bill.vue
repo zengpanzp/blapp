@@ -408,6 +408,8 @@
         this.$set(this.receiveGroupItem, "id", item.id);
         this.$set(this.receiveGroupItem, "groupName", item.groupName);
         this.toShow = true;
+        this.selectItem(item, this.groupList.indexOf(item));
+        // selectGroup
         if (item.update == "update") { // 进行变更分组操作
           this.update();
         }

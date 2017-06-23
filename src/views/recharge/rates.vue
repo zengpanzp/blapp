@@ -23,8 +23,8 @@
             <li>
               账号类型
               <div class="btns">
-                <div class="btn" @click="changeType" v-show="hasShow"  :class="typeChange?'selected':''">条形码</div>
-                <div class="btn" @click="changeType" v-show="hasShow2" :class="!typeChange?'selected':''">{{accountTypeName}}</div>
+                <div class="btn" @click="changeType(1)" v-show="hasShow"  :class="typeChange?'selected':''">条形码</div>
+                <div class="btn" @click="changeType(2)" v-show="hasShow2" :class="typeChange2?'selected':''">{{accountTypeName}}</div>
               </div>
             </li>
             <li>缴费账号
@@ -174,6 +174,8 @@
               data = JSON.parse(data);
               if (data.result == "success") {
                 this.account = data.params;
+                // 拿到数据后进行查询
+                this.next();
               }
             },
             fail: () => {
@@ -185,8 +187,14 @@
           })
       },
       // 改变选择的缴费类型
-      changeType() {
-         this.typeChange = !this.typeChange;
+      changeType(index) {
+          if (index == 1) {
+              this.typeChange = true;
+              this.typeChange2 = false;
+          } else {
+            this.typeChange = false;
+            this.typeChange2 = true;
+          }
       },
       // 选择缴费分组
       showCategory() {

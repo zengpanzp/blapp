@@ -22,6 +22,9 @@
       <div class="btnSign" @click="sign" v-show="!signed && !canLottery">
         {{signText}}<img v-show="signed" src="./i/signed.png"> <span v-show="!signed">+{{signPoint}}</span>
       </div>
+      <div class="btnSign" @click="sign" v-show="signed && !canLottery && (needSignNum == -1) ">
+        <img v-show="signed" src="./i/signed.png">
+      </div>
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
       </div>
@@ -285,7 +288,8 @@
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.signExtendRuleCode; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
-        this.needSignNum = obj.needSignNum;
+        this.needSignNum = obj.needSignNum == "null" ? -1 : obj.needSignNum;
+
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
