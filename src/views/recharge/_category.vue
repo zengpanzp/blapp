@@ -18,7 +18,7 @@
       <input v-model="newGroupName" placeholder="自定义缴费分类名称">
     </span>
     <bl-modal @click="isShow" v-show="visible" :visible="visible" ref="updateCategory"  title="编辑缴费分类" :inputValue="groupName" :placeholder="请输入分类名称" input="true" :buttons="buttons"></bl-modal>
-    <bl-button @click="addNewGroup" ref="next" type="blueBtn next selected bl-button">确 定</bl-button>
+    <button @click="addNewGroup" ref="next" class="next">确 定</button>
   </div>
 </template>
 <script>

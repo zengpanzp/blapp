@@ -7,6 +7,8 @@ body {
 }
 @include animate-fadeInUpBig
 @include animate-fadeOutDownBig
+@include animate-fadeIn
+@include animate-fadeOut
 @include animate-slideInDown
 @include animate-slideOutUp
 /*我的测试*/
@@ -21,19 +23,24 @@ body {
     font-size: rem(28);
     line-height: rem(50);
     z-index: 2000;
+    .title{
+      width: 100%;
+      text-align: center;
+      font-size: rem(32);
+      color:#333;
+      padding-top: rem(35);
+      padding-bottom: rem(20);
+      border-radius:rem(10) rem(10) 0 0;
+      background: #fff;
+    }
     .signRemark{
+      max-height: rem(700);
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
       background: #fff;
       padding:rem(10) rem(30) rem(30) rem(30);
-      border-radius: rem(10);
+      border-radius:0 0 rem(10) rem(10);
       word-wrap:break-word;
-      .title{
-        width: 100%;
-        text-align: center;
-        font-size: rem(32);
-        color:#333;
-        margin-top: rem(35);
-        margin-bottom: rem(20);
-      }
     }
     .close{
       width: rem(90);

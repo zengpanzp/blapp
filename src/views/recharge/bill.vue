@@ -73,8 +73,8 @@
         <bl-home-menu class="homeMenu" v-if="more"></bl-home-menu>
       </transition>
       <bl-modal  v-show="visible" :visible="visible" title="删除账号将删除所有缴费信息" :buttons="buttons"></bl-modal>
+      <div @click="addAccount" class="addAccount">绑定账号,下次直接付账单</div>
     </div>
-    <div @click="addAccount" class="addAccount">绑定账号,下次直接付账单</div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -495,7 +495,7 @@
             console.log("查询结果1", json)
             console.log("查询结果", queryData)
             localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData))
-            this.$router.push({path: "/recharge/pay/" + typeVal});
+            this.$router.push({path: "/recharge/records/" + typeVal});
           })
         } else {                     // 去缴费
           let jigouCode, jigouName;
