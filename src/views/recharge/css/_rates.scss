@@ -12,6 +12,11 @@
       background: #3ea2ff;
     }
   }
+  .listview{
+    position: fixed;
+    top:0;
+    left: 0;
+  }
 
 }
 @mixin common {

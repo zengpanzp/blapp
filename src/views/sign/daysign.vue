@@ -285,7 +285,6 @@
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.signExtendRuleCode; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
-        obj.signStatus = 0;
         this.needSignNum = obj.needSignNum;
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
@@ -296,7 +295,14 @@
             categoryId: 'APP_User',
             $title: 'APP_签到弹层',
           });
-          this.showOverlay = true;
+          if (flag == 1) {
+            this.$toast({
+              position: 'bottom',
+              message: "您还没有签到资格~"
+            });
+          } else {
+            this.showOverlay = true;
+          }
         } else if (obj.signStatus == 1) { // 未签到
           this.signed = false; // 设置未签到
           // 判断是否有抽奖机会
