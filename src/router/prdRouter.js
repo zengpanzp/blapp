@@ -326,5 +326,13 @@ export const prdRouter = [
       title: '更多权益',
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
+  },
+  /* 曾攀  */
+  {
+    path: '/applyShop',
+    meta: {
+      title: '适用门店',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/applyShop')), 'applyShop')
   }
 ]

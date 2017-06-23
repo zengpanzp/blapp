@@ -133,7 +133,6 @@ export default {
       memberId: this.memberId,
       channelId: 1
     }).then(data => {
-      console.log("queryCount" + data)
       this.$loading.close()
       if (data.body.obj) {
         let resData = JSON.parse(data.body.obj)
@@ -180,7 +179,6 @@ export default {
     },
     // 刷新
     currentPageReload() {
-      this.$router.go(0)
       if (!this.$route.query.orderNo) {
         api.queryCount({
           memberId: this.memberId,
@@ -235,7 +233,7 @@ export default {
           if (data.body.obj) {
             let obj = JSON.stringify(data.body.obj).replace(/http:\/\//g, "https://")
             let msg = JSON.parse(obj);
-            console.log("-----hh---" + msg)
+            console.log("-----orderhh---" + msg)
             let resData = JSON.parse(msg)
             if (resData.resultInfo) {
                 this.pageNo = resData.resultInfo.pageNo
@@ -262,7 +260,7 @@ export default {
                               isContent: resRow[i].commentAgain,
                               isvalid: resRow[i].isvalid,
                               ispic: resRow[i].ispic,
-                              product: encodeURIComponent(JSON.stringify({
+                              product: JSON.stringify({
                                   pic: resRow[i].productPic,
                                   goodsName: resRow[i].productName,
                                   productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
@@ -270,7 +268,7 @@ export default {
                                   merchantName: resRow[i].shopId,
                                   tags: resRow[i].tags,
                                   comment: this.getData(resRow[i])
-                              }).replace(/[\ud800-\udfff]/g, ''))
+                              }).replace(/[\ud800-\udfff]/g, '')
                           }
                           this.list = this.list.concat(good)
                       }
@@ -343,7 +341,7 @@ export default {
                             isContent: resRow[i].commentAgain,
                             isvalid: resRow[i].isvalid,
                             ispic: resRow[i].ispic,
-                            product: encodeURIComponent(JSON.stringify({
+                            product: JSON.stringify({
                                 pic: resRow[i].productPic,
                                 goodsName: resRow[i].productName,
                                 productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
@@ -351,7 +349,7 @@ export default {
                                 merchantName: resRow[i].shopId,
                                 tags: resRow[i].tags,
                                 comment: this.getData(resRow[i])
-                            }).replace(/[\ud800-\udfff]/g, ''))
+                            }).replace(/[\ud800-\udfff]/g, '')
                         }
                         this.list = this.list.concat(good)
                     }
@@ -514,10 +512,20 @@ export default {
         order: order,
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addcomment',
-        params: JSON.stringify(reqData)
-      })
+      // 判断终端
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+      if (isAndroid) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addcomment',
+          params: encodeURIComponent(JSON.stringify(reqData))
+        })
+      } else {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addcomment',
+          params: JSON.stringify(reqData)
+        })
+      }
     },
     // 查看评价
     seeComment(id, product) {
@@ -526,10 +534,20 @@ export default {
         type: 'show',
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addCommentAgain',
-        params: JSON.stringify(reqData)
-      })
+      // 判断终端
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+      if (isAndroid) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: encodeURIComponent(JSON.stringify(reqData))
+        })
+      } else {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: JSON.stringify(reqData)
+        })
+      }
     },
     // 追加晒单
     commentAfter(id, product) {
@@ -538,10 +556,20 @@ export default {
         type: 'pic',
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addCommentAgain',
-        params: JSON.stringify(reqData)
-      })
+      // 判断终端
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+      if (isAndroid) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: encodeURIComponent(JSON.stringify(reqData))
+        })
+      } else {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: JSON.stringify(reqData)
+        })
+      }
     },
     // 追加评价
     againComment(id, product) {
@@ -550,10 +578,20 @@ export default {
         type: 'again',
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addCommentAgain',
-        params: JSON.stringify(reqData)
-      })
+     // 判断终端
+     let u = navigator.userAgent;
+     let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+     if (isAndroid) {
+       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+         pageId: 'addCommentAgain',
+         params: encodeURIComponent(JSON.stringify(reqData))
+       })
+     } else {
+       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+         pageId: 'addCommentAgain',
+         params: JSON.stringify(reqData)
+       })
+     }
     }
   },
   // 控制路由跳转
