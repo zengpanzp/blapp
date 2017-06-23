@@ -51,8 +51,8 @@
       <li v-go-native-resource="item.big">
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
-      <li v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
-        <div class="goods lazyload">
+      <li>
+        <div class="goods lazyload" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
           <img  v-lazy="{src: goodsItem.mediaUrl}" class="dateImg">
           <div class="name">{{goodsItem.deployName}}</div>
           <div class="name money"><label>￥</label>{{goodsItem.sale_price}}</div>
