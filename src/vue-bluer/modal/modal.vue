@@ -8,7 +8,7 @@
       </div>
       <div class="modal-buttons">
         <div class="modal-button" v-for="button in buttons" v-if="!input" v-text="button.text" @click="[button.onClick(), close()]"></div>
-        <div class="modal-button" v-for="button in buttons" v-else v-text="button.text" @click="[sure(), close()]"></div>
+        <div class="modal-button" v-for="button in buttons" v-if="input" v-text="button.text" @click="[sure(), close()]"></div>
       </div>
     </div>
   </div>
@@ -296,6 +296,9 @@
           'marginTop': this.halfHeight
         }
       }
+    },
+    created() {
+        console.log("buttons", this.buttons)
     },
     watch: {
       "visible" (val) {
