@@ -48,18 +48,18 @@
 
     </section>
     <!--四个资源位-->
-    <ul class="top-menu">
+    <ul class="top-menu" v-if="recommendList&&recommendList.length>0">
       <li v-for="item in recommendList" v-if="item.advList[0]" v-go-native-resource="item.advList[0]">
         <img  :src="item.advList[0].mediaUrl">
       </li>
       <div class="clearfix"></div>
     </ul>
     <!--推荐的商品-->
-    <ul class="recommend" v-for="item in bigGoodsList">
-      <li v-go-native-resource="item.big" v-if="item.big">
+    <ul class="recommend" v-for="item in bigGoodsList" v-if="item&&(item.big || item.list.length>0)">
+      <li v-go-native-resource="item.big" v-if="item&&item.big">
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
-      <li>
+      <li v-if="item.list.length>0">
         <div class="goods lazyload" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
           <img  v-lazy="{src: goodsItem.mediaUrl}" class="dateImg">
           <div class="name">{{goodsItem.deployName}}</div>

@@ -58,7 +58,7 @@
     margin-left: rem(-270);
     margin-top: 0;
     overflow: hidden;
-    top: 50%;
+    top: 40%;
     text-align: center;
     border-radius: $border-radius;
     // opacity: 0;
