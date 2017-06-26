@@ -528,7 +528,7 @@ span.solid-miner-circle {
     padding: 0 0 0 rem(1.6*31.25);
     position: relative;
     height: rem(4.375*31.25);
-    border-bottom: rem(.05*31.25) solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
     box-sizing: border-box
 }
 .cbill-account .swipeout-content .more{
@@ -805,7 +805,7 @@ span.solid-miner-circle {
   font-size: rem(.72*31.25)
 }
 .new .blue-bill-top ul .bill-select a {
-  border-bottom: rem(.15*31.25) solid #fff
+  border-bottom: 1px solid #fff
 }
 .new .blue-bill-top ul li a {
   color: rgba(255, 255, 255, .6);

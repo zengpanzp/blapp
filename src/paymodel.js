@@ -57,7 +57,7 @@ const goPay = function(order, type, sucCallback, failCallback) {
         'discountAmt': Number(discountAmt).toFixed(2),
         'orderExpiryEndTime': order.activeTime + "",
         'SubId': "",
-        'payType': order.payType ? order.payType : 0
+        'payType': order.payType ? order.payType : 1
       }
       window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequestData, {
         success: data => {

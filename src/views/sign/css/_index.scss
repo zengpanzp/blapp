@@ -15,7 +15,6 @@ body {
 // 日签
 .daysign{
   .remark{
-    text-align: center;
     width: rem(710);
     position: fixed;
     left: 50%;
@@ -41,11 +40,16 @@ body {
       padding:rem(10) rem(30) rem(30) rem(30);
       border-radius:0 0 rem(10) rem(10);
       word-wrap:break-word;
+      span{
+        display: block;
+      }
     }
     .close{
       width: rem(90);
       position: relative;
+      left:50%;
       margin-top:rem(70);
+      margin-left:rem(-45);
       height: rem(90);
     }
   }

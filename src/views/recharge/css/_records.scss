@@ -72,6 +72,7 @@
   }
   .record-list{
     margin-top: rem(30);
+    line-height: rem(50);
   }
   .paylist{
     margin-top: rem(30);
@@ -87,7 +88,7 @@
     height: rem(100);
     line-height: rem(100);
     font-size: rem(30);
-    border-bottom:rem(1.5) solid #e7e7e7;
+    border-bottom:1px solid #e7e7e7;
     &:last-child{
       border: none;
     }
@@ -136,8 +137,11 @@
     .spe{
       &:first-child{
         flex:7;
-        line-height: rem(40);
-        padding: rem(10) 0;
+        line-height: rem(50);
+        position: absolute;
+        width: rem(550);
+        top:50%;
+        margin-top:rem(-50);
         //color:#e6133c
       }
     }

@@ -93,7 +93,7 @@
       <div class="remark" v-show="showSignRemark" style="z-index: 9998">
         <div class="title">签到说明</div>
         <div class="signRemark">
-            <div v-html="unescape(signRemark)"></div>
+          <div v-html="unescape(signRemark)"></div>
         </div>
         <img src="./i/close.png" :style="{top: closeTop}" class="close" @click.prevent="closeRemark">
       </div>
@@ -174,7 +174,22 @@
       let self = this;
       // 供app 调用弹出签到说明
       window.BLAlertSignConfirm = () => {
-        self.showSignRemark = true;
+          if (self.signRemark == '') {
+            // 查询用户是否有签到资格
+            self.getSignQualification((data) => {
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                self.signRemark = json.signRemark;
+                self.showSignRemark = true;
+              }
+            })
+          } else {
+            self.showSignRemark = true;
+          }
+      }
+      // 供app 页面重新reload
+      window.CurrentPageReload = () => {
+        self.pageLoad();
       }
       this.fetchLikeList(0);
       let date = new Date();
@@ -188,16 +203,15 @@
     },
     methods: {
       unescape(html) {
-        let e = document.createElement('div');
-        e.innerHTML = html;
-        return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+        var temp = document.createElement("div");
+        temp.innerHTML = html;
+        var output = temp.innerText || temp.textContent;
+        temp = null;
+        return output;
       },
       hasShowSigned() {
           console.log("执行了没有")
         this.show = false; // 设置签到为隐藏
-      },
-      tipsEnter() {
-
       },
       // 签到说明动画开始执行的时候
       enter() {
@@ -242,6 +256,9 @@
           }
           this.signBg = resData[12].advList[0].mediaUrl;
         })
+        this.pageLoad();
+      },
+      pageLoad() {
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
@@ -304,7 +321,7 @@
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
-        if (obj.signStatus == 0) {  // 没有签到资格
+        if (obj.signStatus == 0 && this.isLogin) {  // 没有签到资格
           sa.track('$pageview', {
             pageId: 'APP_签到弹层',
             categoryId: 'APP_User',
@@ -371,8 +388,8 @@
           month2 = month;
           let date = new Date();
           let year = date.getFullYear();
-          this.startDate = year + "-" + month2 + "-" + "01";
-          this.endDate = year + "-" + month2 + "-" + new Date(year, month2, 0).getDate();
+          this.startDate = year + "-" + (month2 >= 10 ? month2 : (0 + "" + month2)) + "-" + "01";
+          this.endDate = year + "-" + (month2 >= 10 ? month2 : (0 + "" + month2)) + "-" + new Date(year, month2, 0).getDate();
         } else {
           month2 = new Date().getMonth() + 1;
         }
@@ -387,6 +404,10 @@
               this.lotteryList = json.lotterList;
               this.afterLotteryList = json.afterLotterList;
               console.log("日历", json)
+            } else {
+              this.signInList = [];
+              this.lotteryList = [];
+              this.afterLotteryList = [];
             }
         });
       },
@@ -453,7 +474,6 @@
           api.sign.getScores({
             member_token: this.memberToken
           }).then(data => {
-            console.log(data);
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
               this.myPoints = json.points;

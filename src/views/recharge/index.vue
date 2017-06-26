@@ -224,11 +224,14 @@ export default {
             });
           }
         },
-        fail: () => {
-//          this.$toast({
-//            position: 'bottomTop',
-//            message: "识别条形码失败!"
-//          });
+        fail: (data) => {
+            data = JSON.parse(data);
+            if (data.result == "fail") {
+              this.$toast({
+                position: 'bottomTop',
+                message: data.msg
+              });
+            }
         }
       })
     }

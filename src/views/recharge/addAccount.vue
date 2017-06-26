@@ -72,6 +72,7 @@
         companyList: [],
         account: "",  // 缴费账号,
         phone: "",  // 联系电话
+        accountRight: false,
         typeObj: {
             1: "sf",  // 水费
             2: "dl",  // 电费
@@ -245,14 +246,17 @@
         })
       },
       account(val) {
-        if (val.length > 6) {
+          console.log(this.account, val)
+        if (val.length >= 6) {
           this.accountRight = true;
           let pattern = /^1\d{10}$/;
-          if (pattern.test(this.phone) && (val.length == 11)) {
+          if (pattern.test(this.phone) && (this.phone.length == 11)) {
             this.isCantouch = false;
           }
         } else {
           this.accountRight = false;
+          this.isCantouch = true;
+          console.log()
         }
       },
       phone(val) {
