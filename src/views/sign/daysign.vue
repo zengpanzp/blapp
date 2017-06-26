@@ -21,13 +21,13 @@
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
       <!--已经签到  不能抽奖-->
       <div>
-        <transition mode="out-in" v-on:enter="hasShowSigned" name="fade" enter-active-class="fadeIn">
-          <div class="btnSign" @click="sign" v-if="signed && show">
+        <transition appear leave-active-class="slideOutLeft">
+          <div class="btnSign" @click="sign" v-if="signed && hide">
             <img src="./i/signed.png">
           </div>
         </transition>
-        <transition mode="out-in" name="fade" enter-active-class="fadeIn">
-          <div class="signText" v-if="signed && needSignNum>=0 && !canLottery && !show" >
+        <transition appear type="ainimation" enter-active-class="fadeIn" >
+          <div class="signText" v-if="signed && needSignNum>=0 && !canLottery && !hide" >
             太棒了！离抽奖惊喜又进一步
           </div>
         </transition>
@@ -129,7 +129,7 @@
             pageIndex: 1,
             allPage: 0
           },
-          show: true, // 默认不显示签到按钮
+          hide: true, // 默认不显示签到按钮
           signPoint: 5, // 签到赠送的积分
           myPoints: 0, // 我的积分
           closeTop: 0,   // 关闭按钮距离顶部的距离
@@ -314,6 +314,7 @@
       },
       // 根据状态改变页面操作
       changeStatus(obj, flag) {
+        let self = this;
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.lotteryId; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
@@ -360,12 +361,15 @@
               this.signText = ""  // 隐藏
               this.message1 = "再连续签到" + this.needSignNum + "天";
               this.message2 = "就能获得1次抽奖机会";
-              this.show = true;
+              this.hide = true;
+              window.BL_SIGNED_TIMEID = setTimeout(function() {
+                self.hide = false;
+              }, 1000);
             } else {
               this.signText = ""  // 隐藏
               this.message1 = "厉害！又拿到积分啦";
               this.message2 = "感觉赚了一个亿~";
-              this.show = true;
+              this.hide = true;
             }
           } else if (lotteryStatus == 1) { // 已签到可抽奖
             // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
