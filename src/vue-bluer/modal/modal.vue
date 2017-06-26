@@ -8,7 +8,8 @@
       </div>
       <div class="modal-buttons">
         <div class="modal-button" v-for="button in buttons" v-if="!input" v-text="button.text" @click="[button.onClick(), close()]"></div>
-        <div class="modal-button" v-for="button in buttons" v-if="input" v-text="button.text" @click="[sure(), close()]"></div>
+        <div class="modal-button" v-if="input" v-text="buttons[0].text" @click="[sure(), close()]"></div>
+        <div class="modal-button" v-if="input" v-text="buttons[1].text" @click="close()"></div>
       </div>
     </div>
   </div>

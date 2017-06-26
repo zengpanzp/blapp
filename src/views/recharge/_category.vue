@@ -76,6 +76,7 @@
         },
         // 接收弹出层的事件消息
         isShow(receive) {
+            console.log("执行了", receive)
             if (receive instanceof Array) {
               this.visible = receive[1];
               // 名称已修改
