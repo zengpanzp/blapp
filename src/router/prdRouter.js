@@ -313,11 +313,11 @@ export const prdRouter = [
   },
   /* 曾攀 会员权益 */
   {
-    path: '/memberBenefit',
+    path: '/powerDetail',
     meta: {
       title: '会员权益'
     },
-    component: r => require.ensure([], () => r(require('../views/memberBenefit/memberBenefit')), 'memberBenefit')
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
   },
   /* 曾攀 更多权益 */
   {
