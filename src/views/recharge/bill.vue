@@ -256,13 +256,14 @@
                 member_token: this.memberToken,
               }
               api.recharge.createPaySubNo(createPaySubNoData).then(data => {
-                console.log(data);
                 let result = JSON.parse(data.body.obj);
                 if (result.resCode == "00100000") {
                   this.$toast({
                     position: 'bottom',
                     message: "变更分组成功!"
                   });
+                  // 重新加载
+                  this.selectItem(this.changeItem, this.groupList.indexOf(this.changeItem));
                 } else {
                   this.$toast({
                     position: 'bottom',
@@ -409,6 +410,7 @@
         this.$set(this.receiveGroupItem, "groupName", item.groupName);
         this.toShow = true;
         this.selectItem(item, this.groupList.indexOf(item));
+        this.changeItem = item;
         // selectGroup
         if (item.update == "update") { // 进行变更分组操作
           this.update();
