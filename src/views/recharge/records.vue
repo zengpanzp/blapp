@@ -24,7 +24,7 @@
               <span v-else><div class="billstatus">{{item.canpaymsg[0]=="未销账"?"未缴费":(item.canpaymsg[0]=="已销账"?"已缴费":item.canpaymsg[0])}}</div></span>
             </li>
             <li class="record-detail" v-else="item.date" >
-              <span class="spe" v-bind:style="{'padding-top':item.msg.length<=21?'rem(50)':''}">{{item.msg}}</span>
+              <span class="spe">{{item.msg}}</span>
               <span class="spe"><div class="billstatus finish">已完成</div></span>
             </li>
           </ul>

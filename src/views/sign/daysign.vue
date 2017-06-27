@@ -390,8 +390,9 @@
             this.message1 = "恭喜您！";
             this.message2 = "获得1次抽奖机会";
             this.hideTips = false;
-          } else {
-            this.canLottery = false;
+          } else if (lotteryStatus == 2) {
+            this.hideTips = false;
+            this.canLottery = true;
             this.lotteryText = "已抽奖"
             this.message1 = "恭喜您！";
             this.message2 = "已完成本次抽奖";
