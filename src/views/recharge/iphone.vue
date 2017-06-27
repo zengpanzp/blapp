@@ -532,7 +532,17 @@
                 require.ensure([], function(require) {
                   let Pay = require('src/paymodel').default
                   current.inlineLoading.close()
-                  Pay.goPay(order, '23')
+                  Pay.goPay(order, '23', () => {
+                    current.$router.push({
+                      path: '/recharge/paysuccess',
+                      query: {
+                        money: order.changeMoney,
+                        orderNo: order.orderNo,
+                        type: 'cz',
+                        jumpType: '1'
+                      }
+                    })
+                  })
                 }, 'Pay')
               })
             } else {
