@@ -90,7 +90,6 @@
     position: relative;
     height: rem(100);
     //line-height: rem(100);
-    padding: rem(28) 0;
     font-size: rem(30);
     border-bottom:1px solid #e7e7e7;
     &:last-child{
@@ -141,7 +140,7 @@
     .spe{
       &:first-child{
         flex:7;
-        line-height: rem(30);
+        line-height: rem(40);
         width: rem(550);
         //color:#e6133c
       }
