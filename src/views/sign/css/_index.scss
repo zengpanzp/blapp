@@ -312,7 +312,7 @@ body {
   .recommend{
     -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
     padding-bottom: rem(10);
-    margin: rem(20) rem(20);
+    margin: 0 rem(20);
     border-bottom: 1px solid #eee;
     //height: rem(440);
     li:first-child{
@@ -320,6 +320,7 @@ body {
         height: rem(440);
         width: 100%;
       }
+      overflow: hidden;
     }
     li:last-child{
       overflow-x:scroll;
