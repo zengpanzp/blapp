@@ -207,7 +207,6 @@
                       let Pay = require('src/paymodel').default
                       current.inlineLoading.close()
                       Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
-                          alert("支付回调数据" + data);
                         // 跳转到paysuccess
                         current.$router.push({path: "/recharge/paysuccess?money=" + data + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
                       }, (data) => {

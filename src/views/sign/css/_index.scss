@@ -9,13 +9,13 @@ body {
 @include animate-fadeOutDownBig
 @include animate-fadeIn
 @include animate-fadeOut
+@include animate-slideOutLeft
 @include animate-slideInDown
 @include animate-slideOutUp
 /*我的测试*/
 // 日签
 .daysign{
   .remark{
-    text-align: center;
     width: rem(710);
     position: fixed;
     left: 50%;
@@ -41,11 +41,16 @@ body {
       padding:rem(10) rem(30) rem(30) rem(30);
       border-radius:0 0 rem(10) rem(10);
       word-wrap:break-word;
+      span{
+        display: block;
+      }
     }
     .close{
       width: rem(90);
       position: relative;
+      left:50%;
       margin-top:rem(70);
+      margin-left:rem(-45);
       height: rem(90);
     }
   }
@@ -118,7 +123,7 @@ body {
     }
     .bottom{
       margin-top: rem(30);
-      height: rem(410);
+      //height: rem(410);
       position: relative;
       li{
         //height:rem(250);
@@ -180,9 +185,9 @@ body {
       left: 50%;
       margin-left: rem(-160);
       top: rem(357);
-      &:active{
-        background-color: #999;
-      }
+      //&:active{
+      //  background-color: #999;
+      //}
       img{
         width: rem(50);
         height: rem(33.4);
@@ -307,7 +312,7 @@ body {
   .recommend{
     -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
     padding-bottom: rem(10);
-    margin: rem(20) rem(20);
+    margin: 0 rem(20);
     border-bottom: 1px solid #eee;
     //height: rem(440);
     li:first-child{
@@ -315,6 +320,7 @@ body {
         height: rem(440);
         width: 100%;
       }
+      overflow: hidden;
     }
     li:last-child{
       overflow-x:scroll;

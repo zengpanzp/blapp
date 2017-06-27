@@ -131,14 +131,14 @@ export default {
             results.push(json[obj]);
           }
         }
-        console.log(results)
         this.results = results;
-        if (results[0]) {
-          let first = results[0];
-          if (first.canpay && first.canpay[0]) { // 存在未交账单
-            this.billCount += 1;
+        results.forEach((obj, i) => {
+          if (obj) {
+            if (obj.canpay && obj.canpay[0]) { // 存在未交账单
+              this.billCount += 1;
+            }
           }
-        }
+        })
         this.billLength += 1;
         if (this.billLength == this.allLength) {
             this.hasFinish = true;
@@ -224,11 +224,14 @@ export default {
             });
           }
         },
-        fail: () => {
-//          this.$toast({
-//            position: 'bottomTop',
-//            message: "识别条形码失败!"
-//          });
+        fail: (data) => {
+            data = JSON.parse(data);
+            if (data.result == "fail") {
+              this.$toast({
+                position: 'bottomTop',
+                message: data.msg
+              });
+            }
         }
       })
     }

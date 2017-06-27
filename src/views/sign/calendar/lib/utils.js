@@ -1,10 +1,10 @@
-var config = require('./config');
-var vication = config.vication;
-var holiday = config.holiday;
+// var config = require('./config');
+// var vication = config.vication;
+// var holiday = config.holiday;
 // var work = config.work;
-var allVications = [];
-var allHolidays = [];
-var allWorks = [];
+// var allVications = [];
+// var allHolidays = [];
+// var allWorks = [];
 //  处理所有的日期数据
 // ;
 // (function handleVication () {
@@ -32,20 +32,22 @@ module.exports = {
      * @return {Boolean}     is holiday or not.
      */
     judgeIsHoliday: function (day) {
-        var date = this.dateFormat('yyyy-MM-dd', new Date(day));
-        if (this.inArray(date, allHolidays) > -1) {
-            return true;
-        } else {
-            return false;
-        }
+        // var date = this.dateFormat('yyyy-MM-dd', new Date(day));
+        // if (this.inArray(date, allHolidays) > -1) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+        return false;
     },
     judgeIsWork: function (day) {
-        var date = this.dateFormat('yyyy-MM-dd', new Date(day));
-        if (this.inArray(date, allWorks) > -1) {
-            return true;
-        } else {
-            return false;
-        }
+        // var date = this.dateFormat('yyyy-MM-dd', new Date(day));
+        // if (this.inArray(date, allWorks) > -1) {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+       return false;
     },
     /**
      * 判断闰年
@@ -288,14 +290,14 @@ module.exports = {
      * @return {String}
      */
     handleCalendarDisplayName: function (date, isHoliday, isVication) {
-        var self = this;
-        var dt = this.dateFormat('yyyy-MM-dd', date);
-        if (isVication) {
-            var isInVication = this.inArray(dt, allVications);
-            if (isInVication > -1) {
-                return self.showVicationNameWithDate(dt);
-            }
-        }
+        // var self = this;
+        // var dt = this.dateFormat('yyyy-MM-dd', date);
+        // if (isVication) {
+        //     var isInVication = this.inArray(dt, allVications);
+        //     if (isInVication > -1) {
+        //         return self.showVicationNameWithDate(dt);
+        //     }
+        // }
         return new Date(date).getDate();
         // if (self.isToday(dt)) {
         //     return '今天';
@@ -313,18 +315,18 @@ module.exports = {
      * @return {String}      The vication name which matched your date.
      */
     showVicationNameWithDate: function (date) {
-      debugger;
-        for (var i in vication) {
-            for (var j in vication[i].dates) {
-                if (vication[i]['dates'][j] === date) {
-                    return vication[i].name;
-                }
-            }
-        }
+        // for (var i in vication) {
+        //     for (var j in vication[i].dates) {
+        //         if (vication[i]['dates'][j] === date) {
+        //             return vication[i].name;
+        //         }
+        //     }
+        // }
     },
 
     showHolidayNameWithDate: function (date) {
-        return holiday[date];
+        // return holiday[date];
+        return date;
     },
 
     /**

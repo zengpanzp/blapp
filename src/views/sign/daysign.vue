@@ -19,26 +19,31 @@
       <div class="tips2" v-else="isLogin">本月已获得{{lotteryCount}}次抽奖 <img src="./i/date.png" @click="showCalendar = true" class="dateImg"></div>
       <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
-      <transition name="fadeOut" v-on:leave="tipsLeave"  enter-active-class="fadeOut">
-        <div class="btnSign" @click="sign" v-show="toLeave">
-          <img src="./i/signed.png">
-        </div>
-      </transition>
-      <div class="btnSign" @click="sign" v-show="justSigned">
+      <!--已经签到  不能抽奖-->
+      <div>
+        <transition appear leave-active-class="fadeOut">
+          <div class="btnSign" v-if="signed && hide">
+            <img src="./i/signed.png">
+          </div>
+        </transition>
+        <transition appear type="ainimation" enter-active-class="fadeIn" >
+          <div class="signText" v-if="signed && needSignNum>=0 && !canLottery && !hide" >
+            太棒了！离抽奖惊喜又进一步
+          </div>
+        </transition>
+      </div>
+      <div class="btnSign" v-if="signed && justSigned">
         <img src="./i/signed.png">
       </div>
-      <div class="btnSign" @click="sign" v-show="!signed && !canLottery">
+      <!--没有签到-->
+      <div class="btnSign" @click="sign" v-show="!signed && !canLottery && signText && !init">
         {{signText}} <span v-show="!signed">+{{signPoint}}</span>
       </div>
+      <!--去抽奖-->
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
       </div>
-      <transition name="fadeIn" enter-active-class="fadeIn">
-        <div class="signText" v-show="signed && needSignNum>=0 && !canLottery && !tipsEnter">
-           太棒了！离抽奖惊喜又进一步
-        </div>
-      </transition>
-      <div class="tips2 other2" v-show="!canLottery">没有省不下的钱，只有不坚持的签</div>
+      <div class="tips2 other2" v-show="this.hideTips">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu">
         <li v-for="item in iconMenu" v-if="item.advList[0]" v-go-native-resource="item.advList[0]">
           <img :src="item.advList[0].mediaUrl">
@@ -48,18 +53,18 @@
 
     </section>
     <!--四个资源位-->
-    <ul class="top-menu">
+    <ul class="top-menu" v-if="recommendList&&recommendList.length>0">
       <li v-for="item in recommendList" v-if="item.advList[0]" v-go-native-resource="item.advList[0]">
         <img  :src="item.advList[0].mediaUrl">
       </li>
       <div class="clearfix"></div>
     </ul>
     <!--推荐的商品-->
-    <ul class="recommend" v-for="item in bigGoodsList">
-      <li v-go-native-resource="item.big" v-if="item.big">
+    <ul class="recommend" v-for="item in bigGoodsList" v-if="item&&(item.big || item.list.length>0)">
+      <li v-go-native-resource="item.big" v-if="item&&item.big">
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
-      <li>
+      <li v-if="item.list.length>0">
         <div class="goods lazyload" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
           <img  v-lazy="{src: goodsItem.mediaUrl}" class="dateImg">
           <div class="name">{{goodsItem.deployName}}</div>
@@ -71,8 +76,8 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
-        <div class="pic lazyload"><img v-lazy="{src: item.goodsImageUrl}" class="dateImg"></div>
-        <div class="name">{{item.goodsName}}</div>
+        <div class="pic lazyload"><img v-lazy="{src: item.goodsImagePath}" class="dateImg"></div>
+        <div class="name">{{item.goodsMsg}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
       </li>
@@ -91,7 +96,7 @@
       <div class="remark" v-show="showSignRemark" style="z-index: 9998">
         <div class="title">签到说明</div>
         <div class="signRemark">
-            <div v-html="unescape(signRemark)"></div>
+          <div v-html="unescape(signRemark)"></div>
         </div>
         <img src="./i/close.png" :style="{top: closeTop}" class="close" @click.prevent="closeRemark">
       </div>
@@ -106,7 +111,7 @@
       <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <ul class="top-menu bottom" v-show="noSignList.length>0">
-        <li v-for="item in noSignList" v-if="item.advList[0]" v-go-native-resource="item.advList[0]" class="lazyload">
+        <li v-for="item in noSignList" v-if="item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload">
           <img v-lazy="{src: item.advList[0]&&item.advList[0].mediaUrl}">
         </li>
         <div class="clearfix"></div>
@@ -127,7 +132,9 @@
             pageIndex: 1,
             allPage: 0
           },
-          tipsEnter: '',
+          needSignNum: -1,
+          hideTips: true, // 是否隐藏签到提示
+          hide: true, // 默认不显示签到按钮
           signPoint: 5, // 签到赠送的积分
           myPoints: 0, // 我的积分
           closeTop: 0,   // 关闭按钮距离顶部的距离
@@ -172,7 +179,22 @@
       let self = this;
       // 供app 调用弹出签到说明
       window.BLAlertSignConfirm = () => {
-        self.showSignRemark = true;
+          if (self.signRemark == '') {
+            // 查询用户是否有签到资格
+            self.getSignQualification((data) => {
+              if (data.body.resCode == "00100000") {
+                let json = JSON.parse(data.body.obj);
+                self.signRemark = json.signRemark;
+                self.showSignRemark = true;
+              }
+            })
+          } else {
+            self.showSignRemark = true;
+          }
+      }
+      // 供app 页面重新reload
+      window.currentPageReload = () => {
+        self.pageLoad();
       }
       this.fetchLikeList(0);
       let date = new Date();
@@ -186,15 +208,14 @@
     },
     methods: {
       unescape(html) {
-        let e = document.createElement('div');
-        e.innerHTML = html;
-        return e.childNodes.length === 0 ? '' : e.childNodes[0].nodeValue;
+        var temp = document.createElement("div");
+        temp.innerHTML = html;
+        var output = temp.innerText || temp.textContent;
+        temp = null;
+        return output;
       },
-      tipsLeave() {
-
-      },
-      tipsEnter() {
-
+      hasShowSigned() {
+        this.show = false; // 设置签到为隐藏
       },
       // 签到说明动画开始执行的时候
       enter() {
@@ -211,6 +232,7 @@
         }).then(res => {
           this.$loading.close()
           let resData = JSON.parse(res.body.obj).obj.otherResource;
+          console.log(resData)
           // icon菜单
           for (let i = 0; i < 5; i++) {
             this.iconMenu.push(resData[i]);
@@ -239,7 +261,11 @@
           }
           this.signBg = resData[12].advList[0].mediaUrl;
         })
+        this.pageLoad();
+      },
+      pageLoad() {
         utils.isLogin(false).then(user => {
+            console.log("user", user)
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
           if (this.memberId && this.memberToken) { // 已经登录
@@ -280,7 +306,6 @@
               let json = JSON.parse(data.body.obj);
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
-              console.log(json)
               // singStatus 0-不可签到 1-可签到，未签到，2-已签到
               this.changeStatus(json);
             } else {
@@ -294,6 +319,8 @@
       },
       // 根据状态改变页面操作
       changeStatus(obj, flag) {
+        let self = this;
+        console.log("flag", obj)
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.lotteryId; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
@@ -301,7 +328,7 @@
         let lotteryStatus = obj.lotteryStatus;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
-        if (obj.signStatus == 0) {  // 没有签到资格
+        if (obj.signStatus == 0 && this.isLogin) {  // 没有签到资格
           sa.track('$pageview', {
             pageId: 'APP_签到弹层',
             categoryId: 'APP_User',
@@ -316,6 +343,7 @@
             this.showOverlay = true;
           }
         } else if (obj.signStatus == 1) { // 未签到
+          this.showOverlay = false;
           this.signed = false; // 设置未签到
           // 判断是否有抽奖机会
           if (lotteryStatus == 0) {  // 未签到 不可抽奖
@@ -327,34 +355,46 @@
             this.message2 = "就能获得1次抽奖机会";
           }
         } else if (obj.signStatus == 2) { // 已经签到
-          if (flag == 1) {
-            this.myPoints += this.signPoint; // 积分累加
-          }
+          this.showOverlay = false;
           this.signed = true; // 设置已经签到
           // 判断是否有抽奖机会
           if (lotteryStatus == 0) { // 已签到不可抽奖
+            // 需要过渡效果   先把对号显示  再把文字提示显示
             if (this.needSignNum > 0) { // 是否n日后可以抽奖
               this.signText = ""  // 隐藏
               this.message1 = "再连续签到" + this.needSignNum + "天";
               this.message2 = "就能获得1次抽奖机会";
-              this.tipsEnter = false;
-              this.toLeave = true;
+              if (flag == 1) {
+                this.hide = true;
+                window.BL_SIGNED_TIMEID = setTimeout(function() {
+                  self.hide = false;
+                }, 1000);
+              } else {
+                  this.hide = false;
+              }
             } else {
+              this.needSignNum = -1;
               this.signText = ""  // 隐藏
               this.message1 = "厉害！又拿到积分啦";
               this.message2 = "感觉赚了一个亿~";
-              this.tipsEnter = true;
-              this.toLeave = true;
               this.justSigned = true;
+              if (flag == 1) {
+                this.hide = true;
+              } else {
+                this.hide = false;
+              }
             }
+            this.hideTips = false; // 隐藏没有不签到的签
           } else if (lotteryStatus == 1) { // 已签到可抽奖
             // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
             this.canLottery = true;
             this.lotteryText = "去抽奖"
             this.message1 = "恭喜您！";
             this.message2 = "获得1次抽奖机会";
-          } else {
-            this.canLottery = false;
+            this.hideTips = false;
+          } else if (lotteryStatus == 2) {
+            this.hideTips = false;
+            this.canLottery = true;
             this.lotteryText = "已抽奖"
             this.message1 = "恭喜您！";
             this.message2 = "已完成本次抽奖";
@@ -368,8 +408,8 @@
           month2 = month;
           let date = new Date();
           let year = date.getFullYear();
-          this.startDate = year + "-" + month2 + "-" + "01";
-          this.endDate = year + "-" + month2 + "-" + new Date(year, month2, 0).getDate();
+          this.startDate = year + "-" + (month2 >= 10 ? month2 : (0 + "" + month2)) + "-" + "01";
+          this.endDate = year + "-" + (month2 >= 10 ? month2 : (0 + "" + month2)) + "-" + new Date(year, month2, 0).getDate();
         } else {
           month2 = new Date().getMonth() + 1;
         }
@@ -378,12 +418,15 @@
           month: month2,
           year: new Date().getFullYear()
         }).then(data => {
-            let json = JSON.parse(data.body.obj);
             if (data.body.resCode == "00100000") {
+              let json = JSON.parse(data.body.obj);
               this.signInList = json.signInList;
               this.lotteryList = json.lotterList;
               this.afterLotteryList = json.afterLotterList;
-              console.log("日历", json)
+            } else {
+              this.signInList = [];
+              this.lotteryList = [];
+              this.afterLotteryList = [];
             }
         });
       },
@@ -408,10 +451,10 @@
               let newGoodsList = [];
               json.goodsList.forEach((i) => {
                   let obj = {
-                    goodsid: i.sid,
-                    goodsName: i.goods_sales_name,
+                    goodsId: i.sid,
+                    goodsMsg: i.goods_sales_name,
                     goodsPrice: i.sale_price,
-                    goodsImageUrl: i.url,
+                    goodsImagePath: i.url,
                   }
                   newGoodsList.push(obj)
               });
@@ -434,7 +477,6 @@
           channelId: "1",
           member_token: this.memberToken ? this.memberToken : 0
         }).then(data => {
-          console.log(data)
           callback(data)
         });
       },
@@ -450,7 +492,6 @@
           api.sign.getScores({
             member_token: this.memberToken
           }).then(data => {
-            console.log(data);
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
               this.myPoints = json.points;
@@ -489,23 +530,25 @@
       },
       // 按钮点击去抽奖
       lottery() {
-        sa.track('clickButton', {
-          pageId: 'APP_签到有奖',
-          buttonName: "去抽奖",
-          buttonPage: "签到页",
-          categoryId: 'APP_User',
-          $title: 'APP_签到有奖',
-        });
-        let signRuleCode = this.signRuleCode; // 抽奖规则id
-        // 跳转到cordova页面
-        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'lucky',
-          params: JSON.stringify({
-            coupon: null,
-            ruleId: signRuleCode,
-            isSigninFlag: "Y"
+        if (this.lotteryText != "已抽奖") {
+          sa.track('clickButton', {
+            pageId: 'APP_签到有奖',
+            buttonName: "去抽奖",
+            buttonPage: "签到页",
+            categoryId: 'APP_User',
+            $title: 'APP_签到有奖',
+          });
+          let signRuleCode = this.signRuleCode; // 抽奖规则id
+          // 跳转到cordova页面
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+            pageId: 'lucky',
+            params: JSON.stringify({
+              coupon: null,
+              ruleId: signRuleCode,
+              isSigninFlag: "Y"
+            })
           })
-        })
+        }
       },
       // 进行签到
       sign() {
@@ -531,15 +574,15 @@
               let json = JSON.parse(data.body.obj);
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
-              console.log(json)
-              // singStatus 0-不可签到 1-可签到，未签到，2-已签到
-              this.changeStatus(json);
+              this.inlineLoading.close();
               if (json.signStatus == 1) {
                 api.sign.signIn({
                   buld: "3000",
                   channelId: "1",
                   member_token: this.memberToken
                 }).then(data => {
+                  let json = JSON.parse(data.body.obj);
+                  this.changeStatus(json, 1);
                   // 获得我的积分
                   api.sign.getScores({
                     member_token: this.memberToken
@@ -554,6 +597,21 @@
                   this.getCalendarHistory();
                   this.inlineLoading.close();
                 });
+              } else {
+                this.changeStatus(json);
+                // 获得我的积分
+                api.sign.getScores({
+                  member_token: this.memberToken
+                }).then(data => {
+                  console.log(data);
+                  if (data.body.resCode == "00100000") {
+                    let json = JSON.parse(data.body.obj);
+                    this.myPoints = json.points;
+                  }
+                });
+                // 查询签到日历
+                this.getCalendarHistory();
+                this.inlineLoading.close();
               }
             } else {
               this.$toast({
@@ -562,6 +620,8 @@
               });
             }
           })
+        }, fail => {
+          this.inlineLoading.close();
         })
       }
     }
