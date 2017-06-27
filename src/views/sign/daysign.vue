@@ -215,7 +215,6 @@
         return output;
       },
       hasShowSigned() {
-          console.log("执行了没有")
         this.show = false; // 设置签到为隐藏
       },
       // 签到说明动画开始执行的时候
@@ -233,6 +232,7 @@
         }).then(res => {
           this.$loading.close()
           let resData = JSON.parse(res.body.obj).obj.otherResource;
+          console.log(resData)
           // icon菜单
           for (let i = 0; i < 5; i++) {
             this.iconMenu.push(resData[i]);
@@ -265,6 +265,7 @@
       },
       pageLoad() {
         utils.isLogin(false).then(user => {
+            console.log("user", user)
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
           if (this.memberId && this.memberToken) { // 已经登录
@@ -305,7 +306,6 @@
               let json = JSON.parse(data.body.obj);
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
-              console.log(json)
               // singStatus 0-不可签到 1-可签到，未签到，2-已签到
               this.changeStatus(json);
             } else {
@@ -320,6 +320,7 @@
       // 根据状态改变页面操作
       changeStatus(obj, flag) {
         let self = this;
+        console.log("flag", obj)
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.lotteryId; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
@@ -372,6 +373,7 @@
                   this.hide = false;
               }
             } else {
+              this.needSignNum = -1;
               this.signText = ""  // 隐藏
               this.message1 = "厉害！又拿到积分啦";
               this.message2 = "感觉赚了一个亿~";
@@ -421,7 +423,6 @@
               this.signInList = json.signInList;
               this.lotteryList = json.lotterList;
               this.afterLotteryList = json.afterLotterList;
-              console.log("日历", json)
             } else {
               this.signInList = [];
               this.lotteryList = [];
@@ -437,7 +438,6 @@
           "pNum": this.page.pageIndex++,
           "pSize": this.page.pageSize
         }).then(data => {
-            console.log(data)
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
               this.$loading.close()
@@ -477,7 +477,6 @@
           channelId: "1",
           member_token: this.memberToken ? this.memberToken : 0
         }).then(data => {
-          console.log(data)
           callback(data)
         });
       },
@@ -621,6 +620,8 @@
               });
             }
           })
+        }, fail => {
+          this.inlineLoading.close();
         })
       }
     }
