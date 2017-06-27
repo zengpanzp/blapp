@@ -121,7 +121,7 @@
         </bl-tab-container-item>
       </bl-tab-container>
     </div>
-    <div class="phoneFixBottom">
+    <div class="phoneFixBottom" v-show="!focus">
       <div class="limit-remind">
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
