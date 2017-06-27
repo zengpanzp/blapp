@@ -62,16 +62,7 @@ const goPay = function(order, type, sucCallback, failCallback) {
       window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequestData, {
         success: data => {
           console.log('native接口 调native收银台返回报文=============<br>' + data)
-          if (sucCallback) {
-            sucCallback && sucCallback(data);
-          } else {
-            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-              pageId: 'paySuccess',
-              params: JSON.stringify({
-                pay: JSON.stringify(this.sendData)
-              })
-            })
-          }
+          sucCallback && sucCallback(data);
         },
         fail: error => {
           console.log(error)

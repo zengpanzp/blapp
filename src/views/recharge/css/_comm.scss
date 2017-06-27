@@ -162,7 +162,7 @@
 
 .flow-type-top {
   overflow: hidden;
-  margin-bottom: rem(0.75*31.25)
+  margin-bottom: rem(20)
 }
 
 .flow-type-container {
@@ -200,7 +200,7 @@
 
 // 底部按钮
 .phoneFixBottom {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -243,7 +243,7 @@
 .limit-remind p {
   font-size: rem(.75*31.25);
   color: #999999;
-  margin-bottom: rem(20);
+  margin-bottom: rem(10);
 }
 .limit-remind img {
   width: rem(0.875*31.25);
