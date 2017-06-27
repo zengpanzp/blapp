@@ -12,7 +12,7 @@
         <div>{{orderNo}}</div>
       </div>
       <div class="order-info">
-        <div>支付金额：：</div>
+        <div>支付金额：</div>
         <div>¥{{money}}</div>
       </div>
       <div class="remind">充值成功后预计能快速到账，请注意查收短信，遇系统繁忙等情况可能会延时到账。</div>

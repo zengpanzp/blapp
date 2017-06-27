@@ -21,8 +21,8 @@
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
       <!--已经签到  不能抽奖-->
       <div>
-        <transition appear leave-active-class="slideOutLeft">
-          <div class="btnSign" @click="sign" v-if="signed && hide">
+        <transition appear leave-active-class="fadeOut">
+          <div class="btnSign" v-if="signed && hide">
             <img src="./i/signed.png">
           </div>
         </transition>
@@ -32,6 +32,9 @@
           </div>
         </transition>
       </div>
+      <div class="btnSign" v-if="signed && justSigned">
+        <img src="./i/signed.png">
+      </div>
       <!--没有签到-->
       <div class="btnSign" @click="sign" v-show="!signed && !canLottery && signText && !init">
         {{signText}} <span v-show="!signed">+{{signPoint}}</span>
@@ -40,7 +43,7 @@
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
       </div>
-      <div class="tips2 other2" v-show="!canLottery">没有省不下的钱，只有不坚持的签</div>
+      <div class="tips2 other2" v-show="this.hideTips">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu">
         <li v-for="item in iconMenu" v-if="item.advList[0]" v-go-native-resource="item.advList[0]">
           <img :src="item.advList[0].mediaUrl">
@@ -129,6 +132,8 @@
             pageIndex: 1,
             allPage: 0
           },
+          needSignNum: -1,
+          hideTips: true, // 是否隐藏签到提示
           hide: true, // 默认不显示签到按钮
           signPoint: 5, // 签到赠送的积分
           myPoints: 0, // 我的积分
@@ -188,7 +193,7 @@
           }
       }
       // 供app 页面重新reload
-      window.CurrentPageReload = () => {
+      window.currentPageReload = () => {
         self.pageLoad();
       }
       this.fetchLikeList(0);
@@ -350,9 +355,6 @@
           }
         } else if (obj.signStatus == 2) { // 已经签到
           this.showOverlay = false;
-          if (flag == 1) {
-            this.myPoints += this.signPoint; // 积分累加
-          }
           this.signed = true; // 设置已经签到
           // 判断是否有抽奖机会
           if (lotteryStatus == 0) { // 已签到不可抽奖
@@ -361,22 +363,33 @@
               this.signText = ""  // 隐藏
               this.message1 = "再连续签到" + this.needSignNum + "天";
               this.message2 = "就能获得1次抽奖机会";
-              this.hide = true;
-              window.BL_SIGNED_TIMEID = setTimeout(function() {
-                self.hide = false;
-              }, 1000);
+              if (flag == 1) {
+                this.hide = true;
+                window.BL_SIGNED_TIMEID = setTimeout(function() {
+                  self.hide = false;
+                }, 1000);
+              } else {
+                  this.hide = false;
+              }
             } else {
               this.signText = ""  // 隐藏
               this.message1 = "厉害！又拿到积分啦";
               this.message2 = "感觉赚了一个亿~";
-              this.hide = true;
+              this.justSigned = true;
+              if (flag == 1) {
+                this.hide = true;
+              } else {
+                this.hide = false;
+              }
             }
+            this.hideTips = false; // 隐藏没有不签到的签
           } else if (lotteryStatus == 1) { // 已签到可抽奖
             // 当天抽奖状态，0-不可抽奖，1-可抽奖，未抽奖，2-已抽奖
             this.canLottery = true;
             this.lotteryText = "去抽奖"
             this.message1 = "恭喜您！";
             this.message2 = "获得1次抽奖机会";
+            this.hideTips = false;
           } else {
             this.canLottery = false;
             this.lotteryText = "已抽奖"
@@ -566,7 +579,7 @@
                   member_token: this.memberToken
                 }).then(data => {
                   let json = JSON.parse(data.body.obj);
-                  this.changeStatus(json);
+                  this.changeStatus(json, 1);
                   // 获得我的积分
                   api.sign.getScores({
                     member_token: this.memberToken

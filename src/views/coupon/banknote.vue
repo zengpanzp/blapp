@@ -222,11 +222,12 @@ export default {
           this.hasGet = true;  // 已领取
           this.btnShow = false;
           this.tipShow = true;
+          let self = this;
           this.$intervalId = setInterval(() => {
             timeleft--;
             this.timeleft = timeleft;
             if (timeleft <= 0) {
-              history.go(-1);
+              self.$router.go(-1);
               // 删除定时器
               clearInterval(this.$intervalId);
             }
