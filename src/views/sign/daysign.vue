@@ -64,10 +64,10 @@
       <li v-go-native-resource="item.big" v-if="item&&item.big">
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
-      <li v-if="item.list.length>0">
+      <li v-if="item.list.length>0" ref="container">
         <div class="goods" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
           <div class="lazyload imgs">
-            <img  v-lazy="{src:goodsItem.goodsImgPath}" class="dateImg">
+            <img  v-lazy.container="{src:goodsItem.goodsImgPath}" class="dateImg">
           </div>
           <div class="name">{{goodsItem.goodsMsg}}</div>
           <div class="name money"><label>￥</label>{{goodsItem.goodsPrice}}</div>
