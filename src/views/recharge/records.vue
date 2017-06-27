@@ -3,7 +3,7 @@
 <template>
     <div class="rates">
       <div class="content-wrap">
-          <ul>
+          <ul class="ttop">
             <li>缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>

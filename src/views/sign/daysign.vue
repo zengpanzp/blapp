@@ -76,8 +76,8 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
-        <div class="pic lazyload"><img v-lazy="{src: item.goodsImageUrl}" class="dateImg"></div>
-        <div class="name">{{item.goodsName}}</div>
+        <div class="pic lazyload"><img v-lazy="{src: item.goodsImagePath}" class="dateImg"></div>
+        <div class="name">{{item.goodsMsg}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
       </li>
@@ -437,6 +437,7 @@
           "pNum": this.page.pageIndex++,
           "pSize": this.page.pageSize
         }).then(data => {
+            console.log(data)
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
               this.$loading.close()
@@ -450,10 +451,10 @@
               let newGoodsList = [];
               json.goodsList.forEach((i) => {
                   let obj = {
-                    goodsid: i.sid,
-                    goodsName: i.goods_sales_name,
+                    goodsId: i.sid,
+                    goodsMsg: i.goods_sales_name,
                     goodsPrice: i.sale_price,
-                    goodsImageUrl: i.url,
+                    goodsImagePath: i.url,
                   }
                   newGoodsList.push(obj)
               });
@@ -530,23 +531,25 @@
       },
       // 按钮点击去抽奖
       lottery() {
-        sa.track('clickButton', {
-          pageId: 'APP_签到有奖',
-          buttonName: "去抽奖",
-          buttonPage: "签到页",
-          categoryId: 'APP_User',
-          $title: 'APP_签到有奖',
-        });
-        let signRuleCode = this.signRuleCode; // 抽奖规则id
-        // 跳转到cordova页面
-        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'lucky',
-          params: JSON.stringify({
-            coupon: null,
-            ruleId: signRuleCode,
-            isSigninFlag: "Y"
+        if (this.lotteryText != "已抽奖") {
+          sa.track('clickButton', {
+            pageId: 'APP_签到有奖',
+            buttonName: "去抽奖",
+            buttonPage: "签到页",
+            categoryId: 'APP_User',
+            $title: 'APP_签到有奖',
+          });
+          let signRuleCode = this.signRuleCode; // 抽奖规则id
+          // 跳转到cordova页面
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+            pageId: 'lucky',
+            params: JSON.stringify({
+              coupon: null,
+              ruleId: signRuleCode,
+              isSigninFlag: "Y"
+            })
           })
-        })
+        }
       },
       // 进行签到
       sign() {

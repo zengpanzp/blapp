@@ -99,6 +99,8 @@ Vue.directive('go-native-goods-detail', {
       isGiftGoods: binding.modifiers.isGiftGoods || false
     }
     el.addEventListener('click', function() {
+      console.log("DATA1", JSON.parse(JSON.stringify(binding.value)))
+      console.log("DATA2", JSON.parse(JSON.stringify(args)))
       if (!el.getAttribute('disabled')) {
         window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
       }
