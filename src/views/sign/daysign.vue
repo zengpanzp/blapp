@@ -65,10 +65,12 @@
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
       <li v-if="item.list.length>0">
-        <div class="goods lazyload" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
-          <img  v-lazy="{src: goodsItem.mediaUrl}" class="dateImg">
-          <div class="name">{{goodsItem.deployName}}</div>
-          <div class="name money"><label>￥</label>{{goodsItem.sale_price}}</div>
+        <div class="goods" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
+          <div class="lazyload imgs">
+            <img  v-lazy="{src:goodsItem.goodsImgPath}" class="dateImg">
+          </div>
+          <div class="name">{{goodsItem.goodsMsg}}</div>
+          <div class="name money"><label>￥</label>{{goodsItem.goodsPrice}}</div>
         </div>
       </li>
     </ul>
@@ -224,6 +226,13 @@
         this.$el.querySelector(".remark").style.top = "50%";
         this.$el.querySelector(".remark").style.marginTop = "-" + height / 2 + "px";
       },
+      compare(property) {
+        return function(a, b) {
+          var value1 = a[property];
+          var value2 = b[property];
+          return value1 - value2;
+        }
+      },
       fecthData() {
         api.sign.queryAdDeploy({
           otherresource: {
@@ -232,7 +241,6 @@
         }).then(res => {
           this.$loading.close()
           let resData = JSON.parse(res.body.obj).obj.otherResource;
-          console.log(resData)
           // icon菜单
           for (let i = 0; i < 5; i++) {
             this.iconMenu.push(resData[i]);
@@ -242,30 +250,55 @@
           }
           let bigGoods = [];
           for (let i = 9; i < 12; i++) {
+              console.log(i)
             let arr = resData[i].advList;
             let obj = {}
             obj.list = [];
-            for (let j = 0; j < arr.length; j++) {
-              if (j == 0) {
-                obj.big = arr[0];
-              } else {
-                obj.list.push(arr[j]);
-              }
-            }
+            arr = arr.sort(this.compare('priority'));
+            // 查询资源位
+            obj.big = arr[0];
             bigGoods.push(obj);
+            if (obj.big.pCatalog) {
+              let requestData = {
+                "requestData": JSON.stringify({
+                  channelSid: "1",
+                  c: "9999" + obj.big.pCatalog,
+                  searchInfo: {
+                    pageModel: {
+                      pageNo: "1",
+                      pageSize: "5"
+                    }
+                  },
+                  isava: 0,
+                  isColl: "1"
+                })
+              }
+              api.sign.getGoods(requestData).then(res => {
+                if (res.body.obj) {
+                  let resData = JSON.parse(res.body.obj)
+                  let resRows = resData.resultInfo.pageModel.rows;
+                  if (resRows) {
+                    resRows.forEach((i) => {
+                      obj.list.push(i[0])
+                    });
+                  }
+                }
+              }, err => {
+                console.log(err)
+              })
+            }
+            this.bigGoodsList = bigGoods;
           }
-          this.bigGoodsList = bigGoods;
           // 无签到资格的资源位
           for (let i = 13; i < 17; i++) {
             this.noSignList.push(resData[i]);
           }
           this.signBg = resData[12].advList[0].mediaUrl;
+          this.pageLoad();
         })
-        this.pageLoad();
       },
       pageLoad() {
         utils.isLogin(false).then(user => {
-            console.log("user", user)
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
           if (this.memberId && this.memberToken) { // 已经登录
@@ -320,7 +353,6 @@
       // 根据状态改变页面操作
       changeStatus(obj, flag) {
         let self = this;
-        console.log("flag", obj)
         this.signStatus = obj.signStatus;
         this.signRuleCode = obj.lotteryId; // 抽奖规则id
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口

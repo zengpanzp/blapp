@@ -315,10 +315,9 @@
               member_token: this.memberToken,
               contactPhone: this.phone
             }
+            console.log(JSON.stringify(updatePaySubNoData))
             api.recharge.updatePaySubNo(updatePaySubNoData).then(data => {
-              console.log(data);
-              let json = JSON.parse(data.body.obj);
-              if (json.resCode == "00100000") {
+              if (data.body.resCode == "00100000") {
                 this.$toast({
                   position: 'bottomTop',
                   message: "账号编辑成功!",
@@ -331,7 +330,7 @@
               } else {
                 this.$toast({
                   position: 'bottom',
-                  message: json.msg
+                  message: data.body.msg
                 });
               }
             });
@@ -350,23 +349,21 @@
               contactPhone: this.phone
             }
             api.recharge.createPaySubNo(createPaySubNoData).then(data => {
-              console.log(data);
-              let json = JSON.parse(data.body.obj);
-              if (json.resCode == "00100000") {
+//              let json = JSON.parse(data.body.obj);
+              if (data.body.resCode == "00100000") {
                 this.$toast({
                   position: 'bottomTop',
                   message: "账号创建成功!",
                   duration: 3000
                 });
-
                 this.ATIME_ID = setTimeout(() => {
                   clearTimeout(current.ATIME_ID);
                   current.$router.push({path: "/recharge/bill"});
-                }, 3000);
+                }, 2000);
               } else {
                 this.$toast({
                   position: 'bottom',
-                  message: json.msg
+                  message: data.body.msg
                 });
               }
             });
