@@ -239,7 +239,6 @@
             resourceId: '9001,9002,9003,9004,9005,9006,9007,9008,9009,9010,9011,9012,9013,9014,9015,9016,9017'
           }
         }).then(res => {
-          this.$loading.close()
           let resData = JSON.parse(res.body.obj).obj.otherResource;
           // icon菜单
           for (let i = 0; i < 5; i++) {
@@ -304,6 +303,7 @@
           this.memberToken = user.member_token;
           if (this.memberId && this.memberToken) { // 已经登录
             this.isLogin = true;
+            this.$loading.close()
             // 查询签到日历
             this.getCalendarHistory();
             // 获得我的积分
@@ -334,6 +334,7 @@
           }
         }, () => {
           this.isLogin = false;
+          this.$loading.close()
           // 查询用户是否有签到资格
           this.getSignQualification((data) => {
             if (data.body.resCode == "00100000") {
