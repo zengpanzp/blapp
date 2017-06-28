@@ -15,9 +15,9 @@
         <div>{{message2}}</div>
       </div>
       <div class="line"></div>
-      <div class="tips2" v-if="!isLogin">本月可参与抽奖次数：<label style="color:#398be0" @click='login'>【请登录】</label></div>
+      <div class="tips2" v-if="!isLogin && defaultShow">本月可参与抽奖次数：<label style="color:#398be0" @click='login'>【请登录】</label></div>
       <div class="tips2" v-else="isLogin">本月已获得{{lotteryCount}}次抽奖 <img src="./i/date.png" @click="showCalendar = true" class="dateImg"></div>
-      <div class="tips2 other" v-if="!isLogin">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
+      <div class="tips2 other" v-if="!isLogin && defaultShow">我的积分：<lable style='color:#398be0' @click='login'>【请登录】</lable></div>
       <div class="tips2 other" v-if="isLogin">我的积分：{{myPoints}}  (可抵现{{myPoints/100}}元)</div>
       <!--已经签到  不能抽奖-->
       <div>
@@ -134,6 +134,7 @@
             pageIndex: 1,
             allPage: 0
           },
+          defaultShow: false, // 默认不显示登录的
           needSignNum: -1,
           hideTips: true, // 是否隐藏签到提示
           hide: true, // 默认不显示签到按钮
@@ -334,6 +335,7 @@
           }
         }, () => {
           this.isLogin = false;
+          this.defaultShow = true;
           this.$loading.close()
           // 查询用户是否有签到资格
           this.getSignQualification((data) => {
