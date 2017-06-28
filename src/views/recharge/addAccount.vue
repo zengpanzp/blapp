@@ -315,7 +315,6 @@
               member_token: this.memberToken,
               contactPhone: this.phone
             }
-            console.log(JSON.stringify(updatePaySubNoData))
             api.recharge.updatePaySubNo(updatePaySubNoData).then(data => {
               if (data.body.resCode == "00100000") {
                 this.$toast({
