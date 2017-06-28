@@ -56,6 +56,7 @@ export default {
       }).then(data => {
         let json = JSON.parse(data.body.obj);
         this.groupList = json.list;
+        let allLength = 0;
         this.groupList.forEach((obj) => {
           api.recharge.queryPaySubNo({
             "member_token": user.member_token,
@@ -63,8 +64,9 @@ export default {
             "timestamp": timestamp
           }).then(data => {
             let json = JSON.parse(data.body.obj);
-            this.allLength = json.list.length;
             json.list.forEach((obj, i) => {
+              allLength += 1;
+              this.allLength = allLength;
               // 水电煤的
               if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
                 switch (obj.paymentType) {
@@ -136,7 +138,7 @@ export default {
           this.results = results;
           results.forEach((obj, i) => {
             if (obj) {
-              if (obj.canpay && obj.canpay[0]) { // 存在未交账单
+              if (obj.canpay && obj.canpay[0] == "01") { // 存在未交账单
                 this.billCount += 1;
               }
             }

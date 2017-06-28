@@ -17,7 +17,7 @@
             </li>
           </ul>
           <ul class="record-list" v-if="dataJson">
-            <li class="record-detail" @click="toPay(item)" v-for="item in results" v-if="item.Result_code=='200'">
+            <li class="record-detail flex-m" @click="toPay(item)" v-for="item in results" v-if="item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
               <span v-if="item.canpaymsg[0]=='已销账'"><div class="billstatus finish">{{(item.canpaymsg[0]=="已销账"?"已缴费":item.canpaymsg[0])}}</div></span>
