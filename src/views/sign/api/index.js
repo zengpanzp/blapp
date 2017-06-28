@@ -45,6 +45,10 @@ export default {
     // 查询资源位
     queryAdDeploy: params => {
       return Vue.http.post(baseUrl + '/site/queryAdDeploy.htm', params);
+    },
+    // 查询商品
+    getGoods: params => {
+      return Vue.http.post(baseUrl + '/goodSearch/keyWordSearchGood.htm', params)
     }
   }
 }

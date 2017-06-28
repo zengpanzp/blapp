@@ -98,7 +98,6 @@ const isLogin = (login = true) => {
     window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
       success: res => {
         let resData = JSON.parse(res)
-        console.log(resData)
         if (resData.member_id && resData.member_token) {
           localStorage.setItem('userInfo', res)
           console.log('已经登录')

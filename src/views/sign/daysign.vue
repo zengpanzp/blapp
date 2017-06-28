@@ -64,11 +64,13 @@
       <li v-go-native-resource="item.big" v-if="item&&item.big">
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
-      <li v-if="item.list.length>0">
-        <div class="goods lazyload" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
-          <img  v-lazy="{src: goodsItem.mediaUrl}" class="dateImg">
-          <div class="name">{{goodsItem.deployName}}</div>
-          <div class="name money"><label>￥</label>{{goodsItem.sale_price}}</div>
+      <li v-if="item.list.length>0" ref="container">
+        <div class="goods" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
+          <div class="lazyload imgs">
+            <img  v-lazy.container="{src:goodsItem.goodsImgPath}" class="dateImg">
+          </div>
+          <div class="name">{{goodsItem.goodsMsg}}</div>
+          <div class="name money"><label>￥</label>{{goodsItem.goodsPrice}}</div>
         </div>
       </li>
     </ul>
@@ -76,8 +78,8 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
-        <div class="pic lazyload"><img v-lazy="{src: item.goodsImageUrl}" class="dateImg"></div>
-        <div class="name">{{item.goodsName}}</div>
+        <div class="pic lazyload"><img v-lazy="{src: item.goodsImagePath}" class="dateImg"></div>
+        <div class="name">{{item.goodsMsg}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
       </li>
@@ -215,7 +217,6 @@
         return output;
       },
       hasShowSigned() {
-          console.log("执行了没有")
         this.show = false; // 设置签到为隐藏
       },
       // 签到说明动画开始执行的时候
@@ -224,6 +225,13 @@
         let height = this.$el.querySelector(".remark").offsetHeight;
         this.$el.querySelector(".remark").style.top = "50%";
         this.$el.querySelector(".remark").style.marginTop = "-" + height / 2 + "px";
+      },
+      compare(property) {
+        return function(a, b) {
+          var value1 = a[property];
+          var value2 = b[property];
+          return value1 - value2;
+        }
       },
       fecthData() {
         api.sign.queryAdDeploy({
@@ -242,26 +250,52 @@
           }
           let bigGoods = [];
           for (let i = 9; i < 12; i++) {
+              console.log(i)
             let arr = resData[i].advList;
             let obj = {}
             obj.list = [];
-            for (let j = 0; j < arr.length; j++) {
-              if (j == 0) {
-                obj.big = arr[0];
-              } else {
-                obj.list.push(arr[j]);
-              }
-            }
+            arr = arr.sort(this.compare('priority'));
+            // 查询资源位
+            obj.big = arr[0];
             bigGoods.push(obj);
+            if (obj.big.pCatalog) {
+              let requestData = {
+                "requestData": JSON.stringify({
+                  channelSid: "1",
+                  c: "9999" + obj.big.pCatalog,
+                  searchInfo: {
+                    pageModel: {
+                      pageNo: "1",
+                      pageSize: "5"
+                    }
+                  },
+                  isava: 0,
+                  isColl: "1"
+                })
+              }
+              api.sign.getGoods(requestData).then(res => {
+                if (res.body.obj) {
+                  let resData = JSON.parse(res.body.obj)
+                  let resRows = resData.resultInfo.pageModel.rows;
+                  if (resRows) {
+                    resRows.forEach((i) => {
+                      obj.list.push(i[0])
+                    });
+                  }
+                }
+              }, err => {
+                console.log(err)
+              })
+            }
+            this.bigGoodsList = bigGoods;
           }
-          this.bigGoodsList = bigGoods;
           // 无签到资格的资源位
           for (let i = 13; i < 17; i++) {
             this.noSignList.push(resData[i]);
           }
           this.signBg = resData[12].advList[0].mediaUrl;
+          this.pageLoad();
         })
-        this.pageLoad();
       },
       pageLoad() {
         utils.isLogin(false).then(user => {
@@ -305,7 +339,6 @@
               let json = JSON.parse(data.body.obj);
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
-              console.log(json)
               // singStatus 0-不可签到 1-可签到，未签到，2-已签到
               this.changeStatus(json);
             } else {
@@ -372,6 +405,7 @@
                   this.hide = false;
               }
             } else {
+              this.needSignNum = -1;
               this.signText = ""  // 隐藏
               this.message1 = "厉害！又拿到积分啦";
               this.message2 = "感觉赚了一个亿~";
@@ -421,7 +455,6 @@
               this.signInList = json.signInList;
               this.lotteryList = json.lotterList;
               this.afterLotteryList = json.afterLotterList;
-              console.log("日历", json)
             } else {
               this.signInList = [];
               this.lotteryList = [];
@@ -450,10 +483,10 @@
               let newGoodsList = [];
               json.goodsList.forEach((i) => {
                   let obj = {
-                    goodsid: i.sid,
-                    goodsName: i.goods_sales_name,
+                    goodsId: i.sid,
+                    goodsMsg: i.goods_sales_name,
                     goodsPrice: i.sale_price,
-                    goodsImageUrl: i.url,
+                    goodsImagePath: i.url,
                   }
                   newGoodsList.push(obj)
               });
@@ -476,7 +509,6 @@
           channelId: "1",
           member_token: this.memberToken ? this.memberToken : 0
         }).then(data => {
-          console.log(data)
           callback(data)
         });
       },
@@ -530,23 +562,25 @@
       },
       // 按钮点击去抽奖
       lottery() {
-        sa.track('clickButton', {
-          pageId: 'APP_签到有奖',
-          buttonName: "去抽奖",
-          buttonPage: "签到页",
-          categoryId: 'APP_User',
-          $title: 'APP_签到有奖',
-        });
-        let signRuleCode = this.signRuleCode; // 抽奖规则id
-        // 跳转到cordova页面
-        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'lucky',
-          params: JSON.stringify({
-            coupon: null,
-            ruleId: signRuleCode,
-            isSigninFlag: "Y"
+        if (this.lotteryText != "已抽奖") {
+          sa.track('clickButton', {
+            pageId: 'APP_签到有奖',
+            buttonName: "去抽奖",
+            buttonPage: "签到页",
+            categoryId: 'APP_User',
+            $title: 'APP_签到有奖',
+          });
+          let signRuleCode = this.signRuleCode; // 抽奖规则id
+          // 跳转到cordova页面
+          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+            pageId: 'lucky',
+            params: JSON.stringify({
+              coupon: null,
+              ruleId: signRuleCode,
+              isSigninFlag: "Y"
+            })
           })
-        })
+        }
       },
       // 进行签到
       sign() {
@@ -618,6 +652,8 @@
               });
             }
           })
+        }, fail => {
+          this.inlineLoading.close();
         })
       }
     }

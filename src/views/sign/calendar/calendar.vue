@@ -180,13 +180,11 @@
           showLotteryDay: function(day) {
             if (day != '') {
               let formatDate = utils.dateFormat('yyyy-MM-dd', day);
-              console.log("begin", formatDate)
               for (let i = 0; i < this.afterLotteryList.length; i++) {
                 let dayStr = this.afterLotteryList[i] > 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
                 let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
                 //              console.log("formatDate", formatDate, lotteryDate)
                 if (lotteryDate == formatDate) {
-                  console.log(true, lotteryDate, formatDate)
                   return true;
                 }
               }
@@ -196,7 +194,6 @@
             getPreMonthSignList() {
               let months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
               let month = this.getPreMonth(this.startDate).preMonthInt;
-              console.log("pre", month)
               if (month >= 0) {
                 this.curMonth = months[month];
                 this.nextMonth = months[month + 1];
@@ -214,7 +211,6 @@
             getNextMonthSignList() {
               let months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]
               let month = parseInt(this.currentDate(this.startDate).curMonthInt);
-              console.log("next", month)
               if (month >= 0) {
                 this.curMonth = months[month];
                 this.nextMonth = months[month + 1];
@@ -232,7 +228,6 @@
             // 当前月份
             currentDate(date) {
               let arr = date.split('-');
-              console.log(date)
               let year = arr[0];
               let month = arr[1]; // 获取当前日期的月份
               let strs = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"]

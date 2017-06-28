@@ -185,9 +185,9 @@ body {
       left: 50%;
       margin-left: rem(-160);
       top: rem(357);
-      &:active{
-        background-color: #999;
-      }
+      //&:active{
+      //  background-color: #999;
+      //}
       img{
         width: rem(50);
         height: rem(33.4);
@@ -313,6 +313,7 @@ body {
     -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
     padding-bottom: rem(10);
     margin: 0 rem(20);
+    margin-bottom: rem(20);
     border-bottom: 1px solid #eee;
     //height: rem(440);
     li:first-child{
@@ -333,12 +334,8 @@ body {
         position: relative;
         //float: left;
         display: inline-block;
-        img{
-          width: rem(181);
-          height: rem(220);
-          left: rem(44);
-          top:rem(50);
-          position: absolute;
+        .imgs{
+          height: rem(270);
         }
         .name{
           width: rem(250);

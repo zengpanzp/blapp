@@ -3,7 +3,7 @@
 <template>
     <div class="rates">
       <div class="content-wrap">
-          <ul>
+          <ul class="ttop">
             <li>缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>
@@ -17,13 +17,13 @@
             </li>
           </ul>
           <ul class="record-list" v-if="dataJson">
-            <li class="record-detail" @click="toPay(item)" v-for="item in results" v-if="item.Result_code=='200'">
+            <li class="record-detail flex-m" @click="toPay(item)" v-for="item in results" v-if="item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
               <span v-if="item.canpaymsg[0]=='已销账'"><div class="billstatus finish">{{(item.canpaymsg[0]=="已销账"?"已缴费":item.canpaymsg[0])}}</div></span>
               <span v-else><div class="billstatus">{{item.canpaymsg[0]=="未销账"?"未缴费":(item.canpaymsg[0]=="已销账"?"已缴费":item.canpaymsg[0])}}</div></span>
             </li>
-            <li class="record-detail" v-else="item.date" >
+            <li class="record-detail flex-m" v-else="item.date" >
               <span class="spe">{{item.msg}}</span>
               <span class="spe"><div class="billstatus finish">已完成</div></span>
             </li>

@@ -56,32 +56,35 @@ export default {
       }).then(data => {
         let json = JSON.parse(data.body.obj);
         this.groupList = json.list;
-        api.recharge.queryPaySubNo({
-          "member_token": user.member_token,
-          "groupId": this.groupList && this.groupList[0].id,
-          "timestamp": timestamp
-        }).then(data => {
-          let json = JSON.parse(data.body.obj);
-          console.log(json);
-          this.allLength = json.list.length;
-          json.list.forEach((obj, i) => {
-            // 水电煤的
-            if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
-              switch (obj.paymentType) {
-                case "20" :  // 水费
-                case "01" :  // 水费
+        let allLength = 0;
+        this.groupList.forEach((obj) => {
+          api.recharge.queryPaySubNo({
+            "member_token": user.member_token,
+            "groupId": obj.id,
+            "timestamp": timestamp
+          }).then(data => {
+            let json = JSON.parse(data.body.obj);
+            json.list.forEach((obj, i) => {
+              allLength += 1;
+              this.allLength = allLength;
+              // 水电煤的
+              if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
+                switch (obj.paymentType) {
+                  case "20" :  // 水费
+                  case "01" :  // 水费
                     this.queryBill(obj, 1);
                     break;
-                case "21" :  // 电费
-                case "02" :  // 水费
-                  this.queryBill(obj, 2);
-                  break;
-                case "22" :  // 煤气
-                case "03" :  // 水费
-                  this.queryBill(obj, 3);
-                  break;
+                  case "21" :  // 电费
+                  case "02" :  // 水费
+                    this.queryBill(obj, 2);
+                    break;
+                  case "22" :  // 煤气
+                  case "03" :  // 水费
+                    this.queryBill(obj, 3);
+                    break;
+                }
               }
-            }
+            });
           });
         });
       });
@@ -103,7 +106,7 @@ export default {
         client_id: CONST.CLIENT_ID,
         t_dz: "02",
         type: this.typeObj[type],
-        codetype: obj.accountNo.length >= 24 ? "01" : "02",
+        codetype: obj.accountNo && obj.accountNo.length >= 24 ? "01" : "02",
         dkhzh: this.memberId,
         groupId: obj.groupId,
         groupName: obj.groupName,
@@ -118,30 +121,33 @@ export default {
       }
       // 获取内容
       api.recharge.getGoodsDetail(queryData).then(data => {
-        let json = JSON.parse(data.body.obj);
-        delete json.Result_code;
-        let results = [];
-        for (let obj in json) {
-          if (json[obj].date) {
-            json[obj].date = json[obj].date.toString().substring(0, 4) + '-' + json[obj].date.toString().substring(4);
+        if (data.body.resCode == "00100000") {
+          let json = JSON.parse(data.body.obj);
+          delete json.Result_code;
+          let results = [];
+          for (let obj in json) {
+            if (json[obj] && json[obj].date) {
+              json[obj].date = json[obj].date.toString().substring(0, 4) + '-' + json[obj].date.toString().substring(4);
+            }
+            if (json[obj] && json[obj].Result_code == "200") {
+              results.unshift(json[obj]);
+            } else {
+              results.push(json[obj]);
+            }
           }
-          if (json[obj].Result_code == "200") {
-            results.unshift(json[obj]);
-          } else {
-            results.push(json[obj]);
-          }
-        }
-        console.log(results)
-        this.results = results;
-        if (results[0]) {
-          let first = results[0];
-          if (first.canpay && first.canpay[0]) { // 存在未交账单
-            this.billCount += 1;
-          }
-        }
-        this.billLength += 1;
-        if (this.billLength == this.allLength) {
+          this.results = results;
+          results.forEach((obj, i) => {
+            if (obj) {
+              if (obj.canpay && obj.canpay[0] == "01") { // 存在未交账单
+                this.billCount += 1;
+              }
+            }
+          })
+          this.billLength += 1;
+          if (this.billLength == this.allLength) {
             this.hasFinish = true;
+            console.log("length", this.billLength)
+          }
         }
       })
     },
