@@ -266,7 +266,7 @@
                     searchInfo: {
                       pageModel: {
                         pageNo: "1",
-                        pageSize: "5"
+                        pageSize: "8"
                       }
                     },
                     isava: 0,
@@ -277,6 +277,7 @@
                   if (res.body.obj) {
                     let resData = JSON.parse(res.body.obj)
                     let resRows = resData.resultInfo.pageModel.rows;
+                    console.log(resRows)
                     if (resRows) {
                       resRows.forEach((i) => {
                         obj.list.push(i[0])
