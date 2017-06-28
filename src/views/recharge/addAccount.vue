@@ -332,7 +332,7 @@
                   position: 'bottom',
                   message: "当前户号您已经订阅过!"
                 });
-              }else {
+              } else {
                 this.$toast({
                   position: 'bottom',
                   message: data.body.msg

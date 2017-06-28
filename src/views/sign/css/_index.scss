@@ -15,6 +15,10 @@ body {
 /*我的测试*/
 // 日签
 .daysign{
+  *:not(input,textarea) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
   .remark{
     width: rem(710);
     position: fixed;
