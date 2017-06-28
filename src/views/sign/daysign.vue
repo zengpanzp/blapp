@@ -250,50 +250,51 @@
           }
           let bigGoods = [];
           for (let i = 9; i < 12; i++) {
-              console.log(i)
             let arr = resData[i].advList;
             let obj = {}
             obj.list = [];
-            arr = arr.sort(this.compare('priority'));
-            // 查询资源位
-            obj.big = arr[0];
-            bigGoods.push(obj);
-            if (obj.big.pCatalog) {
-              let requestData = {
-                "requestData": JSON.stringify({
-                  channelSid: "1",
-                  c: "9999" + obj.big.pCatalog,
-                  searchInfo: {
-                    pageModel: {
-                      pageNo: "1",
-                      pageSize: "5"
+            if (arr && arr.length > 0) {
+              arr = arr.sort(this.compare('priority'));
+              // 查询资源位
+              obj.big = arr[0];
+              bigGoods.push(obj);
+              if (obj.big.pCatalog) {
+                let requestData = {
+                  "requestData": JSON.stringify({
+                    channelSid: "1",
+                    c: "9999" + obj.big.pCatalog,
+                    searchInfo: {
+                      pageModel: {
+                        pageNo: "1",
+                        pageSize: "5"
+                      }
+                    },
+                    isava: 0,
+                    isColl: "1"
+                  })
+                }
+                api.sign.getGoods(requestData).then(res => {
+                  if (res.body.obj) {
+                    let resData = JSON.parse(res.body.obj)
+                    let resRows = resData.resultInfo.pageModel.rows;
+                    if (resRows) {
+                      resRows.forEach((i) => {
+                        obj.list.push(i[0])
+                      });
                     }
-                  },
-                  isava: 0,
-                  isColl: "1"
+                  }
+                }, err => {
+                  console.log(err)
                 })
               }
-              api.sign.getGoods(requestData).then(res => {
-                if (res.body.obj) {
-                  let resData = JSON.parse(res.body.obj)
-                  let resRows = resData.resultInfo.pageModel.rows;
-                  if (resRows) {
-                    resRows.forEach((i) => {
-                      obj.list.push(i[0])
-                    });
-                  }
-                }
-              }, err => {
-                console.log(err)
-              })
+              this.bigGoodsList = bigGoods;
             }
-            this.bigGoodsList = bigGoods;
           }
           // 无签到资格的资源位
           for (let i = 13; i < 17; i++) {
             this.noSignList.push(resData[i]);
           }
-          this.signBg = resData[12].advList[0].mediaUrl;
+          this.signBg = resData[12].advList[0] && resData[12].advList[0].mediaUrl;
           this.pageLoad();
         })
       },
