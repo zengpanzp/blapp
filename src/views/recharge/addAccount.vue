@@ -327,7 +327,12 @@
                   clearTimeout(current.ATIME_ID);
                   current.$router.push({path: "/recharge/bill"});
                 }, 3000);
-              } else {
+              } else if (data.body.resCode == "05111003") {
+                this.$toast({
+                  position: 'bottom',
+                  message: "当前户号您已经订阅过!"
+                });
+              }else {
                 this.$toast({
                   position: 'bottom',
                   message: data.body.msg
@@ -360,6 +365,11 @@
                   clearTimeout(current.ATIME_ID);
                   current.$router.push({path: "/recharge/bill"});
                 }, 2000);
+              } else if (data.body.resCode == "05111003") {
+                this.$toast({
+                  position: 'bottom',
+                  message: "当前户号您已经订阅过!"
+                });
               } else {
                 this.$toast({
                   position: 'bottom',
