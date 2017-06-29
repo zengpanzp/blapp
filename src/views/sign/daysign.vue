@@ -420,8 +420,13 @@
           this.signed = false; // 设置未签到
           // 判断是否有抽奖机会
           if (lotteryStatus == 0) {  // 未签到 不可抽奖
-            this.message1 = "积分攒着当钱花";
-            this.message2 = "线上线下都可花";
+            if (this.needSignNum > 0) {
+              this.message1 = "再连续签到" + obj.needSignNum + "天";
+              this.message2 = "就能获得1次抽奖机会";
+            } else {
+              this.message1 = "积分攒着当钱花";
+              this.message2 = "线上线下都可花";
+            }
           }
           if (lotteryStatus == 1) {  // 未签到可抽奖
             this.message1 = "再连续签到" + obj.needSignNum + "天";
