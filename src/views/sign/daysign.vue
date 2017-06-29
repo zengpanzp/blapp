@@ -5,6 +5,7 @@
 
   <div class="daysign" v-infinite-scroll="fetchLikeList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="overlay test" v-show="showOverlay"></div>
+    <img class="fail" @click="goIndex" @touchmove.prevent src="./i/fail.png" v-if="fail">
     <div class="overlay" @touchmove.prevent v-show="showSignRemark" style="z-index: 9997"></div>
     <bl-calendar v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
                 :is-double-check.sync=true :is-vication.sync=true>
@@ -45,7 +46,7 @@
       </div>
       <div class="tips2 other2" v-show="this.hideTips">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu">
-        <li v-for="item in iconMenu" v-if="item.advList[0]" v-go-native-resource="item.advList[0]">
+        <li v-for="item in iconMenu" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
           <img :src="item.advList[0].mediaUrl">
           <div>{{item.advList[0].deployName.substring(0,4)}}</div>
         </li>
@@ -54,7 +55,7 @@
     </section>
     <!--四个资源位-->
     <ul class="top-menu" v-if="recommendList&&recommendList.length>0">
-      <li v-for="item in recommendList" v-if="item.advList[0]" v-go-native-resource="item.advList[0]">
+      <li v-for="item in recommendList" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
         <img  :src="item.advList[0].mediaUrl">
       </li>
       <div class="clearfix"></div>
@@ -64,7 +65,7 @@
       <li v-go-native-resource="item.big" v-if="item&&item.big">
         <img :src="item.big.mediaUrl" class="dateImg">
       </li>
-      <li v-if="item.list.length>0" ref="container">
+      <li v-if="item&&item.list.length>0" ref="container">
         <div class="goods" v-if="goodsItem" v-for="goodsItem in item.list" v-go-native-goods-detail="goodsItem">
           <div class="lazyload imgs">
             <img  v-lazy.container="{src:goodsItem.goodsImgPath}" class="dateImg">
@@ -112,8 +113,8 @@
       </div>
       <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
-      <ul class="top-menu bottom" v-show="noSignList.length>0">
-        <li v-for="item in noSignList" v-if="item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload">
+      <ul class="top-menu bottom" v-show="noSignList&&noSignList.length>0">
+        <li v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload">
           <img v-lazy="{src: item.advList[0]&&item.advList[0].mediaUrl}">
         </li>
         <div class="clearfix"></div>
@@ -134,6 +135,7 @@
             pageIndex: 1,
             allPage: 0
           },
+          fail: false,
           defaultShow: false, // 默认不显示登录的
           needSignNum: -1,
           hideTips: true, // 是否隐藏签到提示
@@ -192,7 +194,9 @@
               }
             })
           } else {
-            self.showSignRemark = true;
+              if (!this.fail) {
+                self.showSignRemark = true;
+              }
           }
       }
       // 供app 页面重新reload
@@ -241,71 +245,78 @@
           }
         }).then(res => {
           let resData = JSON.parse(res.body.obj).obj.otherResource;
-          // icon菜单
-          for (let i = 0; i < 5; i++) {
-            this.iconMenu.push(resData[i]);
-          }
-          for (let i = 5; i < 9; i++) {
-            this.recommendList.push(resData[i]);
-          }
-          let bigGoods = [];
-          for (let i = 9; i < 12; i++) {
-            let arr = resData[i].advList;
-            let obj = {}
-            obj.list = [];
-            if (arr && arr.length > 0) {
-              arr = arr.sort(this.compare('priority'));
-              // 查询资源位
-              obj.big = arr[0];
-              bigGoods.push(obj);
-              if (obj.big.pCatalog) {
-                let requestData = {
-                  "requestData": JSON.stringify({
-                    channelSid: "1",
-                    c: "9999" + obj.big.pCatalog,
-                    searchInfo: {
-                      pageModel: {
-                        pageNo: "1",
-                        pageSize: "8"
+          try {
+            // icon菜单
+            for (let i = 0; i < 5; i++) {
+              this.iconMenu.push(resData[i]);
+            }
+            for (let i = 5; i < 9; i++) {
+              this.recommendList.push(resData[i]);
+            }
+            let bigGoods = [];
+            for (let i = 9; i < 12; i++) {
+              let arr = resData[i].advList;
+              let obj = {}
+              obj.list = [];
+              if (arr && arr.length > 0) {
+                arr = arr.sort(this.compare('priority'));
+                // 查询资源位
+                obj.big = arr[0];
+                bigGoods.push(obj);
+                if (obj.big.pCatalog) {
+                  let requestData = {
+                    "requestData": JSON.stringify({
+                      channelSid: "1",
+                      c: "9999" + obj.big.pCatalog,
+                      searchInfo: {
+                        pageModel: {
+                          pageNo: "1",
+                          pageSize: "8"
+                        }
+                      },
+                      isava: 0,
+                      isColl: "1"
+                    })
+                  }
+                  api.sign.getGoods(requestData).then(res => {
+                    if (res.body.obj) {
+                      let resData = JSON.parse(res.body.obj)
+                      let resRows = resData.resultInfo.pageModel.rows;
+                      console.log(resRows)
+                      if (resRows) {
+                        resRows.forEach((i) => {
+                          obj.list.push(i[0])
+                        });
                       }
-                    },
-                    isava: 0,
-                    isColl: "1"
+                    }
+                  }, err => {
+                    console.log(err)
                   })
                 }
-                api.sign.getGoods(requestData).then(res => {
-                  if (res.body.obj) {
-                    let resData = JSON.parse(res.body.obj)
-                    let resRows = resData.resultInfo.pageModel.rows;
-                    console.log(resRows)
-                    if (resRows) {
-                      resRows.forEach((i) => {
-                        obj.list.push(i[0])
-                      });
-                    }
-                  }
-                }, err => {
-                  console.log(err)
-                })
+                this.bigGoodsList = bigGoods;
               }
-              this.bigGoodsList = bigGoods;
+              this.pageLoad();
             }
+            // 无签到资格的资源位
+            for (let i = 13; i < 17; i++) {
+              this.noSignList.push(resData[i]);
+            }
+            this.signBg = resData[12].advList[0] && resData[12].advList[0].mediaUrl;
+          } catch (ex) {
           }
-          // 无签到资格的资源位
-          for (let i = 13; i < 17; i++) {
-            this.noSignList.push(resData[i]);
-          }
-          this.signBg = resData[12].advList[0] && resData[12].advList[0].mediaUrl;
-          this.pageLoad();
         })
+        this.pageLoad();
+        console.log(1)
       },
       pageLoad() {
+        let localStatus = localStorage.getItem("BL_SIGN_STATUS");
+        let localStatusTime = localStorage.getItem("BL_SIGN_STATUS_DATE");
+        let nowTime = utils.dateFormat("yyyy-MM-dd"); // 当前时间
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
           if (this.memberId && this.memberToken) { // 已经登录
-            this.isLogin = true;
-            this.$loading.close()
+            this.isLogin = true
             // 查询签到日历
             this.getCalendarHistory();
             // 获得我的积分
@@ -317,13 +328,27 @@
                 this.myPoints = json.points;
               }
             });
+            if (localStatusTime == nowTime) { // 不需要请求
+               localStatus = localStatus ? JSON.parse(localStatus) : '';
+               if (localStatus) {
+                 this.signRemark = localStatus.signRemark;
+                 this.signPoint = localStatus.signPoint;
+                 this.changeStatus(localStatus);
+                 return true;
+               }
+            }
             // 查询用户是否有签到资格
             this.getSignQualification((data) => {
               if (data.body.resCode == "00100000") {
                 let json = JSON.parse(data.body.obj);
+                if (json.resCode == "00100005") { // 没有签到规则
+                  this.fail = true;
+                }
                 this.signRemark = json.signRemark;
                 this.signPoint = json.signPoint;
-                console.log(json)
+                // 将抽奖资格状态缓存
+                localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
+                localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
                 // singStatus 0-不可签到 1-可签到，未签到，2-已签到
                 this.changeStatus(json);
               } else {
@@ -337,11 +362,22 @@
         }, () => {
           this.isLogin = false;
           this.defaultShow = true;
-          this.$loading.close()
+          if (localStatusTime == nowTime) { // 不需要请求
+            localStatus = localStatus ? JSON.parse(localStatus) : '';
+            if (localStatus) {
+              this.signRemark = localStatus.signRemark;
+              this.signPoint = localStatus.signPoint;
+              this.changeStatus(localStatus);
+              return true;
+            }
+          }
           // 查询用户是否有签到资格
           this.getSignQualification((data) => {
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
+              if (json.resCode == "00100005") { // 没有签到规则
+                  this.fail = true;
+              }
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
               // singStatus 0-不可签到 1-可签到，未签到，2-已签到
@@ -384,8 +420,13 @@
           this.signed = false; // 设置未签到
           // 判断是否有抽奖机会
           if (lotteryStatus == 0) {  // 未签到 不可抽奖
-            this.message1 = "积分攒着当钱花";
-            this.message2 = "线上线下都可花";
+            if (this.needSignNum > 0) {
+              this.message1 = "再连续签到" + obj.needSignNum + "天";
+              this.message2 = "就能获得1次抽奖机会";
+            } else {
+              this.message1 = "积分攒着当钱花";
+              this.message2 = "线上线下都可花";
+            }
           }
           if (lotteryStatus == 1) {  // 未签到可抽奖
             this.message1 = "再连续签到" + obj.needSignNum + "天";
@@ -437,6 +478,9 @@
             this.message2 = "已完成本次抽奖";
           }
         }
+        setTimeout(function() {
+          self.$loading.close()
+        }, 100);
       },
       // 查询签到日历
       getCalendarHistory(month) {
@@ -477,7 +521,6 @@
         }).then(data => {
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
-              this.$loading.close()
               if (json.goodsList && json.goodsList.length >= this.page.pageSize) {
                 this.busy = false
               } else {
@@ -538,9 +581,14 @@
           this.getSignQualification((data) => {
             if (data.body.resCode == "00100000") {
               let json = JSON.parse(data.body.obj);
+              if (json.resCode == "00100005") { // 没有签到规则
+                this.fail = true;
+              }
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
-              console.log(json)
+              // 将抽奖资格状态缓存
+              localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
+              localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
               // singStatus 0-不可签到 1-可签到，未签到，2-已签到
               this.changeStatus(json);
             } else {
@@ -601,10 +649,16 @@
           message: '加载中',
           duration: 'loading'
         })
-        utils.isLogin(true).then(user => {
-          this.memberId = user.member_id;
-          this.memberToken = user.member_token;
-          this.isLogin = true;
+        if (!this.isLogin) {
+          utils.isLogin(true).then(user => {
+            this.memberId = user.member_id;
+            this.memberToken = user.member_token;
+            this.isLogin = true;
+            this.inlineLoading.close();
+          }, fail => {
+            this.inlineLoading.close();
+          });
+        } else {
           // 查询用户是否有签到资格
           this.getSignQualification((data) => {
             if (data.body.resCode == "00100000") {
@@ -624,9 +678,11 @@
                   api.sign.getScores({
                     member_token: this.memberToken
                   }).then(data => {
-                    console.log(data);
                     if (data.body.resCode == "00100000") {
                       let json = JSON.parse(data.body.obj);
+                      // 将抽奖资格状态缓存
+                      localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
+                      localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
                       this.myPoints = json.points;
                     }
                   });
@@ -657,9 +713,7 @@
               });
             }
           })
-        }, fail => {
-          this.inlineLoading.close();
-        })
+        }
       }
     }
   };

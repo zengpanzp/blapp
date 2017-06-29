@@ -14,6 +14,14 @@ body {
 /*我的测试*/
 // 日签
 .daysign{
+  .fail{
+    position: fixed;
+    z-index: 9999;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
   *:not(input,textarea) {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
