@@ -191,17 +191,15 @@
                 let json = JSON.parse(data.body.obj);
                 self.signRemark = json.signRemark;
                 self.showSignRemark = true;
-                let height = window.innerHeight || document.body.clientHeight;
-                document.querySelector("body").style.height = height + "px";
-                document.querySelector("body").style.overflow = "hidden";
+                document.querySelector("body").style.overflowX = "hidden";
+                document.querySelector("body").style.overflowY = "hidden";
               }
             })
           } else {
               if (!this.fail) {
                 self.showSignRemark = true;
-                let height = window.innerHeight || document.body.clientHeight;
-                document.querySelector("body").style.height = height + "px";
-                document.querySelector("body").style.overflow = "hidden";
+                document.querySelector("body").style.overflowX = "hidden";
+                document.querySelector("body").style.overflowY = "hidden";
               }
           }
       }
@@ -555,8 +553,8 @@
       },
       closeRemark() {
         this.showSignRemark = false;
-        document.querySelector("body").style.height = "100%";
-        document.querySelector("body").style.overflow = "auto";
+        document.querySelector("body").style.overflowX = "auto";
+        document.querySelector("body").style.overflowY = "auto";
       },
       // 查询签到资格
       getSignQualification(callback) {
