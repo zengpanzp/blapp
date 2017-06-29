@@ -95,7 +95,7 @@
       <img  :src="require('src/assets/icon_end.png')">
     </div>
     <!--签到说明-->
-    <!--<transition v-on:enter="enter" active-class="slideInDown"  name="slideInDown" enter-active-class="slideInDown" leave-active-class="slideOutUp">-->
+    <transition name="fadeIn" enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div class="remark" v-show="showSignRemark" style="z-index: 9998">
         <div class="title">签到说明</div>
         <div class="signRemark">
@@ -103,7 +103,7 @@
         </div>
         <img src="./i/close.png" :style="{top: closeTop}" class="close" @click.prevent="closeRemark">
       </div>
-    <!--</transition>-->
+    </transition>
     <transition appear appear-active-class="fadeInUpBig"  name="fadeInDown" enter-active-class="fadeInUpBig" leave-active-class="fadeOutDownBig">
         <section class="fixed" v-if="showOverlay">
       <img src="./i/close.png" class="close" @click="close">
