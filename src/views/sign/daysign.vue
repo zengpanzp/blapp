@@ -553,8 +553,8 @@
       },
       closeRemark() {
         this.showSignRemark = false;
-        document.querySelector("body").style.overflow = "auto";
-        document.querySelector("html").style.overflow = "auto";
+        document.querySelector("body").style.overflow = "";
+        document.querySelector("html").style.overflow = "";
       },
       // 查询签到资格
       getSignQualification(callback) {
