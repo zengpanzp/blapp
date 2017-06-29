@@ -214,8 +214,6 @@
       this.startDate = year + "-" + month + "-" + "01";
       this.endDate = year + "-" + month + "-" + new Date(year, month, 0).getDate();
       this.fecthData();
-
-      window.BLAlertSignConfirm();
     },
     mounted() {
     },
