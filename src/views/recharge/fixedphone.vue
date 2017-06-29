@@ -491,6 +491,10 @@ export default {
     iphoneNum(val) {
       if (this.testPhoneNum()) {
         this.focus = false
+        $('.numInput').forEach(item => {
+          console.log(item)
+          item.blur()
+        })
       }
     },
     // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏
