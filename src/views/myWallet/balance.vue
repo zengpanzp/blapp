@@ -13,7 +13,7 @@
       <div class="refresh-time" style="display: none">最近交易时间</div>
       <div class="top-money">
           <div>可用余额（元）</div>
-          <div id="available"></div>
+          <div id="available">{{available}}</div>
       </div>
       <div class="recharge-container">
           <!--<a href="#walletChargePage" class="simple-password-buttom corner larger-button" data-role="none">充值</a>-->
@@ -52,6 +52,7 @@ export default {
     return {
         memberId: "",
         memberToken: "",
+        available: ""
     };
   },
   created() {
@@ -63,7 +64,7 @@ export default {
       }).then(data => {
           this.$loading.close();
           let obj = JSON.parse(data.body.obj);
-          $("#available").html(Number(obj.bal / 100).toFixed(2))
+          this.available = Number(obj.bal / 100).toFixed(2)
       })
     })
   },
