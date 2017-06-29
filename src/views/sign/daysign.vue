@@ -282,7 +282,6 @@
                     if (res.body.obj) {
                       let resData = JSON.parse(res.body.obj)
                       let resRows = resData.resultInfo.pageModel.rows;
-                      console.log(resRows)
                       if (resRows) {
                         resRows.forEach((i) => {
                           obj.list.push(i[0])
