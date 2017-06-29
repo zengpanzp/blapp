@@ -469,7 +469,11 @@ export default {
       inputNode.focus()
     },
     historySel(number) {
-      if (this.testPhoneNum(number)) {
+      let pattern = /^\d{11}$/; // 分账
+      if (this.tabsModel !== 0) {
+        pattern = /^\d{8}$/;
+      }
+      if (pattern.test(number)) {
         this.iphoneNum = number
         this.focus = false
       } else {
