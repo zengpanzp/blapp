@@ -33,7 +33,7 @@
       </li>
       </ul>
     </div>
-    <div id="empty" class="empty pointEmpty" v-if="count == 0">
+    <div id="empty" class="empty pointEmpty" v-if="count == 0 && pointsList.length == 0">
         暂无积分记录
     </div>
 </div>
