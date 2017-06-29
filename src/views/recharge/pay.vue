@@ -5,7 +5,7 @@
       <div class="content-wrap">
           <ul>
             <li class="title" :class="typeClass">{{typeName}}</li>
-            <li @click.prevent="showCategory">条码
+            <li class="flex-m" @click.prevent="showCategory">条码
               <div class="name"><label>{{queryData.tiaoma?queryData.tiaoma:'暂未查询到条形码信息~'}}</label></div>
             </li>
             <!--	</ul>
@@ -13,15 +13,15 @@
             <!--<div class='pay-remind'><img src='images/new_store/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>-->
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
-            <li>缴费账号
+            <li class="flex-m">缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>
-            <li>缴费机构
+            <li class="flex-m">缴费机构
               <div class="name"><label>{{queryData.companyName}}</label></div>
             </li>
           </ul>
           <ul class="paylist">
-            <li @click.prevent="showCategory">账期
+            <li class="flex-m" @click.prevent="showCategory">账期
               <div class="name"><label>{{queryData.date}}</label></div>
             </li>
             <!--	</ul>
@@ -29,7 +29,7 @@
             <!--<div class='pay-remind'><img src='images/new_store/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>-->
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
-            <li>缴费金额
+            <li class="flex-m">缴费金额
               <div class="name"><label style="color:#e6133c">￥{{queryData.total||0}}</label></div>
             </li>
           </ul>
