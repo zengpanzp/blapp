@@ -47,6 +47,7 @@ body {
     .signRemark{
       max-height: rem(700);
       overflow: scroll;
+      overflow: auto;
       -webkit-overflow-scrolling: touch;
       background: #fff;
       padding:rem(10) rem(30) rem(30) rem(30);
