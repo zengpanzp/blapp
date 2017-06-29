@@ -34,6 +34,8 @@ body {
     font-size: rem(28);
     line-height: rem(50);
     z-index: 2000;
+    transform: translate(0, -50%);
+    top:50%;
     .title{
       width: 100%;
       text-align: center;
@@ -50,9 +52,8 @@ body {
       overflow: auto;
       -webkit-overflow-scrolling: touch;
       background: #fff;
-      padding:rem(10) rem(30) rem(30) rem(30);
       border-radius:0 0 rem(10) rem(10);
-      word-wrap:break-word;
+      padding: rem(10) rem(30) rem(30) rem(30);
       span{
         display: block;
       }

@@ -6,7 +6,7 @@
   <div class="daysign" v-infinite-scroll="fetchLikeList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="overlay test" v-show="showOverlay"></div>
     <img class="fail" @click="goIndex" @touchmove.prevent src="./i/fail.png" v-if="fail">
-    <div class="overlay" @touchmove.prevent v-show="showSignRemark" style="z-index: 9997"></div>
+    <div class="overlay" @touchmove.prevent v-show="showSignRemark" style="z-index: 9997;"></div>
     <bl-calendar v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
                 :is-double-check.sync=true :is-vication.sync=true>
     </bl-calendar>
@@ -95,15 +95,15 @@
       <img  :src="require('src/assets/icon_end.png')">
     </div>
     <!--签到说明-->
-    <transition v-on:enter="enter" active-class="slideInDown"  name="slideInDown" enter-active-class="slideInDown" leave-active-class="slideOutUp">
+    <!--<transition v-on:enter="enter" active-class="slideInDown"  name="slideInDown" enter-active-class="slideInDown" leave-active-class="slideOutUp">-->
       <div class="remark" v-show="showSignRemark" style="z-index: 9998">
         <div class="title">签到说明</div>
         <div class="signRemark">
-          <div v-html="unescape(signRemark)"></div>
+          <div v-html="unescape(signRemark)" ></div>
         </div>
         <img src="./i/close.png" :style="{top: closeTop}" class="close" @click.prevent="closeRemark">
       </div>
-    </transition>
+    <!--</transition>-->
     <transition appear appear-active-class="fadeInUpBig"  name="fadeInDown" enter-active-class="fadeInUpBig" leave-active-class="fadeOutDownBig">
         <section class="fixed" v-if="showOverlay">
       <img src="./i/close.png" class="close" @click="close">
@@ -191,15 +191,19 @@
                 let json = JSON.parse(data.body.obj);
                 self.signRemark = json.signRemark;
                 self.showSignRemark = true;
-                document.querySelector("body").style.overflow = "hidden";
-                document.querySelector("html").style.overflow = "hidden";
+                let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+                document.body.style.cssText += 'position:fixed;top:-' + scrollTop + 'px;';
+                // 动态计算高度
+                let height = this.$el.querySelector(".remark").offsetHeight;
+                this.$el.querySelector(".remark").style.top = "50%";
+                this.$el.querySelector(".remark").style.marginTop = "-" + height / 2 + "px";
               }
             })
           } else {
               if (!this.fail) {
                 self.showSignRemark = true;
-                document.querySelector("body").style.overflow = "hidden";
-                document.querySelector("html").style.overflow = "hidden";
+                let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+                document.body.style.cssText += 'position:fixed;width:100%;top:-' + scrollTop + 'px;';
               }
           }
       }
@@ -553,8 +557,11 @@
       },
       closeRemark() {
         this.showSignRemark = false;
-        document.querySelector("body").style.overflow = "";
-        document.querySelector("html").style.overflow = "";
+        let body = document.body;
+        body.style.position = '';
+        body.style.width = '';
+        let top = body.style.top;
+        document.body.scrollTop = document.documentElement.scrollTop = -parseInt(top);
       },
       // 查询签到资格
       getSignQualification(callback) {
@@ -723,4 +730,9 @@
     }
   };
 </script>
+<style scoped>
+  .noscroll {
+    position: fixed!important
+  }
+</style>
 
