@@ -190,7 +190,20 @@ export default {
             if (this.status == 0) {
                 this.$router.push('../securityCenter/payPw')
             } else {
-                this.$router.push('../securityCenter/payPwAuth')
+                this.$modal({
+                title: '提示',
+                content: '请设置支付密码',
+                buttons: [{
+                  text: '取消',
+                  onClick: () => {
+                  }
+                }, {
+                  text: '确定',
+                  onClick: () => {
+                    this.$router.push('../securityCenter/payPwAuth')
+                  }
+                }]
+            })
             }
         }
     }
