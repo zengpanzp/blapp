@@ -6,7 +6,7 @@
 	            <ul id="message_center_type_list">
 	            	<div id="mc">
         				<div class="list-block" id="hf-app">
-				            <router-link tag="li" class="item-content" v-for="item in msgList" :to="{ name: 'messageList', params: { typeId:item.value, title:  encodeURI(item.label) } }">
+				            <router-link tag="li" class="item-content" v-for="item in msgList" :to="{ name: 'messageList', params: { typeId:item.value, title:  item.label } }">
 			                    <a href="javascript:;" title="">
 			                        <div class="item-media" :class="{ 'red-cil': !item.isRead }">
 			                            <img v-if="item.value == '1'" src="./i/mci_wuliu.png" alt="">
