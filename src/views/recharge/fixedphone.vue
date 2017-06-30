@@ -392,7 +392,7 @@ export default {
                   changeMoney: resData.changeMoney,
                   omsNotifyUrl: resData.omsNotifyUrl,
                   payType: resData.payType,
-                  accountNo: user.member_mobile
+                  accountNo: this.iphoneNum
                 }
                 require.ensure([], function(require) {
                   let Pay = require('src/paymodel').default
