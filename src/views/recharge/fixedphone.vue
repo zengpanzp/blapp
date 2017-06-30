@@ -412,6 +412,7 @@ export default {
               })
             } else {
               this.$toast(resData.msg)
+              current.inlineLoading.close()
             }
           })
         }, () => {})
