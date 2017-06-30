@@ -346,7 +346,7 @@ export default {
           // 生成订单
           let requestData = {
             client_id: CONST.CLIENT_ID,
-            decid: this.iphoneNum,
+            decid: (this.tabsModel == 1 || this.tabsModel == 2) ? '021' + this.iphoneNum : this.iphoneNum,
             ddgsl: '1',
             dkhzh: user.member_id,
             dsphh: this.currentItem,
