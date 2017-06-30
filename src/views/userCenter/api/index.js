@@ -53,5 +53,9 @@ export default {
     getDicInfo: params => {
       return Vue.http.post(baseUrl + '/metadata/getDicInfo.htm', params);
     },
+    // 设置 更新用户信息
+    update: params => {
+      return Vue.http.post(baseUrl + '/myInformation/updateMember', params);
+    }
   }
 }

@@ -299,6 +299,27 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
     }
   }
 })
+
+<!-- iOS 地址选择 省市区
+省：data[kBLAddressSelectPickerViewProvince][kBLAddressSelectPickerViewAreasNm]
+市：data[kBLAddressSelectPickerViewCity][kBLAddressSelectPickerViewAreasNm] 
+区：data[kBLAddressSelectPickerViewDistrict][kBLAddressSelectPickerViewAreasNm] -->
+
+  window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', {
+    title: "title",
+    limitedProvinceIds: []
+  }, {
+    success: data => {
+      console.log(data)
+    },
+    fail: data => {
+      console.log(data)
+    },
+    progress: data => { console.log(data) }
+  })
+
+
+
 ======================================End
 ```
 

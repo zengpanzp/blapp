@@ -6,7 +6,7 @@
 // import Bar from './bar'
 import Button from './button'
 // import Switch from './switch'
-// import Actionsheet from './actionsheet'
+import Actionsheet from './actionsheet'
 import Navbar from './navbar'
 import TabItem from './tab-item'
 import TabContainer from './tab-container'
@@ -32,7 +32,7 @@ const install = function(Vue) {
   // Vue.component('bl' + Bar.name, Bar);
   Vue.component('bl' + Button.name, Button);
   // Vue.component('bl' + Switch.name, Switch);
-  // Vue.component('bl' + Actionsheet.name, Actionsheet);
+  Vue.component('bl' + Actionsheet.name, Actionsheet);
   Vue.component('bl' + Navbar.name, Navbar);
   Vue.component('bl' + TabItem.name, TabItem);
   Vue.component('bl' + TabContainer.name, TabContainer);

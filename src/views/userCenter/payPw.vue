@@ -81,7 +81,7 @@ export default {
         }
       }
     }
-  },
+  }
   // watch: {
   //   pw_input(val) {
   //     if (val.length == 6) {

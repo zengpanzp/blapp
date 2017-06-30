@@ -219,6 +219,30 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/userCenter/myInfo')), 'myInfo'),
   },
+  /* 薛天玲 设置 会员资料 所属地址 */
+  {
+    path: '/userCenter/changeAddress',
+    meta: {
+      title: '修改地址'
+    },
+    component: r => require.ensure([], () => r(require('../views/userCenter/changeAddress')), 'changeAddress'),
+  },
+  /* 薛天玲 设置 其他个人资料 */
+  {
+    path: '/userCenter/otherInfo',
+    meta: {
+      title: '会员资料'
+    },
+    component: r => require.ensure([], () => r(require('../views/userCenter/otherInfo')), 'otherInfo'),
+  },
+  /* 薛天玲 设置 昵称 */
+  {
+    path: '/userCenter/nickName',
+    meta: {
+      title: '我的昵称'
+    },
+    component: r => require.ensure([], () => r(require('../views/userCenter/nickName')), 'nickName'),
+  },
   /* 薛天玲 安全中心 */
   {
     path: '/userCenter/securityCenter',
