@@ -400,7 +400,7 @@
                     phoneNo: phoneNo,
                     price: parseFloat(this.currentPay),
                     count: count,
-                    accountNo: `${requestData.decid}_0`,
+                    accountNo: `${requestData.decid}`,
                     changeMoney: parseFloat(this.currentPay),
                     aliasSaleTime: resData.orddate,
                     orderPhone: requestData.decid,
