@@ -50,6 +50,7 @@ export default {
     }
   },
   created() {
+  	window.CTJSBridge.LoadMethod('BLMessageCenter', 'messageCenterWebViewControllerHiddenClearButton', {})
   	let list = [];
   	utils.isLogin().then(data => {
   		try {

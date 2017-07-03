@@ -130,8 +130,10 @@ export default {
         api.myWallet.getPoint({
             "member_token": this.memberToken
         }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            this.point = obj.points
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                this.point = obj.points
+            }
         })
         api.myWallet.getECP({
             "accType": 100,
