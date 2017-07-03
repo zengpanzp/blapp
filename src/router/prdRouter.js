@@ -330,7 +330,7 @@ export const prdRouter = [
   },
   /* 曾攀  */
   {
-    path: '/applyShop',
+    path: '/applyShop/:power',
     meta: {
       title: '适用门店',
     },
