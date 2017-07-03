@@ -127,15 +127,10 @@ export default {
               this.comList = item.advList
             }
           }
-          if (this.comList[0]) {
-            window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', JSON.stringify(this.comList[0]))
+          if (this.comList) {
+            window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', this.comList[0], {success: function () {}, fail: function () {}, progress: function () {}})
           }
         }
-      } else {
-        this.$toast({
-          position: 'bottom',
-          message: data.body.msg
-        })
       }
       }, err => {
         console.log(err)
