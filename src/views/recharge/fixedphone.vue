@@ -372,7 +372,7 @@ export default {
                 phoneNo: user.member_mobile,
                 price: this.currentSku,
                 count: 1,
-                accountNo: this.iphoneNum,
+                accountNo: requestData.decid,
                 changeMoney: parseFloat(this.currentPay),
                 aliasSaleTime: resData.orddate,
                 orderPhone: user.member_mobile,
@@ -392,7 +392,7 @@ export default {
                   changeMoney: resData.changeMoney,
                   omsNotifyUrl: resData.omsNotifyUrl,
                   payType: resData.payType,
-                  accountNo: this.iphoneNum
+                  accountNo: requestData.decid
                 }
                 require.ensure([], function(require) {
                   let Pay = require('src/paymodel').default
