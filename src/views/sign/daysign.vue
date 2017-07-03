@@ -312,6 +312,7 @@
           } catch (ex) {
           }
         })
+        debugger
         this.pageLoad();
         console.log(1)
       },
@@ -369,15 +370,6 @@
         }, () => {
           this.isLogin = false;
           this.defaultShow = true;
-          if (localStatusTime == nowTime) { // 不需要请求
-            localStatus = localStatus ? JSON.parse(localStatus) : '';
-            if (localStatus) {
-              this.signRemark = localStatus.signRemark;
-              this.signPoint = localStatus.signPoint;
-              this.changeStatus(localStatus);
-              return true;
-            }
-          }
           // 查询用户是否有签到资格
           this.getSignQualification((data) => {
             if (data.body.resCode == "00100000") {
