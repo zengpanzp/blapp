@@ -70,7 +70,9 @@ export default {
     	// 消息内容
     	msgList: [],
     	// 当前时间
-    	nowTimeMillSeconds: ""
+    	nowTimeMillSeconds: "",
+      typeId: "",
+      memberId: ""
     };
   },
   created() {
@@ -81,9 +83,11 @@ export default {
 		this.noRows = false
 	  	let list = [];
 	  	this.typeId = this.$route.params.typeId;
-      window.CTJSBridge._setNativeTitle(this.$route.params.title);
+      // window.CTJSBridge._setNativeTitle(this.$route.params.title);
+      window.CTJSBridge.LoadMethod('BLMessageCenter', 'messageCenterWebViewControllerShowClearButton', {})
 	  	utils.isLogin().then(data => {
 	  		let memberId = data.member_id;
+        this.memberId = data.member_id
 	  		api.messageCenter.getMessage({
 	  			"obj": JSON.stringify({
 	  			"memberNo": memberId,
@@ -128,8 +132,10 @@ export default {
 	  			"businessType": this.typeId,
 	  			"operation": "4"
 	  		})}).then(data => {
-	  			let obj = JSON.parse(data.body.obj);
-	  			console.log("---gjRead---" + obj);
+          if (data.body.obj) {
+            let obj = JSON.parse(data.body.obj);
+            console.log("---gjRead---" + obj);
+          }
 	  		})
 	  	})
 	},
@@ -229,9 +235,22 @@ export default {
         "operation": "2",
         "businessType": this.typeId
       })}).then(data => {
-        $("#mc").html("");
-        this.$toast({position: "bottom", message: "~消息已清空~"})
-        $("#empty").show();
+        this.$modal({
+              title: '提示',
+              content: '~确认清空吗~',
+              buttons: [{
+                text: '取消',
+                onClick: () => {
+                }
+              }, {
+                text: '确定',
+                onClick: () => {
+                  $("#mc").html("");
+                  this.$toast({position: "bottom", message: "~消息已清空~"})
+                  $("#empty").show();
+                }
+              }]
+          })
       })
     }
   },

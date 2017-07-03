@@ -35,7 +35,7 @@ export default {
     },
     // 查询ECP明细
     getECPList: params => {
-      return Vue.http.post(baseUrl + '//turn/forwardBizms/syn/000000000104.htm', params);
+      return Vue.http.post(baseUrl + '/turn/forwardBizms/syn/000000000104.htm', params);
     },
     // 查询小额免密
     checkNoPswPay: params => {
