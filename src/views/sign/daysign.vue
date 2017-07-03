@@ -7,7 +7,7 @@
     <div class="overlay test" v-show="showOverlay"></div>
     <img class="fail" @click="goIndex" @touchmove.prevent src="./i/fail.png" v-if="fail">
     <div class="overlay" @touchmove.prevent v-show="showSignRemark" style="z-index: 9997;"></div>
-    <bl-calendar v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
+    <bl-calendar id="ccalendar" v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
                 :is-double-check.sync=true :is-vication.sync=true>
     </bl-calendar>
     <section class="dheader" :style="{'background-image':'url('+signBg+')'}">
