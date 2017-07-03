@@ -106,54 +106,6 @@ export default {
     }
   },
   created() {
-    let list = [];
-    utils.isLogin().then(data => {
-      try {
-        sa.track('$pageview', {
-          pageId: 'APP_我的消息',
-          categoryId: 'APP_User',
-          $title: "APP_我的消息"
-        })
-      } catch (err) {
-        console.log("sa error => " + err);
-      }
-      let memberId = data.member_id;
-      api.messageCenter.loadMsgType({
-        "types": ['sys_data_msg_busniess_type']
-      }).then(data => {
-        let obj = JSON.parse(data.body.obj);
-        for (var i = 0; i < obj[0].types.length; i++) {
-          list.push(obj[0].types[i]);
-        };
-      });
-      api.messageCenter.getCount({
-        'channel': 'APP',
-        'memberNo': memberId
-      }).then(data => {
-        let obj = JSON.parse(data.body.obj);
-        for (var i = 0; i < obj.dataList.length; i++) {
-          list[i].isRead = obj.dataList[i].isRead;
-          list[i].unReadNum = obj.dataList[i].unReadNum;
-          list[i].newMsg = obj.dataList[i].newMsg;
-        };
-        this.$nextTick(() => {
-          this.$loading.close();
-          let currentTime = this.currentTime();
-          for (var i = 0; i < list.length; i++) {
-            if (list[i].newMsg.createDate) {
-              let time = obj.dataList[i].newMsg.createDate.time;
-              if (currentTime == this.formateTime(new Date(time)).substring(0, 10)) {
-                list[i].time = this.formateTime(new Date(time)).substring(11, 19)
-              } else {
-                list[i].time = this.formateTime(new Date(time)).substring(0, 10)
-              }
-            }
-          }
-          this.msgList = list;
-          console.log("-----gjGetCount-----" + JSON.stringify(this.msgList));
-        });
-      })
-    })
   	window.CTJSBridge.LoadMethod('BLMessageCenter', 'messageCenterWebViewControllerHiddenClearButton', {})
   	let list = [];
   	utils.isLogin().then(data => {
