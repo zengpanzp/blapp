@@ -400,7 +400,7 @@
                     phoneNo: phoneNo,
                     price: parseFloat(this.currentPay),
                     count: count,
-                    accountNo: `${requestData.decid}_0`,
+                    accountNo: `${requestData.decid}`,
                     changeMoney: parseFloat(this.currentPay),
                     aliasSaleTime: resData.orddate,
                     orderPhone: requestData.decid,
@@ -425,7 +425,17 @@
                     require.ensure([], function(require) {
                       let Pay = require('src/paymodel').default
                       current.inlineLoading.close()
-                      Pay.goPay(order, '23')
+                      Pay.goPay(order, '23', () => {
+                        current.$router.push({
+                          path: '/recharge/paysuccess',
+                          query: {
+                            money: order.changeMoney,
+                            orderNo: order.orderNo,
+                            type: 'cz',
+                            jumpType: '1'
+                          }
+                        })
+                      })
                     }, 'Pay')
                   })
                 }

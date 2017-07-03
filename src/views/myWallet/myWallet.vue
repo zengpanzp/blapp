@@ -3,7 +3,7 @@
     <div class="master-wraper bg-eee">
         <div class="bl-my-wallet">
             <div class="bl-mywallet-hd">
-                <a class="wallet-hd-cell action" id="pay">
+                <a class="wallet-hd-cell action" id="pay" @click="pay">
                     <div class="payment-code-img"></div>
                     <p>付款</p>
                 </a>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="wallet-balance-con">
                         <h4>余额</h4>
-                        <p>0.00</p>
+                        <p>{{yue}}</p>
                     </div>
                 </router-link>
                 <a class="wallet-bd-cell child2" id="coupon" @click="couponEcard">
@@ -34,15 +34,15 @@
                     </div>
                     <div class="wallet-balance-con">
                         <h4>积分</h4>
-                        <p>0</p>
+                        <p>{{point}}</p>
                     </div>
                 </router-link>
-                <router-link class="wallet-bd-cell child4" id="ECP" :to="{ path : '/ECP' }">
+                <router-link class="wallet-bd-cell child4" id="ECP" :to="{ path : '/ECP' }" v-if="ecpLength != 0">
                     <div class="wallet-balance-img">
                     </div>
                     <div class="wallet-balance-con">
                         <h4>ECP账户</h4>
-                        <p>0.00</p>
+                        <p>{{ecp}}</p>
                     </div>
                 </router-link>
                 <!--<a class="wallet-bd-cell" href="#cardListPage" id="card">-->
@@ -61,7 +61,8 @@
                 <li class="wallet-my-row" @click="setPayWord">
                     支付密码
                     <a class="row-right" id="password">
-                        <span>未设置</span>
+                        <span v-if="status != 0">未设置</span>
+                        <span v-if="status == 0">已设置</span>
                         <i class="iconfont icon-enter">&gt;</i>
                     </a>
                 </li>
@@ -97,7 +98,15 @@ export default {
         memberId: "",
         memberToken: "",
         mobile: "",
-        deviceId: ""
+        deviceId: "",
+        yue: "",
+        point: "",
+        ecpLength: "",
+        ecp: "",
+        status: "",
+        // idFlag: "",
+        // mobile: "",
+        // realNameLevel: "",
     };
   },
   created() {
@@ -111,38 +120,34 @@ export default {
     utils.isLogin().then(data => {
         this.memberId = data.member_id;
         this.memberToken = data.member_token;
-        // this.mobile = data.mobile;
         api.myWallet.getBalance({
             "memberNo": this.memberId
         }).then(data => {
             this.$loading.close();
             let obj = JSON.parse(data.body.obj);
-            $("#balance p").html(Number(obj.bal / 100).toFixed(2))
+            this.yue = Number(obj.bal / 100).toFixed(2)
         })
         api.myWallet.getPoint({
             "member_token": this.memberToken
         }).then(data => {
             let obj = JSON.parse(data.body.obj);
-            $("#point p").html(obj.points)
+            this.point = obj.points
         })
         api.myWallet.getECP({
             "accType": 100,
             "memberNo": this.memberId
         }).then(data => {
             let obj = JSON.parse(data.body.obj);
-            if (obj.root.length == "0") {
-                $("#ECP").hide();
-            } else {
-                $("#ECP p").html(Number(obj.root[0].bal / 100).toFixed(2))
+            this.ecpLength = obj.root.length
+            if (obj.root.length > 0) {
+                this.ecp = Number(obj.root[0].bal / 100).toFixed(2)
             }
         })
         api.myWallet.checkPayWord({
             "memberId": this.memberId
         }).then(data => {
             let obj = JSON.parse(data.body.obj);
-            if (obj.status == "0") {
-                $("#password span").html("已设置")
-            }
+            this.status = obj.status
         })
         api.myWallet.checkNoPswPay({
             memberId: this.memberId,
@@ -159,9 +164,11 @@ export default {
   },
   methods: {
     setPayWord: function() {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-            pageId: 'setPayWord'
-        })
+        if (this.status == 0) {
+            this.$router.push('../securityCenter/payPw')
+        } else {
+            this.$router.push('../securityCenter/payPwAuth')
+        }
     },
     couponEcard: function() {
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
@@ -173,6 +180,32 @@ export default {
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
             pageId: 'smallnosecret'
         })
+    },
+    pay: function () {
+        if (this.status == 0) {
+            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                pageId: 'paymentcode'
+            })
+        } else {
+            if (this.status == 0) {
+                this.$router.push('../securityCenter/payPw')
+            } else {
+                this.$modal({
+                title: '提示',
+                content: '请设置支付密码',
+                buttons: [{
+                  text: '取消',
+                  onClick: () => {
+                  }
+                }, {
+                  text: '确定',
+                  onClick: () => {
+                    this.$router.push('../securityCenter/payPwAuth')
+                  }
+                }]
+            })
+            }
+        }
     }
   }
 };

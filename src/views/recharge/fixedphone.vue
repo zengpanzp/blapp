@@ -141,7 +141,7 @@
         </ul>
       </div>
     </div>
-    <div class="phoneFixBottom">
+    <div class="phoneFixBottom" v-show="!focus">
       <div class="limit-remind">
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
@@ -346,7 +346,7 @@ export default {
           // 生成订单
           let requestData = {
             client_id: CONST.CLIENT_ID,
-            decid: this.iphoneNum,
+            decid: (this.tabsModel == 1 || this.tabsModel == 2) ? '021' + this.iphoneNum : this.iphoneNum,
             ddgsl: '1',
             dkhzh: user.member_id,
             dsphh: this.currentItem,
@@ -392,16 +392,27 @@ export default {
                   changeMoney: resData.changeMoney,
                   omsNotifyUrl: resData.omsNotifyUrl,
                   payType: resData.payType,
-                  accountNo: user.member_mobile
+                  accountNo: this.iphoneNum
                 }
                 require.ensure([], function(require) {
                   let Pay = require('src/paymodel').default
                   current.inlineLoading.close()
-                  Pay.goPay(order, '23')
+                  Pay.goPay(order, '23', () => {
+                    current.$router.push({
+                      path: '/recharge/paysuccess',
+                      query: {
+                        money: order.changeMoney,
+                        orderNo: order.orderNo,
+                        type: 'cz',
+                        jumpType: '1'
+                      }
+                    })
+                  })
                 }, 'Pay')
               })
             } else {
               this.$toast(resData.msg)
+              current.inlineLoading.close()
             }
           })
         }, () => {})
@@ -459,7 +470,11 @@ export default {
       inputNode.focus()
     },
     historySel(number) {
-      if (this.testPhoneNum(number)) {
+      let pattern = /^\d{11}$/; // 分账
+      if (this.tabsModel !== 0) {
+        pattern = /^\d{8}$/;
+      }
+      if (pattern.test(number)) {
         this.iphoneNum = number
         this.focus = false
       } else {
@@ -477,6 +492,10 @@ export default {
     iphoneNum(val) {
       if (this.testPhoneNum()) {
         this.focus = false
+        $('.numInput').forEach(item => {
+          console.log(item)
+          item.blur()
+        })
       }
     },
     // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏

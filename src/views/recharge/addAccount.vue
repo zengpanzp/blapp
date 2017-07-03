@@ -72,6 +72,7 @@
         companyList: [],
         account: "",  // 缴费账号,
         phone: "",  // 联系电话
+        accountRight: false,
         typeObj: {
             1: "sf",  // 水费
             2: "dl",  // 电费
@@ -245,14 +246,17 @@
         })
       },
       account(val) {
-        if (val.length > 6) {
+          console.log(this.account, val)
+        if (val.length >= 6) {
           this.accountRight = true;
           let pattern = /^1\d{10}$/;
-          if (pattern.test(this.phone) && (val.length == 11)) {
+          if (pattern.test(this.phone) && (this.phone.length == 11)) {
             this.isCantouch = false;
           }
         } else {
           this.accountRight = false;
+          this.isCantouch = true;
+          console.log()
         }
       },
       phone(val) {
@@ -312,9 +316,7 @@
               contactPhone: this.phone
             }
             api.recharge.updatePaySubNo(updatePaySubNoData).then(data => {
-              console.log(data);
-              let json = JSON.parse(data.body.obj);
-              if (json.resCode == "00100000") {
+              if (data.body.resCode == "00100000") {
                 this.$toast({
                   position: 'bottomTop',
                   message: "账号编辑成功!",
@@ -324,10 +326,15 @@
                   clearTimeout(current.ATIME_ID);
                   current.$router.push({path: "/recharge/bill"});
                 }, 3000);
+              } else if (data.body.resCode == "05111003") {
+                this.$toast({
+                  position: 'bottom',
+                  message: "当前户号您已经订阅过!"
+                });
               } else {
                 this.$toast({
                   position: 'bottom',
-                  message: json.msg
+                  message: data.body.msg
                 });
               }
             });
@@ -346,23 +353,26 @@
               contactPhone: this.phone
             }
             api.recharge.createPaySubNo(createPaySubNoData).then(data => {
-              console.log(data);
-              let json = JSON.parse(data.body.obj);
-              if (json.resCode == "00100000") {
+//              let json = JSON.parse(data.body.obj);
+              if (data.body.resCode == "00100000") {
                 this.$toast({
                   position: 'bottomTop',
                   message: "账号创建成功!",
                   duration: 3000
                 });
-
                 this.ATIME_ID = setTimeout(() => {
                   clearTimeout(current.ATIME_ID);
                   current.$router.push({path: "/recharge/bill"});
-                }, 3000);
+                }, 2000);
+              } else if (data.body.resCode == "05111003") {
+                this.$toast({
+                  position: 'bottom',
+                  message: "当前户号您已经订阅过!"
+                });
               } else {
                 this.$toast({
                   position: 'bottom',
-                  message: json.msg
+                  message: data.body.msg
                 });
               }
             });

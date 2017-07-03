@@ -5,7 +5,7 @@
         <div class="total-integral">
             <div class="total-integral-media">积分总额</div>
             <div class="quickhome-adresstele">
-                <label class="total-integral-num"></label>分
+                <label class="total-integral-num">{{points}}</label>分
             </div>
         </div>
         <div class="integral-menu">
@@ -33,7 +33,7 @@
       </li>
       </ul>
     </div>
-    <div id="empty" class="empty pointEmpty" style="display: none">
+    <div id="empty" class="empty pointEmpty" v-if="count == 0 && pointsList.length == 0">
         暂无积分记录
     </div>
 </div>
@@ -58,6 +58,8 @@ export default {
       memberToken: "",
       type: "1",
       pointsList: [],
+      points: "",
+      count: ""
     };
   },
   created() {
@@ -73,16 +75,15 @@ export default {
           api.myWallet.getPoint({
               "member_token": this.memberToken
           }).then(data => {
-            this.$loading.close();
             let obj = JSON.parse(data.body.obj);
-            $(".total-integral-num").html(obj.points)
+            this.points = obj.points
           })
           $(".integral-menu li").click(function (e) {
             $(".integral-menu a").removeClass("select-integral")
             $(e.currentTarget).find("a").addClass("select-integral")
             current.type = $(e.currentTarget)[0].id
             $("#pointsList").html("");
-            $("#empty").hide();
+            // $("#empty").hide();
             current.getPointsInfo();
             current.pageNum = 1;
           })
@@ -94,6 +95,7 @@ export default {
             'timestamp': this.getTimeFormatToday(),
             'sysid': "1103"
           }).then(data => {
+            this.$loading.close();
             let obj = JSON.parse(data.body.obj);
             var dataList = obj.list;
             if (obj.list && dataList.length > 0) {
@@ -119,8 +121,8 @@ export default {
                 this.loading = false
             }
             if (obj.count == 0) {
+              this.count = obj.count
               $(".integral-list").removeClass("integral-list").addClass("integral-list-no")
-              $('#empty').show();
               return
             }
           })

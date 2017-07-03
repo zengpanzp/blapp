@@ -24,7 +24,7 @@ export default {
     },
     // 我的收藏 门店
     queryShopFavorites: params => {
-      return Vue.http.post(baseUrl + '/memberCenter/queryShopFavorites.htm', params);
+      return Vue.http.post(baseUrl + '/myCollect/queryShopFavorites.htm', params);
     }
   }
 }

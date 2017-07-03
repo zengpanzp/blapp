@@ -72,6 +72,7 @@
   }
   .record-list{
     margin-top: rem(30);
+    line-height: rem(50);
   }
   .paylist{
     margin-top: rem(30);
@@ -80,14 +81,17 @@
   .name{
     position: absolute;
     right: rem(10);
-    top:0
+    top:rem(28);
+  }
+  .ttop li{
+    padding: rem(28) 0;
   }
   li{
     position: relative;
     height: rem(100);
-    line-height: rem(100);
+    //line-height: rem(100);
     font-size: rem(30);
-    border-bottom:rem(1.5) solid #e7e7e7;
+    border-bottom:1px solid #e7e7e7;
     &:last-child{
       border: none;
     }
@@ -137,7 +141,7 @@
       &:first-child{
         flex:7;
         line-height: rem(40);
-        padding: rem(10) 0;
+        width: rem(550);
         //color:#e6133c
       }
     }

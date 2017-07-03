@@ -14,8 +14,19 @@ body {
 /*我的测试*/
 // 日签
 .daysign{
+  .fail{
+    position: fixed;
+    z-index: 9999;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+  *:not(input,textarea) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
   .remark{
-    text-align: center;
     width: rem(710);
     position: fixed;
     left: 50%;
@@ -23,6 +34,8 @@ body {
     font-size: rem(28);
     line-height: rem(50);
     z-index: 2000;
+    transform: translate(0, -50%);
+    top:50%;
     .title{
       width: 100%;
       text-align: center;
@@ -35,17 +48,22 @@ body {
     }
     .signRemark{
       max-height: rem(700);
-      overflow: scroll;
+      //overflow: scroll;
+      overflow: auto;
       -webkit-overflow-scrolling: touch;
       background: #fff;
-      padding:rem(10) rem(30) rem(30) rem(30);
       border-radius:0 0 rem(10) rem(10);
-      word-wrap:break-word;
+      padding: rem(10) rem(30) rem(30) rem(30);
+      span{
+        display: block;
+      }
     }
     .close{
       width: rem(90);
       position: relative;
+      left:50%;
       margin-top:rem(70);
+      margin-left:rem(-45);
       height: rem(90);
     }
   }
@@ -118,7 +136,7 @@ body {
     }
     .bottom{
       margin-top: rem(30);
-      height: rem(410);
+      //height: rem(410);
       position: relative;
       li{
         //height:rem(250);
@@ -180,9 +198,9 @@ body {
       left: 50%;
       margin-left: rem(-160);
       top: rem(357);
-      &:active{
-        background-color: #999;
-      }
+      //&:active{
+      //  background-color: #999;
+      //}
       img{
         width: rem(50);
         height: rem(33.4);
@@ -307,7 +325,8 @@ body {
   .recommend{
     -webkit-overflow-scrolling: touch; /* lets it scroll lazy */
     padding-bottom: rem(10);
-    margin: rem(20) rem(20);
+    margin: 0 rem(20);
+    margin-bottom: rem(20);
     border-bottom: 1px solid #eee;
     //height: rem(440);
     li:first-child{
@@ -315,6 +334,7 @@ body {
         height: rem(440);
         width: 100%;
       }
+      overflow: hidden;
     }
     li:last-child{
       overflow-x:scroll;
@@ -327,12 +347,8 @@ body {
         position: relative;
         //float: left;
         display: inline-block;
-        img{
-          width: rem(181);
-          height: rem(220);
-          left: rem(44);
-          top:rem(50);
-          position: absolute;
+        .imgs{
+          height: rem(270);
         }
         .name{
           width: rem(250);

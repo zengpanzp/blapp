@@ -114,7 +114,7 @@
     overflow: hidden;
     text-align: center;
     box-sizing: border-box;
-    margin-bottom: rem(10);
+    // margin-bottom: rem(10);
     a {
       border: 1px solid #ccc;
       border-radius: rem(.375*31.25);
@@ -150,7 +150,7 @@
 }
 // 全国或者本地
 .flow-type {
-  padding: rem(0.9375*31.25);
+  padding: rem(20) rem(30);
   padding-left: rem(31.25);
   margin-top: rem(-0.5*31.25);
   background: #FFFFFF;
@@ -162,7 +162,7 @@
 
 .flow-type-top {
   overflow: hidden;
-  margin-bottom: rem(0.75*31.25)
+  margin-bottom: rem(10)
 }
 
 .flow-type-container {
@@ -200,7 +200,7 @@
 
 // 底部按钮
 .phoneFixBottom {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -243,7 +243,7 @@
 .limit-remind p {
   font-size: rem(.75*31.25);
   color: #999999;
-  margin-bottom: rem(20);
+  margin-bottom: rem(10);
 }
 .limit-remind img {
   width: rem(0.875*31.25);
