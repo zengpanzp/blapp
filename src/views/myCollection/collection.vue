@@ -8,7 +8,7 @@
         <div class="goods-box" v-infinite-scroll="loadGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="goods-item flex" v-for="item in list" v-go-native-goods-detail="item">
             <div class="goods-img lazy-box">
-              <img class="lazy" v-lazy="{ src: (item.goodsImgPath || '').replace(/^http:/, '') }">
+              <img class="lazy" v-lazy="{ src: item.goodsImgPath }">
             </div>
             <div class="goods-des flex-item">
               <div class="goods-title">{{ item.goodsMsg }}</div>
@@ -93,19 +93,18 @@ export default {
   },
   methods: {
     currentPageReload() {
-      window.history.go(0)
-      // let deployName = this.$route.query.deployName
-      // switch (deployName) {
-      //   case 'goods':
-      //     this.tabsModel = '0'
-      //     break;
-      //   case 'stores':
-      //     this.tabsModel = '1'
-      //     break;
-      //   default:
-      //     this.tabsModel = '1'
-      // }
-      // this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
+      let deployName = this.$route.query.deployName
+      switch (deployName) {
+        case 'goods':
+          this.tabsModel = '0'
+          break;
+        case 'stores':
+          this.tabsModel = '1'
+          break;
+        default:
+          this.tabsModel = '1'
+      }
+      this.changeTab(this.tabsModel, this.filterEleTabs[this.tabsModel].deployName)
     },
     changeTab(index, deployName) {
       let saName = this.filterEleTabs[this.tabsModel].deployName
@@ -171,7 +170,7 @@ export default {
                 channel: "1",
                 pageNo: 1,
                 pageSize: "10",
-                isFilterCommons: "true"
+                isFilterCommons: "false"
               }
               api.userCenter.searchProductByIds({
                 clientIp: "0:0:0:0:0:0:0:1",
@@ -184,8 +183,7 @@ export default {
                 let check = JSON.stringify(rows)
                 console.log(check + '============')
                 if (rows) {
-                  // this.list = this.list.concat(rows)
-                  this.list.push.apply(this.list, rows)
+                  this.list = this.list.concat(rows)
                   this.busy = false
                 } else {
                   this.goodsLoading = false
@@ -226,8 +224,7 @@ export default {
               // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
             if (currentPage <= totalPageNum) {
               if (storeList && storeList.length) {
-                // this.storeList = this.storeList.concat(storeList)
-                this.storeList.push.apply(this.storeList, storeList)
+                this.storeList = this.storeList.concat(storeList)
                 this.busyStore = false
               } else {
                 this.busyStore = true
@@ -251,7 +248,7 @@ export default {
         message: message,
         storeType: storeType
       })
-      console.log('######storeType:########' + params)
+      console.log('######storeType:########' + storeType)
       if (storeType == 1010 || storeType == 1020) {
         // 1010:百货  1020:购物中心
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
