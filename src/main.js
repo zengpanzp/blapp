@@ -118,7 +118,7 @@ Vue.directive('go-native-goods-similar', {
         goodsSid: binding.value.goodsId,
         goodsName: binding.value.goodsMsg,
         salePrice: binding.value.goodsPrice,
-        imgUrlString: binding.value.goodsImgPath,
+        goodsImageUrl: binding.value.goodsImagePath,
         isGiftGoods: binding.modifiers.isGiftGoods || false
       })
     }
