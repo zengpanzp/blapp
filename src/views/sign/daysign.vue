@@ -79,7 +79,7 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
-        <div class="pic lazyload"><img v-lazy="{src: item.goodsImagePath}" class="dateImg"></div>
+        <div class="pic lazyload"><img v-lazy="{src: item.goodsImgPath}" class="dateImg"></div>
         <div class="name">{{item.goodsMsg}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
@@ -533,7 +533,7 @@
                     goodsId: i.sid,
                     goodsMsg: i.goods_sales_name,
                     goodsPrice: i.sale_price,
-                    goodsImagePath: i.url,
+                    goodsImgPath: i.url,
                   }
                   newGoodsList.push(obj)
               });
