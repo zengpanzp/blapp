@@ -71,6 +71,7 @@ export default {
         })
       }
       let resData = utils.transData(res.body.obj)
+      console.log("zpzpzpzz" + JSON.stringify(resData))
       if (resData) {
         this.aTab = resData.resultInfo.categorys
         this.jumpId = this.aTab[0].categoryId.replace('9999', '')
