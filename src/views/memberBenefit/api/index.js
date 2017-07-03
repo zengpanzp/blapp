@@ -27,5 +27,13 @@ export default {
   	//	曾攀查会员活动
   checkActivity: params => {
   	return Vue.http.post(baseUrl + '/memberActivity/memberActivityQualification.htm', params)
+  },
+  // 适用查询门店信息
+  selectShop: params => {
+    return Vue.http.post(baseUrl + '/site/range.htm', params)
+  },
+  // 查询坐标
+  selectForIos: params => {
+    return Vue.http.post(baseUrl + 'lbsApi/regeo.htm', params)
   }
 }
