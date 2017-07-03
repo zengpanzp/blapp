@@ -533,7 +533,7 @@
                     goodsId: i.sid,
                     goodsMsg: i.goods_sales_name,
                     goodsPrice: i.sale_price,
-                    goodsImagePath: i.url,
+                    goodsImgPath: i.url,
                   }
                   newGoodsList.push(obj)
               });
