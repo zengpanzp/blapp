@@ -112,7 +112,7 @@
               <div class="flex">
                 <div class="text-node">密码</div>
                 <div class="flex-item">
-                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = false" v-model="password">
+                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = true" v-model="password">
                   <i class="img_icon icon_emptycon" v-show="password !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
