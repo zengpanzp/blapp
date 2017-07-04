@@ -312,9 +312,7 @@
           } catch (ex) {
           }
         })
-        debugger
         this.pageLoad();
-        console.log(1)
       },
       pageLoad() {
         let localStatus = localStorage.getItem("BL_SIGN_STATUS");
@@ -441,14 +439,10 @@
               this.signText = ""  // 隐藏
               this.message1 = "再连续签到" + this.needSignNum + "天";
               this.message2 = "就能获得1次抽奖机会";
-              if (flag == 1) {
-                this.hide = true;
-                window.BL_SIGNED_TIMEID = setTimeout(function() {
-                  self.hide = false;
-                }, 1000);
-              } else {
-                  this.hide = false;
-              }
+              this.hide = true;
+              window.BL_SIGNED_TIMEID = setTimeout(function() {
+                self.hide = false;
+              }, 100);
             } else {
               this.needSignNum = -1;
               this.signText = ""  // 隐藏
