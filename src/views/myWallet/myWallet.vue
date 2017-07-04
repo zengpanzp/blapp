@@ -74,7 +74,7 @@
                 <!--</a>-->
                 <!--</li>-->
                 
-                <li class="wallet-my-row" @click="smallnosecret">
+                <li class="wallet-my-row" @click="smallnosecret(status)">
                     小额免密
                     <a class="row-right action" id="noPsw">
                         <span></span>
@@ -124,39 +124,51 @@ export default {
             "memberNo": this.memberId
         }).then(data => {
             this.$loading.close();
-            let obj = JSON.parse(data.body.obj);
-            this.yue = Number(obj.bal / 100).toFixed(2)
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                this.yue = Number(obj.bal / 100).toFixed(2)
+            }
         })
         api.myWallet.getPoint({
             "member_token": this.memberToken
         }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            this.point = obj.points
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                this.point = obj.points
+            }
         })
         api.myWallet.getECP({
             "accType": 100,
             "memberNo": this.memberId
         }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            this.ecpLength = obj.root.length
-            if (obj.root.length > 0) {
-                this.ecp = Number(obj.root[0].bal / 100).toFixed(2)
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                if (obj.root) {
+                    this.ecpLength = obj.root.length
+                    if (obj.root.length > 0) {
+                        this.ecp = Number(obj.root[0].bal / 100).toFixed(2)
+                    }
+                }
             }
         })
         api.myWallet.checkPayWord({
             "memberId": this.memberId
         }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            this.status = obj.status
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                this.status = obj.status
+            }
         })
         api.myWallet.checkNoPswPay({
             memberId: this.memberId,
             deviceNo: this.deviceId
         }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            for (var i = 0; i < obj.freeFlags.length; i++) {
-                if (obj.freeFlags[i].freeFlagSta == '1') {
-                    $("#noPsw span").html(obj.freeFlags[i].freeFlagDesc)
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                for (var i = 0; i < obj.freeFlags.length; i++) {
+                    if (obj.freeFlags[i].freeFlagSta == '1') {
+                        $("#noPsw span").html(obj.freeFlags[i].freeFlagDesc)
+                    }
                 }
             }
         })
@@ -176,7 +188,24 @@ export default {
             params: { type: 0 }
         })
     },
-    smallnosecret: function() {
+    smallnosecret: function(status) {
+        if (status != 0) {
+            this.$modal({
+              title: '提示',
+              content: '请设置支付密码',
+              buttons: [{
+                text: '取消',
+                onClick: () => {
+                }
+              }, {
+                text: '去设置',
+                onClick: () => {
+                  this.$router.push('../securityCenter/payPwAuth')
+                }
+              }]
+          })
+            return
+        }
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
             pageId: 'smallnosecret'
         })
@@ -198,7 +227,7 @@ export default {
                   onClick: () => {
                   }
                 }, {
-                  text: '确定',
+                  text: '去设置',
                   onClick: () => {
                     this.$router.push('../securityCenter/payPwAuth')
                   }

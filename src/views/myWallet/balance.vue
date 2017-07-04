@@ -63,8 +63,10 @@ export default {
           "memberNo": this.memberId
       }).then(data => {
           this.$loading.close();
-          let obj = JSON.parse(data.body.obj);
-          this.available = Number(obj.bal / 100).toFixed(2)
+          if (data.body.obj) {
+            let obj = JSON.parse(data.body.obj);
+            this.available = Number(obj.bal / 100).toFixed(2)
+          }
       })
     })
   },
