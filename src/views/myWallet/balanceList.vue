@@ -81,8 +81,10 @@ export default {
   		api.myWallet.getBalance({
         	"memberNo": this.memberId
       	}).then(data => {
-		    let obj = JSON.parse(data.body.obj);
-		    $("#available").html(Number(obj.bal / 100).toFixed(2))
+      		if (data.body.obj) {
+			    let obj = JSON.parse(data.body.obj);
+			    $("#available").html(Number(obj.bal / 100).toFixed(2))
+			}
       	})
       	api.myWallet.getBalanceList({
 	      	memberNo: this.memberId,
@@ -91,24 +93,26 @@ export default {
 	        transType: this.type
 	    }).then(data => {
 	    	this.$loading.close();
-	    	let obj = JSON.parse(data.body.obj);
-	    	var dataList = JSON.parse(obj.data);
-	    	if (obj.data && dataList.length > 0) {
-	    		this.busy = false
-	    		for (var i = 0; i < dataList.length; i++) {
-	    			list.push(dataList[i]);
-	    			list[i].time = this.getTime(list[i].AcctTrantime);
-	    			list[i].payAmount = list[i].transType == '04' ? '+' + Number((list[i].payAmount) / 100).toFixed(2) : '-' + Number((list[i].payAmount) / 100).toFixed(2)
-	    		}
-	    		console.log("---gj---" + JSON.stringify(list));
-	    		this.balList = this.balList.concat(list);
-	    	} else if (obj.currentPage >= obj.totalPage) {
-	    		this.loading = false
-	    	}
-	    	if (obj.totalCount == 0) {
-	    		$('#empty').show();
-	    		return
-	    	}
+	    	if (data.body.obj) {
+		    	let obj = JSON.parse(data.body.obj);
+		    	var dataList = JSON.parse(obj.data);
+		    	if (obj.data && dataList.length > 0) {
+		    		this.busy = false
+		    		for (var i = 0; i < dataList.length; i++) {
+		    			list.push(dataList[i]);
+		    			list[i].time = this.getTime(list[i].AcctTrantime);
+		    			list[i].payAmount = list[i].transType == '04' ? '+' + Number((list[i].payAmount) / 100).toFixed(2) : '-' + Number((list[i].payAmount) / 100).toFixed(2)
+		    		}
+		    		console.log("---gj---" + JSON.stringify(list));
+		    		this.balList = this.balList.concat(list);
+		    	} else if (obj.currentPage >= obj.totalPage) {
+		    		this.loading = false
+		    	}
+		    	if (obj.totalCount == 0) {
+		    		$('#empty').show();
+		    		return
+		    	}
+		    }
 	    })
   		})
   	},
