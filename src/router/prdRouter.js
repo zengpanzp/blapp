@@ -328,12 +328,20 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
   },
-  /* 曾攀  */
+  /* 曾攀 适用门店 */
   {
     path: '/applyShop/:power',
     meta: {
       title: '适用门店',
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/applyShop')), 'applyShop')
+  },
+  /* 曾攀 积分互换 */
+  {
+    path: '/integralExchange',
+    meta: {
+      title: '积分互换',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/integralExchange')), 'integralExchange')
   }
 ]

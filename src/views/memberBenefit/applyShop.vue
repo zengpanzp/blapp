@@ -93,7 +93,6 @@ export default {
       } else if (isiOS) {
         window.CTJSBridge.LoadMethod('Location', 'getLocation', '', {
         success: data => {
-          console.log("666666666666888889999999" + data)
           let obj = JSON.parse(data)
           this.longitude = obj.longitude
           this.latitude = obj.latitude
@@ -114,17 +113,16 @@ export default {
       })).then(data => {
         this.$loading.close()
         console.log("#####selectForIos" + data.body.obj)
-        let obj = data.body.obj
+        let obj = JSON.parse(data.body.obj)
         if (obj && obj.regeocode && obj.regeocode.addressComponent) {
           this.District.adCode = obj.regeocode.addressComponent.adcode
-          console.log(this.Distirct.adCode)
         }
       }, err => {
         console.log(err)
       })
     },
     getDetail() {
-      api.selectShop(JSON.stringify({area: "868",
+      api.selectShop(JSON.stringify({area: this.District.adCode,
         o2oKey: this.type,
         longitude: this.longitude,
         lantitude: this.latitude,
