@@ -88,7 +88,7 @@
       <bl-tab-container v-model="tabsModel">
         <bl-tab-container-item :id="0">
           <div class="list-sales">
-            <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
+            <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() || disabled }">
               <li v-for="(item, index) in moneyList" @click="selectPrice(index, item)">
                 <a :class="{ 'curr': moneyListModel == index }" href="javascript:;">
                   <h3>{{ item.mainPrice }}元</h3>
@@ -100,7 +100,7 @@
         </bl-tab-container-item>
         <bl-tab-container-item :id="1">
           <div class="list-sales">
-            <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() }">
+            <ul class="phoneMoney" :class="{ 'list-disabled': !testPhoneNum() || disabled }">
               <li v-for="(item, index) in flowList" @click="flowSelectPrice(index, item)">
                 <a :class="{ 'curr': flowListModel == index }" href="javascript:;">
                   <h3>{{ item.mainPrice }}M</h3>
@@ -121,12 +121,12 @@
         </bl-tab-container-item>
       </bl-tab-container>
     </div>
-    <div class="phoneFixBottom">
+    <div class="phoneFixBottom" v-show="!focus">
       <div class="limit-remind">
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
       <div class="config-button-contain">
-        <button class="edit-config-button middleFont" @click="goPay" :disabled="!(testPhoneNum() && currentPay)">
+        <button class="edit-config-button middleFont" @click="goPay" :disabled="!(testPhoneNum() && currentPay) || disabled">
           立即支付：￥{{ currentPay }}
         </button>
       </div>
@@ -177,7 +177,8 @@
         moneyList: [],
 
         flowListModel: 0,
-        flowList: []
+        flowList: [],
+        disabled: false
       }
     },
     created() {
@@ -250,60 +251,63 @@
             token: utils.dbGet('userInfo').member_token,
           }
           api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
+            this.inlineLoading.close()
             let resData = JSON.parse(data.body.obj)
-            let list = []
-            // for (let [index, val] of resData.sku.entries()) {
-            //   list.push({
-            //     mainPrice: val,
-            //     salePrice: resData.price2[index],
-            //     activePay: resData.price[index],
-            //     item: resData.item[index],
-            //     fee: resData.fee[index]
-            //   })
-            // }
-            for (var i = 0; i < resData.sku.length; i++) {
-              list.push({
-                mainPrice: resData.sku[i],
-                salePrice: resData.price2[i],
-                activePay: resData.price[i],
-                item: resData.item[i],
-                fee: resData.fee[i],
-                num: resData.num[i]
-              })
-            }
-            this.moneyList = list
-            this.currentPay = this.moneyList[0].salePrice
-            this.currentItem = this.moneyList[0].item
-            this.currentSku = this.moneyList[0].mainPrice
-            this.currentActivePay = this.moneyList[0].activePay
-            this.currentFee = this.moneyList[0].fee
-            this.currentNum = String(this.moneyList[0].num)
-            this.moneyListModel = 0
+            if (resData.sku) {
+              this.disabled = false
+              let list = []
+              // for (let [index, val] of resData.sku.entries()) {
+              //   list.push({
+              //     mainPrice: val,
+              //     salePrice: resData.price2[index],
+              //     activePay: resData.price[index],
+              //     item: resData.item[index],
+              //     fee: resData.fee[index]
+              //   })
+              // }
+              for (var i = 0; i < resData.sku.length; i++) {
+                list.push({
+                  mainPrice: resData.sku[i],
+                  salePrice: resData.price2[i],
+                  activePay: resData.price[i],
+                  item: resData.item[i],
+                  fee: resData.fee[i],
+                  num: resData.num[i]
+                })
+              }
+              this.moneyList = list
+              this.currentPay = this.moneyList[0].salePrice
+              this.currentItem = this.moneyList[0].item
+              this.currentSku = this.moneyList[0].mainPrice
+              this.currentActivePay = this.moneyList[0].activePay
+              this.currentFee = this.moneyList[0].fee
+              this.currentNum = String(this.moneyList[0].num)
+              this.moneyListModel = 0
 
-            let msg = resData.msg.split("|")[1]
-            if (this.tabsModel == '0') {
+              let msg = resData.msg.split("|")[1]
+              if (this.tabsModel == '0') {
+                this.phoneCheck = resData.msg
+              }
+              switch (msg) {
+                case '联通':
+                  this.rechargeType = 'ltll'
+                  break;
+                case '移动':
+                  this.rechargeType = 'ydll'
+                  break;
+                case '电信':
+                  this.rechargeType = 'dxll'
+                  break;
+                default:
+                  this.rechargeType = ''
+              }
+              if (this.rechargeType && this.tabsModel == '1') {
+                this.type = this.rechargeType
+                this.getPhoneLlInfo(this.rechargeType)
+              }
+            } else {
               this.phoneCheck = resData.msg
-            }
-            switch (msg) {
-              case '联通':
-                this.rechargeType = 'ltll'
-                break;
-              case '移动':
-                this.rechargeType = 'ydll'
-                break;
-              case '电信':
-                this.rechargeType = 'dxll'
-                break;
-              default:
-                this.rechargeType = ''
-            }
-            if (this.tabsModel == '0') {
-              this.inlineLoading.close()
-            }
-
-            if (this.rechargeType && this.tabsModel == '1') {
-              this.type = this.rechargeType
-              this.getPhoneLlInfo(this.rechargeType)
+              this.disabled = true
             }
           })
         }
@@ -323,6 +327,7 @@
           let resData = JSON.parse(data.body.obj)
           this.phoneCheck = resData.msg
           if (resData.sku) {
+            this.disabled = false
             let list = []
             // for (let [index, val] of resData.sku.entries()) {
             //   list.push({
@@ -354,6 +359,7 @@
           } else {
             this.currentPay = 0
             this.flowList = []
+            this.disabled = true
           }
         })
       },
@@ -532,11 +538,22 @@
                 require.ensure([], function(require) {
                   let Pay = require('src/paymodel').default
                   current.inlineLoading.close()
-                  Pay.goPay(order, '23')
+                  Pay.goPay(order, '23', () => {
+                    current.$router.push({
+                      path: '/recharge/paysuccess',
+                      query: {
+                        money: order.changeMoney,
+                        orderNo: order.orderNo,
+                        type: 'cz',
+                        jumpType: '1'
+                      }
+                    })
+                  })
                 }, 'Pay')
               })
             } else {
               this.$toast(resData.msg)
+              current.inlineLoading.close()
             }
           })
         }

@@ -200,6 +200,7 @@ export const prdRouter = [
   /* 郭健 消息中心 消息内容 */
   {
     path: '/messageList/:typeId/:title',
+    name: 'messageList',
     component: r => require.ensure([], () => r(require('../views/messageCenter/messageList')), 'messageList')
   },
   /* 薛天玲 我的收藏 */
@@ -346,11 +347,11 @@ export const prdRouter = [
   },
   /* 曾攀 会员权益 */
   {
-    path: '/memberBenefit',
+    path: '/powerDetail',
     meta: {
       title: '会员权益'
     },
-    component: r => require.ensure([], () => r(require('../views/memberBenefit/memberBenefit')), 'memberBenefit')
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
   },
   /* 曾攀 更多权益 */
   {
@@ -359,5 +360,13 @@ export const prdRouter = [
       title: '更多权益',
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
+  },
+  /* 曾攀  */
+  {
+    path: '/applyShop',
+    meta: {
+      title: '适用门店',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/applyShop')), 'applyShop')
   }
 ]

@@ -18,7 +18,7 @@
           <div class="goods-btn-group">
             <bl-button type="outlineMain" inline size="small" @click="commentShow(item.orderNo,item.product)" v-if="type == '00'||item.isvalid == -1">评价晒单</bl-button>
             <bl-button type="outlineMain" inline size="small" @click="commentAfter(item.id,item.product)" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">追加晒单</bl-button>
-            <bl-button type="outlineMain" inline size="small" @click="seeComment(item.id,item.product)" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'|| models[i].isContent">
+            <bl-button type="outlineMain" inline size="small" @click="seeComment(item.id, item.product)" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'||item.isContent">
               查看评价
             </bl-button>
             <bl-button type="outlineMain" inline size="small" @click="againComment(item.id,item.product)" v-else>
@@ -85,6 +85,17 @@ export default {
     };
   },
   created() {
+    // 评价埋点
+    try {
+      console.log((new Date()).toLocaleString() + 'APP_我的评价')
+      sa.track('$pageview', {
+        pageId: 'APP_我的评价',
+        categoryId: 'APP_User',
+        $title: '我的评价'
+      });
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
     this.memberId = utils.dbGet('userInfo').member_id
     if (this.memberId) {
       this.loginflag = true
@@ -133,7 +144,6 @@ export default {
       memberId: this.memberId,
       channelId: 1
     }).then(data => {
-      console.log("queryCount" + data)
       this.$loading.close()
       if (data.body.obj) {
         let resData = JSON.parse(data.body.obj)
@@ -158,19 +168,6 @@ export default {
       console.log(err)
     })
   },
-  activated() {
-    // sensor analytics
-    try {
-      console.log((new Date()).toLocaleString() + 'APP_我的评价')
-      sa.track('$pageview', {
-        pageId: 'APP_我的评价',
-        categoryId: 'APP_User',
-        $title: '我的评价'
-      });
-    } catch (err) {
-      console.log("sa error => " + err);
-    }
-  },
   mounted() {
     window.currentPageReload = this.currentPageReload
   },
@@ -180,7 +177,6 @@ export default {
     },
     // 刷新
     currentPageReload() {
-      this.$router.go(0)
       if (!this.$route.query.orderNo) {
         api.queryCount({
           memberId: this.memberId,
@@ -211,6 +207,7 @@ export default {
           console.log(err)
         })
       }
+      this.loadMore()
     },
     // 切换tab
     changeTab(index, type) {
@@ -233,10 +230,8 @@ export default {
           console.log("----data orderNo-------" + data.body.obj)
           this.$loading.close()
           if (data.body.obj) {
-            let obj = JSON.stringify(data.body.obj).replace(/http:\/\//g, "https://")
-            let msg = JSON.parse(obj);
-            console.log("-----hh---" + msg)
-            let resData = JSON.parse(msg)
+            let obj = data.body.obj.replace(/http:\/\//g, "https://")
+            let resData = JSON.parse(obj)
             if (resData.resultInfo) {
                 this.pageNo = resData.resultInfo.pageNo
                 let resRow = resData.resultInfo.rows
@@ -262,7 +257,7 @@ export default {
                               isContent: resRow[i].commentAgain,
                               isvalid: resRow[i].isvalid,
                               ispic: resRow[i].ispic,
-                              product: encodeURIComponent(JSON.stringify({
+                              product: JSON.stringify({
                                   pic: resRow[i].productPic,
                                   goodsName: resRow[i].productName,
                                   productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
@@ -270,35 +265,27 @@ export default {
                                   merchantName: resRow[i].shopId,
                                   tags: resRow[i].tags,
                                   comment: this.getData(resRow[i])
-                              }).replace(/[\ud800-\udfff]/g, ''))
+                              }).replace(/[\ud800-\udfff]/g, '')
                           }
                           this.list = this.list.concat(good)
                       }
                   this.busy = false
                   this.loading = true
                   if (resRow.length < 10) {
-                    this.busy = true
                     this.loading = false
-                    this.$toast({
-                      position: 'bottom',
-                      message: '没有了~'
-                    })
-                  }
-                } else {
-                  this.busy = true
-                  this.loading = false
-                  if (resData.resultInfo.pageNo > 1) {
-                    this.$toast({
-                      position: 'bottom',
-                      message: '亲，没有数据了！'
-                    })
-                  } else {
-                    this.noRows = true
+                    this.busy = true
                   }
                 }
-            } else {
-              this.noRows = true
             }
+          }
+          if (this.count.unCom == 0) {
+            this.noRows = true
+          }
+          if (this.count.notPic == 0) {
+            this.noRows = true
+          }
+          if (this.count.finCom == 0) {
+            this.noRows = true
           }
         }, err => {
           console.log(err)
@@ -314,17 +301,15 @@ export default {
         console.log("------Bytype-----" + data.body.obj)
         this.$loading.close()
         if (data.body.obj) {
-          let obj = JSON.stringify(data.body.obj).replace(/http:\/\//g, "https://")
-          let msg = JSON.parse(obj);
-          console.log("-----hh---" + msg);
-          let resData = JSON.parse(msg)
+          let obj = data.body.obj.replace(/http:\/\//g, "https://")
+          let resData = JSON.parse(obj)
           if (resData && resData.resultInfo) {
               this.pageNo = resData.resultInfo.pageNo
               let resRow = resData.resultInfo.rows
                 if (!resRow && resData.resultInfo.length > 0) {
                           resRow = resData.resultInfo;
                 }
-          if (resRow) {
+              if (resRow) {
                 for (let i = 0; i < resRow.length; i++) {
                         let orderNo = -1;
                         if (resRow[i].orderNo) {
@@ -343,7 +328,7 @@ export default {
                             isContent: resRow[i].commentAgain,
                             isvalid: resRow[i].isvalid,
                             ispic: resRow[i].ispic,
-                            product: encodeURIComponent(JSON.stringify({
+                            product: JSON.stringify({
                                 pic: resRow[i].productPic,
                                 goodsName: resRow[i].productName,
                                 productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
@@ -351,35 +336,27 @@ export default {
                                 merchantName: resRow[i].shopId,
                                 tags: resRow[i].tags,
                                 comment: this.getData(resRow[i])
-                            }).replace(/[\ud800-\udfff]/g, ''))
+                            }).replace(/[\ud800-\udfff]/g, '')
                         }
                         this.list = this.list.concat(good)
                     }
                 this.busy = false
                 this.loading = true
                 if (resRow.length < 10) {
-                  this.busy = true
                   this.loading = false
-                  this.$toast({
-                    position: 'bottom',
-                    message: '没有了~'
-                  })
+                  this.busy = true
                 }
-                } else {
-                this.busy = true
-                this.loading = false
-                if (resData.resultInfo.pageNo > 1) {
-                  this.$toast({
-                    position: 'bottom',
-                    message: '亲，没有数据了！'
-                  })
-                } else {
-                  this.noRows = true
-                }
-                }
-          } else {
-            this.noRows = true
+              }
           }
+        }
+        if (this.count.unCom == 0) {
+          this.noRows = true
+        }
+        if (this.count.notPic == 0) {
+          this.noRows = true
+        }
+        if (this.count.finCom == 0) {
+          this.noRows = true
         }
       }, err => {
         console.log(err)
@@ -514,10 +491,20 @@ export default {
         order: order,
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addcomment',
-        params: JSON.stringify(reqData)
-      })
+      // 判断终端
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+      if (isAndroid) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addcomment',
+          params: encodeURIComponent(JSON.stringify(reqData))
+        })
+      } else {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addcomment',
+          params: JSON.stringify(reqData)
+        })
+      }
     },
     // 查看评价
     seeComment(id, product) {
@@ -526,10 +513,20 @@ export default {
         type: 'show',
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addCommentAgain',
-        params: JSON.stringify(reqData)
-      })
+      // 判断终端
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+      if (isAndroid) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: encodeURIComponent(JSON.stringify(reqData))
+        })
+      } else {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: JSON.stringify(reqData)
+        })
+      }
     },
     // 追加晒单
     commentAfter(id, product) {
@@ -538,10 +535,20 @@ export default {
         type: 'pic',
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addCommentAgain',
-        params: JSON.stringify(reqData)
-      })
+      // 判断终端
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+      if (isAndroid) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: encodeURIComponent(JSON.stringify(reqData))
+        })
+      } else {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'addCommentAgain',
+          params: JSON.stringify(reqData)
+        })
+      }
     },
     // 追加评价
     againComment(id, product) {
@@ -550,10 +557,20 @@ export default {
         type: 'again',
         product: product
       }
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-        pageId: 'addCommentAgain',
-        params: JSON.stringify(reqData)
-      })
+     // 判断终端
+     let u = navigator.userAgent;
+     let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
+     if (isAndroid) {
+       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+         pageId: 'addCommentAgain',
+         params: encodeURIComponent(JSON.stringify(reqData))
+       })
+     } else {
+       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+         pageId: 'addCommentAgain',
+         params: JSON.stringify(reqData)
+       })
+     }
     }
   },
   // 控制路由跳转

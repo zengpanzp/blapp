@@ -98,7 +98,6 @@ const isLogin = (login = true) => {
     window.CTJSBridge.LoadMethod('NativeEnv', 'fetchLoginInfo', {}, {
       success: res => {
         let resData = JSON.parse(res)
-        console.log(resData)
         if (resData.member_id && resData.member_token) {
           localStorage.setItem('userInfo', res)
           console.log('已经登录')
@@ -106,6 +105,9 @@ const isLogin = (login = true) => {
         } else {
           localStorage.removeItem('userInfo', res)
           console.log('没有登录')
+          if (!login) {
+            reject();
+          }
           login && window.CTJSBridge.LoadMethod('BLLogin', 'PresentLoginViewController', {}, {
             success: data => {
               let resData = JSON.parse(data)

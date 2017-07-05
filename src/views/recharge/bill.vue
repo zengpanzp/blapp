@@ -13,7 +13,7 @@
           </ul>
         </div>
       </div>
-      <div class='cbill-account list-block'>
+      <div class='cbill-account list-block max-list-height'>
         <ul>
           <li class="swipeout ligo" @click="go(item,$event)" v-for="item in accountList">
             <bl-swipeout>
@@ -37,7 +37,7 @@
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account" style="color:#666" v-if="item.accountNo">立即缴费</span>
+                      <span class="bill-account" style="color:#666" v-if="item.accountNo">查看账单</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -47,7 +47,7 @@
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">立即缴费</span>
+                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">查看账单</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -57,7 +57,7 @@
                       <div style="color:#999" v-show="item.accountNo">{{item.accountNo}}</div>
                     </div>
                     <div class='bill-pay-stadius-go gray'>
-                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">立即缴费</span>
+                      <span class="bill-account" style="color:#666"  v-if="item.accountNo">查看账单</span>
                       <span class="bill-account"  v-else>我要缴费</span><img class="more" src="./i/iphone/more.png" />
                     </div>
                   </div>
@@ -73,8 +73,8 @@
         <bl-home-menu class="homeMenu" v-if="more"></bl-home-menu>
       </transition>
       <bl-modal  v-show="visible" :visible="visible" title="删除账号将删除所有缴费信息" :buttons="buttons"></bl-modal>
+      <div @click="addAccount" class="addAccount">绑定账号,下次直接付账单</div>
     </div>
-    <div @click="addAccount" class="addAccount">绑定账号,下次直接付账单</div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -256,13 +256,14 @@
                 member_token: this.memberToken,
               }
               api.recharge.createPaySubNo(createPaySubNoData).then(data => {
-                console.log(data);
                 let result = JSON.parse(data.body.obj);
                 if (result.resCode == "00100000") {
                   this.$toast({
                     position: 'bottom',
                     message: "变更分组成功!"
                   });
+                  // 重新加载
+                  this.selectItem(this.changeItem, this.groupList.indexOf(this.changeItem));
                 } else {
                   this.$toast({
                     position: 'bottom',
@@ -408,6 +409,9 @@
         this.$set(this.receiveGroupItem, "id", item.id);
         this.$set(this.receiveGroupItem, "groupName", item.groupName);
         this.toShow = true;
+        this.selectItem(item, this.groupList.indexOf(item));
+        this.changeItem = item;
+        // selectGroup
         if (item.update == "update") { // 进行变更分组操作
           this.update();
         }
@@ -434,13 +438,15 @@
             typeVal = 3;
             break;
         }
-        if (obj && obj.accountNo) {  // 立即缴费
+        if (obj && obj.accountNo) {  // 查看账单
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
             message: '加载中',
             duration: 'loading'
           })
           let timestamp = utils.getTimeFormatToday();
+          let month = (new Date().getMonth() + 1).toString();
+          month = month > 10 ? month : ('0' + month)
           let queryData = {
             client_id: CONST.CLIENT_ID,
             t_dz: "02",
@@ -454,10 +460,12 @@
             format: "json",
             year: new Date().getFullYear().toString(),
             month: (new Date().getMonth() + 1).toString(),
+            date: new Date().getFullYear().toString() + "-" + month,
             code: obj.accountNo,
             timestamp: timestamp,
             token: this.memberToken
           }
+          console.log(month, new Date().getFullYear().toString() + "-" + month)
           // 获取内容
           api.recharge.getGoodsDetail(queryData).then(data => {
             let json = JSON.parse(data.body.obj);
@@ -468,7 +476,7 @@
                 json[obj].date = json[obj].date.toString().substring(0, 4) + '-' + json[obj].date.toString().substring(4);
               }
               if (json[obj].Result_code == "200") {
-                results.unshift(json[obj]);
+                results.push(json[obj]);
               } else {
                 results.push(json[obj]);
               }
@@ -486,8 +494,10 @@
               queryData.fee = first.fee && first.fee[0];
             }
             this.inlineLoading.close();
+            console.log("查询结果1", json)
+            console.log("查询结果", queryData)
             localStorage.setItem("BL_QUERY_DATA", JSON.stringify(queryData))
-            this.$router.push({path: "/recharge/pay/" + typeVal});
+            this.$router.push({path: "/recharge/records/" + typeVal});
           })
         } else {                     // 去缴费
           let jigouCode, jigouName;

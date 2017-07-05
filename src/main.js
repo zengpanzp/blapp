@@ -99,6 +99,8 @@ Vue.directive('go-native-goods-detail', {
       isGiftGoods: binding.modifiers.isGiftGoods || false
     }
     el.addEventListener('click', function() {
+      console.log("DATA1", JSON.parse(JSON.stringify(binding.value)))
+      console.log("DATA2", JSON.parse(JSON.stringify(args)))
       if (!el.getAttribute('disabled')) {
         window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
       }
@@ -113,10 +115,10 @@ Vue.directive('go-native-goods-similar', {
     let args = {
       pageId: 'similar',
       params: JSON.stringify({
-        goodsSid: binding.value.sid,
-        goodsName: binding.value.goods_sales_name,
-        salePrice: binding.value.sale_price,
-        imgUrlString: binding.value.url,
+        goodsSid: binding.value.goodsid,
+        goodsName: binding.value.goodsName,
+        salePrice: binding.value.goodsPrice,
+        imgUrlString: binding.value.goodsImageUrl,
         isGiftGoods: binding.modifiers.isGiftGoods || false
       })
     }

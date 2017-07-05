@@ -12,6 +12,11 @@
       background: #3ea2ff;
     }
   }
+  .listview{
+    position: fixed;
+    top:0;
+    left: 0;
+  }
 
 }
 @mixin common {
@@ -53,7 +58,7 @@
     height: rem(80);
     line-height: rem(80);
     font-size: rem(30);
-    border-bottom:rem(1.5) solid #e7e7e7;
+    border-bottom:1px solid #e7e7e7;
     .btns{
       float: right;
       height: rem(60);
@@ -99,7 +104,7 @@
     padding:0 rem(20);
   }
   .headMenu{
-    border-bottom: rem(1.8) solid #ddd;
+    border-bottom: 1px solid #ddd;
     ul{
       display: -webkit-flex;
       height: rem(90);

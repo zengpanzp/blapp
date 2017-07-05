@@ -3,7 +3,7 @@
 <template>
     <div class="rates">
       <div class="content-wrap">
-          <ul>
+          <ul class="ttop">
             <li>缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>
@@ -17,13 +17,14 @@
             </li>
           </ul>
           <ul class="record-list" v-if="dataJson">
-            <li class="record-detail" @click="toPay" v-for="item in results" v-if="item.Result_code=='200'">
+            <li class="record-detail flex-m" @click="toPay(item)" v-for="item in results" v-if="item.Result_code=='200'">
               <span>{{item.date}}</span>
               <span>￥{{item.total[0]}}</span>
-              <span><div class="billstatus">{{item.canpaymsg[0]=="未销账"?"未缴费":item.canpaymsg[0]}}</div></span>
+              <span v-if="item.canpaymsg[0]=='已销账'"><div class="billstatus finish">{{(item.canpaymsg[0]=="已销账"?"已缴费":item.canpaymsg[0])}}</div></span>
+              <span v-else><div class="billstatus">{{item.canpaymsg[0]=="未销账"?"未缴费":(item.canpaymsg[0]=="已销账"?"已缴费":item.canpaymsg[0])}}</div></span>
             </li>
-            <li class="record-detail" v-else="item.date">
-              <span class="spe" v-bind:style="{ 'line-height': (item.msg.length>21?'':'70px')}">{{item.msg}}</span>
+            <li class="record-detail flex-m" v-else="item.date" >
+              <span class="spe">{{item.msg}}</span>
               <span class="spe"><div class="billstatus finish">已完成</div></span>
             </li>
           </ul>
@@ -68,7 +69,7 @@
           api.recharge.getGoodsDetail(queryData).then(data => {
             let json = JSON.parse(data.body.obj);
             this.dataJson = json;
-            console.log(json)
+            console.log("结果", json)
             delete this.dataJson.Result_code;
             let results = [];
             for (let obj in this.dataJson) {
@@ -76,26 +77,15 @@
                     this.dataJson[obj].date = this.dataJson[obj].date.toString().substring(0, 4) + '-' + this.dataJson[obj].date.toString().substring(4);
                 }
                 if (this.dataJson[obj].Result_code == "200") {
-                    results.unshift(this.dataJson[obj]);
+                    results.push(this.dataJson[obj]);
                 } else {
-                  console.log(results)
                     if (!this.arrayContains(results, this.dataJson[obj])) {
                       results.push(this.dataJson[obj]);
                     }
                 }
             }
             this.results = results;
-            if (results[0]) {
-              let first = results[0];
-              this.queryData.canpay = first.canpay && first.canpay[0];
-              // 条码
-              this.queryData.tiaoma = first.code && first.code[0];
-              this.queryData.price = first.price && first.price[0];
-              this.queryData.total = first.total && first.total[0];
-              this.queryData.date = first.date;
-              this.queryData.fee = first.fee && first.fee[0];
-              localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData));
-            }
+            console.log("result", this.results)
             this.$loading.close()
           })
         });
@@ -128,8 +118,22 @@
           return false;
         }
       },
-      toPay() {
-        this.$router.push({ path: "/recharge/pay/" + this.rateType });
+      toPay(item) {
+        console.log(item)
+        if (item) {
+          let first = item;
+          this.queryData.canpay = first.canpay && first.canpay[0];
+          // 条码
+          this.queryData.tiaoma = first.code && first.code[0];
+          this.queryData.price = first.price && first.price[0];
+          this.queryData.total = first.total && first.total[0];
+          this.queryData.date = first.date;
+          this.queryData.fee = first.fee && first.fee[0];
+          localStorage.setItem("BL_QUERY_DATA", JSON.stringify(this.queryData));
+        }
+        if (item.canpay[0] == "01") {
+          this.$router.push({path: "/recharge/pay/" + this.rateType});
+        }
       },
       // 监听路由
       fill(to, from) {

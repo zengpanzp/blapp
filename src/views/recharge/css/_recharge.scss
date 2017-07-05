@@ -4,20 +4,25 @@
     color: #fff !important
 }
 
-
+*{
+  -webkit-overflow-scrolling: touch;
+}
 .icon-waitassess {
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAAU1QTFRFX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtX7LtAAAAX7Lt9068HgAAAG50Uk5T2f21pxFLzxN5RMYZlt5TFNsmVOa3Jw9kiiSlKozLTm33otqQ76n0If6/4GbdBpi2FTeENNTj4jUiLLrB2BDSrnuAbtC0Nuv1fNHO4QcSGgVwfYXIHvz2A3go7WvM8HUEeiUw8sP6Fyn5+AL7AQDmWW8ZAAACNklEQVRIx53XV1fjMBAGULb33iu9996X3tIgJCENAoFgx23+/+PalrMb5JE09veS8ZHuOXIsS3KHI47dP9RvS9qdDklbFQCqMfHggIsHBmNhexi8DNtxcBVYqjFw/SDAB/XI2GxAKw0zKj6B/zmJiOtnbfisHgkXG9Ae0cBxXIO7qUXAZYPDRpmMizngkytScQ3CqRHxDwPBhk7Cl+eA5fySgjcBzyYBLzcFuLmsxIJB4wPncRbEOVTga0uCrWspPt4BWXaOZXgL5NmSYOmgkYG349QfUOUoJcKnoM6pAM8WCLgwi+LxOaBkLoXhEtBSQvD6BRFfrIfxFVBzFcL2CBmP2DyeJqjmWzaJpnmcVduPTxxt1SuyPN5VWiPtdsvcc6tdHo8pMev5wa3GeNxUYuuF221pyLt3HhP+r+dLzruEX8XA7vwIfnl8A/Tc8HgtAl7j8YZKrH76fBiUGzxWTe1C3u30i5vcLbyowA+8TvdZvchjc14+vb65fR6yg8q8GXolZ6TYPxA9ZfVM+H3O30rsS6/HG/aYb/PIMjQhtl/9N/g7u5jA1rCMaJ68euS3fwlmSAZderdx+3Pcb/0d3NY2vm6bK5hNskXnfWBXTMGOMbWA4Mf+7tnaTBamhBudXkH0a8d5dhTUFV2yxe7tIzr3b//b35OeDPSk5GkndcWZJD0ptJNp5VHKHu1Dad+oTTk+ar1dIdrVq1GPzFqp5w7tKWmRvjHKnd2JigVWJdHdWRZ9Y/wF5e3cMTdmkIgAAAAASUVORK5CYII=') rem(.25*31.25) center no-repeat;
   background-size: .6rem;
+  margin-left: rem(20);
 }
 
 .icon-electricity {
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAASNQTFRF/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZ/7NZAAAA/7NZ99eoLAAAAGB0Uk5TtuTUTBQQO0G5ERhQIspK2lLvBewq2LcymaE+iMQ3w8JVd+tEwTAjSUaUl2buyQTWOm+bJoNPWr0zOa3dyEIksbtOql2vzKT86ltp0vUP8AN449sVAYcGHPkKlv5LPC0AiGLd7wAAAX9JREFUSMed1uWSwjAUBWDW3d3dXXBY3KVFCi3Se9//KZaBHaCdsqTn/Ezmm0lyMpM4aEy8ayvaqDnHGKsXmVdBXC8x8zqGtZeO5RaEpRDj+IFxnGUcR1I43sszjLsl9XJnFxdyfcttm1jaZRw3GMcy49jZxPFJnmF8m2YYD5fUy40wrrnNlnVhfMA4lhnHmSaO31WG8U+aYVwpW1r+GgavC4vLumdu1oRr19aWG439qC98lnjzXz7/DTWXjLiaZPHIpmUrNmzDtGfLkkZkXjLioCpucwXjaW8XxW2pbqxqVElWyXuMPWsBcZuKGC9J1WfjoLOmG6bwxpZ/J3Eajkc/H4++Lz6eXOex/0sa4E2rH4G1DUkiL4Y1TmgE40FJ9nFRJxin7gnHWcKxIv4+e802XhXHbZMNaATjcoVgXNQJxmqQcBwjHCt2v1JXA5us2sWtvj2uEYytSxLD6R+CsXpIMG5mCMcyQdjZLYkw7OpYdw3EU8yTBQLxzIRjepylX9DOJGA6kahmAAAAAElFTkSuQmCC') rem(0.25*31.25) center no-repeat;
-  background-size: .6rem
+  background-size: .6rem;
+  margin-left: rem(20);
 }
 
 .icon-gas {
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAABGdBTUEAALGPC/xhBQAAAeBQTFRF+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJo+WJoAAAA+WJo7NeZ0wAAAJ90Uk5T2GJ1PNyWUrORhPCOOGr3Pl3rKvx7IB/Zhzee1mF3ShcFV0kCL6MdX8xjSLwPv1HA6YiZq4N5LtII30BwtEMiZJgxWm46vdPOPXTX8cZxjMHatalGGafilLj47iafBAkNWCUcByusu356TQ4KnY/s3ZDzZeVO+mwnyapVVMNgS1D2whZnga3qMO3I7ymb6AsDLRLhDAb5uaYB+/0a5v4ANvEtGgAAAmlJREFUSMed12V72zAQAOCMGTpm7piZmdvxVoYV16608sq4NkmbJm3SJrET31+dsZJsxWflPp3unvdxIsuy7FPwqMzU8CGwYm1ZwZrscNX6IIA0kw3+XiaBGuuULPCTPNDjpzi++wPMqBbGvwctu1MRxbExy0K3MJ4FEqL4MmVhXgw3ddL4thi+RVt4TnV+7cZwLMXgj6Szi73pPNzPWHi93GhMQyGGb7AYIta9V3/RXgSHgzZ83Ww0aIM97viZzcJildFo0wY97njIjuFVWKvX6vkFLq58bCbXHBj2afVDepoc5+Ev78wk14nhsHaPjbSHg0egzsyWOBiam5QWI5uqduCTn+FqwkgHeRgO7j9gZn+P2fGwWjX3qk9cDOlWK5u0439q8QVJXaO4l8XRUbW4ZOR/MAxxFg/oi8F4cjtQLPUy2Ng5OvQ8gmJoZvA9Yx71PNGJ4vY5Cp82iy89/mkYoPCIWTOmbEcaxU8pfNMqdunDehSfpXCfVUwd1Yab0Usvxgh+s1wN6FNRh156huAQqQZkdSyXYPgRwaNU2b+lRlG2Y3iYYLaRs2lbzSyCGwlut/e2hhB8n+A2EI1pgotEbTpKcIsoXqAWyXFR/JXC85IgPkc/kmNiNinTeEgMP2Q2gzm/EO5id88GEXsnweJoSgCft79u+r3buPNF1+fVhsad+OJ7b7b7Le/lXjrlaVVP8E8Gp4Ie8IdMx4rIArq0JjKfhuR8d9v6ze34WD6ZdLH1MnL2nL6UiabOJPCD64kr3Mf/QYW3U2/thtWs3Bg/Ehb4xihdUVjk8xdLJQWB+MpV5dl90bnGfxK/eIFPXeIVAAAAAElFTkSuQmCC') rem(0.25*31.25) center no-repeat;
-  background-size: .6rem
+  background-size: .6rem;
+  margin-left: rem(20);
 }
 .simple-password-buttom {
     height: 2.75rem;
@@ -60,7 +65,7 @@
   left: 50%;
   margin-left: rem(-350);
   border-radius: rem(10);
-  border:rem(1.5) solid #d0111a;
+  border:1px solid #d0111a;
   color:#d0111a;
   text-align: center;
   font-size: rem(28);
@@ -341,7 +346,6 @@ span.solid-miner-circle {
 .bill-histroy {
     padding: 0 0.75rem
 }
-
 .bill-histroy li {
     padding: 1.0625rem 0;
     display: -webkit-box;
@@ -527,7 +531,6 @@ span.solid-miner-circle {
     padding: 0 0 0 rem(1.6*31.25);
     position: relative;
     height: rem(4.375*31.25);
-    border-bottom: rem(.05*31.25) solid #e7e7e7;
     box-sizing: border-box
 }
 .cbill-account .swipeout-content .more{
@@ -642,7 +645,19 @@ span.solid-miner-circle {
 }
 
 .list-block {
-    padding: 0
+    padding: 0;
+    max-height: 60%;
+    overflow: hidden;
+  .ligo{
+    padding-left: 0;
+    border-bottom: 1px solid #e7e7e7;
+  }
+  .ligo:first-child{
+    border-bottom: 1px solid #e7e7e7;
+  }
+  .ligo:last-child{
+    border-bottom: 1px solid #e7e7e7;
+  }
 }
 
 .line-tv-box ul li {
@@ -802,7 +817,7 @@ span.solid-miner-circle {
   font-size: rem(.72*31.25)
 }
 .new .blue-bill-top ul .bill-select a {
-  border-bottom: rem(.15*31.25) solid #fff
+  border-bottom: 1px solid #fff
 }
 .new .blue-bill-top ul li a {
   color: rgba(255, 255, 255, .6);
@@ -812,4 +827,8 @@ span.solid-miner-circle {
 }
 .new .blue-bill-top ul .bill-select a {
   color: #fff;
+}
+.max-list-height{
+  max-height: rem(800);
+  overflow: scroll;
 }

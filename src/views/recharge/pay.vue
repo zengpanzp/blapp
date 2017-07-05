@@ -5,23 +5,23 @@
       <div class="content-wrap">
           <ul>
             <li class="title" :class="typeClass">{{typeName}}</li>
-            <li @click.prevent="showCategory">条码
-              <div class="name"><label>{{queryData.tiaoma}}</label></div>
+            <li class="flex-m" @click.prevent="showCategory">条码
+              <div class="name"><label>{{queryData.tiaoma?queryData.tiaoma:'暂未查询到条形码信息~'}}</label></div>
             </li>
             <!--	</ul>
             </div>-->
             <!--<div class='pay-remind'><img src='images/new_store/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>-->
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
-            <li>缴费账号
+            <li class="flex-m">缴费账号
               <div class="name"><label>{{queryData.code}}</label></div>
             </li>
-            <li>缴费机构
+            <li class="flex-m">缴费机构
               <div class="name"><label>{{queryData.companyName}}</label></div>
             </li>
           </ul>
           <ul class="paylist">
-            <li @click.prevent="showCategory">账期
+            <li class="flex-m" @click.prevent="showCategory">账期
               <div class="name"><label>{{queryData.date}}</label></div>
             </li>
             <!--	</ul>
@@ -29,14 +29,15 @@
             <!--<div class='pay-remind'><img src='images/new_store/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>-->
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
-            <li>缴费金额
-              <div class="name"><label style="color:#e6133c">￥{{queryData.total}}</label></div>
+            <li class="flex-m">缴费金额
+              <div class="name"><label style="color:#e6133c">￥{{queryData.total||0}}</label></div>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
         <div class="phoneFixBottom">
           <div class="config-button-contain">
-            <button class="edit-config-button middleFont" @click="goPay" :disabled="queryData.canpay!='01'">立即支付：￥{{ queryData.total }}</button>
+            <button class="edit-config-button middleFont" v-if="queryData.total" @click="goPay" :disabled="queryData.canpay!='01'">立即支付：￥{{ queryData.total }}</button>
+            <button class="edit-config-button middleFont" v-else  :disabled="queryData.canpay!='01'">未查询到付费信息</button>
           </div>
         </div>
       </div>
@@ -77,7 +78,7 @@
         this.ratesType = this.$route.params["type"];
         let queryData = JSON.parse(localStorage.getItem("BL_QUERY_DATA"));
         this.queryData = queryData;
-        console.log(queryData)
+        console.log("接收结果", queryData)
         this.fill();
     },
     watch: {
@@ -206,8 +207,9 @@
                       let Pay = require('src/paymodel').default
                       current.inlineLoading.close()
                       Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
+                        let result = JSON.parse(data);
                         // 跳转到paysuccess
-                        current.$router.push({path: "/recharge/paysuccess?money=" + data + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
+                        current.$router.push({path: "/recharge/paysuccess?money=" + result.payAmount + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
                       }, (data) => {
                         // 跳转到详情
                         current.$router.push({path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo});

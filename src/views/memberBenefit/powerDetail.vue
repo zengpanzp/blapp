@@ -1,4 +1,4 @@
-<style lang="scss" src="./css/memberBenefit.scss" scoped></style>
+<style lang="scss" src="./css/powerDetail.scss" scoped></style>
 <template>
   <div class="new">
    	<div class="freedom-top">
@@ -7,7 +7,7 @@
         <div class="freedom-name">
               {{power.title}}
             <div class="freedom-text">
-                    <div v-for="item in power.viceTitle">{{item}}</div ><br/>
+              <div v-for="item in power.viceTitle">{{item}}</div ><br/>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
     </div>
     <div class="freedom-details freedom-button">
         <a href="tel:4009008800" class="simple-password-buttom" v-if="power.rightCode == '009'">一键接通贵宾客服</a>
-        <a href="#" class="simple-password-buttom" v-if="power.rightCode == '002'||power.rightCode == '004'||power.rightCode == '007'||power.rightCode == '008'">查看门店清单</a>
+        <router-link to="/" class="simple-password-buttom" v-if="power.rightCode == '002'||power.rightCode == '004'||power.rightCode == '007'||power.rightCode == '008'">查看门店清单</router-link>
         <a href="#" class="simple-password-buttom" v-if="power.rightCode == '011'">合作商户积分互换</a>
         <a href="#" class="simple-password-buttom green-button" style="display:none"
            id="appointment">快速预约</a>
@@ -57,7 +57,7 @@ import api from './api'
 import utils from 'src/utils'
 export default {
 
-  name: 'memberBenefit',
+  name: 'powerDetail',
 
   data() {
     return {
@@ -83,7 +83,7 @@ export default {
     this.member_mobile = utils.dbGet('userInfo').member_mobile
     console.log(this.memberToken)
   //	let powerId = this.$route.params.powerId
-    let powerId = '012'
+    let powerId = '004'
   	console.log(powerId)
   	api.getPowerDel(JSON.stringify({
     	'rightCode': powerId
