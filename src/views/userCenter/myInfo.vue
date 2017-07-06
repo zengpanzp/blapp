@@ -19,7 +19,7 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li class="first" @click="avatar">头像<b><img src="../..//assets/headPic.jpg" /><i class="head iconfont arrow-back"></i></b></li>
+        <li class="first" @click="avatar">头像<b><img src="../..//assets/headPic.png" /><i class="head iconfont arrow-back"></i></b></li>
         <li @click="nick">昵称<div>{{ nickName }}<i class="iconfont arrow-back"></i></div></li>
         <li @click="gender">性别<i class="iconfont arrow-back"></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
