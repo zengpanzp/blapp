@@ -397,7 +397,7 @@
         window.CTJSBridge && window.CTJSBridge.LoadMethod('Contact', 'selectItem', '', {
           success: data => {
             let resData = JSON.parse(data)
-            this.iphoneNum = resData.phoneNumber
+            this.iphoneNum = String(resData.phoneNumber).replace(/\s/g, "")
           },
           fail: () => {},
           progress: () => {}
