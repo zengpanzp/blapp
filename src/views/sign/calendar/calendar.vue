@@ -3,66 +3,64 @@
   <div class="BLCalendar">
       <div class="vue-calendar-backdrop" v-if="showCalendar" @touchmove.prevent  @click.prevent="closeCalendar"></div>
       <div class="vue-calendar" data-index="0">
-          <transition name="slide-fade" appear appear-class="slide-fade">
-            <div v-if="showCalendar" @touchmove.prevent>
-              <div class="vue-calendar-content"    id="vueCalendarTemplate">
-                  <div class="vue-calendar-content-title-wrapper" id="topHeight1">
-                      <div class="premonth" @click="getPreMonthSignList">{{preMonth}}</div>
-                      <div class="curmonth">{{curMonth}}</div>
-                      <div class="curyear">{{curYear}}</div>
-                      <div class="nextmonth" @click="getNextMonthSignList">{{nextMonth}}</div>
-                      <!--<div class="month-bar" id="monthBar-$index" :class="{'first-month-bar': $index == 0}">{{item.month}}</div>-->
-                  </div>
-                  <div class="week-bar" id="topHeight2">
-                      <ul>
-                          <li class="weekend">日</li>
-                          <li>一</li>
-                          <li>二</li>
-                          <li>三</li>
-                          <li>四</li>
-                          <li>五</li>
-                          <li class="weekend">六</li>
-                      </ul>
-                  </div>
-                  <div id="scrollPanelWrapper">
-                      <div class="vue-calendar-date-wrapper" id="scrollPanel">
-                          <div v-for="item in panel"  class="month-panel">
-                              <div class="month-list">
-                                  <ul>
-                                      <li @click.prevent="selectedFunc" v-for="day in item.days" date-sec="new Date(day).getTime() || ''" :class="{'selected-star': isStartDate == new Date(day).getTime(),
-      //                                            'selected-end': isEndDate == new Date(day).getTime(),
-      //                                            'selected-line': isStartDate < new Date(day).getTime() && new Date(day).getTime() < isEndDate,
-      //                                            'disabled': today > new Date(day).getTime() || new Date(day).getTime() > lastDay,
-                                                  'without-text': withoutText,
-                                                  'border-radius': borderRadius,
-                                                  'selected-is-today': isToday(day),
-                                                  'selected-tips-hasLottery': hasLottery(day),
-                                                  'selected-tips-lottery-day': showLotteryDay(day),
-                                                  'selected-is-today2': isToday(day) && hasSigned(day),
-                                                  'selected-tips-hasLottery2': hasLottery(day) && hasSigned(day),
-                                                  'selected-tips-lottery-day2': showLotteryDay(day) && hasSigned(day)
+          <div v-if="showCalendar" @touchmove.prevent>
+            <div class="vue-calendar-content"    id="vueCalendarTemplate">
+                <div class="vue-calendar-content-title-wrapper" id="topHeight1">
+                    <div class="premonth" @click="getPreMonthSignList">{{preMonth}}</div>
+                    <div class="curmonth">{{curMonth}}</div>
+                    <div class="curyear">{{curYear}}</div>
+                    <div class="nextmonth" @click="getNextMonthSignList">{{nextMonth}}</div>
+                    <!--<div class="month-bar" id="monthBar-$index" :class="{'first-month-bar': $index == 0}">{{item.month}}</div>-->
+                </div>
+                <div class="week-bar" id="topHeight2">
+                    <ul>
+                        <li class="weekend">日</li>
+                        <li>一</li>
+                        <li>二</li>
+                        <li>三</li>
+                        <li>四</li>
+                        <li>五</li>
+                        <li class="weekend">六</li>
+                    </ul>
+                </div>
+                <div id="scrollPanelWrapper">
+                    <div class="vue-calendar-date-wrapper" id="scrollPanel">
+                        <div v-for="item in panel"  class="month-panel">
+                            <div class="month-list">
+                                <ul>
+                                    <li @click.prevent="selectedFunc" v-for="day in item.days" date-sec="new Date(day).getTime() || ''" :class="{'selected-star': isStartDate == new Date(day).getTime(),
+    //                                            'selected-end': isEndDate == new Date(day).getTime(),
+    //                                            'selected-line': isStartDate < new Date(day).getTime() && new Date(day).getTime() < isEndDate,
+    //                                            'disabled': today > new Date(day).getTime() || new Date(day).getTime() > lastDay,
+                                                'without-text': withoutText,
+                                                'border-radius': borderRadius,
+                                                'selected-is-today': isToday(day),
+                                                'selected-tips-hasLottery': hasLottery(day),
+                                                'selected-tips-lottery-day': showLotteryDay(day),
+                                                'selected-is-today2': isToday(day) && hasSigned(day),
+                                                'selected-tips-hasLottery2': hasLottery(day) && hasSigned(day),
+                                                'selected-tips-lottery-day2': showLotteryDay(day) && hasSigned(day)
 
-                                              }" data-date-format="convertDateFormatValue(day)">
-                                          <div class="dd" :class="{
-                                              'selected-hasLottery': hasLottery(day),
-                                              'selected-lotteryDay': showLotteryDay(day),
-                                              'selected-is-today': isToday(day),
-                                              'signed': hasSigned(day)
-                                          }">
-                                            {{convertDateFormatDisplay(day)}}
-                                            <i></i>
-                                          </div><i></i>
-                                          <!--<span class="holiday"></span>-->
-                                      </li>
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div @click.prevent="closeCalendar" class="closeCalendar"><img src="./i/close.png"></div>
+                                            }" data-date-format="convertDateFormatValue(day)">
+                                        <div class="dd" :class="{
+                                            'selected-hasLottery': hasLottery(day),
+                                            'selected-lotteryDay': showLotteryDay(day),
+                                            'selected-is-today': isToday(day),
+                                            'signed': hasSigned(day)
+                                        }">
+                                          {{convertDateFormatDisplay(day)}}
+                                          <i></i>
+                                        </div><i></i>
+                                        <!--<span class="holiday"></span>-->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </transition>
+            <div @click.prevent="closeCalendar" class="closeCalendar"><img src="./i/close.png"></div>
+          </div>
       </div>
 
     <!--<vue-component-tips></vue-component-tips>-->
@@ -181,7 +179,7 @@
             if (day != '') {
               let formatDate = utils.dateFormat('yyyy-MM-dd', day);
               for (let i = 0; i < this.afterLotteryList.length; i++) {
-                let dayStr = this.afterLotteryList[i] > 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
+                let dayStr = this.afterLotteryList[i] >= 10 ? this.afterLotteryList[i] : ("0" + this.afterLotteryList[i]);
                 let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
                 //              console.log("formatDate", formatDate, lotteryDate)
                 if (lotteryDate == formatDate) {

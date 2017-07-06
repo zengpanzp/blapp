@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <bl-slide class="evaluation-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
     <!-- end -->
-    <bl-navbar class="collection-tab flex" v-model="tabsModel">
+    <bl-navbar class="collection-tab flex" v-model="tabsModel" v-show="filterEleTabs.length != []">
       <bl-tab-item class="flex-item flex-c-m" v-for="(item, index) in filterEleTabs" :id="index" @click.native="changeTab(index, item.type)"><span>{{ item.deployName }}({{ item.num }})</span></bl-tab-item>
     </bl-navbar>
     <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
@@ -50,6 +50,7 @@ export default {
       noRows: false,
       loading: true,
       tabsModel: 0,
+      comList: [],
       filterEleTabs: [
         {
           deployName: '待评价',
@@ -101,7 +102,9 @@ export default {
       this.loginflag = true
     }
     if (this.$route.query.orderNo) {
+      window.CTJSBridge && window.CTJSBridge._setNativeTitle("商品列表")
       this.type = -1
+      this.filterEleTabs = []
       this.loadMore()
       return
     }
@@ -120,22 +123,14 @@ export default {
             if (item.resourceId == 1223) {
               this.allSlides = item.advList
             }
+            if (item.resourceId == 1225) {
+              this.comList = item.advList
+            }
           }
-         if (resData.obj.otherResource[1]) {
-                if (resData.obj.otherResource[1].advList[0]) {
-                  let params = {
-                    popDownUrl: resData.obj.otherResource[1].advList[0].jumpUrl,
-                    popDownTitle: resData.obj.otherResource[1].advList[0].deployName
-                  }
-                  window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', params)
-                }
+          if (this.comList) {
+            window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', this.comList[0], {success: function () {}, fail: function () {}, progress: function () {}})
           }
         }
-      } else {
-        this.$toast({
-          position: 'bottom',
-          message: data.body.msg
-        })
       }
       }, err => {
         console.log(err)
@@ -182,7 +177,6 @@ export default {
           memberId: this.memberId,
           channelId: 1
         }).then(data => {
-          console.log("queryCount" + data)
           this.$loading.close()
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
@@ -214,7 +208,6 @@ export default {
       this.pageNum = 1
       this.list = []
       this.type = type
-      console.log(this.type)
       this.loadMore()
     },
     // 根据类型查询评论信息
@@ -272,20 +265,13 @@ export default {
                   this.busy = false
                   this.loading = true
                   if (resRow.length < 10) {
-                    this.loading = false
-                    this.busy = true
+                  this.loading = false
+                  this.busy = true
                   }
                 }
+            } else {
+              this.noRows = true
             }
-          }
-          if (this.count.unCom == 0) {
-            this.noRows = true
-          }
-          if (this.count.notPic == 0) {
-            this.noRows = true
-          }
-          if (this.count.finCom == 0) {
-            this.noRows = true
           }
         }, err => {
           console.log(err)
@@ -343,20 +329,13 @@ export default {
                 this.busy = false
                 this.loading = true
                 if (resRow.length < 10) {
-                  this.loading = false
-                  this.busy = true
+                this.loading = false
+                this.busy = true
                 }
               }
+          } else {
+            this.noRows = true
           }
-        }
-        if (this.count.unCom == 0) {
-          this.noRows = true
-        }
-        if (this.count.notPic == 0) {
-          this.noRows = true
-        }
-        if (this.count.finCom == 0) {
-          this.noRows = true
         }
       }, err => {
         console.log(err)
@@ -431,7 +410,6 @@ export default {
                     }
                 }
             }
-
             var picMinURLS = [];
             var picMaxURLS = [];
             var allPicMinURLS = [];
@@ -513,6 +491,11 @@ export default {
         type: 'show',
         product: product
       }
+      let req = {
+        comId: id,
+        type: 'show',
+        product: encodeURIComponent(product)
+      }
       // 判断终端
       let u = navigator.userAgent;
       let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
@@ -524,8 +507,9 @@ export default {
       } else {
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
           pageId: 'addCommentAgain',
-          params: JSON.stringify(reqData)
+          params: JSON.stringify(req)
         })
+        console.log("zpzpzpzp" + JSON.stringify(req))
       }
     },
     // 追加晒单
@@ -557,6 +541,11 @@ export default {
         type: 'again',
         product: product
       }
+      let req = {
+        comId: id,
+        type: 'again',
+        product: encodeURIComponent(product)
+      }
      // 判断终端
      let u = navigator.userAgent;
      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
@@ -568,7 +557,7 @@ export default {
      } else {
        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
          pageId: 'addCommentAgain',
-         params: JSON.stringify(reqData)
+         params: JSON.stringify(req)
        })
      }
     }

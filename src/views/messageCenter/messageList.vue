@@ -70,7 +70,9 @@ export default {
     	// 消息内容
     	msgList: [],
     	// 当前时间
-    	nowTimeMillSeconds: ""
+    	nowTimeMillSeconds: "",
+      typeId: "",
+      memberId: ""
     };
   },
   created() {
@@ -81,9 +83,11 @@ export default {
 		this.noRows = false
 	  	let list = [];
 	  	this.typeId = this.$route.params.typeId;
-      window.CTJSBridge._setNativeTitle(this.$route.params.title);
+      // window.CTJSBridge._setNativeTitle(this.$route.params.title);
+      window.CTJSBridge.LoadMethod('BLMessageCenter', 'messageCenterWebViewControllerShowClearButton', {})
 	  	utils.isLogin().then(data => {
 	  		let memberId = data.member_id;
+        this.memberId = data.member_id
 	  		api.messageCenter.getMessage({
 	  			"obj": JSON.stringify({
 	  			"memberNo": memberId,
@@ -93,33 +97,35 @@ export default {
 	  			"pageSize": "10"
 	  		})}).then(data => {
 	  			this.$loading.close();
-	  			let obj = JSON.parse(data.body.obj);
-	  			let currentTime = this.currentTime();
-			  	if (obj.dataList && obj.dataList.length) {
-			  		this.busy = false
-  		  			for (var i = 0; i < obj.dataList.length; i++) {
-  		  				list.push(obj.dataList[i]);
-  		  				if (obj.dataList[i].createDate) {
-  			  				let time = obj.dataList[i].createDate.time;
-  			  				if (currentTime == this.formateTime(new Date(time)).substring(0, 10)) {
-  			  					list[i].time = this.formateTime(new Date(time)).substring(11, 19)
-  			  				} else {
-  			  					list[i].time = this.formateTime(new Date(time)).substring(0, 10)
-  			  				}
-  			  			}
-  			  			if (obj.dataList[i].businessType == "202") {
-  			  				var time = this.getTimeFormatToday9NOw();
-  			  				var nowTime = time.replace(new RegExp("-", "gm"), "/");
-  			  				this.nowTimeMillSeconds = (new Date(nowTime)).getTime();
-  			  			}
-  			  		};
-  			  		console.log("---gj---" + JSON.stringify(list));
-  			  		this.msgList = this.msgList.concat(list);
-			  	} else {
-			  		this.loading = false
-			  	}
-          if (obj.totalPage == 0) {
-            $("#empty").show();
+          if (data.body.obj) {
+  	  			let obj = JSON.parse(data.body.obj);
+  	  			let currentTime = this.currentTime();
+  			  	if (obj.dataList && obj.dataList.length) {
+  			  		this.busy = false
+    		  			for (var i = 0; i < obj.dataList.length; i++) {
+    		  				list.push(obj.dataList[i]);
+    		  				if (obj.dataList[i].createDate) {
+    			  				let time = obj.dataList[i].createDate.time;
+    			  				if (currentTime == this.formateTime(new Date(time)).substring(0, 10)) {
+    			  					list[i].time = this.formateTime(new Date(time)).substring(11, 19)
+    			  				} else {
+    			  					list[i].time = this.formateTime(new Date(time)).substring(0, 10)
+    			  				}
+    			  			}
+    			  			if (obj.dataList[i].businessType == "202") {
+    			  				var time = this.getTimeFormatToday9NOw();
+    			  				var nowTime = time.replace(new RegExp("-", "gm"), "/");
+    			  				this.nowTimeMillSeconds = (new Date(nowTime)).getTime();
+    			  			}
+    			  		};
+    			  		console.log("---gj---" + JSON.stringify(list));
+    			  		this.msgList = this.msgList.concat(list);
+  			  	} else {
+  			  		this.loading = false
+  			  	}
+            if (obj.totalPage == 0) {
+              $("#empty").show();
+            }
           }
 	  		})
 	  		api.messageCenter.operateMessage({
@@ -128,8 +134,10 @@ export default {
 	  			"businessType": this.typeId,
 	  			"operation": "4"
 	  		})}).then(data => {
-	  			let obj = JSON.parse(data.body.obj);
-	  			console.log("---gjRead---" + obj);
+          if (data.body.obj) {
+            let obj = JSON.parse(data.body.obj);
+            console.log("---gjRead---" + obj);
+          }
 	  		})
 	  	})
 	},
@@ -186,11 +194,13 @@ export default {
   			"msgId": msgId,
   			"operation": "2"
   		})}).then(data => {
-  			let obj = JSON.parse(data.body.obj);
-  			console.log("---gjDelete---" + obj);
-  			var delLi = ev.target.parentNode.parentNode.parentNode;
-  			delLi.remove();
-        this.$toast({position: "bottom", message: "~删除成功~"})
+        if (data.body.obj) {
+          let obj = JSON.parse(data.body.obj);
+          console.log("---gjDelete---" + obj);
+          var delLi = ev.target.parentNode.parentNode.parentNode;
+          delLi.remove();
+          this.$toast({position: "bottom", message: "~删除成功~"})
+        }
   		})
   	},
   	getTimeFormatToday9NOw: function () {
@@ -229,9 +239,22 @@ export default {
         "operation": "2",
         "businessType": this.typeId
       })}).then(data => {
-        $("#mc").html("");
-        this.$toast({position: "bottom", message: "~消息已清空~"})
-        $("#empty").show();
+        this.$modal({
+              title: '提示',
+              content: '~确认清空吗~',
+              buttons: [{
+                text: '取消',
+                onClick: () => {
+                }
+              }, {
+                text: '确定',
+                onClick: () => {
+                  $("#mc").html("");
+                  this.$toast({position: "bottom", message: "~消息已清空~"})
+                  $("#empty").show();
+                }
+              }]
+          })
       })
     }
   },

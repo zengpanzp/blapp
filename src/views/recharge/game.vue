@@ -397,13 +397,13 @@
                     orderTypeCode: orderTypeCode,
                     memberId: LoginInfo.member_id,
                     goodsName: goodsName,
-                    phoneNo: phoneNo,
+                    phoneNo: phoneNo || LoginInfo.mobile,
                     price: parseFloat(this.currentPay),
                     count: count,
                     accountNo: `${requestData.decid}`,
                     changeMoney: parseFloat(this.currentPay),
                     aliasSaleTime: resData.orddate,
-                    orderPhone: requestData.decid,
+                    orderPhone: requestData.decid || LoginInfo.mobile,
                     serviceFee: parseFloat(0).toFixed(2)
                   }
                   console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))

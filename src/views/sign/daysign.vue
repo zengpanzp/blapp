@@ -7,7 +7,7 @@
     <div class="overlay test" v-show="showOverlay"></div>
     <img class="fail" @click="goIndex" @touchmove.prevent src="./i/fail.png" v-if="fail">
     <div class="overlay" @touchmove.prevent v-show="showSignRemark" style="z-index: 9997;"></div>
-    <bl-calendar v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
+    <bl-calendar id="ccalendar" v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar.sync="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
                 :is-double-check.sync=true :is-vication.sync=true>
     </bl-calendar>
     <section class="dheader" :style="{'background-image':'url('+signBg+')'}">
@@ -79,7 +79,7 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
-        <div class="pic lazyload"><img v-lazy="{src: item.goodsImagePath}" class="dateImg"></div>
+        <div class="pic lazyload"><img v-lazy="{src: item.goodsImgPath}" class="dateImg"></div>
         <div class="name">{{item.goodsMsg}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
@@ -313,7 +313,6 @@
           }
         })
         this.pageLoad();
-        console.log(1)
       },
       pageLoad() {
         let localStatus = localStorage.getItem("BL_SIGN_STATUS");
@@ -369,15 +368,6 @@
         }, () => {
           this.isLogin = false;
           this.defaultShow = true;
-          if (localStatusTime == nowTime) { // 不需要请求
-            localStatus = localStatus ? JSON.parse(localStatus) : '';
-            if (localStatus) {
-              this.signRemark = localStatus.signRemark;
-              this.signPoint = localStatus.signPoint;
-              this.changeStatus(localStatus);
-              return true;
-            }
-          }
           // 查询用户是否有签到资格
           this.getSignQualification((data) => {
             if (data.body.resCode == "00100000") {
@@ -449,14 +439,10 @@
               this.signText = ""  // 隐藏
               this.message1 = "再连续签到" + this.needSignNum + "天";
               this.message2 = "就能获得1次抽奖机会";
-              if (flag == 1) {
-                this.hide = true;
-                window.BL_SIGNED_TIMEID = setTimeout(function() {
-                  self.hide = false;
-                }, 1000);
-              } else {
-                  this.hide = false;
-              }
+              this.hide = true;
+              window.BL_SIGNED_TIMEID = setTimeout(function() {
+                self.hide = false;
+              }, 100);
             } else {
               this.needSignNum = -1;
               this.signText = ""  // 隐藏
@@ -541,7 +527,7 @@
                     goodsId: i.sid,
                     goodsMsg: i.goods_sales_name,
                     goodsPrice: i.sale_price,
-                    goodsImagePath: i.url,
+                    goodsImgPath: i.url,
                   }
                   newGoodsList.push(obj)
               });
@@ -735,4 +721,3 @@
     position: fixed!important
   }
 </style>
-

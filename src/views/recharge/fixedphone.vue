@@ -112,7 +112,7 @@
               <div class="flex">
                 <div class="text-node">密码</div>
                 <div class="flex-item">
-                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = false" v-model="password">
+                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = true" v-model="password">
                   <i class="img_icon icon_emptycon" v-show="password !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export default {
           // 生成订单
           let requestData = {
             client_id: CONST.CLIENT_ID,
-            decid: this.iphoneNum,
+            decid: (this.tabsModel == 1 || this.tabsModel == 2) ? '021' + this.iphoneNum : this.iphoneNum,
             ddgsl: '1',
             dkhzh: user.member_id,
             dsphh: this.currentItem,
@@ -372,7 +372,7 @@ export default {
                 phoneNo: user.member_mobile,
                 price: this.currentSku,
                 count: 1,
-                accountNo: this.iphoneNum,
+                accountNo: requestData.decid,
                 changeMoney: parseFloat(this.currentPay),
                 aliasSaleTime: resData.orddate,
                 orderPhone: user.member_mobile,
@@ -392,7 +392,7 @@ export default {
                   changeMoney: resData.changeMoney,
                   omsNotifyUrl: resData.omsNotifyUrl,
                   payType: resData.payType,
-                  accountNo: user.member_mobile
+                  accountNo: requestData.decid
                 }
                 require.ensure([], function(require) {
                   let Pay = require('src/paymodel').default

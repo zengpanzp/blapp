@@ -75,8 +75,10 @@ export default {
           api.myWallet.getPoint({
               "member_token": this.memberToken
           }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            this.points = obj.points
+            if (data.body.obj) {
+              let obj = JSON.parse(data.body.obj);
+              this.points = obj.points
+            }
           })
           $(".integral-menu li").click(function (e) {
             $(".integral-menu a").removeClass("select-integral")
@@ -96,34 +98,38 @@ export default {
             'sysid': "1103"
           }).then(data => {
             this.$loading.close();
-            let obj = JSON.parse(data.body.obj);
-            var dataList = obj.list;
-            if (obj.list && dataList.length > 0) {
-                this.busy = false
-                for (var i = 0; i < dataList.length; i++) {
-                  list.push(dataList[i]);
-                  list[i].points = list[i].actionType == '1' ? '+' + Number((list[i].points)) : '-' + Number((list[i].points))
-                  if (list[i].shopName) {
-                    list[i].shopName = list[i].shopName
-                  } else {
-                    list[i].shopName = list[i].desc
-                  }
-                  if (list[i].occurTime) {
-                    list[i].occurDate = list[i].occurTime.split(" ")[0]
-                    list[i].occurTime = list[i].occurTime.split(" ")[1]
-                  }
+            if (data.body.obj) {
+              let obj = JSON.parse(data.body.obj);
+              if (obj.list) {
+                let dataList = obj.list;
+                if (obj.list && dataList.length > 0) {
+                    this.busy = false
+                    for (var i = 0; i < dataList.length; i++) {
+                      list.push(dataList[i]);
+                      list[i].points = list[i].actionType == '1' ? '+' + Number((list[i].points)) : '-' + Number((list[i].points))
+                      if (list[i].shopName) {
+                        list[i].shopName = list[i].shopName
+                      } else {
+                        list[i].shopName = list[i].desc
+                      }
+                      if (list[i].occurTime) {
+                        list[i].occurDate = list[i].occurTime.split(" ")[0]
+                        list[i].occurTime = list[i].occurTime.split(" ")[1]
+                      }
+                    }
+                    console.log("---gj---" + JSON.stringify(list));
+                    this.pointsList = this.pointsList.concat(list);
                 }
-                console.log("---gj---" + JSON.stringify(list));
-                this.pointsList = this.pointsList.concat(list);
-            }
-            if (obj.currentPage >= obj.pages) {
-                this.busy = true
-                this.loading = false
-            }
-            if (obj.count == 0) {
-              this.count = obj.count
-              $(".integral-list").removeClass("integral-list").addClass("integral-list-no")
-              return
+              }
+              if (obj.currentPage >= obj.pages) {
+                  this.busy = true
+                  this.loading = false
+              }
+              if (obj.count == 0) {
+                this.count = obj.count
+                $(".integral-list").removeClass("integral-list").addClass("integral-list-no")
+                return
+              }
             }
           })
         })

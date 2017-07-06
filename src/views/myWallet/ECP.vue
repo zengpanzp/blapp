@@ -132,79 +132,85 @@ export default {
             "memberNo": this.memberId
         }).then(data => {
             this.$loading.close();
-            let obj = JSON.parse(data.body.obj);
-            this.money = "¥ " + Number(obj.root[0].bal / 100).toFixed(2)
+            if (data.body.obj) {
+              let obj = JSON.parse(data.body.obj);
+              this.money = "¥ " + Number(obj.root[0].bal / 100).toFixed(2)
+            }
         })
         api.myWallet.checkPayWord({
             "memberId": this.memberId
         }).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            this.status = obj.status
+            if (data.body.obj) {
+              let obj = JSON.parse(data.body.obj);
+              this.status = obj.status
+            }
         })
         api.myWallet.getECPList(
             JSON.stringify(this.requestData)
         ).then(data => {
-            let obj = JSON.parse(data.body.obj);
-            if (obj.root && obj.root.length > 0) {
-              $("#empty").hide()
-              this.busy = false
-              var lastMonth = 0
-              this.inComeAmt = Number(obj.inComeAmt / 100).toFixed(2)
-              this.payAmt = Number(obj.payAmt / 100).toFixed(2)
-              for (var i = 0; i < obj.root.length; i++) {
-                var record = {
-                    No: obj.root[i].appSeqNo,
-                    des: obj.root[i].appTranCodeDesc,
-                    amount: obj.root[i].transType == '04' ? '+ ¥ ' + Number(Number(obj.root[i].tsfAmt) / 100).toFixed(2) : '- ¥ ' + Number(Number(obj.root[i].tsfAmt) / 100).toFixed(2),
-                    time: this.getTime(obj.root[i].acctTranTime),
-                    color: obj.root[i].transType == '04' ? 'create-color' : ''
-                };
-                this.transType = obj.root[i].transType
-                var tempMonth = this.getMonth(obj.root[i].acctTranTime)
-                if (tempMonth != lastMonth) {
-                    recordList.push({month: tempMonth, record: []});
+            if (data.body.obj) {
+              let obj = JSON.parse(data.body.obj);
+              if (obj.root && obj.root.length > 0) {
+                $("#empty").hide()
+                this.busy = false
+                var lastMonth = 0
+                this.inComeAmt = Number(obj.inComeAmt / 100).toFixed(2)
+                this.payAmt = Number(obj.payAmt / 100).toFixed(2)
+                for (var i = 0; i < obj.root.length; i++) {
+                  var record = {
+                      No: obj.root[i].appSeqNo,
+                      des: obj.root[i].appTranCodeDesc,
+                      amount: obj.root[i].transType == '04' ? '+ ¥ ' + Number(Number(obj.root[i].tsfAmt) / 100).toFixed(2) : '- ¥ ' + Number(Number(obj.root[i].tsfAmt) / 100).toFixed(2),
+                      time: this.getTime(obj.root[i].acctTranTime),
+                      color: obj.root[i].transType == '04' ? 'create-color' : ''
+                  };
+                  this.transType = obj.root[i].transType
+                  var tempMonth = this.getMonth(obj.root[i].acctTranTime)
+                  if (tempMonth != lastMonth) {
+                      recordList.push({month: tempMonth, record: []});
+                  }
+                  recordList[recordList.length - 1].record.push(record);
+                  lastMonth = this.getMonth(obj.root[i].acctTranTime);
                 }
-                recordList[recordList.length - 1].record.push(record);
-                lastMonth = this.getMonth(obj.root[i].acctTranTime);
+                console.log("---gj---" + JSON.stringify(recordList));
+                this.ECPList = this.ECPList.concat(recordList);
               }
-              console.log("---gj---" + JSON.stringify(recordList));
-              this.ECPList = this.ECPList.concat(recordList);
-            }
-            if (obj.root && obj.root.length == 0) {
-              $("#recordList").hide()
-              $("#empty").show()
-            }
-            if (current.pageNum >= obj.TotalPageCount) {
-              this.busy = true
-              this.loading = false
-            }
-            $(".filter li").click(function(e) {
-              e = e || event;
-              $(e.currentTarget).siblings().removeClass("redBtn");
-              $(e.currentTarget).addClass("redBtn");
-              if (e.currentTarget.id.split("_")[0] == 'type') {
-                  current.requestData.transType = e.currentTarget.id.split("_")[1];
-              } else {
-                  current.period.month = parseInt(e.currentTarget.id.split("_")[1]);
+              if (obj.root && obj.root.length == 0) {
+                $("#recordList").hide()
+                $("#empty").show()
               }
-              if (current.period.month > 0) {
-                  current.setPeriod();
-                  current.requestData.startDate = current.period.start;
-                  current.requestData.endDate = current.period.end;
+              if (current.pageNum >= obj.TotalPageCount) {
+                this.busy = true
+                this.loading = false
               }
-              if (current.range.lAmt) {
-                  current.requestData.lAmt = Number(current.range.lAmt) * 100;
-              }
-              if (current.range.hAmt) {
-                  current.requestData.hAmt = Number(current.range.hAmt) * 100;
-              }
-              $(".confirm").click(function() {
-                console.log(JSON.stringify(current.requestData))
-                current.closeFilter()
-                $("#recordList").show().html("")
-                current.getECPList()
+              $(".filter li").click(function(e) {
+                e = e || event;
+                $(e.currentTarget).siblings().removeClass("redBtn");
+                $(e.currentTarget).addClass("redBtn");
+                if (e.currentTarget.id.split("_")[0] == 'type') {
+                    current.requestData.transType = e.currentTarget.id.split("_")[1];
+                } else {
+                    current.period.month = parseInt(e.currentTarget.id.split("_")[1]);
+                }
+                if (current.period.month > 0) {
+                    current.setPeriod();
+                    current.requestData.startDate = current.period.start;
+                    current.requestData.endDate = current.period.end;
+                }
+                if (current.range.lAmt) {
+                    current.requestData.lAmt = Number(current.range.lAmt) * 100;
+                }
+                if (current.range.hAmt) {
+                    current.requestData.hAmt = Number(current.range.hAmt) * 100;
+                }
+                $(".confirm").click(function() {
+                  console.log(JSON.stringify(current.requestData))
+                  current.closeFilter()
+                  $("#recordList").show().html("")
+                  current.getECPList()
+                })
               })
-            })
+            }
           })
       })
     },
