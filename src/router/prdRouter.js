@@ -234,13 +234,21 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/payPw')), 'payPw')
   },
-    /* 薛天玲 安全中心 验证身份 */
+  /* 薛天玲 安全中心 验证身份 */
   {
     path: '/securityCenter/checkPhone',
     meta: {
       title: '验证身份'
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/checkPhone')), 'checkPhone')
+  },
+  /* 薛天玲 虚拟会员卡 */
+  {
+    path: '/memberCard',
+    meta: {
+      title: '百联通会员卡二维码'
+    },
+    component: r => require.ensure([], () => r(require('../views/memberCard/memberCard')), 'memberCard')
   },
   /* 陈鹏 我的评价 */
   {

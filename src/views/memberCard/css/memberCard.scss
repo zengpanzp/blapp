@@ -1,0 +1,71 @@
+/* creat by chenpeng */
+@import "src/sass/tobe/function";
+
+.code-box {
+    width: rem(570);
+    margin: rem(90) auto rem(40);
+    background: #FFFFFF;
+    border-radius: rem(20);
+    padding: rem(60);
+    height: rem(850);
+    .box-container {
+        position: relative;
+    }
+    .member-detail {
+        @include display(flex);
+        @include align-items(center);
+        margin-bottom: rem(50);
+        .member-pic {
+            width: rem(128);
+            height: rem(128);
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: rem(20);
+        }
+        .member-name {
+            height: rem(45);
+            line-height: rem(45);
+            margin-bottom: rem(30);
+            font-size: rem(32);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .member-level {
+            @include display(flex);
+            @include align-items(center);
+            line-height: 1;
+            .log{
+                width: rem(86);
+                font-size: 0;
+                margin-right: rem(10);
+            }
+            .level{
+                height: rem(33);
+                line-height: rem(33);
+                font-size: rem(24);
+            }
+        }
+    }
+    .line-code{
+        min-height: rem(133);
+        margin-bottom: rem(50);
+    }
+    .square-code{
+        width: rem(370);
+        height: rem(370);
+        margin: 0 auto;
+    }
+    .cover-pic{
+        position: absolute;
+        top: 0;
+        left: rem(-6);
+        right: rem(-6);
+        display: none
+    }
+}
+.operate-text{
+    font-size: rem(24);
+    text-align: center;
+    color: #999999;
+}
