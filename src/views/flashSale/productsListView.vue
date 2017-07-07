@@ -321,7 +321,7 @@ export default {
           sa.track('$pageview', {
             pageId: 'APP_闪购商品详情页_' + item.goodsId,
             categoryId: 'APP_SpecificZone',
-            flagType: '卖场id',
+            flagType: '商品id',
             flagValue: String(item.goodsId)
           })
         } catch (err) {
