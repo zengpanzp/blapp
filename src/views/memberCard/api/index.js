@@ -14,6 +14,6 @@ if (process.env.NODE_ENV !== 'production') {
 export default {
 // 查询二维码
   qrcode: params => {
-    return Vue.http.post(baseUrl + '/points/generateTwoDimensionalCode', params);
+    return Vue.http.post(baseUrl + '/points/generateTwoDimensionalCode.htm', params);
   }
 }
