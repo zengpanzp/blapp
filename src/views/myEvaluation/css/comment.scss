@@ -1,0 +1,76 @@
+/* creat by chenpeng */
+@import "src/sass/tobe/function";
+
+.goods-box{
+  padding: rem(20);
+  .goods-item{
+    background-color: #fff;
+    margin-bottom: rem(8);
+    border-radius: rem(8);
+    border: 1px solid #e9e9e9;
+    .flex{
+      padding: rem(18);
+      border-bottom: 1px solid #e9e9e9;
+    }
+  }
+  .goods-img{
+    width: rem(200);
+    margin-right: rem(50);
+  }
+  .goods-title{
+    height: rem(100);
+    font-size: rem(28);
+    color: #313131;
+    @include clamp;
+  }
+}
+
+// addComment
+.goods-comment{
+  height: rem(88);
+  border-bottom: 1px solid #e9e9e9;
+  padding: 0 rem(16);
+  .goods-pf{
+    font-size: rem(28);
+    color: #2a2a2a;
+    margin-right: rem(20);
+  }
+  .icon{
+    font-size: rem(48);
+    color: #FFDE49;
+  }
+}
+
+.comment-because{
+  font-size: rem(28);
+  padding: rem(16) rem(16) 0 rem(16);
+  border-bottom: 1px solid #e9e9e9;
+  .comment-title{
+    margin: 0 0 rem(30) 0;
+  }
+  .quice-box{
+    display: inline-block;
+    margin-right: rem(20);
+    margin-bottom: rem(20);
+    position: relative;
+    input{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      opacity: 0;
+    }
+    input:checked + .quice{
+      border: 1px solid #e6133c;
+      background-color: #e6133c;
+      color: #fff;
+    }
+  }
+  .quice{
+    border: 1px solid #cccccc;
+    border-radius: rem(8);
+    padding: rem(16) rem(20);
+    display: inline-block;
+    font-size: rem(24);
+  }
+}

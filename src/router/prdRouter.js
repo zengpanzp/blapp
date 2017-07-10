@@ -284,6 +284,14 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
   },
+  /* 陈鹏 商品评价 */
+  {
+    path: '/addComment',
+    meta: {
+      title: '商品评价'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/addComment')), 'addComment')
+  },
   /* 郭健 联通专区 */
   {
     path: '/unicom',
