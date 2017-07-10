@@ -18,7 +18,7 @@
       <input v-model="newGroupName" placeholder="自定义缴费分类名称">
     </span>
     <bl-modal @click="isShow" v-show="visible" :visible="visible" ref="updateCategory"  title="编辑缴费分类" :inputValue="groupName" :placeholder="请输入分类名称" input="true" :buttons="buttons"></bl-modal>
-    <bl-button @click="addNewGroup" ref="next" type="blueBtn next selected bl-button">确 定</bl-button>
+    <button @click="addNewGroup" ref="next" class="next">确 定</button>
   </div>
 </template>
 <script>
@@ -35,7 +35,7 @@
       return {
         visible: false, // 是否弹出编辑
         groupName: "",
-        type: 1,  // 1为水  2为电  3为煤
+        type: 1,  // 0为新增 1为水  2为电  3为煤
         groupList: [],
         buttons: [{
             text: "确定"
@@ -76,6 +76,7 @@
         },
         // 接收弹出层的事件消息
         isShow(receive) {
+            console.log("执行了", receive)
             if (receive instanceof Array) {
               this.visible = receive[1];
               // 名称已修改
@@ -83,7 +84,7 @@
                 // 修改分类名称
                 utils.isLogin().then(user => {
                     let timestamp = utils.getTimeFormatToday();
-                    let memberToken = utils.ssdbGet('member_token');
+                    let memberToken = utils.dbGet('userInfo').member_token;
                     api.recharge.updateMyGroup({
                         "member_token": memberToken,
                         "groupName": this.item.groupName,
@@ -122,7 +123,7 @@
             // 添加分类名称
             utils.isLogin().then(user => {
               let timestamp = utils.getTimeFormatToday();
-              let memberToken = utils.ssdbGet('member_token');
+              let memberToken = utils.dbGet('userInfo').member_token;
               api.recharge.createMyGroup({
                 "member_token": memberToken,
                 "groupName": this.newGroupName,
@@ -136,6 +137,9 @@
                       groupName: obj.groupName
                     });
                     this.newGroupName = "";
+                    // 进行默认选中添加的分组
+                    let item = this.groupList[this.groupList.length - 1];
+                    this.selectGroup(item, this.groupList.length - 1);
                 } else {
                   this.$toast({
                     position: 'bottom',
@@ -152,7 +156,7 @@
           // 添加分类名称
           utils.isLogin().then(user => {
               let timestamp = utils.getTimeFormatToday();
-              let memberToken = utils.ssdbGet('member_token');
+              let memberToken = utils.dbGet('userInfo').member_token;
               api.recharge.deleteMyGroup({
                 "member_token": memberToken,
                 "id": item.id,
@@ -176,8 +180,11 @@
           })
         },
         selectGroup(item, $index) {
-            debugger
           let that = this;
+          let isUpdate = this.$route.query.isUpdate; // 是否是变更分组过来的
+          if (isUpdate == "update") {
+              item.update = isUpdate;
+          }
           // 让所有的没有选中样式
           this.groupList.forEach(function(item) {
             that.$set(item, 'active', false);

@@ -99,6 +99,8 @@ Vue.directive('go-native-goods-detail', {
       isGiftGoods: binding.modifiers.isGiftGoods || false
     }
     el.addEventListener('click', function() {
+      console.log("DATA1", JSON.parse(JSON.stringify(binding.value)))
+      console.log("DATA2", JSON.parse(JSON.stringify(args)))
       if (!el.getAttribute('disabled')) {
         window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', args)
       }
@@ -106,7 +108,30 @@ Vue.directive('go-native-goods-detail', {
   }
 
 })
+/* 跳转到native商品相似页 */
+Vue.directive('go-native-goods-similar', {
 
+  bind: function(el, binding) {
+    let args = {
+      pageId: 'similar',
+      params: JSON.stringify({
+        goodsSid: binding.value.goodsId,
+        goodsName: binding.value.goodsMsg,
+        salePrice: binding.value.goodsPrice,
+        imgUrlString: binding.value.goodsImgPath,
+        isGiftGoods: binding.modifiers.isGiftGoods || false
+      })
+    }
+    el.addEventListener('click', function(e) {
+      console.log(JSON.stringify(args))
+      e.stopPropagation();
+      if (!el.getAttribute('disabled')) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', args)
+      }
+    }, false)
+  }
+
+})
 /* 资源位跳转 */
 Vue.directive('go-native-resource', {
 

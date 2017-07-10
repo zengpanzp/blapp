@@ -1,0 +1,172 @@
+@charset "utf-8";
+@import "src/sass/tobe/function";
+.iconfont{
+    font-family:"blfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.interestsPic {
+  width: rem(128);
+  height: rem(128);
+  padding: rem(20);
+  border: none;
+  overflow: hidden;
+  float: left
+}
+
+.freedom-top {
+  padding: rem(32) rem(30);
+  position: relative;
+  overflow: hidden
+}
+
+.freedom-top .interestsPic {
+  width: rem(128);
+  height: auto;
+  padding: 0;
+  background: transparent;
+  margin-top: rem(-16);
+  margin-right: rem(24)
+}
+
+.freedom-top .interestsPic img {
+  width: 100%;
+  height: 100%
+}
+
+.freedom-name {
+  font-size: rem(42);
+  color: #fff;
+  font-weight: 700;
+  line-height: rem(80);
+  height: rem(80)
+}
+
+.freedom-text {
+  float: right;
+  line-height: normal;
+  font-size: rem(24);
+  font-weight: 300;
+  padding: rem(12) 0;
+  text-align: right
+}
+
+.fit-store {
+  padding: 0 rem(30);
+  overflow: hidden;
+  background: #fff
+}
+
+.fit-store li {
+  padding: rem(28) 0;
+  width: 33.3%;
+  float: left;
+  text-align: center;
+  color: #804800
+}
+
+.fit-store li i {
+  vertical-align: middle;
+  color: #bbb;
+  display: inline-block;
+  font-size: rem(28)
+}
+
+.fit-store li .arrow-back {
+  @include transform(rotate(270deg));
+}
+
+.fit-store-list {
+  padding: 0 rem(30)
+}
+
+.fit-store-list li {
+  padding: rem(30) 0;
+  border-bottom: 1px solid #e9e9e9;
+  overflow: hidden
+}
+
+.fit-store-img {
+  width: rem(150);
+  height: rem(150);
+  float: left;
+  display: block;
+  margin-right: rem(32)
+}
+
+.fit-store-text {
+  overflow: hidden;
+  width: 48%;
+  float: left
+}
+
+.fit-store-text p {
+  font-size: rem(24);
+  color: #666666
+}
+
+.fit-store-text .fit-store-name {
+  font-size: rem(28);
+  color: #333333;
+  margin-bottom: rem(32)
+}
+
+.fit-store-logo {
+  float: right;
+  width: 25%;
+  text-align: right;
+  overflow: hidden
+}
+
+.fit-store-logo div {
+  overflow: hidden
+}
+
+.fit-store-logo img {
+  width: rem(48);
+  margin-top: rem(24);
+  display: block;
+  float: right
+}
+
+.logo-store {
+  background: url(../i/fit-store-logo.png) no-repeat;
+  background-size: 100% 100%;
+  padding: rem(12) rem(12) rem(12) rem(32);
+  font-size: rem(20);
+  color: #fff;
+  margin-top: rem(24);
+  text-align: center
+}
+
+.font-size-miner {
+  font-size: rem(24)
+}
+
+img {
+  max-width: 100%;
+  height: auto
+}
+
+img {
+  max-width: 100%;
+  height: auto
+}
+
+img {
+  max-width: 100%;
+  height: auto
+}
+
+@font-face {
+  font-family: "blfont";
+  src: url("data:;base64,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") format("truetype")
+}
+
+html {
+  -webkit-overflow-scrolling: touch
+}
+

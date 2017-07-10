@@ -8,7 +8,8 @@
       </div>
       <div class="modal-buttons">
         <div class="modal-button" v-for="button in buttons" v-if="!input" v-text="button.text" @click="[button.onClick(), close()]"></div>
-        <div class="modal-button" v-for="button in buttons" v-else v-text="button.text" @click="[sure(), close()]"></div>
+        <div class="modal-button" v-if="input" v-text="buttons[0].text" @click="[sure(), close()]"></div>
+        <div class="modal-button" v-if="input" v-text="buttons[1].text" @click="close()"></div>
       </div>
     </div>
   </div>
@@ -58,7 +59,7 @@
     margin-left: rem(-270);
     margin-top: 0;
     overflow: hidden;
-    top: 50%;
+    top: 40%;
     text-align: center;
     border-radius: $border-radius;
     // opacity: 0;
@@ -297,9 +298,13 @@
         }
       }
     },
+    created() {
+        console.log("buttons", this.buttons)
+    },
     watch: {
       "visible" (val) {
         this.showVisible = val;
+        console.log(val)
       }
     },
     methods: {
@@ -316,6 +321,7 @@
       }
     },
     mounted() {
+        console.log(this.buttons)
       this.halfHeight = -(this.$refs.modal.offsetHeight / 2) + 'px'
     }
   }

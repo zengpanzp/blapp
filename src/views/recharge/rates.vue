@@ -5,7 +5,7 @@
       <!--用来显示缴费分组-->
       <router-view :groupItem="receiveGroupItem" :_groupList="groupList"  v-if="loadGroup" @click="getGroup"></router-view>
       <!--选择缴费机构-->
-      <bl-sort-list-view @click="getCompany" v-if="loadListView" :list="companyList"></bl-sort-list-view>
+      <bl-sort-list-view class="listview" @click="getCompany" v-if="loadListView" :list="companyList"></bl-sort-list-view>
       <div class="content-wrap" v-show="toShow">
           <ul>
             <li class="icon-waitassess title" :class="typeClass">{{typeName}}</li>
@@ -23,12 +23,12 @@
             <li>
               账号类型
               <div class="btns">
-                <div class="btn" @click="changeType" v-show="hasShow"  :class="typeChange?'selected':''">条形码</div>
-                <div class="btn" @click="changeType" v-show="hasShow2" :class="!typeChange?'selected':''">{{accountTypeName}}</div>
+                <div class="btn" @click="changeType(1)" v-show="hasShow"  :class="typeChange?'selected':''">条形码</div>
+                <div class="btn" @click="changeType(2)" v-show="hasShow2" :class="typeChange2?'selected':''">{{accountTypeName}}</div>
               </div>
             </li>
             <li>缴费账号
-              <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" src="./i/rates/icon_scan.png"></div>
+              <div class="account"><input v-model="account" type="text" placeholder="请输入缴费账号"><img @click="scanQ" v-show="typeChange" src="./i/rates/icon_scan.png"></div>
             </li>
           </ul>
           <div class="phoneFixBottom">
@@ -102,8 +102,8 @@
         // 查询缴费分组
         utils.isLogin().then(user => {
             let timestamp = utils.getTimeFormatToday();
-            this.memberId = utils.ssdbGet('member_id')
-            this.memberToken = utils.ssdbGet('member_token')
+            this.memberId = utils.dbGet('userInfo').member_id
+            this.memberToken = utils.dbGet('userInfo').member_token
             api.recharge.queryMyGroup({
               timestamp: timestamp,
               member_token: this.memberToken
@@ -174,6 +174,8 @@
               data = JSON.parse(data);
               if (data.result == "success") {
                 this.account = data.params;
+                // 拿到数据后进行查询
+                this.next();
               }
             },
             fail: () => {
@@ -185,8 +187,14 @@
           })
       },
       // 改变选择的缴费类型
-      changeType() {
-         this.typeChange = !this.typeChange;
+      changeType(index) {
+          if (index == 1) {
+              this.typeChange = true;
+              this.typeChange2 = false;
+          } else {
+            this.typeChange = false;
+            this.typeChange2 = true;
+          }
       },
       // 选择缴费分组
       showCategory() {

@@ -77,7 +77,7 @@
           <div class="phoneRechargeItem">
             <div class="item-content">
               <div class="flex">
-                <div class="text-node">固定电话 021-</div>
+                <div class="text-node">固定电话021-</div>
                 <div class="flex-item">
                   <input class="numInput" type="tel" placeholder="请输入固定电话" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
@@ -90,7 +90,7 @@
           <div class="phoneRechargeItem">
             <div class="item-content">
               <div class="flex">
-                <div class="text-node">小灵通号 021-</div>
+                <div class="text-node">小灵通号021-</div>
                 <div class="flex-item">
                   <input class="numInput" type="tel" placeholder="请输入小灵通号(仅限电信)" :maxlength="maxlength" @focus="focus = true" v-model="iphoneNum">
                   <i class="img_icon icon_emptycon" v-show="iphoneNum !== '' && focus" @click="emptyPhone($event)"></i>
@@ -112,7 +112,7 @@
               <div class="flex">
                 <div class="text-node">密码</div>
                 <div class="flex-item">
-                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = false" v-model="password">
+                  <input class="numInput" type="password" placeholder="请输入宽带账号密码" @focus="focus = true" v-model="password">
                   <i class="img_icon icon_emptycon" v-show="password !== '' && focus" @click="emptyPhone($event)"></i>
                 </div>
               </div>
@@ -141,7 +141,7 @@
         </ul>
       </div>
     </div>
-    <div class="phoneFixBottom">
+    <div class="phoneFixBottom" v-show="!focus">
       <div class="limit-remind">
         <p><img src="./i/iphone/remind-light.png">如使用会员卡、积点卡需另支付服务费</p>
       </div>
@@ -219,26 +219,36 @@ export default {
           message: '加载中',
           duration: 'loading'
         })
+        console.log(utils.dbGet('userInfo').member_token + '--------------------------')
         let requestData = {
           client_id: CONST.CLIENT_ID,
           mobile: type,
           timestamp: utils.getTimeFormatToday(),
           format: "json",
           t_dz: CONST.T_DZ,
-          token: utils.ssdbGet('member_token'),
+          token: utils.dbGet('userInfo').member_token,
         }
         api.recharge.queryPhoneGoodsDetail(requestData).then(data => {
           this.inlineLoading.close()
           let resData = JSON.parse(data.body.obj)
           if (resData.sku) {
             let list = []
-            for (let [index, val] of resData.sku.entries()) {
+            // for (let [index, val] of resData.sku.entries()) {
+            //   list.push({
+            //     mainPrice: val,
+            //     salePrice: resData.price2[index],
+            //     activePay: resData.price[index],
+            //     item: resData.item[index],
+            //     fee: resData.fee[index]
+            //   })
+            // }
+            for (var i = 0; i < resData.sku.length; i++) {
               list.push({
-                mainPrice: val,
-                salePrice: resData.price2[index],
-                activePay: resData.price[index],
-                item: resData.item[index],
-                fee: resData.fee[index]
+                mainPrice: resData.sku[i],
+                salePrice: resData.price2[i],
+                activePay: resData.price[i],
+                item: resData.item[i],
+                fee: resData.fee[i]
               })
             }
             this.moneyList = list
@@ -332,67 +342,80 @@ export default {
         // 把输入历史数据保存到localStore
         utils.dbSet(this.historyName, this.historyNum)
 
-        // 生成订单
-        let requestData = {
-          client_id: CONST.CLIENT_ID,
-          decid: this.iphoneNum,
-          ddgsl: '1',
-          dkhzh: utils.ssdbGet('member_id'),
-          dsphh: this.currentItem,
-          dtype: this.getPayType(this.payType, this.password),
-          str_snda: '0',
-          format: 'json',
-          dlx: '01'
-        }
-        console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
-        console.log('this.currentFee: ' + this.currentFee)
-        api.recharge.buyszkOrder(requestData).then(data => {
-          console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
-          let resData = JSON.parse(data.body.obj)
-          if (resData.orderid) {
-            let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
-            let createExpensesOrderRequestData = {
-              outOrderNo: resData.orderid,
-              payMoney: parseFloat(this.currentActivePay),
-              orderSource: 1,
-              orderTypeCode: '10',
-              memberId: utils.ssdbGet('member_id'),
-              goodsName: goodsName,
-              phoneNo: utils.ssdbGet('member_mobile'),
-              price: this.currentSku,
-              count: 1,
-              accountNo: this.iphoneNum,
-              changeMoney: parseFloat(this.currentPay),
-              aliasSaleTime: resData.orddate,
-              orderPhone: utils.ssdbGet('member_mobile'),
-              serviceFee: Number(this.currentFee).toFixed(2)
-            }
-            console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
-            api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
-              console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
-              let resData = JSON.parse(data.body.obj)
-              let order = {
-                orderNo: resData.orderNo,
-                outOrderNo: resData.outOrderNo,
-                payMoney: resData.payMoney,
-                orderTime: resData.orderTime,
-                orderTypeCode: resData.orderTypeCode,
-                activeTime: resData.activeTime,
-                changeMoney: resData.changeMoney,
-                omsNotifyUrl: resData.omsNotifyUrl,
-                payType: resData.payType,
-                accountNo: utils.dbGet('member_mobile')
-              }
-              require.ensure([], function(require) {
-                let Pay = require('src/paymodel').default
-                current.inlineLoading.close()
-                Pay.goPay(order, '23')
-              }, 'Pay')
-            })
-          } else {
-            this.$toast(resData.msg)
+        utils.isLogin().then(user => {
+          // 生成订单
+          let requestData = {
+            client_id: CONST.CLIENT_ID,
+            decid: (this.tabsModel == 1 || this.tabsModel == 2) ? '021' + this.iphoneNum : this.iphoneNum,
+            ddgsl: '1',
+            dkhzh: user.member_id,
+            dsphh: this.currentItem,
+            dtype: this.getPayType(this.payType, this.password),
+            str_snda: '0',
+            format: 'json',
+            dlx: '01'
           }
-        })
+          console.log('外部接口 生成订单接口上送报文=============<br>' + JSON.stringify(requestData))
+          console.log('this.currentFee: ' + this.currentFee)
+          api.recharge.buyszkOrder(requestData).then(data => {
+            console.log('外部接口 生成订单接口返回报文=============<br>' + data.body.obj)
+            let resData = JSON.parse(data.body.obj)
+            if (resData.orderid) {
+              let goodsName = this.currentSku + '元' + '固话/宽带充值卡'
+              let createExpensesOrderRequestData = {
+                outOrderNo: resData.orderid,
+                payMoney: parseFloat(this.currentActivePay),
+                orderSource: 1,
+                orderTypeCode: '10',
+                memberId: user.member_id,
+                goodsName: goodsName,
+                phoneNo: user.member_mobile,
+                price: this.currentSku,
+                count: 1,
+                accountNo: requestData.decid,
+                changeMoney: parseFloat(this.currentPay),
+                aliasSaleTime: resData.orddate,
+                orderPhone: user.member_mobile,
+                serviceFee: Number(this.currentFee).toFixed(2)
+              }
+              console.log('中间件接口 生成费用订单接口上送报文=============<br>' + JSON.stringify(createExpensesOrderRequestData))
+              api.recharge.createExpensesOrder(createExpensesOrderRequestData).then(data => {
+                console.log('中间件接口 生成费用订单接口返回报文=============<br>' + data.body.obj)
+                let resData = JSON.parse(data.body.obj)
+                let order = {
+                  orderNo: resData.orderNo,
+                  outOrderNo: resData.outOrderNo,
+                  payMoney: resData.payMoney,
+                  orderTime: resData.orderTime,
+                  orderTypeCode: resData.orderTypeCode,
+                  activeTime: resData.activeTime,
+                  changeMoney: resData.changeMoney,
+                  omsNotifyUrl: resData.omsNotifyUrl,
+                  payType: resData.payType,
+                  accountNo: requestData.decid
+                }
+                require.ensure([], function(require) {
+                  let Pay = require('src/paymodel').default
+                  current.inlineLoading.close()
+                  Pay.goPay(order, '23', () => {
+                    current.$router.push({
+                      path: '/recharge/paysuccess',
+                      query: {
+                        money: order.changeMoney,
+                        orderNo: order.orderNo,
+                        type: 'cz',
+                        jumpType: '1'
+                      }
+                    })
+                  })
+                }, 'Pay')
+              })
+            } else {
+              this.$toast(resData.msg)
+              current.inlineLoading.close()
+            }
+          })
+        }, () => {})
       }
     },
     getPayType(orderType, password) {
@@ -447,7 +470,11 @@ export default {
       inputNode.focus()
     },
     historySel(number) {
-      if (this.testPhoneNum(number)) {
+      let pattern = /^\d{11}$/; // 分账
+      if (this.tabsModel !== 0) {
+        pattern = /^\d{8}$/;
+      }
+      if (pattern.test(number)) {
         this.iphoneNum = number
         this.focus = false
       } else {
@@ -465,6 +492,10 @@ export default {
     iphoneNum(val) {
       if (this.testPhoneNum()) {
         this.focus = false
+        $('.numInput').forEach(item => {
+          console.log(item)
+          item.blur()
+        })
       }
     },
     // 监听输入号码的历史数据,当长度等于0或者没有的时候黑框隐藏

@@ -43,10 +43,10 @@ export const prdRouter = [
   },
   /* 神马 签到 日签 */
   {
-    path: '/daysign',
+    path: '/sign/daysign',
       meta: {
-    title: '签到'
-  },
+        title: '每日福利'
+      },
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */
@@ -120,6 +120,15 @@ export const prdRouter = [
       {path: 'company'}
     ]
   },
+  /* 神马 充值缴费 添加缴费账号 */
+  {
+    path: '/recharge/addAccount',
+      component: r => require.ensure([], () => r(require('../views/recharge/addAccount')), 'addAccount'),
+    children: [
+      {path: 'category', component: r => require.ensure([], () => r(require('../views/recharge/_category')), '_category')},
+    {path: 'company'}
+  ]
+  },
   /* 神马 充值缴费 支付页面  type=1 水费  2 电费  3煤气 */
   {
     path: '/recharge/pay/:type',
@@ -191,6 +200,7 @@ export const prdRouter = [
   /* 郭健 消息中心 消息内容 */
   {
     path: '/messageList/:typeId/:title',
+    name: 'messageList',
     component: r => require.ensure([], () => r(require('../views/messageCenter/messageList')), 'messageList')
   },
   /* 薛天玲 我的收藏 */
@@ -226,7 +236,7 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/enterPw')), 'enterPw')
   },
-  /* 薛天玲 安全中心 支付密码 */
+  /* 薛天玲 安全中心 验证支付密码 */
   {
     path: '/securityCenter/payPw',
     meta: {
@@ -234,7 +244,15 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/securityCenter/payPw')), 'payPw')
   },
-  /* 薛天玲 安全中心 验证身份 */
+  /* 薛天玲 安全中心 提交支付密码 */
+  {
+    path: '/securityCenter/submitPw',
+    meta: {
+      title: '我的密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/submitPw')), 'submitPw')
+  },
+    /* 薛天玲 安全中心 验证身份 */
   {
     path: '/securityCenter/checkPhone',
     meta: {
@@ -250,7 +268,15 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/memberCard/memberCard')), 'memberCard')
   },
-  /* 陈鹏 我的评价 */
+    /* 薛天玲 安全中心 支付密码 未实名认证 */
+  {
+    path: '/securityCenter/payPwAuth',
+    meta: {
+      title: '我的支付密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/securityCenter/payPwAuth')), 'payPwAuth')
+  },
+  /* 曾攀 我的评价 */
   {
     path: '/myEvaluation',
     meta: {
@@ -265,5 +291,57 @@ export const prdRouter = [
       title: '联通专区'
     },
     component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
+  },
+  /* 郭健 我的钱包 */
+  {
+    path: '/myWallet',
+    meta: {
+      title: '我的钱包'
+    },
+    component: r => require.ensure([], () => r(require('../views/myWallet/myWallet')), 'myWallet')
+  },
+  /* 郭健 我的钱包 我的余额 */
+  {
+    path: '/balance',
+    component: r => require.ensure([], () => r(require('../views/myWallet/balance')), 'balance')
+  },
+  /* 郭健 我的钱包 我的余额 余额明细 */
+  {
+    path: '/balanceList',
+    component: r => require.ensure([], () => r(require('../views/myWallet/balanceList')), 'balanceList')
+  },
+  /* 郭健 我的钱包 我的积分 */
+  {
+    path: '/points',
+    component: r => require.ensure([], () => r(require('../views/myWallet/points')), 'points')
+  },
+  /* 郭健 我的钱包 我的ECP */
+  {
+    path: '/ECP',
+    component: r => require.ensure([], () => r(require('../views/myWallet/ECP')), 'ECP')
+  },
+  /* 曾攀 会员权益 */
+  {
+    path: '/powerDetail',
+    meta: {
+      title: '会员权益'
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
+  },
+  /* 曾攀 更多权益 */
+  {
+    path: '/blprivilegeClub',
+    meta: {
+      title: '更多权益',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
+  },
+  /* 曾攀  */
+  {
+    path: '/applyShop/:power',
+    meta: {
+      title: '适用门店',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/applyShop')), 'applyShop')
   }
 ]

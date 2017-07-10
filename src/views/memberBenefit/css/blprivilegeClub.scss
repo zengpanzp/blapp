@@ -1,0 +1,123 @@
+@charset "utf-8";
+@import "src/sass/tobe/function";
+.hm-container {
+    // padding-top: rem(92);
+    .head-menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: rem(92);
+        font-size: rem(24);
+        background: #FFFFFF;
+        padding: 0 rem(20);
+        .menu-name {
+            color: #999999;
+            width: rem(170);
+        }
+        .menu {
+            .menuli {
+                text-align: center;
+                position: relative;
+                height: rem(92);
+                line-height: rem(92);
+            }
+        }
+        .trigle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            @include transform(translateX(-50%));
+            width: 0;
+            height: 0;
+            border-left: rem(16) solid transparent;
+            border-right: rem(16) solid transparent;
+            border-bottom: rem(16) solid #F4EEE5;
+            display: none;
+        }
+        .select {
+            color: #B1946B;
+            font-size: rem(28);
+            .trigle {
+                display: block;
+            }
+        }
+    }
+}
+.up-container {
+    position: relative;
+    .up-limit {
+        position: fixed;
+        top: rem(88);
+        left: 0;
+        right: 0;
+        height: rem(152);
+        padding: rem(16) rem(20);
+        background: #F4EEE5;
+        line-height: rem(40);
+        font-size: rem(24);
+    }
+}
+.detail-list {
+    background: #FFFFFF;
+    padding: rem(240) rem(20) 0;
+    li {
+        @include display(flex);
+        @include align-items(center);
+        @include justify-content(space-between);
+        @include hair(bottom,#e7e7e7);
+        font-size: rem(24);
+        .li-name {
+            width: rem(170);
+        }
+        .li-diff {
+            @include flex(1);
+            @include display(flex);
+            @include align-items(center);
+            @include justify-content(space-between);
+            min-height: rem(88);
+            padding: rem(20) 0;
+        }
+        .diff-box {
+            @include flex(1);
+            @include display(flex);
+            @include align-items(center);
+            @include justify-content(center);
+        }
+        .diff-detail {
+            max-width: rem(96);
+            color: #999999;
+            &.selected {
+                color: #B1946B;
+            }
+        }
+        .diff-log {
+            width: rem(24);
+            height: rem(24);
+            border: 1px solid #CCCCCC;
+            @include display(flex);
+            @include align-items(center);
+            @include justify-content(center);
+            div {
+                width: rem(16);
+                height: rem(16);
+                background: #999999;
+            }
+            &.selected {
+                div {
+                    background: #B1946B;
+                }
+            }
+        }
+    }
+}
+.bottom-end {
+    height: rem(74);
+    color: #c6c6c6;
+    .line{
+        height: 1px;
+        width: rem(50);
+        margin: 0 rem(18);
+        background: #c6c6c6;
+    }
+}

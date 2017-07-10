@@ -37,7 +37,7 @@ const goPay = function(order, type, sucCallback, failCallback) {
     discountAmt = order.changeMoney;
   }
 
-  let member_id = utils.ssdbGet('member_id')
+  let member_id = utils.dbGet('userInfo').member_id
   window.CTJSBridge && window.CTJSBridge.LoadMethod('ExposeJsApi', 'getServiceCfg', '', {
     success: data => {
       sa.track('$pageview', {
@@ -57,32 +57,29 @@ const goPay = function(order, type, sucCallback, failCallback) {
         'discountAmt': Number(discountAmt).toFixed(2),
         'orderExpiryEndTime': order.activeTime + "",
         'SubId': "",
-        'payType': order.payType ? order.payType : 0
+        'payType': order.payType ? order.payType : 1
       }
       window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequestData, {
         success: data => {
           console.log('native接口 调native收银台返回报文=============<br>' + data)
           sucCallback && sucCallback(data);
-          window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-            pageId: 'paySuccess',
-            params: JSON.stringify({
-              pay: JSON.stringify(this.sendData)
-            })
-          })
         },
         fail: error => {
           console.log(error)
           let errorData = JSON.parse(error)
           if (errorData.result == 'fail') {
-            // 取消支付
-            failCallback && failCallback(errorData)
-            if (type == '23') {
-              window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-                pageId: 'expensesorderdetail',
-                params: JSON.stringify({
-                  order: order.orderNo
+            if (failCallback) {
+              // 取消支付
+              failCallback && failCallback(errorData)
+            } else {
+              if (type == '23') {
+                window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                  pageId: 'expensesorderdetail',
+                  params: JSON.stringify({
+                    order: order.orderNo
+                  })
                 })
-              })
+              }
             }
           }
         }

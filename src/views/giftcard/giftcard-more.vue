@@ -4,11 +4,11 @@
       <div class="head-search">
         <div class="search-contain">
           <div class="search-logo"></div>
-          <input type="search" placeholder="礼品卡" v-model="searchText" ref="searchText" v-focus>
+          <input type="search" name="search" placeholder="礼品卡" v-model="searchText" autofocus="autofocus">
         </div>
       </div>
     </form>
-    <bl-card-list style="margin-top: 0.25rem" :jumpId="$route.query.jumpId" :searchWord="searchWord"></bl-card-list>
+    <bl-card-list style="padding-top: 0.25rem" :jumpId="$route.query.jumpId" :searchWord="searchWord"></bl-card-list>
     <bl-shop-card></bl-shop-card>
   </div>
 </template>

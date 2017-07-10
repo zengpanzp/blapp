@@ -258,7 +258,80 @@ window.CTJSBridge.LoadMethod('BLCashier', 'cashierNavigationController', payRequ
     }
   })
 }
+
+// 返回首页
+
+setTimeout(function () {
+window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+}, 2500)
+
+// 弹框
+<!-- ios  style 不传值 默认为default-->
+window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+  title: "title",
+  message: "message",
+  buttons: [
+  {
+    title: "default"
+  }, {
+    title: "cancel",
+    style: "disabled"
+  }, {
+    title: "destructive",
+    style: "highlighted"
+  }]
+}, { success: data => {
+  console.log("####success#####" + data)
+}})
+
+<!-- android -->
+  window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
+    title: "提示",
+    message: "确认要退出？",
+    buttons: [ "取消", "确定" ]
+  }, { success: data => {
+    debugger
+    console.log("####success#####" + data)
+    if (data.index == 0) {
+      alert("取消")
+    } else if (data.index == 1) {
+      alert("确定")
+    }
+  }
+})
+
+// iOS 地址选择 省市区
+// 省：data[kBLAddressSelectPickerViewProvince][kBLAddressSelectPickerViewAreasNm]
+// 市：data[kBLAddressSelectPickerViewCity][kBLAddressSelectPickerViewAreasNm] 
+// 区：data[kBLAddressSelectPickerViewDistrict][kBLAddressSelectPickerViewAreasNm]
+
+  window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', {
+    title: "aaaa",
+    limitedProvinceIds: []
+  }, {
+    success: data => {
+      // let resData = JSON.parse(data)
+      let province = JSON.parse(data).kBLAddressSelectPickerViewProvince.nm
+      let city = JSON.parse(data).kBLAddressSelectPickerViewCity.nm
+      let distirct = JSON.parse(data).kBLAddressSelectPickerViewDistrict.nm
+      console.log('####province:  ' + province + '#####city:  ' + city + '####distirct: ' + distirct)
+    },
+    fail: data => {
+      console.log(data)
+    },
+    progress: data => { console.log(data) }
+  })
+
+  <!-- iOS 上传图片-->
+  window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
+    // type: 'camera'
+  }, {success: data => {
+      console.log('success' + data)
+      // let image = JSON.parse { }
+    },
+    fail: () => {
+      console.log('fail')
+    }
+  })
 ======================================End
 ```
-
-

@@ -30,9 +30,9 @@
           <div class="todynew" v-for="item in filterGetFlashDetailData">
             <div class="todynew-img">
               <div class="wumengcen" v-if="item.pictures">
-                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="picturesUrl.replace(/^http:/, '')"></div>
+                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="(picturesUrl || '').replace(/^http:/, '')"></div>
                 <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + item.start }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                  <img v-lazy.container="{ src: picturesUrl.replace(/^http:/, ''), error: require('src/assets/icon_banner_loading.png') }" alt="">
+                  <img v-lazy.container="{ src: (picturesUrl || '').replace(/^http:/, ''), error: require('src/assets/icon_banner_loading.png') }" alt="">
                   <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
                 </router-link>
                 <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
@@ -40,7 +40,7 @@
               <div class="D" v-if="isActive === 'z'" v-text="timeCoundDown(item.effectiveEnd)"></div>
               <div class="D" v-else-if="isActive === 'p'" v-text="timeCoundNotice(item.effectiveStart)"></div>
               <div class="bottom-todynew">
-                <div class="le-fonts"><img :src="item.brandList[0].brandLogo.replace(/^http:/, '')" :alt="item.brandList[0].brandNameCN"></div>
+                <div class="le-fonts"><img :src="(item.brandList[0].brandLogo || '').replace(/^http:/, '')" :alt="item.brandList[0].brandNameCN"></div>
                 <div class="dd-fonts">
                   <div class="le2-fonts" v-text="item.flashName"></div>
                   <div class="tian-number" v-if="isActive === 'p' || isActive === 'z'"></div>
