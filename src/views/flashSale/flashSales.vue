@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <!-- <iframe v-if="miniUrl" :src="miniUrl.replace(/^http:/, '')" id="Iframe" frameborder="0" scrolling="yes" style="border:0px; width:100%; min-height: 20rem;"></iframe> -->
+      <iframe v-if="miniUrl" :src="miniUrl.replace(/^http:/, '')" id="Iframe" frameborder="0" scrolling="yes" style="border:0px; width:100%;"></iframe>
       <!-- end -->
       <!-- 闪购商品列表 -->
       <div class="flash-list">
@@ -123,7 +123,9 @@ export default {
         this.$nextTick(() => {
           this.queryCate = resData.list
           if (this.queryCate[0].miniList && this.queryCate[0].miniList.length && this.queryCate[0].miniList[0].miniUrl) {
-            this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+            setTimeout(() => {
+              this.miniUrl = this.queryCate[0].miniList[0].miniUrl
+            }, 100)
           }
           this.loaded = true
           this.$loading.close()
@@ -234,7 +236,9 @@ export default {
     /* 点击分类加载数据 */
     selectCate(key, index, flashname, item) {
       if (item && item.miniList && item.miniList.length) {
-        this.miniUrl = item.miniList[0].miniUrl
+        setTimeout(() => {
+          this.miniUrl = item.miniList[0].miniUrl
+        }, 100)
       } else {
         this.miniUrl = ''
       }
