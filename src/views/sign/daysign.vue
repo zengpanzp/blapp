@@ -189,6 +189,7 @@
             self.getSignQualification((data) => {
               if (data.body.resCode == "00100000") {
                 let json = JSON.parse(data.body.obj);
+                console.log(json)
                 self.signRemark = json.signRemark;
                 self.showSignRemark = true;
                 let scrollTop = document.body.scrollTop || document.documentElement.scrollTop;

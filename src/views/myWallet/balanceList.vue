@@ -3,7 +3,7 @@
 	<div class="new" v-infinite-scroll="getBalanceList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
 	    <div class="top-money">
 	        <div>可用余额（元）</div>
-	        <div id="available"></div>
+	        <div id="available">{{available}}</div>
 	    </div>
 	    <div class="integral-menu">
 	        <ul>
@@ -28,13 +28,9 @@
 				</li>
 	        </ul>
 	    </div>
-	    <div id="empty" class="empty pointEmpty" style="display: none">
+	    <div id="empty" class="empty pointEmpty" v-if="flag">
 	        暂无记录
 	    </div>
-	    <!-- <div class="infinite-layer" v-if="loading">
-	      <div class="infinite-preloader"></div>
-	      <div>加载中...</div>
-	    </div> -->
 	</div>
 
 </template>
@@ -56,6 +52,8 @@ export default {
     	memberId: "",
         memberToken: "",
         type: "04",
+        available: "",
+        flag: false,
         balList: [],
     };
   },
@@ -74,7 +72,6 @@ export default {
 	      	$(e.currentTarget).find("a").addClass("select-integral")
 	      	current.type = $(e.currentTarget)[0].id
 	      	$("#balanceList").html("");
-	        $("#empty").hide();
 	        current.getBalanceList();
 	        current.pageNum = 1;
       	})
@@ -83,7 +80,7 @@ export default {
       	}).then(data => {
       		if (data.body.obj) {
 			    let obj = JSON.parse(data.body.obj);
-			    $("#available").html(Number(obj.bal / 100).toFixed(2))
+			    this.available = Number(obj.bal / 100).toFixed(2)
 			}
       	})
       	api.myWallet.getBalanceList({
@@ -109,7 +106,7 @@ export default {
 		    		this.loading = false
 		    	}
 		    	if (obj.totalCount == 0) {
-		    		$('#empty').show();
+		    		this.flag = true
 		    		return
 		    	}
 		    }

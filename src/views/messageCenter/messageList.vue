@@ -41,7 +41,7 @@
 	            </ul>
 	        </div>
 	    </div>
-      <div id="empty" class="empty messageEmpty" style="display: none">
+      <div id="empty" class="empty messageEmpty" v-if="flag">
         还没有消息
         <!--<p>可以去看看那些想看的</p>-->
         <!--<a href="#homepage/home">去逛逛</a>-->
@@ -72,7 +72,8 @@ export default {
     	// 当前时间
     	nowTimeMillSeconds: "",
       typeId: "",
-      memberId: ""
+      memberId: "",
+      flag: false
     };
   },
   created() {
@@ -124,7 +125,7 @@ export default {
   			  		this.loading = false
   			  	}
             if (obj.totalPage == 0) {
-              $("#empty").show();
+              this.flag = true
             }
           }
 	  		})

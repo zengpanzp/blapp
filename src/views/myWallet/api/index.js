@@ -41,6 +41,22 @@ export default {
     checkNoPswPay: params => {
       return Vue.http.post(baseUrl + '/blpay/queryPassword.htm', params);
     },
+    // 扫一扫用
+    querysalesystem: params => {
+      return Vue.http.post(baseUrl + '/memberCheckin/checkin.htm', params);
+    },
+    handleCoupon: params => {
+      return Vue.http.post(baseUrl + '/coupon/getCoupon.htm', params);
+    },
+    getExportCoupon: params => {
+      return Vue.http.post(baseUrl + '/coupon/getCouponByCouponCode.htm', params);
+    },
+    querymyinfos: params => {
+      return Vue.http.post(baseUrl + '/myInformation/getMyInformation.htm.htm', params);
+    },
+    querymyorderdetail: params => {
+      return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
+    }
     // // 查看实名认证等级
     // realNameAuth: params => {
     //   return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
