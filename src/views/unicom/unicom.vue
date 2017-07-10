@@ -5,7 +5,7 @@
 	        <div class="unicom-ban">
 	            <div><img src="./i/fill_icon.jpg"></div>
 	        </div>
-	        <div class="block" id="start" style="display: block">
+	        <div class="block" id="start" v-if="key == 1">
 	            <div class="unicom-confirm">
 	                <a>
 	                    <h4 class="confirm">开始认证</h4>
@@ -14,14 +14,14 @@
 	                </a>
 	            </div>
 	        </div>
-	        <div class="block" id="finish" style="display: none">
+	        <div class="block" id="finish" v-if="key == 2">
 	            <div class="unicom-confirm unicom-finsh">
 	                <a>
 	                    <h4 class="finish-confirm">已完成认证</h4>
 	                </a>
 	            </div>
 	        </div>
-	        <div class="block" id="cannot" style="display: none">
+	        <div class="block" id="cannot" v-if="key == 3">
 	            <div class="unicom-confirm unicom-error">
 	                <a>
 	                    <h4 class="num-error">号码不符合</h4>
@@ -100,6 +100,7 @@ export default {
     	memberId: "",
     	memberToken: "",
     	mobile: "",
+    	key: "",
     	llList: []
     };
   },
@@ -147,16 +148,15 @@ export default {
 			            deviceId: this.deviceId
 			  		}).then(data => {
 			  			this.$loading.close();
-			  			$(".block").hide();
 			  			if (data.body.obj) {
 			  				let obj = JSON.parse(data.body.obj);
 				  			if (obj && obj.key) {
 				  				if (obj.key == "1") {
-				  					$("#start").css("display", "block")
+				  					this.key = obj.key
 					  			} else if (obj.key == "2") {
-					  				$("#finish").css("display", "block")
+					  				this.key = obj.key
 					  			} else if (obj.key == "3") {
-					  				$("#cannot").css("display", "block")
+					  				this.key = obj.key
 					  			}
 				  			}
 			  			}
@@ -175,7 +175,14 @@ export default {
 			  			// $("#start").css("display", "block")
 			  		})
 			  	})
+		  	} else {
+		  		this.$toast({
+			        position: 'bottom',
+			        message: data.body.msg
+			    })
 		  	}
+  		}, err => {
+  			console.log(err)
   		})
   	},
   	notice() {

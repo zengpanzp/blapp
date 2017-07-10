@@ -40,7 +40,7 @@
           </div>
         </div>
     </div>
-    <div id="empty" class="empty pointEmpty" style="display: none">
+    <div id="empty" class="empty pointEmpty" v-if="flag">
         暂无记录
     </div>
     <div class="sx-check-box corner" style="bottom: -100%;">
@@ -105,6 +105,7 @@ export default {
       money: "",
       status: "",
       transType: "",
+      flag: false,
       range: {},
       ECPList: [],
       requestData: {
@@ -151,7 +152,7 @@ export default {
             if (data.body.obj) {
               let obj = JSON.parse(data.body.obj);
               if (obj.root && obj.root.length > 0) {
-                $("#empty").hide()
+                this.flag = false
                 this.busy = false
                 var lastMonth = 0
                 this.inComeAmt = Number(obj.inComeAmt / 100).toFixed(2)
@@ -177,7 +178,7 @@ export default {
               }
               if (obj.root && obj.root.length == 0) {
                 $("#recordList").hide()
-                $("#empty").show()
+                this.flag = true
               }
               if (current.pageNum >= obj.TotalPageCount) {
                 this.busy = true
@@ -197,19 +198,19 @@ export default {
                     current.requestData.startDate = current.period.start;
                     current.requestData.endDate = current.period.end;
                 }
-                if (current.range.lAmt) {
-                    current.requestData.lAmt = Number(current.range.lAmt) * 100;
-                }
-                if (current.range.hAmt) {
-                    current.requestData.hAmt = Number(current.range.hAmt) * 100;
-                }
+                })
                 $(".confirm").click(function() {
+                  if (current.range && current.range.lAmt) {
+                      current.requestData.lAmt = Number(current.range.lAmt) * 100;
+                  }
+                  if (current.range && current.range.hAmt) {
+                      current.requestData.hAmt = Number(current.range.hAmt) * 100;
+                  }
                   console.log(JSON.stringify(current.requestData))
                   current.closeFilter()
                   $("#recordList").show().html("")
                   current.getECPList()
                 })
-              })
             }
           })
       })

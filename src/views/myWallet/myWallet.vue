@@ -7,7 +7,7 @@
                     <div class="payment-code-img"></div>
                     <p>付款</p>
                 </a>
-                <a class="wallet-hd-cell action" id="scan">
+                <a class="wallet-hd-cell action" id="scan" @click="scanner">
                     <div class="payment-cell-img"></div>
                     <p>扫一扫</p>
                 </a>
@@ -77,7 +77,7 @@
                 <li class="wallet-my-row" @click="smallnosecret(status)">
                     小额免密
                     <a class="row-right action" id="noPsw">
-                        <span></span>
+                        <span>{{freeFlagDesc}}</span>
                         <i class="iconfont icon-enter">&gt;</i>
                     </a>
                 </li>
@@ -104,6 +104,7 @@ export default {
         ecpLength: "",
         ecp: "",
         status: "",
+        freeFlagDesc: ""
         // idFlag: "",
         // mobile: "",
         // realNameLevel: "",
@@ -167,7 +168,7 @@ export default {
                 let obj = JSON.parse(data.body.obj);
                 for (var i = 0; i < obj.freeFlags.length; i++) {
                     if (obj.freeFlags[i].freeFlagSta == '1') {
-                        $("#noPsw span").html(obj.freeFlags[i].freeFlagDesc)
+                        this.freeFlagDesc = obj.freeFlags[i].freeFlagDesc
                     }
                 }
             }
@@ -235,6 +236,211 @@ export default {
             })
             }
         }
+    },
+    scanner() {
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
+        success: data => {
+          data = JSON.parse(data);
+          if (data.result == "success") {
+                console.log(data.params)
+                let content = (data.params.indexOf("?") != -1) ? data.params.split('?')[1] : ""
+                let apiType = (content.indexOf("=") != -1) ? content.split("&")[0].split("=")[1] : ""
+                if (apiType === 'signIn') {
+                    this.handleSignIn(content);
+                } else if (apiType === 'coupon') {
+                    this.handleCoupon(content);
+                } else if (apiType === 'product') {
+                    var productid = content.split("&")[1].split("=")[1];
+                    var deviceNo = '';
+                    if (content.split("&").length > 1) {
+                        deviceNo = content.split("&")[2].split("=")[1];
+                    }
+                    window.CTJSBridge.LoadMethod('BLGoodsDetail', 'BLGoodsDetailViewController', {
+                        params: {
+                            "goodsid": productid,
+                            "maxCount": null,
+                            "deviceNo": deviceNo
+                        }
+                    })
+                } else if (apiType === 'activity') {
+                    let activityId = content.split("&")[1].split("=")[1];
+                    window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                        pageId: 'activityDetail',
+                        params: {
+                            "activity": 0,
+                            "activityId": activityId
+                        }
+                    })
+                } else if (apiType === 'basket') {
+                    var id = content.split("&")[1].split("=")[1];
+                    // var name = content.split("&")[2].split("=")[1];
+                    window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                        pageId: 'basketorderlistv2',
+                        params: { "basketId": id }
+                    })
+                } else if (apiType === 'vegetables') {
+                    window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                        pageId: 'vegetablesorder'
+                    })
+                } else if (apiType === 'basketOrder') {
+                    var basketOrderId = content.split("&")[1].split("=")[1];
+                    window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                        pageId: 'basketorderlistv2',
+                        params: { "basketId": basketOrderId }
+                    })
+                } else if (apiType === 'activationCoupon') {
+                    this.BindCoupon(content);
+                } else if (apiType === 'flashSale') {
+                    let flashId = content.split("&")[1].split("=")[1];
+                    deviceNo = content.split("&")[3].split("=")[1];
+                    this.$router.push({path: '../flashSale/productsListView/' + flashId + deviceNo});
+                } else if (apiType === 'payCartOrder') {
+                    if (this.validatePayCartOrder(content)) {
+                        let memberToken = content.split("&")[1].split("=")[1];
+                        let orderNumber = content.split("&")[2].split("=")[1];
+
+                         // get user information by token
+                         api.myWallet.querymyinfos({
+                            'member_token': memberToken,
+                            'timestamp': this.getTimeFormatToday(),
+                            'sysid': "1103"
+                         }).then(data => {
+                            if (data.body.obj) {
+                                let obj = JSON.parse(data.body.obj);
+                                if (obj.memberId != this.memberId) {
+                                    this.$toast({
+                                        position: 'bottomTop',
+                                        message: "扫码失败，扫码不识别"
+                                    });
+                                    return false;
+                                } else {
+                                    api.myWallet.querymyorderdetail({
+                                        'memberId': this.memberId,
+                                        'orderNo': orderNumber
+                                    }).then(data => {
+                                        if (data.body.obj) {
+                                            let obj = JSON.parse(data.body.obj);
+                                            console.log(obj)
+                                        }
+                                    })
+                                }
+                            }
+                         })
+                    } else {
+                        this.$toast({
+                            position: 'bottomTop',
+                            message: "扫码失败，扫码不识别"
+                        });
+                    }
+                } else {
+                    this.$toast({
+                        position: 'bottomTop',
+                        message: "扫码失败，扫码不识别"
+                    });
+                }
+          } else {
+                this.$toast({
+                    position: 'bottomTop',
+                    message: "扫码失败，未获取到二维码"
+                });
+          }
+        },
+        fail: (data) => {
+            data = JSON.parse(data);
+            if (data.result == "fail") {
+              this.$toast({
+                position: 'bottomTop',
+                message: data.msg
+              });
+            }
+        }
+      })
+    },
+    handleSignIn: function (content) {
+        api.myWallet.querysalesystem({
+            'memberToken': this.memberToken,
+            'sysid': '1101',
+            'channelId': '1',
+            'onOffChannel': '2',
+            'storeId': content.split("&")[1].split("=")[1]
+        }).then(data => {
+            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+              pageId: 'scansignnew'
+            })
+        }, err => {
+            console.log(err)
+        })
+    },
+    handleCoupon: function (content) {
+        api.myWallet.handleCoupon({
+            'userToken': this.memberToken,
+            'couponTemplateId': content.split("&")[3].split("=")[1],
+            'acquireChannel': "1"
+        }).then(data => {
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                  pageId: 'scangetcoupon',
+                  params: { "coupon": encodeURIComponent(obj) }
+                })
+            }
+        }, err => {
+            console.log(err)
+        })
+    },
+    BindCoupon: function (content) {
+        api.myWallet.getExportCoupon({
+            'userToken': this.memberToken,
+            'couponCode': content.split("&")[1].split("=")[1],
+            'channelId': "1",
+            'shopId': content.split("&")[3].split("=")[1],
+            'merchantId': content.split("&")[4].split("=")[1]
+        }).then(data => {
+            if (data.body.obj) {
+                this.$toast({
+                    message: "领券成功！"
+                });
+            }
+        }, err => {
+            console.log(err)
+        })
+    },
+    validatePayCartOrder: function (content) {
+        if (content.split("&").length == 3) {
+            let memberToken = content.split("&")[1].split("=")[1];
+            let orderNumber = content.split("&")[2].split("=")[1];
+
+            let loginMemberId = this.memberId;
+
+            if (memberToken == null || memberToken == '' || orderNumber == null || orderNumber == '' || loginMemberId == null || loginMemberId == '') {
+                this.$toast({
+                    position: 'bottomTop',
+                    message: "扫码失败，扫码不识别"
+                });
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    },
+    getTimeFormatToday: function () {
+        var today = new Date();
+
+        var year = today.getFullYear() + '';
+        var month = (today.getMonth() + 1) + '';
+        month = (month.length === 1) ? '0' + month : month;
+        var day = today.getDate() + '';
+        day = (day.length === 1) ? '0' + day : day;
+        var hour = today.getHours() + '';
+        hour = (hour.length === 1) ? '0' + hour : hour;
+        var min = today.getMinutes() + '';
+        min = (min.length === 1) ? '0' + min : min;
+        var sec = today.getSeconds() + '';
+        sec = (sec.length === 1) ? '0' + sec : sec;
+
+        return year + month + day + hour + min + sec;
     }
   }
 };
