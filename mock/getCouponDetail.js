@@ -8,7 +8,6 @@ module.exports = {
   api: '/mockapi/coupon/queryCouponTemplateDetail.htm',
   response: function (req, res) {
     res.json(
-    	
     		{
 	        "contentTextApp": 1,
 	        "contentTextPc": 1,

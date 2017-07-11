@@ -41,7 +41,7 @@
     <div class="freedom-details freedom-button">
         <a href="tel:4009008800" class="simple-password-buttom" v-if="power.rightCode == '009'">一键接通贵宾客服</a>
         <router-link :to="{path: '/applyShop/' + encodeURIComponent(JSON.stringify(power))}" class="simple-password-buttom" v-if="power.rightCode == '002'||power.rightCode == '004'||power.rightCode == '007'||power.rightCode == '008'">查看门店清单</router-link>
-        <a href="#" class="simple-password-buttom" v-if="power.rightCode == '011'">合作商户积分互换</a>
+        <router-link :to="{path: '/integralExchange'}" class="simple-password-buttom" v-if="power.rightCode == '011'">合作商户积分互换</router-link>
         <a href="#" class="simple-password-buttom green-button" style="display:none"
            id="appointment">快速预约</a>
         <a href="#" class="simple-password-buttom green-button" style="display:none"
@@ -83,7 +83,7 @@ export default {
     this.member_mobile = utils.dbGet('userInfo').member_mobile
     console.log(this.memberToken)
   //	let powerId = this.$route.params.powerId
-    let powerId = '004'
+    let powerId = '011'
   	console.log(powerId)
   	api.getPowerDel(JSON.stringify({
     	'rightCode': powerId

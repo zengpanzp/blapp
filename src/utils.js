@@ -226,7 +226,6 @@ const getTimeFormatToday = () => {
 
   return year + month + day + hour + min + sec;
 }
-
 export default {
   dbGet,
   dbSet,
