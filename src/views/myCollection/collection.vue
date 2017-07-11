@@ -5,6 +5,10 @@
     </bl-navbar>
     <bl-tab-container v-model="tabsModel">
       <bl-tab-container-item id="0">
+        <div class="empty" v-if="list.length == 0">
+          <div class="noStore">暂无收藏的商品</div>
+          <bl-button type="outlineMain" @click="homePage" inline size="small">去逛逛</bl-button>
+        </div>
         <div class="goods-box" v-infinite-scroll="loadGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="goods-item flex" v-for="item in list" v-go-native-goods-detail="item">
             <div class="goods-img lazy-box">
@@ -22,6 +26,10 @@
         </div>
       </bl-tab-container-item>
       <bl-tab-container-item id="1">
+        <div class="empty" v-if="storeList.length == 0">
+          <div class="noStore">暂无收藏的门店</div>
+          <bl-button type="outlineMain" @click="homePage" inline size="small">去逛逛</bl-button>
+        </div>
         <div :class="{'shop-box': storeList && storeList.length}" v-infinite-scroll="loadStores" infinite-scroll-disabled="busyStore" infinite-scroll-distance="10">
           <div class="shop-main">
             <div class="shop-item flex-c-m" v-for="item in storeList" @click="storesDtail(item.shopId, item.issueOrgId)">
@@ -92,6 +100,9 @@ export default {
     window.currentPageReload = this.currentPageReload
   },
   methods: {
+    homePage() {
+      window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+    },
     currentPageReload() {
       let deployName = this.$route.query.deployName
       switch (deployName) {
@@ -193,7 +204,7 @@ export default {
             } else {
               this.$loading.close()
               this.goodsLoading = false
-                // this.$toast('没有收藏的商品')
+              // this.$toast('没有收藏的商品')
             }
           } else {
             this.goodsLoading = false
@@ -233,7 +244,8 @@ export default {
             } else {
               this.storesLoading = false
               this.$loading.close()
-                // this.$toast('没有收藏的门店')
+              // this.$toast('没有收藏的门店')
+              this.empty = true
             }
           } else {
             this.$toast(data.body.msg)

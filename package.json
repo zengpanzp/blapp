@@ -14,7 +14,9 @@
   "dependencies": {
     "array-find-index": "^1.0.2",
     "fastclick": "^1.0.6",
+    "jsbarcode": "3.5.1",
     "scroll": "^2.0.0",
+    "v-qrcode": "^1.0.3",
     "vue": "^2.1.10",
     "vue-infinite-scroll": "^2.0.1",
     "vue-lazyload": "0.8.0",
