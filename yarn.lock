@@ -3377,6 +3377,10 @@ js-yaml@~3.7.0:
     argparse "^1.0.7"
     esprima "^2.6.0"
 
+jsbarcode@3.5.1:
+  version "3.5.1"
+  resolved jsbarcode-3.5.1.tgz#6789799d8ff6b0366260d1d070cdd3e3649f8166
+
 jsbn@~0.1.0:
   version "0.1.1"
   resolved jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513

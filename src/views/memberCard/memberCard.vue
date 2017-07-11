@@ -4,7 +4,8 @@
       <div class="box-container">
         <div class="member-detail">
           <div class="member-pic">
-            <img src="./i/user_p01.png">
+            <!-- <img src="./i/user_p01.png"> -->
+            <img :src="avater">
           </div>
           <div>
             <div class="member-name">
@@ -20,11 +21,12 @@
             </div>
           </div>
         </div>
-        <div class="line-code">
-          <img src="http://placeholder.qiniudn.com/450x133"/>
+        <div class="bar-code">
+          <svg id="barcode" jsbarcode-value="123456789012"></svg>
+          <!-- <img src="http://placeholder.qiniudn.com/450x133"/> -->
         </div>
         <div class="square-code" id="qrcode">
-          <qrcode :cls="qrCls" :value="qrText" :size="size" :padding="15"></qrcode>
+          <qrcode class="qrcode" :cls="qrCls" :value="qrText" :size="size" :padding="15"></qrcode>
           <!-- <img src="http://placeholder.qiniudn.com/370x370"/> -->
         </div>
         <transition name="fade">
@@ -55,6 +57,7 @@
 import api from './api'
 import utils from 'src/utils'
 import Qrcode from 'v-qrcode/src/index'
+import JsBarcode from 'jsbarcode'
 export default {
 
   name: 'memberCard',
@@ -65,9 +68,11 @@ export default {
       memberLevel: '',
       name: '', // 昵称
       memberToken: '',
+      avater: '',
       qrCls: 'square-code',
       qrText: '', // 条码／二维码信息
-      size: '500'
+      size: '500',
+      bHeight: '' // 条码高度
     };
   },
   components: {
@@ -80,8 +85,9 @@ export default {
     }, 1000)
     utils.isLogin().then(data => {
       this.memberLevel = data.memberLevelCode
-      this.name = data.member_name
+      this.name = data.nickName
       this.memberToken = data.member_token
+      this.avater = data.avatarUrl
       if (this.memberLevel == 20) {
         this.level = '银卡会员'
       } else if (this.memberLevel == 30) {
@@ -101,7 +107,15 @@ export default {
         console.log(data)
         if (data.body.obj) {
           this.qrText = data.body.obj
+          // 条形码；结果：只取uid和;
+          let bar = this.qrText.split(";")[0]
+          let barCode = bar + ';'
+          console.log('###barText:' + barCode)
           console.log('success')
+          JsBarcode("#barcode", barCode, {
+            width: 2,
+            displayValue: false
+          });
         } else {
           console.log('fail')
           // alert(1)
@@ -114,8 +128,10 @@ export default {
     // 二维码居中
     let div = document.getElementById('qrcode')
     let clientWidth = div.clientWidth
-    console.log(clientWidth)
     this.size = clientWidth
+    // let barcode = document.getElementById('bar-code')
+    // this.bHeight = barcode.clientHeight
+    // console.log('this.size' + this.bHeight)
   },
   methods: {
     click() {
