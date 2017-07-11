@@ -1,5 +1,5 @@
 <template>
-  <div class="swiper-container" ref="slide" v-show="show">
+  <div class="swiper-container" ref="slide" v-show="slides.length >= 1">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-if="slides.length > 1" v-for="item in slides" v-go-native-resource="item">
         <a href="javascript:;"><img :_src="item.mediaUrl.replace(/^http:/, '')" :alt="item.deployName"></a>
@@ -18,12 +18,6 @@
 export default {
 
   name: 'Slide',
-
-  data() {
-    return {
-      show: true
-    }
-  },
 
   props: {
     pagination: {
@@ -48,11 +42,7 @@ export default {
   watch: {
     slides: {
       handler(items) {
-        if (items.length == 0) {
-          this.show = false
-        }
         if (items.length > 1) {
-          this.show = true
           this.reInitPages()
         }
       },
