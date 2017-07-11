@@ -21,7 +21,7 @@
           <!--<button disabled class="simple-password-buttom corner larger-button" data-role="none">充值</button>-->
       </div>
     </div>
-    <div class="fhshow yhg" style="display:none;" id="balanceInfom">
+    <div class="fhshow yhg" id="balanceInfom" v-if="flag">
         <div class="font-info-1" style="margin-top:-60%;">
             <div class="btn-cancel" id="hf-app"><button type="button" class="newiconfont cancel" @click="cancelShow">X</button></div>
             <div class="showtitle">充值说明</div>
@@ -52,7 +52,8 @@ export default {
     return {
         memberId: "",
         memberToken: "",
-        available: ""
+        available: "",
+        flag: false
     };
   },
   created() {
@@ -72,10 +73,10 @@ export default {
   },
   methods: {
     recharge: function() {
-      $("#balanceInfom").show();
+      this.flag = true
     },
     cancelShow: function() {
-      $("#balanceInfom").hide();
+      this.flag = false
     }
   }
 };

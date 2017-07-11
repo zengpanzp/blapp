@@ -54,7 +54,7 @@
 	        </div>
 	    </div>
 
-	    <div class="mask" style="display: none;"></div>
+	    <div class="mask" v-if="flag"></div>
 	    <div class="modal fix-modal iphone-modal modal-out" style="display: none">
 	        <div class="modal-inner unic-modal-inner">
 	            <h3 class="unic-modal-title">流量领取说明</h3>
@@ -100,6 +100,7 @@ export default {
     	memberId: "",
     	memberToken: "",
     	mobile: "",
+    	flag: false,
     	llList: []
     };
   },
@@ -147,7 +148,6 @@ export default {
 			            deviceId: this.deviceId
 			  		}).then(data => {
 			  			this.$loading.close();
-			  			$(".block").hide();
 			  			if (data.body.obj) {
 			  				let obj = JSON.parse(data.body.obj);
 				  			if (obj && obj.key) {
@@ -175,7 +175,14 @@ export default {
 			  			// $("#start").css("display", "block")
 			  		})
 			  	})
+		  	} else {
+		  		this.$toast({
+			        position: 'bottom',
+			        message: data.body.msg
+			    })
 		  	}
+  		}, err => {
+  			console.log(err)
   		})
   	},
   	notice() {
@@ -184,11 +191,14 @@ export default {
   			"border-radius": "0",
   			"display": "block"
   		})
-  		$(".mask").css("display", "block")
+  		this.flag = true
   	},
   	close() {
-  		$(".modal").addClass("modal-out").css("top", "50%")
-  		$(".mask, .modal").css("display", "none")
+  		$(".modal").addClass("modal-out").css({
+  			"top": "50%",
+  			"display": "none"
+  		})
+  		this.flag = false
   	},
   	// authenticate() {
   	// 	if (this.memberId) {
