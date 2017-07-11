@@ -55,7 +55,7 @@ export default {
     },
     // 设置 更新用户信息
     update: params => {
-      return Vue.http.post(baseUrl + '/myInformation/updateMember', params);
+      return Vue.http.post(baseUrl + '/baseinfo/update.htm', params);
     }
   }
 }
