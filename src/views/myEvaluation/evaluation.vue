@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <bl-slide class="evaluation-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
     <!-- end -->
-    <bl-navbar class="collection-tab flex" v-model="tabsModel" v-show="filterEleTabs.length != []">
+    <bl-navbar class="collection-tab flex" v-model="tabsModel">
       <bl-tab-item class="flex-item flex-c-m" v-for="(item, index) in filterEleTabs" :id="index" @click.native="changeTab(index, item.type)"><span>{{ item.deployName }}({{ item.num }})</span></bl-tab-item>
     </bl-navbar>
     <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
@@ -289,6 +289,7 @@ export default {
         if (data.body.obj) {
           let obj = data.body.obj.replace(/http:\/\//g, "https://")
           let resData = JSON.parse(obj)
+          console.log('===========', resData)
           if (resData && resData.resultInfo) {
               this.pageNo = resData.resultInfo.pageNo
               let resRow = resData.resultInfo.rows
@@ -469,6 +470,7 @@ export default {
         order: order,
         product: product
       }
+      console.log(reqData)
       // 判断终端
       let u = navigator.userAgent;
       let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端

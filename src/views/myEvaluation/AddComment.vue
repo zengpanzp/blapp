@@ -1,7 +1,7 @@
 <style lang="scss" src="./css/comment.scss" scoped></style>
 <template>
   <div class="comment">
-    <div class="goods-box">
+    <div class="goods-box space-bottom">
       <div class="goods-item">
         <div class="flex">
           <div class="goods-img lazy-box"><img src="http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg" alt="" class="lazy"></div>
@@ -12,7 +12,7 @@
         <div class="goods-comment flex-c-m">
           <div class="goods-pf">商品评分:</div>
           <div class="flex-item">
-            <svg class="icon" v-for="n in 5" @click="starHandle(n)">
+            <svg class="icon" v-for="n in 5" @click="star = n">
               <use :xlink:href="star >= n ? '#icon-full-star' : '#icon-star'"></use>
             </svg>
           </div>
@@ -24,6 +24,12 @@
         <bl-comment placeholder="评价有积分，积分可抵现，快来给没有购买的小伙伴提供一些参考吧！" maxLength="250" v-model="message.text" :messageBoole="message.messageBoole"></bl-comment>
       </div>
       <bl-upload></bl-upload>
+    </div>
+    <div class="comment-bottom flex-space flex-m">
+      <div class="comment-left"><label class="flex-m"><input type="checkbox" class="ni-ming" name="" v-model="niMing">匿名</label></div>
+      <div class="comment-right">
+        <bl-button class="middle">发布评价</bl-button>
+      </div>
     </div>
   </div>
 </template>
@@ -59,19 +65,14 @@ export default {
         url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
       }, {
         url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
-      }]
+      }],
+      niMing: false
     };
   },
   mounted() {
     this.$loading.close()
   },
   methods: {
-    starHandle(index) {
-      this.star = index
-      if (index > 3) {
-        this.lowModel = []
-      }
-    }
   }
 };
 </script>

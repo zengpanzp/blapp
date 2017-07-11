@@ -2,21 +2,21 @@
   <div class="upload-pic-box">
     <div class="upload-pic-name">上传图片</div>
     <div class="upload-pic-content">
-      <div class="upload-pic-item" v-for="item in upload">
+      <div class="upload-pic-item" v-for="(item, index) in upload">
         <div class="lazy-box">
           <img class="lazy" :src="item.url">
         </div>
-        <div class="remove-upload-pic flex-c-m">
+        <div class="remove-upload-pic flex-c-m" @click="upload.splice(index, 1)">
           <svg class="icon">
             <use xlink:href="#icon-close"></use>
           </svg>
         </div>
       </div>
-      <div class="upload-pic-get lazy-box">
+      <div class="upload-pic-get lazy-box" v-if="upload.length < maxLength">
         <img :src="require('./i/assess-shoot.png')" alt="" class="lazy">
       </div>
     </div>
-    <div class="upload-pic-bottom">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ upload.length }}</span>张）</div>
+    <div class="upload-pic-bottom">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ maxLength }}</span>张）</div>
   </div>
 </template>
 
@@ -31,12 +31,24 @@ export default {
         url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
       }, {
         url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
+      }, {
+        url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
+      }, {
+        url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
+      }, {
+        url: 'http://img.st.iblimg.com/photo-1/1000/190106562_360x360.jpg'
       }]
     };
   },
   props: {
+    maxLength: {
+      type: Number,
+      default: 5
+    }
   },
   watch: {
+  },
+  methods: {
   }
 };
 </script>
@@ -63,6 +75,7 @@ export default {
         float: left;
         width: 25%;
         padding-right: rem(20);
+        padding-bottom: rem(20);
         position: relative;
         .remove-upload-pic{
           position: absolute;
