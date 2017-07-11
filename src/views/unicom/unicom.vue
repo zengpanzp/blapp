@@ -5,7 +5,7 @@
 	        <div class="unicom-ban">
 	            <div><img src="./i/fill_icon.jpg"></div>
 	        </div>
-	        <div class="block" id="start" v-if="key == 1">
+	        <div class="block" id="start" style="display: block">
 	            <div class="unicom-confirm">
 	                <a>
 	                    <h4 class="confirm">开始认证</h4>
@@ -14,14 +14,14 @@
 	                </a>
 	            </div>
 	        </div>
-	        <div class="block" id="finish" v-if="key == 2">
+	        <div class="block" id="finish" style="display: none">
 	            <div class="unicom-confirm unicom-finsh">
 	                <a>
 	                    <h4 class="finish-confirm">已完成认证</h4>
 	                </a>
 	            </div>
 	        </div>
-	        <div class="block" id="cannot" v-if="key == 3">
+	        <div class="block" id="cannot" style="display: none">
 	            <div class="unicom-confirm unicom-error">
 	                <a>
 	                    <h4 class="num-error">号码不符合</h4>
@@ -54,7 +54,7 @@
 	        </div>
 	    </div>
 
-	    <div class="mask" style="display: none;"></div>
+	    <div class="mask" v-if="flag"></div>
 	    <div class="modal fix-modal iphone-modal modal-out" style="display: none">
 	        <div class="modal-inner unic-modal-inner">
 	            <h3 class="unic-modal-title">流量领取说明</h3>
@@ -100,7 +100,7 @@ export default {
     	memberId: "",
     	memberToken: "",
     	mobile: "",
-    	key: "",
+    	flag: false,
     	llList: []
     };
   },
@@ -152,11 +152,11 @@ export default {
 			  				let obj = JSON.parse(data.body.obj);
 				  			if (obj && obj.key) {
 				  				if (obj.key == "1") {
-				  					this.key = obj.key
+				  					$("#start").css("display", "block")
 					  			} else if (obj.key == "2") {
-					  				this.key = obj.key
+					  				$("#finish").css("display", "block")
 					  			} else if (obj.key == "3") {
-					  				this.key = obj.key
+					  				$("#cannot").css("display", "block")
 					  			}
 				  			}
 			  			}
@@ -191,11 +191,14 @@ export default {
   			"border-radius": "0",
   			"display": "block"
   		})
-  		$(".mask").css("display", "block")
+  		this.flag = true
   	},
   	close() {
-  		$(".modal").addClass("modal-out").css("top", "50%")
-  		$(".mask, .modal").css("display", "none")
+  		$(".modal").addClass("modal-out").css({
+  			"top": "50%",
+  			"display": "none"
+  		})
+  		this.flag = false
   	},
   	// authenticate() {
   	// 	if (this.memberId) {
