@@ -343,5 +343,37 @@ export const prdRouter = [
       title: '适用门店',
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/applyShop')), 'applyShop')
-  }
+  },
+  /* 神马 ecp 登录 */
+  {
+    path: '/login',
+      meta: {
+    title: '登录页面'
+  },
+    component: r => require.ensure([], () => r(require('../views/login/login')), 'login')
+  },
+  /* 神马 ecp 联合登录 */
+  {
+    path: '/bindLogin',
+      meta: {
+      title: '联合登录'
+    },
+    component: r => require.ensure([], () => r(require('../views/login/bindlogin')), 'bindLogin')
+  },
+  /* 神马 找回密码 */
+  {
+    path: '/findpass/:step',
+      meta: {
+      title: '找回密码'
+    },
+    component: r => require.ensure([], () => r(require('../views/login/findpass')), 'findpass')
+  },
+  /* 神马 ecp 注册 */
+  {
+    path: '/register',
+      meta: {
+    title: '注册'
+  },
+  component: r => require.ensure([], () => r(require('../views/login/register')), 'register')
+},
 ]
