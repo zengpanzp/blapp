@@ -90,7 +90,7 @@ export default {
             } else {
               this.$toast(res.body.msg)
             }
-          }, err => {
+          }, () => {
             this.inlineLoading.close()
           })
         })
