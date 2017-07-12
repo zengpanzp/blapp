@@ -148,6 +148,7 @@ export default {
 			            deviceId: this.deviceId
 			  		}).then(data => {
 			  			this.$loading.close();
+			  			$(".block").hide()
 			  			if (data.body.obj) {
 			  				let obj = JSON.parse(data.body.obj);
 				  			if (obj && obj.key) {
