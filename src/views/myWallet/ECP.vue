@@ -1,6 +1,6 @@
 <style lang="scss" src="./css/_ECP.scss" scoped></style>
 <template>
-	<div class="new" v-infinite-scroll="getECPList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+	<div class="new" :class="{ 'lockScreen' : filterFlag }" v-infinite-scroll="getECPList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
     <div class="ecp-main">
         <div class="ecp-money-title hair hairBottom">
             <div class="money-free">
@@ -60,8 +60,8 @@
             <div class="sx-content-item hair hairBottom">
                 <div class="sx-content-title">金额区间</div>
                 <div class="input-group">
-                    <input type="text" value="" placeholder="输入最低金额" id="lAmt" @blur="setRange(event)">
-                    <input type="text" value="" placeholder="输入最高金额" id="hAmt" @blur="setRange(event)">
+                    <input type="text" value="" placeholder="输入最低金额" id="lAmt" @blur="setRange">
+                    <input type="text" value="" placeholder="输入最高金额" id="hAmt" @blur="setRange">
                 </div>
             </div>
             <div class="sx-content-item">
@@ -80,7 +80,7 @@
             <button class="confirm">确定</button>
         </div>
     </div>
-    <div class="plusMark" style="display: none; opacity: 0.6;"></div>
+    <div class="plusMark" style="opacity: 0.6" v-if="filterFlag"></div>
   </div>
 </template>
 
@@ -106,6 +106,7 @@ export default {
       status: "",
       transType: "",
       flag: false,
+      filterFlag: false,
       range: {},
       ECPList: [],
       requestData: {
@@ -231,13 +232,11 @@ export default {
     },
     showFilter: function () {
         $(".sx-check-box").css("bottom", 0)
-        $("div.plusMark").show()
-        $(".new").addClass("lockScreen");
+        this.filterFlag = true
     },
     closeFilter: function () {
         $(".sx-check-box").css("bottom", "-100%")
-        $("div.plusMark").hide()
-        $(".new").removeClass("lockScreen");
+        this.filterFlag = false
     },
     setPeriod: function () {
         var current = this
