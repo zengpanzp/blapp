@@ -19,6 +19,7 @@
                     <div class="wallet-balance-con">
                         <h4>余额</h4>
                         <p>{{yue}}</p>
+                        <p v-if="!yue">0</p>
                     </div>
                 </router-link>
                 <a class="wallet-bd-cell child2" id="coupon" @click="couponEcard">
@@ -35,6 +36,7 @@
                     <div class="wallet-balance-con">
                         <h4>积分</h4>
                         <p>{{point}}</p>
+                        <p v-if="!point">0</p>
                     </div>
                 </router-link>
                 <router-link class="wallet-bd-cell child4" id="ECP" :to="{ path : '/ECP' }" v-if="ecpLength != 0">
@@ -43,17 +45,17 @@
                     <div class="wallet-balance-con">
                         <h4>ECP账户</h4>
                         <p>{{ecp}}</p>
+                        <p v-if="!ecp">0</p>
                     </div>
                 </router-link>
-                <!--<a class="wallet-bd-cell" href="#cardListPage" id="card">-->
-                    <!--<div class="wallet-balance-img">-->
-                    <!--</div>-->
-                    <!--<div class="wallet-balance-con">-->
-                        <!--<h4>电子卡</h4>-->
-
-                        <!--<p>0.00</p>-->
-                    <!--</div>-->
-                <!--</a>-->
+                <!-- <a class="wallet-bd-cell" id="card">
+                    <div class="wallet-balance-img">
+                    </div>
+                    <div class="wallet-balance-con">
+                        <h4>OK卡</h4>
+                        <p>0.00</p>
+                    </div>
+                </a> -->
             </div>
         </div>
         <div class="bl-mywallet-list">
