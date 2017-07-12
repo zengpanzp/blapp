@@ -5,7 +5,7 @@
 	        <div class="unicom-ban">
 	            <div><img src="./i/fill_icon.jpg"></div>
 	        </div>
-	        <div class="block" id="start" style="display: block">
+	        <div class="block" id="start" style="display: block" @click="authenticate">
 	            <div class="unicom-confirm">
 	                <a>
 	                    <h4 class="confirm">开始认证</h4>
@@ -125,22 +125,22 @@ export default {
   },
   methods: {
   	getTrafficList() {
-  		let list = [];
-  		api.unicom.getTrafficList({
-  			deviceId: this.deviceId,
-  			member_token: this.memberToken
-  		}).then(data => {
-  			if (data.body.obj) {
-	  			let obj = JSON.parse(data.body.obj);
-	  			console.log("-----gjGetTrafficList-----" + JSON.stringify(obj));
-	  			for (var i = 0; i < obj.list.length; i++) {
-	  				list.push(obj.list[i])
-	  			}
-	  			this.llList = list
-			  	utils.isLogin().then(data => {
-			  		this.memberId = data.member_id;
-			  		this.memberToken = data.member_token;
-			  		this.mobile = data.mobile;
+  		utils.isLogin().then(data => {
+  			this.memberId = data.member_id;
+	  		this.memberToken = data.member_token;
+	  		this.mobile = data.mobile;
+  			let list = [];
+  			api.unicom.getTrafficList({
+  				deviceId: this.deviceId,
+  				member_token: this.memberToken
+  			}).then(data => {
+  				if (data.body.obj) {
+	  				let obj = JSON.parse(data.body.obj);
+	  				console.log("-----gjGetTrafficList-----" + JSON.stringify(obj));
+	  				for (var i = 0; i < obj.list.length; i++) {
+	  					list.push(obj.list[i])
+	  				}
+	  				this.llList = list
 			  		// $(".llitem-right a").addClass("unicom-disabled")
 			  		api.unicom.checkAuthentic({
 			  			member_token: this.memberToken,
@@ -169,20 +169,20 @@ export default {
 			  							$(".llitem-right a").html("已领取")
 			  					}
 				  			}
-			  			})
 			  		}, err => {
 			  			console.log(err)
 			  			// $("#start").css("display", "block")
 			  		})
 			  	})
-		  	} else {
-		  		this.$toast({
-			        position: 'bottom',
-			        message: data.body.msg
-			    })
-		  	}
-  		}, err => {
-  			console.log(err)
+		  		} else {
+		  			this.$toast({
+			        	position: 'bottom',
+			        	message: data.body.msg
+			    	})
+		  		}
+  			}, err => {
+  				console.log(err)
+  			})
   		})
   	},
   	notice() {
@@ -200,45 +200,45 @@ export default {
   		})
   		this.flag = false
   	},
-  	// authenticate() {
-  	// 	if (this.memberId) {
-  	// 		api.unicom.authenticate({
-  	// 		member_token: this.memberToken,
-   //          deviceId: this.deviceId,
-   //          mobile: this.mobile
-	  // 		}).then(data => {
-	  // 			$(".block").hide();
-	  // 			if (data.body.obj) {
-	  // 				let obj = JSON.parse(data.body.obj);
-		 //  			if (obj && obj.status) {
-		 //  				if (obj.status == "1") {
-		 //  					$("#start").css("display", "block")
-			//   			} else if (obj.status == "2") {
-			//   				this.$toast("~认证成功~")
-			//   				$("#finish").css("display", "block")
-			//   			} else if (obj.status == "3") {
-			//   				$("#cannot").css("display", "block")
-			//   			}
-		 //  			}
-	  // 			} else {
-	  // 				$("#cannot").css("display", "block")
-	  // 			}
-	  // 		})
-  	// 	} else {
-  	// 		utils.isLogin().then(data => {
-  	// 			this.memberId = data.member_id;
-  	// 			this.memberToken = data.member_token;
-  	// 			this.mobile = data.mobile;
-  	// 			window.CTJSBridge.LoadMethod('ExposeJsApi', 'getIMEI', '', {
-		 //  			success: data => {
-			//         	this.deviceId = JSON.parse(data).IMEI
-			//         },
-			//         fail: () => {},
-			//         progress: () => {}
-		 //  		})
-  	// 		})
-  	// 	}
-  	// },
+  	authenticate() {
+  		if (this.memberId) {
+  			api.unicom.authenticate({
+  			member_token: this.memberToken,
+            deviceId: this.deviceId,
+            mobile: this.mobile
+	  		}).then(data => {
+	  			$(".block").hide();
+	  			if (data.body.obj) {
+	  				let obj = JSON.parse(data.body.obj);
+		  			if (obj && obj.status) {
+		  				if (obj.status == "1") {
+		  					$("#start").css("display", "block")
+			  			} else if (obj.status == "2") {
+			  				this.$toast("~认证成功~")
+			  				$("#finish").css("display", "block")
+			  			} else if (obj.status == "3") {
+			  				$("#cannot").css("display", "block")
+			  			}
+		  			}
+	  			} else {
+	  				$("#cannot").css("display", "block")
+	  			}
+	  		})
+  		} else {
+  			utils.isLogin().then(data => {
+  				this.memberId = data.member_id;
+  				this.memberToken = data.member_token;
+  				this.mobile = data.mobile;
+  				window.CTJSBridge.LoadMethod('ExposeJsApi', 'getIMEI', '', {
+		  			success: data => {
+			        	this.deviceId = JSON.parse(data).IMEI
+			        },
+			        fail: () => {},
+			        progress: () => {}
+		  		})
+  			})
+  		}
+  	},
   	getTraffic(ruleCode) {
   		if ($(".llitem-right a").hasClass("unicom-disabled")) {
   			if ($("#start")[0].style.cssText == "display: block;") {
