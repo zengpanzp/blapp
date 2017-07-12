@@ -7,8 +7,8 @@
 	    </div>
 	    <div class="integral-menu">
 	        <ul>
-	            <li id="04"><a class="select-integral">收入</a></li>
-	            <li id="05"><a>支出</a></li>
+	            <li id="04" @click="chooseType"><a class="select-integral">收入</a></li>
+	            <li id="05" @click="chooseType"><a>支出</a></li>
 	        </ul>
 	    </div>
 	    <div class="integral-list">
@@ -64,17 +64,16 @@ export default {
 		this.busy = true
   		let list = [];
   		utils.isLogin().then(data => {
-	  	var current = this;
       	this.memberId = data.member_id;
       	this.memberToken = data.member_token;
-      	$(".integral-menu li").click(function (e) {
-	      	$(".integral-menu a").removeClass("select-integral")
-	      	$(e.currentTarget).find("a").addClass("select-integral")
-	      	current.type = $(e.currentTarget)[0].id
-	      	$("#balanceList").html("");
-	        current.getBalanceList();
-	        current.pageNum = 1;
-      	})
+      	// $(".integral-menu li").click(function (e) {
+	      // 	$(".integral-menu a").removeClass("select-integral")
+	      // 	$(e.currentTarget).find("a").addClass("select-integral")
+	      // 	current.type = $(e.currentTarget)[0].id
+	      // 	$("#balanceList").html("");
+	      //   current.getBalanceList();
+	      //   current.pageNum = 1;
+      	// })
   		api.myWallet.getBalance({
         	"memberNo": this.memberId
       	}).then(data => {
@@ -119,6 +118,15 @@ export default {
             date = time.substring(0, 4) + '-' + time.substring(4, 6) + '-' + time.substring(6, 8) + ' ' + time.substring(8, 10) + ':' + time.substring(10, 12);
         }
         return date;
+    },
+    chooseType: function (e) {
+    	e = e || event
+    	$(e.currentTarget).find("a").addClass("select-integral")
+    	$(e.currentTarget).siblings().find("a").removeClass("select-integral")
+    	this.type = $(e.currentTarget)[0].id
+    	$("#balanceList").html("");
+        this.getBalanceList();
+        this.pageNum = 1;
     }
   }
 };
