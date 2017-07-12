@@ -4,8 +4,8 @@
       <div class="box-container">
         <div class="member-detail">
           <div class="member-pic">
-            <!-- <img src="./i/user_p01.png"> -->
-            <img :src="avater">
+            <img v-if="avater" :src="avater">
+            <img v-else="avater==''" src="./i/userlogo.png">  
           </div>
           <div>
             <div class="member-name">
@@ -88,6 +88,9 @@ export default {
       this.name = data.nickName
       this.memberToken = data.member_token
       this.avater = data.avatarUrl
+      if (this.name == '') {
+        this.name = data.member_name // 如果没有昵称，显示会员名。
+      }
       if (this.memberLevel == 20) {
         this.level = '银卡会员'
       } else if (this.memberLevel == 30) {
