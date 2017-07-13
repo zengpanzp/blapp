@@ -5,7 +5,7 @@
         <div class="member-detail">
           <div class="member-pic">
             <img v-if="avater" :src="avater">
-            <img v-else="avater==''" src="./i/userlogo.png">  
+            <img v-else="avater==''" src="./i/userlogo.png">
           </div>
           <div>
             <div class="member-name">
@@ -44,7 +44,7 @@
               <img src="./i/tx-img40.png">
             </div>
           </div>
-        <transition>
+        </transition>
       </div>
     </div>
     <div class="operate-text">
@@ -132,9 +132,6 @@ export default {
     let div = document.getElementById('qrcode')
     let clientWidth = div.clientWidth
     this.size = clientWidth
-    // let barcode = document.getElementById('bar-code')
-    // this.bHeight = barcode.clientHeight
-    // console.log('this.size' + this.bHeight)
   },
   methods: {
     click() {
