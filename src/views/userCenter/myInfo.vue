@@ -26,7 +26,7 @@
             <i class="head iconfont arrow-back"></i>
           </b>
         </li>
-        <li @click="nick">昵称<div>{{ nickName }}<i class="iconfont arrow-back"></i></div></li>
+        <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
         <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
         <li>我的车牌<i class="iconfont arrow-back"></i></li>

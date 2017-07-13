@@ -52,9 +52,18 @@ export default {
       }).then(data => {
         console.log(data)
         if (data.body.obj) {
-          alert('obj_exsit')
+          this.$toast({
+            message: '我的昵称修改成功!',
+            position: "bottom"
+          })
+          setTimeout(() => {
+            window.history.go(-1)
+          }, 2000)
         } else {
-          alert('a_o')
+          this.$toast({
+            message: data.body.msg,
+            position: "bottom"
+          })
         }
       })
   	},
