@@ -14,11 +14,11 @@
                   {{item.out.pointRateThird}}个{{item.name}}积分
               </div>
               <div class="credit-a3">
-                  <button class="credit-btn color-out" @click="action" :class="{'bind':item.isBind != ''}" data-role="none"
+                  <button class="credit-btn color-out" @click="action" :class="{'bind':item.isBind == ''}" data-role="none"
                 :disabled="!item.canOut">换出积分
                   <span class="credit-smallspan">手续费{{item.out.fee}}%</span>
                   </button>
-                  <button class="credit-btn color-in" @click="action" :class="{'bind':item.isBind != ''}" data-role="none"
+                  <button class="credit-btn color-in" @click="action" :class="{'bind':item.isBind == ''}" data-role="none"
                   :disabled="!item.canIn">换入积分
                   <span class="credit-smallspan">手续费{{item.in.fee}}%</span>
                   </button>
@@ -45,7 +45,7 @@ export default {
       list: [],
       merchantList: [],
       index: 0,
-      curNo: 0
+      curNo: 1
     };
   },
   created() {
@@ -72,7 +72,7 @@ export default {
         pageSize: '10',
         channelId: '1',
         'appOpenChFlag': '1',
-        currentPage: String(this.curNo + 1)
+        currentPage: String(this.curNo ++)
       })).then(data => {
         this.$loading.close()
         console.log("##########", data.body.obj)
@@ -155,17 +155,19 @@ export default {
         if (data.body.obj) {
           let obj = JSON.parse(data.body.obj)
           if (obj) {
-            let path = 'exchangePoint/' + index + '/'
+            let url = '/exchangePoint/' + index + '/'
             if (dom.hasClass('bind')) {
               this.getBindParam(mercha)
             } else if (dom.hasClass("color-out") && obj.realNameAuthType >= 2) {
-              path += 'out'
-              this.$router.push({path: path})
+              url += 'out'
+              this.$router.push({path: url})
+              console.log(url)
             } else if (dom.hasClass("color-out") && obj.realNameAuthType < 2) {
               // 跳实名认证
             } else if (dom.hasClass("color-in")) {
-              path += 'in'
-              this.$router.push({path: path})
+              url += 'in'
+              console.log(url)
+              this.$router.push({path: url})
             } else if (dom.hasClass("unbind")) {
               // 跳验证
               this.$router.push({path: ''})
@@ -174,12 +176,12 @@ export default {
         }
       }, err => {
         console.log(err)
-        let path = 'exchangePoint/' + index + '/'
+        let url = '/exchangePoint/' + index + '/'
         if (dom.hasClass("bind")) {
           this.getBindParam(mercha);
         } else if (dom.hasClass("color-in")) {
-          path += 'in';
-          this.$router.push({path: path})
+          url += 'in';
+          this.$router.push({path: url})
         } else if (dom.hasClass("color-out")) {
           // 跳实名认证
         } else if (dom.hasClass("unbind")) {
@@ -196,14 +198,10 @@ export default {
         this.$loading.close()
         console.log("pppp", data)
         if (data.body.obj) {
-          // let obj = JSON.parse(data.body.obj)
-          // let url = message.bindURL + "?" + obj.bindParameters + "&callback=" + encodeURIComponent("bindThirdPartySuccess") + "&type=" + message.type
-          // let requestData = {pageUrl: url, pageTitle: message.name + "自助绑卡服务"};
-          let u = navigator.userAgent
-          let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
-          if (isAndroid) {
-          } else {
-          }
+          let obj = JSON.parse(data.body.obj)
+          let url = message.bindURL + "?" + obj.bindParameters + "&callback=" + encodeURIComponent("bindThirdPartySuccess") + "&type=" + message.type
+          console.log(url)
+          window.location.href = url
         } else {
           this.$toast(data.body.msg)
         }

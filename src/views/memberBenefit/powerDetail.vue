@@ -166,19 +166,21 @@ export default {
         console.log("-----checkQualify--" + data.body.obj)
         if (data.body.obj) {
           let obj = JSON.parse(data.body.obj)
-          $("#count").find("label").eq(0).html(obj.memberPoint)
-                $("#count").find("label").eq(1).html(obj.remainTimes)
-                $("#count").find("label").eq(2).html(obj.usedTimes)
-                $("#count").show();
-                if (parseInt(obj.usedTimes) > 0) {
-                    $("#appointment").show()
-                    return
-                }
-                if (parseInt(obj.remainTimes) > 0) {
-                    $("#qualify").show()
-                } else {
-                    $("#qualify").removeClass("green-button").attr("disabled", "disabled").show()
-                }
+          this.$nextTick(() => {
+            $("#count").find("label").eq(0).html(obj.memberPoint)
+            $("#count").find("label").eq(1).html(obj.remainTimes)
+            $("#count").find("label").eq(2).html(obj.usedTimes)
+            $("#count").show();
+            if (parseInt(obj.usedTimes) > 0) {
+                $("#appointment").show()
+                return
+            }
+            if (parseInt(obj.remainTimes) > 0) {
+                $("#qualify").show()
+            } else {
+                $("#qualify").removeClass("green-button").attr("disabled", "disabled").show()
+            }
+          })
         } else {
           this.$toast(data.body.msg)
         }

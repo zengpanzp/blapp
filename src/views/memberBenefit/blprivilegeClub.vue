@@ -14,10 +14,25 @@
 			</div>
 		</div>
 		<div class="up-container">
-			<div class="up-limit">
+			<div class="up-limit" v-if="powerId == '10'">
 				<p>升级条件：会员累计积分达2000分，升级为银卡会员</p>
 				<p>保级条件：未达升级标准，保持普卡会员身份</p>
 				<p>降级条件：普卡会员不会产生降级</p>
+			</div>
+			<div class="up-limit" v-if="powerId == '20'">
+				<p>升级条件：银卡会员在等级有效期内累计积分达20000分，升级为金卡会员</p>
+				<p>保级条件：等级有效期内，累计积分大于等于2000分但小于20000分，保持银卡会员身份</p>
+				<p>降级条件：等级有效期内，累计积分小于2000分，降级为普卡会员</p>
+			</div>
+			<div class="up-limit" v-if="powerId == '30'">
+				<p>升级条件：金卡会员在等级有效期内累计积分达100000分，升级为钻石卡会员</p>
+				<p>保级条件：等级有效期内，累计积分大于等于20000分但小于100000分，保持金卡会员</p>
+				<p>降级条件：等级有效期内，累计积分小于20000分，降级为银卡会员</p>
+			</div>
+			<div class="up-limit" v-if="powerId == '40'">
+				<p>升级条件：钻石卡为百联通会员最高等级，不会再产生升级</p>
+				<p>保级条件：等级有效期内，累计积分大于等于100000分，保持钻石卡会员身份</p>
+				<p>降级条件：等级有效期内，累计积分小于100000分，降级为金卡会员</p>
 			</div>
 		</div>
 		<div class="detail-list">
@@ -299,7 +314,7 @@ export default {
 
   data () {
     return {
-    	powerId: this.$route.query.powerId || 10,
+    	powerId: this.$route.query.powerId || 20,
     	list: [
     	{
 			name: '普通会员',

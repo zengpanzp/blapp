@@ -54,6 +54,6 @@ export default {
   },
   // 绑定
   getBind: params => {
-    return Vue.http.post(baseUrl + '/memberPointExchange/bindThirdParty.htm', params)
+    return Vue.http.post(baseUrl + '/memberPointExchange/assembleBindParameters.htm', params)
   }
 }

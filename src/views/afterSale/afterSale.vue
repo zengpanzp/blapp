@@ -71,7 +71,6 @@ export default {
         console.log("dfafd", data.body.obj)
         if (data.body.obj) {
           this.dictionary = JSON.parse(data.body.obj).list
-        //  utils.dbSet("returnStatusName",JSON.stringify(this.dictionary))
           this.loadMore()
         } else {
           this.$toast(data.body.msg)

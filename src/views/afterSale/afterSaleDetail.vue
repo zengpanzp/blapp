@@ -1,4 +1,4 @@
-<style src="./css/afterSaleDetail.scss" scoped></style>
+<style lang="scss" src="./css/afterSaleDetail.scss" scoped></style>
 <template>
 <div class="new">
     <div class="main">
@@ -50,12 +50,8 @@
                                     <div class="schedule-line need"></div>
                                 </div>
                                 <div class="schedule-text-show"><label>待退款</label>
-                                    <%if(model.moneyTime[0]){%>
                                     <br>
-                                    <%- model.moneyTime[0].date%>
                                     <br>
-                                    <%- model.moneyTime[0].time%>
-                                    <%}%>
                                 </div>
                             </li>
                             <li>
@@ -68,12 +64,8 @@
                                     <div class="schedule-line need"></div>
                                 </div>
                                 <div class="schedule-text-show"><label>退款中</label>
-                                    <%if(model.moneyTime[1]){%>
                                     <br>
-                                    <%- model.moneyTime[1].date%>
                                     <br>
-                                    <%- model.moneyTime[1].time%>
-                                    <%}%>
                                 </div>
 
                             </li>
@@ -86,12 +78,8 @@
                                     <div class="schedule-line"></div>
                                 </div>
                                 <div class="schedule-text-show"><label>退款成功</label>
-                                    <%if(model.moneyTime[2]){%>
                                     <br>
-                                    <%- model.moneyTime[2].date%>
                                     <br>
-                                    <%- model.moneyTime[2].time%>
-                                    <%}%>
                                 </div>
                             </li>
                         </ul>
@@ -108,14 +96,14 @@
                 </li>
                 <li class="sell-service-listmiddle">
                     <a>
-                        <div class="pic service-goods-money"><img src="<%- model.items[0].goodsImage%>"/>
+                        <div class="pic service-goods-money"><img src=""/>
                         </div>
                         <div>
-                            <div class="manage-goods-num">x<%- model.items[0].returnQuantity%></div>
-                            <div class="service-manage-goods"><%- model.items[0].goodsName%></div>
+                            <div class="manage-goods-num">x</div>
+                            <div class="service-manage-goods"></div>
                         </div>
                         <p class="service-goods-num"><label class="service-goods-money font-color-red">售后原因：
-                            <%-model.items[0].returnReasonName%></label>
+                            </label>
                         </p>
                     </a>
                 </li>
@@ -126,22 +114,22 @@
                 <li class="link-detail">
                     <label class="font-color-ash2">售后类型</label>
 
-                    <div class="font-color-ash1"><%- model.serviceType%></div>
+                    <div class="font-color-ash1"></div>
                 </li>
                 <li class="link-detail">
                     <label class="font-color-ash2">问题描述</label>
 
-                    <div class="font-color-ash1"><%- model.returnReasonDesc %></div>
+                    <div class="font-color-ash1"></div>
                 </li>
                 <li class="link-detail">
                     <label class="font-color-ash2">退款方式</label>
 
-                    <div class="font-color-ash1"><%- model.refundMethodName %></div>
+                    <div class="font-color-ash1"></div>
                 </li>
                 <li class="link-detail back-money">
                     <label class="font-color-ash2 ">退款金额</label>
 
-                    <div class="font-color-black"><span><%- model.refundAmount %></span>元</div>
+                    <div class="font-color-black"><span></span>元</div>
                 </li>
             </ul>
         </div>
@@ -174,16 +162,16 @@
         <div class="payList return-pickup corner" id="pickup">
             <ul>
                 <li><p>取件信息</p></li>
-                <li><p>取件时间：<span class="fr"><%- model.buyer.time%></span></p></li>
+                <li><p>取件时间：<span class="fr"></span></p></li>
             </ul>
             <div class="addressCon">
                 <b class="iconfont icon-address"></b>
                 <ul>
-                    <li><span class="fr"><%- model.buyer.phone%></span><label>联系人：</label><%- model.buyer.name%>
+                    <li><span class="fr"></span><label>联系人：</label>
                     </li>
                     <li><label>上门取货地址：</label>
 
-                        <p><%- model.buyer.address%></p>
+                        <p></p>
                     </li>
                 </ul>
             </div>
@@ -195,11 +183,11 @@
             <div class="addressCon">
                 <b class="iconfont icon-address"></b>
                 <ul>
-                    <li><span class="fr"><%- model.buyer.phone%></span><label>联系人：</label><%- model.buyer.name%>
+                    <li><span class="fr"></span><label>联系人：</label>
                     </li>
                     <li><label>地址：</label>
 
-                        <p><%- model.buyer.address%></p>
+                        <p></p>
                     </li>
                 </ul>
             </div>
@@ -209,14 +197,14 @@
                 <li class="link-detail">
                     <label>物流单号</label>
 
-                    <div><%- model.store.deliveryCompany%>&nbsp;<%- model.store.deliveryNo%></div>
+                    <div>&nbsp;</div>
                 </li>
             </ul>
         </div>
     </div>
     <footer>
         <div class="fixedMainbtn orderbtn orderbtnSize return">
-            <a href="#myorderdetailpage/<%- model.orderNo%>" class="btn-sub">订单详细</a>
+            <a href="#" class="btn-sub">订单详细</a>
             <a href="tel:4009008800" class="btn-sub">
                 致电客服
             </a>
@@ -239,6 +227,9 @@ export default {
   },
   created() {
   	this.$loading.close()
+  },
+  methods: {
+
   }
 };
 </script>
