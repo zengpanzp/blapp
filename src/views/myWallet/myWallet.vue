@@ -323,7 +323,19 @@ export default {
                                         if (data.body.obj) {
                                             let obj = JSON.parse(data.body.obj);
                                             console.log(obj)
+                                            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                                                pageId: 'payPushCartSuccess'
+                                            })
+                                        } else {
+                                            window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                                                pageId: 'payPushCartFail'
+                                            })
                                         }
+                                    }, err => {
+                                        console.log(err)
+                                        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+                                                pageId: 'payPushCartFail'
+                                        })
                                     })
                                 }
                             }
