@@ -19,9 +19,15 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li class="first" @click="avatar">头像<b><img src="../..//assets/headPic.png" /><i class="head iconfont arrow-back"></i></b></li>
+        <li class="first" @click="avatar">头像
+          <b>
+            <img v-if="avatarUrl == ''" src="../..//assets/headPic.png"/>
+            <img v-if="avatarUrl" :src="avatarUrl">
+            <i class="head iconfont arrow-back"></i>
+          </b>
+        </li>
         <li @click="nick">昵称<div>{{ nickName }}<i class="iconfont arrow-back"></i></div></li>
-        <li @click="gender">性别<i class="iconfont arrow-back"></i></li>
+        <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
         <li>我的车牌<i class="iconfont arrow-back"></i></li>
         <router-link to="/userCenter/otherInfo"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
@@ -59,8 +65,12 @@ export default {
 
   data () {
     return {
+      memberToken: '',
+      genderNo: '', // 男：1； 女：0； 保密：2；
+      gd: '', // 性别
     	bday: '',
     	nickName: '',
+      avatarUrl: '',
       sheetVisible: false,
       showModel: false,
       actions: [{
@@ -79,20 +89,31 @@ export default {
   },
   created () {
   	utils.isLogin().then(data => {
-  	  let memberToken = data.member_token
+      console.log(data)
+  	  this.memberToken = data.member_token
+      this.avatarUrl = data.avatarUrl
   	  // let member_id = data.member_id
   	  api.userCenter.getMyInformation({
-  	    member_token: memberToken,
+  	    member_token: this.memberToken,
   	    timestamp: utils.getTimeFormatToday()
   	  }).then(data => {
+        console.log(data)
   	    if (data.body.obj) {
   	    	this.nickName = JSON.parse(data.body.obj).nickName
   	    	let y = JSON.parse(data.body.obj).birthYear
   	    	let m = JSON.parse(data.body.obj).birthMonth
   	    	let d = JSON.parse(data.body.obj).birthDay
   	    	this.bday = y + '-' + m + '-' + d
-  	    	// 性别
-  	    	// api.
+          let gender = JSON.parse(data.body.obj).gender
+          if (gender == '0') {
+            this.gd = '女性'
+          } else if (gender == '1') {
+            this.gd = '男性'
+          } else if (gender == '2') {
+            this.gd = '保密'
+          } else {
+            this.gd = ''
+          }
   	    } else {
   	    	this.$toast({
   	    	  message: data.body.msg,
@@ -102,6 +123,18 @@ export default {
   	  }).then(err => {
   	  	console.log(err)
   	  })
+      api.userCenter.getDicInfo({
+        type: "sys_data_mbr_gender_type"
+      }).then(data => {
+        if (data.body.obj) {
+          console.log(data)
+        } else {
+          this.$toast({
+            message: data.body.msg,
+            position: "bottom"
+          })
+        }
+      })
   	})
   },
   methods: {
@@ -173,13 +206,22 @@ export default {
       // })
     },
     male () {
-      alert('male')
+      console.log('###selection: ' + '男性')
+      this.gd = "男性"
+      this.genderNo = '1'
+      this.updateGender()
     },
     female () {
-      alert('female')
+      console.log('###selection: ' + '女性')
+      this.gd = "女性"
+      this.genderNo = '0'
+      this.updateGender()
     },
     secret () {
-      alert('secret')
+      console.log('###selection: ' + '保密')
+      this.gd = "保密"
+      this.genderNo = '2'
+      this.updateGender()
     },
     nick () {
       this.$router.push({
@@ -189,6 +231,24 @@ export default {
         }
       })
     },
+    updateGender () {
+      api.userCenter.update({
+        member_token: this.memberToken,
+        timestamp: utils.getTimeFormatToday(),
+        sysid: '1103',
+        gender: this.genderNo
+      }).then(data => {
+        console.log(data)
+        if (data.body.obj) {
+          console.log('###updateGender success')
+        } else {
+          this.$toast({
+            message: data.body.msg,
+            position: "bottom"
+          })
+        }
+      })
+    }
   }
 };
 </script>

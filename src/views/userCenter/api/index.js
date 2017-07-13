@@ -51,7 +51,7 @@ export default {
     },
     // 设置 登录密码修改
     getDicInfo: params => {
-      return Vue.http.post(baseUrl + '/metadata/getDicInfo.htm', params);
+      return Vue.http.post(baseUrl + '/dict/list.htm', params);
     },
     // 设置 更新用户信息
     update: params => {
