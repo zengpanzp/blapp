@@ -1,13 +1,22 @@
 /* creat by chenpeng */
 @import "src/sass/tobe/function";
 
+.fix-box{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100000;
+}
+.fix-height{
+  height: rem(88);
+}
 .collection-tab{
   background-color: #fff;
   border-bottom: 1px solid #e9e9e9;
+  height: rem(88);
   .flex-item{
     border-bottom: rem(4) solid transparent;
     border-top: rem(4) solid transparent;
-    line-height: rem(88);
     font-size: rem(28);
     font-weight: bold;
     &.is-selected{
@@ -80,4 +89,3 @@
   color: #494949;
   border: 1px solid #a9a9a9;
 }
-

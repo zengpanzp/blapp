@@ -292,6 +292,30 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/addComment')), 'addComment')
   },
+  /* 陈鹏 追加晒单 */
+  {
+    path: '/commentAfter',
+    meta: {
+      title: '追加晒单'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/commentAfter')), 'commentAfter')
+  },
+  /* 陈鹏 商品追评 */
+  {
+    path: '/addCommentAgain',
+    meta: {
+      title: '追加晒单'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/addCommentAgain')), 'addCommentAgain')
+  },
+  /* 陈鹏 查看评价 */
+  {
+    path: '/seeComment',
+    meta: {
+      title: '追加晒单'
+    },
+    component: r => require.ensure([], () => r(require('../views/myEvaluation/seeComment')), 'seeComment')
+  },
   /* 郭健 联通专区 */
   {
     path: '/unicom',

@@ -84,8 +84,10 @@ export default {
             if (res.body.obj) {
               let resData = JSON.parse(res.body.obj)
               this.upload.push({
+                pid: i,
                 url: resData[0].mediaCephUrl,
-                mediaId: resData[0].mediaId
+                mediaId: resData[0].mediaId,
+                cephUrl: resData[0].mediaCephUrl
               })
             } else {
               this.$toast(res.body.msg)

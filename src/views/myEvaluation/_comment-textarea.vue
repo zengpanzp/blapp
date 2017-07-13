@@ -3,7 +3,7 @@
     <textarea
       v-model="message"
       class="textarea-msg"
-      :class="{ 'disabled': message.length > maxLength || messageBoole }"
+      :class="{ 'disabled': value }"
       :placeholder="placeholder">
     </textarea>
     <div class="comment-line" v-if="!message">不能少于1字</div>
@@ -18,7 +18,7 @@ export default {
 
   data () {
     return {
-      message: ''
+      message: null
     };
   },
   props: {
@@ -27,14 +27,14 @@ export default {
       type: Number,
       default: 250
     },
-    messageBoole: {
+    value: {
       type: Boolean,
       default: false
     }
   },
   watch: {
     message(val) {
-      this.$emit('input', val)
+      this.$emit('input', val !== null && !(val.length > 0 && val.length <= 250))
     }
   }
 };
