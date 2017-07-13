@@ -27,5 +27,29 @@ export default {
   // 查询待评价信息
   queryComnentByorder: params => {
     return Vue.http.post(baseUrl + '/product/queryOrderProductComment.htm', params)
+  },
+  // 上传图片
+  upload: params => {
+    return Vue.http.post(baseUrl + '/media/upload.htm', params)
+  },
+  // 添加评价
+  addComment: params => {
+    return Vue.http.post(baseUrl + '/product/addComment.htm', params)
+  },
+  // 点赞
+  supportComment: params => {
+    return Vue.http.post(baseUrl + '/product/supportComment.htm', params)
+  },
+  // 添加评价
+  queryTagCountById: params => {
+    return Vue.http.post(baseUrl + '/product/queryTagCountById.htm', params)
+  },
+  // 追加评价
+  addCommentAgain: params => {
+    return Vue.http.post(baseUrl + '/product/addCommentAgain.htm', params)
+  },
+  // 追加评价晒图
+  addCommentPic: params => {
+    return Vue.http.post(baseUrl + '//product/addCommentPic.htm', params)
   }
 }

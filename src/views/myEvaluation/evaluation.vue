@@ -1,31 +1,34 @@
 <template>
   <div class="evaluation">
-    <!-- 轮播图 -->
-    <bl-slide class="evaluation-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
-    <!-- end -->
-    <bl-navbar class="collection-tab flex" v-model="tabsModel" v-show="filterEleTabs.length != []">
-      <bl-tab-item class="flex-item flex-c-m" v-for="(item, index) in filterEleTabs" :id="index" @click.native="changeTab(index, item.type)"><span>{{ item.deployName }}({{ item.num }})</span></bl-tab-item>
-    </bl-navbar>
+    <div class="fix-box" ref="fixBox">
+      <!-- 轮播图 -->
+      <bl-slide class="evaluation-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
+      <!-- end -->
+      <bl-navbar class="collection-tab flex" v-model="tabsModel">
+        <bl-tab-item class="flex-item flex-c-m" v-for="(item, index) in filterEleTabs" :id="index" @click.native="changeTab(index, item)"><span>{{ item.deployName }}({{ item.num }})</span></bl-tab-item>
+      </bl-navbar>
+    </div>
+    <div class="fix-height" :style="{ height: fixHeight + 'px' }"></div>
     <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div class="goods-item flex" v-for="item in list">
         <div class="goods-img lazy-box">
-          <img class="lazy" v-lazy="{src: item.pic}">
+          <img class="lazy" v-lazy="{src: item.productPic}">
         </div>
         <div class="goods-des flex-item">
-          <div class="goods-title">{{item.goodsName}}</div>
-          <div class="goods-text" v-if="type == '00'||item.isvalid == -1">评价+晒单最多可获得30积分</div>
-          <div class="goods-text" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">评价+晒单最多可获得20积分</div>
+          <div class="goods-title">{{item.productName}}</div>
+          <div class="goods-text" v-if="type == '00' || item.isvalid == -1">评价+晒单最多可获得30积分</div>
+          <div class="goods-text" v-else-if="type == '05' || item.isvalid != -1 && item.ispic == '00'">评价+晒单最多可获得20积分</div>
           <div class="goods-btn-group">
-            <bl-button type="outlineMain" inline size="small" @click="commentShow(item.orderNo,item.product)" v-if="type == '00'||item.isvalid == -1">评价晒单</bl-button>
-            <bl-button type="outlineMain" inline size="small" @click="commentAfter(item.id,item.product)" v-else-if="type == '05'||item.isvalid != -1&&item.ispic == '00'">追加晒单</bl-button>
-            <bl-button type="outlineMain" inline size="small" @click="seeComment(item.id, item.product)" :class="{ 'disabled-color': item.isAgain != '01' }" v-else-if="item.isAgain != '01'||item.isContent">
-              查看评价
-            </bl-button>
-            <bl-button type="outlineMain" inline size="small" @click="againComment(item.id,item.product)" v-else>
-              追加评价
-            </bl-button>
+            <bl-button type="outlineMain" inline size="small" @click="routerReturn('/addComment', item)" v-if="type == '00' || item.isvalid == -1">评价晒单</bl-button>
+            <bl-button type="outlineMain" inline size="small" @click="routerReturn('/commentAfter', item)" v-else-if="type == '05' || item.isvalid != -1 && item.ispic == '00'">追加晒单</bl-button>
+            <bl-button type="outlineMain" inline size="small" @click="routerReturn('/seeComment', item)" :class="{ 'disabled-color': item.isCanZP != '01' }" v-else-if="item.isCanZP != '01' || item.commentAgain">查看评价</bl-button>
+            <bl-button type="outlineMain" inline size="small" @click="routerReturn('/addCommentAgain', item)" v-else>追加评价</bl-button>
           </div>
         </div>
+      </div>
+      <div class="infinite-layer" v-if="loading">
+        <div class="infinite-preloader"></div>
+        <div>加载中...</div>
       </div>
     </div>
     <div class="goods-no" v-if="noRows">
@@ -35,7 +38,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import api from './api'
 import utils from 'src/utils'
@@ -43,46 +45,34 @@ export default {
 
   name: 'evaluation',
 
-  data () {
+  data() {
     return {
+      fixHeight: null,
       memberId: '',
-      loginflag: true,
       noRows: false,
       loading: true,
       tabsModel: 0,
-      comList: [],
-      filterEleTabs: [
-        {
-          deployName: '待评价',
-          num: 0,
-          type: '00'
-        },
-        {
-          deployName: '待晒单',
-          num: 0,
-          type: '05'
-        },
-        {
-          deployName: '晒单完成',
-          num: 0,
-          type: '01'
-        }
-      ],
+      filterEleTabs: [{
+        deployName: '待评价',
+        num: 0,
+        type: '00',
+        tab: '0'
+      }, {
+        deployName: '待晒单',
+        num: 0,
+        type: '05',
+        tab: '1'
+      }, {
+        deployName: '晒单完成',
+        num: 0,
+        type: '01',
+        tab: '2'
+      }],
       type: '00',
-      urlList: [],
       allSlides: [],
-      busy: false,
+      busy: true,
       pageNum: 1,
-      pageNo: '',
-      list: [],
-      count: {
-            unCom: 0,
-            finCom: 0,
-            notAgain: 0,
-            replied: 0,
-            notPic: 0,
-            hasPic: 0
-        }
+      list: []
     };
   },
   created() {
@@ -98,183 +88,132 @@ export default {
       console.log("sa error => " + err);
     }
     this.memberId = utils.dbGet('userInfo').member_id
-    if (this.memberId) {
-      this.loginflag = true
-    }
     if (this.$route.query.orderNo) {
       window.CTJSBridge && window.CTJSBridge._setNativeTitle("商品列表")
       this.type = -1
       this.filterEleTabs = []
-      this.loadMore()
+      this.loadMore(true)
       return
     }
-    api.queryAdDeploy(JSON.stringify({
-                'otherresource': {
-                    'resourceId': "1223,1225"
-                },
-                'activity': []
-            })).then(data => {
+    api.queryAdDeploy({
+      otherresource: {
+        resourceId: "1223,1225"
+      },
+      activity: []
+    }).then(data => {
       console.log("-------pic----" + data.body.obj)
       this.$loading.close()
       if (data.body.obj) {
-      let resData = JSON.parse(data.body.obj)
+        let resData = JSON.parse(data.body.obj)
         if (resData && resData.obj.otherResource) {
           for (let item of resData.obj.otherResource) {
             if (item.resourceId == 1223) {
               this.allSlides = item.advList
+                // 设置高度
+              this.$nextTick(() => {
+                this.fixHeight = $(this.$refs.fixBox).height()
+              });
             }
             if (item.resourceId == 1225) {
-              this.comList = item.advList
+              window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', item.advList[0])
             }
           }
-          if (this.comList) {
-            window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', this.comList[0], {success: function () {}, fail: function () {}, progress: function () {}})
-          }
         }
-      }
-      }, err => {
-        console.log(err)
-    })
-    api.queryCount({
-      memberId: this.memberId,
-      channelId: 1
-    }).then(data => {
-      this.$loading.close()
-      if (data.body.obj) {
-        let resData = JSON.parse(data.body.obj)
-        console.log(resData)
-        if (resData && resData.resultInfo) {
-          this.count = {
-            unCom: resData.resultInfo.neceCount,
-            finCom: resData.resultInfo.finishCount,
-            notAgain: resData.resultInfo.neceAgainCount,
-            replied: resData.resultInfo.replyCount,
-            notPic: resData.resultInfo.necePicCount,
-            hasPic: resData.resultInfo.havePicCount
-          }
-          this.filterEleTabs[0].num = this.count.unCom
-          this.filterEleTabs[1].num = this.count.notPic
-          this.filterEleTabs[2].num = this.count.finCom
-        }
-      } else {
-        this.$toast(data.body.msg)
       }
     }, err => {
       console.log(err)
     })
+    this.tabsModel = this.$route.query.tab || this.filterEleTabs[0].tab
+    this.type = this.filterEleTabs[this.tabsModel].type
+    this.queryCount()
+    this.loadMore(true)
   },
   mounted() {
     window.currentPageReload = this.currentPageReload
   },
   methods: {
     goHome() {
-      window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+      window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {
+        pageId: ''
+      })
     },
     // 刷新
     currentPageReload() {
       if (!this.$route.query.orderNo) {
-        api.queryCount({
-          memberId: this.memberId,
-          channelId: 1
-        }).then(data => {
-          this.$loading.close()
-          if (data.body.obj) {
-            let resData = JSON.parse(data.body.obj)
-            console.log(resData)
-            if (resData && resData.resultInfo) {
-              this.count = {
-                unCom: resData.resultInfo.neceCount,
-                finCom: resData.resultInfo.finishCount,
-                notAgain: resData.resultInfo.neceAgainCount,
-                replied: resData.resultInfo.replyCount,
-                notPic: resData.resultInfo.necePicCount,
-                hasPic: resData.resultInfo.havePicCount
-              }
-              this.filterEleTabs[0].num = this.count.unCom
-              this.filterEleTabs[1].num = this.count.notPic
-              this.filterEleTabs[2].num = this.count.finCom
-            }
-          } else {
-            this.$toast(data.body.msg)
-          }
-        }, err => {
-          console.log(err)
-        })
+        this.queryCount()
       }
-      this.loadMore()
+      this.loadMore(true)
+    },
+    // 查询tab评价数量
+    queryCount() {
+      api.queryCount({
+        memberId: this.memberId,
+        channelId: 1
+      }).then(data => {
+        this.$loading.close()
+        if (data.body.obj) {
+          let resData = JSON.parse(data.body.obj)
+          if (resData && resData.resultInfo) {
+            this.filterEleTabs[0].num = resData.resultInfo.neceCount
+            this.filterEleTabs[1].num = resData.resultInfo.necePicCount
+            this.filterEleTabs[2].num = resData.resultInfo.finishCount
+          }
+        } else {
+          this.$toast(data.body.msg)
+        }
+      }, err => {
+        console.log(err)
+      })
     },
     // 切换tab
-    changeTab(index, type) {
+    changeTab(index, item) {
+      this.$router.replace({
+        path: '/myEvaluation',
+        query: {
+          tab: item.tab
+        }
+      })
       this.pageNum = 1
-      this.list = []
-      this.type = type
-      this.loadMore()
+      this.type = item.type
+      this.loadMore(true)
+    },
+    thenFn(data, once) {
+      this.$loading.close()
+      if (data.body.obj) {
+        let obj = data.body.obj.replace(/http:\/\//g, "https://")
+        let resData = JSON.parse(obj)
+        if (resData && resData.resultInfo) {
+          let resRow = resData.resultInfo.rows
+          if (resRow && resRow.length) {
+            this.loading = true
+            this.busy = false
+            this.list = this.list.concat(resRow)
+          }
+          if (resRow.length < 10) {
+            this.loading = false
+            this.busy = true
+          }
+        } else if (once) {
+          this.loading = false
+          this.noRows = true
+        } else {
+          this.loading = false
+        }
+      }
     },
     // 根据类型查询评论信息
-    loadMore() {
+    loadMore(once = false) {
+      if (once) {
+        this.list = []
+      }
       this.busy = true
       this.noRows = false
       let orderNo = this.$route.query.orderNo
-      console.log(orderNo)
       if (orderNo) {
         api.queryComnentByorder({
           orderNo: orderNo
         }).then(data => {
-          console.log("----data orderNo-------" + data.body.obj)
-          this.$loading.close()
-          if (data.body.obj) {
-            let obj = data.body.obj.replace(/http:\/\//g, "https://")
-            let resData = JSON.parse(obj)
-            if (resData.resultInfo) {
-                this.pageNo = resData.resultInfo.pageNo
-                let resRow = resData.resultInfo.rows
-                  if (!resRow && resData.resultInfo.length > 0) {
-                      resRow = resData.resultInfo;
-                  }
-                if (resRow) {
-                  for (let i = 0; i < resRow.length; i++) {
-                          let orderNo = -1;
-                          if (resRow[i].orderNo) {
-                              orderNo = resRow[i].orderNo;
-                          }
-                          if (resRow[i].order_number) {
-                              orderNo = resRow[i].order_number;
-                          }
-                          let good = {
-                              id: resRow[i].id,
-                              orderTime: resRow[i].orderTime,
-                              orderNo: orderNo,
-                              goodsName: resRow[i].productName,
-                              pic: resRow[i].productPic,
-                              isAgain: resRow[i].isCanZP,
-                              isContent: resRow[i].commentAgain,
-                              isvalid: resRow[i].isvalid,
-                              ispic: resRow[i].ispic,
-                              product: JSON.stringify({
-                                  pic: resRow[i].productPic,
-                                  goodsName: resRow[i].productName,
-                                  productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
-                                  supplyId: resRow[i].dshh,
-                                  merchantName: resRow[i].shopId,
-                                  tags: resRow[i].tags,
-                                  comment: this.getData(resRow[i])
-                              }).replace(/[\ud800-\udfff]/g, '')
-                          }
-                          this.list = this.list.concat(good)
-                      }
-                  this.busy = false
-                  this.loading = true
-                  if (resRow.length < 10) {
-                  this.loading = false
-                  this.busy = true
-                  }
-                }
-            } else {
-              this.noRows = true
-            }
-          }
-        }, err => {
-          console.log(err)
+          this.thenFn(data, once)
         })
       } else {
         api.queryCommentBytype({
@@ -282,288 +221,24 @@ export default {
           channelId: 1,
           type: this.type,
           pageSize: 10,
-          pageNo: this.pageNum ++
-      }).then(data => {
-        console.log("------Bytype-----" + data.body.obj)
-        this.$loading.close()
-        if (data.body.obj) {
-          let obj = data.body.obj.replace(/http:\/\//g, "https://")
-          let resData = JSON.parse(obj)
-          if (resData && resData.resultInfo) {
-              this.pageNo = resData.resultInfo.pageNo
-              let resRow = resData.resultInfo.rows
-                if (!resRow && resData.resultInfo.length > 0) {
-                          resRow = resData.resultInfo;
-                }
-              if (resRow) {
-                for (let i = 0; i < resRow.length; i++) {
-                        let orderNo = -1;
-                        if (resRow[i].orderNo) {
-                            orderNo = resRow[i].orderNo;
-                        }
-                        if (resRow[i].order_number) {
-                            orderNo = resRow[i].order_number;
-                        }
-                        let good = {
-                            id: resRow[i].id,
-                            orderTime: resRow[i].orderTime,
-                            orderNo: orderNo,
-                            goodsName: resRow[i].productName,
-                            pic: resRow[i].productPic,
-                            isAgain: resRow[i].isCanZP,
-                            isContent: resRow[i].commentAgain,
-                            isvalid: resRow[i].isvalid,
-                            ispic: resRow[i].ispic,
-                            product: JSON.stringify({
-                                pic: resRow[i].productPic,
-                                goodsName: resRow[i].productName,
-                                productId: resRow[i].dsphh ? resRow[i].dsphh : resRow[i].product_id,
-                                supplyId: resRow[i].dshh,
-                                merchantName: resRow[i].shopId,
-                                tags: resRow[i].tags,
-                                comment: this.getData(resRow[i])
-                            }).replace(/[\ud800-\udfff]/g, '')
-                        }
-                        this.list = this.list.concat(good)
-                    }
-                this.busy = false
-                this.loading = true
-                if (resRow.length < 10) {
-                this.loading = false
-                this.busy = true
-                }
-              }
-          } else {
-            this.noRows = true
-          }
+          pageNo: this.pageNum++
+        }).then(data => {
+          this.thenFn(data, once)
+        })
+      }
+    },
+    // 统一跳转方法
+    routerReturn(path, item) {
+      this.$router.push({
+        path: path,
+        query: {
+          data: encodeURIComponent(JSON.stringify(item))
         }
-      }, err => {
-        console.log(err)
       })
-      }
-    },
-    // 转换字段方法
-    getData: function (obj) {
-            var name = "匿名用户";
-            if (obj.isAnony != "01") {
-                name = obj.nickName;
-                if (!name) {
-                    name = obj.username;
-                    if (name) {
-                        var temp = "";
-                        if (name.length == 2) {
-                            temp = name.charAt(0).toString() + "*";
-                        } else if (name.length > 2) {
-                            temp = name.charAt(0).toString();
-                            for (i = 1; i < name.length - 1; i++) {
-                                temp += "*";
-                            }
-                            temp += name.charAt(name.length - 1).toString()
-                        }
-                        name = temp;
-                    } else {
-                        name = obj.mobile;
-                        if (name && name.length == 11) {
-                            temp = name.substring(0, 3) + "****" + name.substring(7, 11);
-                        }
-                        name = temp;
-                    }
-                }
-            }
-            var content = "此用户没有填写评论！";
-            if (obj.isAuto == '01') {
-                content = "好评!";
-            }
-            if (obj.comments != '') {
-                content = obj.comments;
-            }
-            if (obj.isAuto != '01' && !obj.comments && obj.tags) {
-                content = 'notShow';
-            }
-
-            var reason = [];
-            if (obj.dscore <= 3) {
-                reason.push('产品质量');
-            }
-            if (obj.qscore <= 3) {
-                reason.push('描述相符');
-            }
-            if (obj.lscore <= 3) {
-                reason.push('物流配送');
-            }
-            if (obj.sscore <= 3) {
-                reason.push('服务态度');
-            }
-
-            var hasVote = false;
-            if (obj.isLike) {
-                if (obj.isLike == '01') {
-                    hasVote = true;
-                }
-            } else {
-                if (obj.votes_user) {
-                    for (var i = 0; i < obj.votes_user.length; i++) {
-                        if (this.loginflag && obj.votes_user[i] == this.memberId) {
-                            hasVote = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            var picMinURLS = [];
-            var picMaxURLS = [];
-            var allPicMinURLS = [];
-            var allPicMaxURLS = [];
-            var twoSet = false;
-            if (obj.pictures) {
-                for (i = 0; i < obj.pictures.length; i++) {
-                    if (obj.pictures[i].imgMin && obj.pictures[i].imgMax) {
-                        allPicMinURLS.push(obj.pictures[i].imgMin);
-                        allPicMaxURLS.push(obj.pictures[i].imgMax);
-                        if (obj.pictures[i].isvalid == "01") {
-                            picMinURLS.push(obj.pictures[i].imgMin);
-                            picMaxURLS.push(obj.pictures[i].imgMax);
-                        }
-                        twoSet = true;
-                    } else {
-                        allPicMinURLS.push(obj.pictures[i].url);
-                        if (obj.pictures[i].isvalid == "01") {
-                            picMinURLS.push(obj.pictures[i].url);
-                        }
-                    }
-                }
-            }
-            if (!twoSet) {
-                allPicMaxURLS = allPicMinURLS;
-                picMaxURLS = picMinURLS;
-            }
-
-            return {
-                id: obj.id,
-                username: name,
-                datetime: obj.datetime,
-                score: parseInt(obj.score),
-                reason: reason,
-                content: content,
-                votes: obj.votes ? obj.votes : {good: 0, bad: 0},
-                tags: obj.tags,
-                hasVote: hasVote,
-                ip: obj.ip,
-                isReply: obj.isreply != "00",
-                reply: obj.reply,
-                isAgain: obj.isCanZP,
-                commentAgain: obj.commentAgain,
-                headPic: obj.headPic,
-                pictures: obj.pictures,
-                validURLS: picMinURLS,
-                allURLS: allPicMinURLS,
-                validPicList: encodeURIComponent(JSON.stringify(picMaxURLS)),
-                allPicList: encodeURIComponent(JSON.stringify(allPicMaxURLS)),
-                isAnony: obj.isAnony,
-                orderTime: obj.orderTime
-            };
-        },
-    // 评价晒单
-    commentShow(order, product) {
-      let reqData = {
-        order: order,
-        product: product
-      }
-      // 判断终端
-      let u = navigator.userAgent;
-      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
-      if (isAndroid) {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'addcomment',
-          params: encodeURIComponent(JSON.stringify(reqData))
-        })
-      } else {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'addcomment',
-          params: JSON.stringify(reqData)
-        })
-      }
-    },
-    // 查看评价
-    seeComment(id, product) {
-      let reqData = {
-        comId: id,
-        type: 'show',
-        product: product
-      }
-      let req = {
-        comId: id,
-        type: 'show',
-        product: encodeURIComponent(product)
-      }
-      // 判断终端
-      let u = navigator.userAgent;
-      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
-      if (isAndroid) {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'addCommentAgain',
-          params: encodeURIComponent(JSON.stringify(reqData))
-        })
-      } else {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'addCommentAgain',
-          params: JSON.stringify(req)
-        })
-        console.log("zpzpzpzp" + JSON.stringify(req))
-      }
-    },
-    // 追加晒单
-    commentAfter(id, product) {
-      let reqData = {
-        comId: id,
-        type: 'pic',
-        product: product
-      }
-      // 判断终端
-      let u = navigator.userAgent;
-      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
-      if (isAndroid) {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'addCommentAgain',
-          params: encodeURIComponent(JSON.stringify(reqData))
-        })
-      } else {
-        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'addCommentAgain',
-          params: JSON.stringify(reqData)
-        })
-      }
-    },
-    // 追加评价
-    againComment(id, product) {
-      let reqData = {
-        comId: id,
-        type: 'again',
-        product: product
-      }
-      let req = {
-        comId: id,
-        type: 'again',
-        product: encodeURIComponent(product)
-      }
-     // 判断终端
-     let u = navigator.userAgent;
-     let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; // android终端
-     if (isAndroid) {
-       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-         pageId: 'addCommentAgain',
-         params: encodeURIComponent(JSON.stringify(reqData))
-       })
-     } else {
-       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-         pageId: 'addCommentAgain',
-         params: JSON.stringify(req)
-       })
-     }
     }
   },
   // 控制路由跳转
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter(to, from, next) {
     utils.isLogin().then(user => {
       next()
     })
@@ -572,8 +247,8 @@ export default {
 </script>
 <style lang="scss" src="./css/evaluation.scss" scoped></style>
 <style lang="scss">
-  @import "src/sass/tobe/function";
-  .evaluation-swipe{
-    height: rem(200);
-  }
+@import "src/sass/tobe/function";
+.evaluation-swipe {
+  height: rem(200);
+}
 </style>
