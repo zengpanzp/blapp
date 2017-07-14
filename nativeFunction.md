@@ -331,6 +331,11 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
     },
     fail: () => {
       console.log('fail')
+
+  <!-- 清理缓存 -->
+  window.CTJSBridge.LoadMethod('BLCache', 'clearAllCache', {}, {
+    success: result => {
+      console.log(result)
     }
   })
 ======================================End

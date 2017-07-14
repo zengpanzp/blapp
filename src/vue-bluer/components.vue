@@ -182,7 +182,10 @@ export default {
       }],
       values: false,
       actions: [{
-        name: '1'
+        name: '1',
+        method: function() {
+          console.log(1)
+        }
       }, {
         name: '2'
       }],

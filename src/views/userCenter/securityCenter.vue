@@ -3,18 +3,19 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li>绑定手机 <i>{{ phoneNum }}</i></li>
-        <router-link to="/securityCenter/myEmail"><li><i class="iconfont arrow-back"></i>修改邮箱<i>{{ email ? email : '暂无绑定' }}</i></li></router-link>
-        <li @click="authen"><i class="iconfont arrow-back"></i>实名认证<i>{{ realNameAuthType >= 2 ? '认证信息已提交' : '未认证' }}</i></li>
+        <li class="first">绑定手机 <i>{{ phoneNum }}</i></li>
+        <router-link to="/userCenter/myEmail"><li>修改邮箱<div><i class="iconfont arrow-back"></i><i>{{ email ? email : '暂无绑定' }}</i></div></li></router-link>
+        <li @click="authen">实名认证<div><i class="iconfont arrow-back"></i><i>{{ realNameAuthType >= 2 ? '认证信息已提交' : '未认证' }}</i></div></li>
       </ul>
     </div>
    </div>
    <div class="section1">
      <div class="list">
       <ul>
-        <router-link to="/securityCenter/enterPw"><li><i class="iconfont arrow-back"></i>登录密码<i>密码强度: {{ pwStatus }}</i></li></router-link>
-        <div v-if="payStatus == '0'"><router-link to="/securityCenter/payPw"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
-        <div v-if="payStatus != '0'"><router-link to="/securityCenter/payPwAuth"><li><i class="iconfont arrow-back"></i>支付密码<i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></li></router-link></div>
+        <router-link to="/userCenter/enterPw"><li class="first">登录密码<div><i class="iconfont arrow-back"></i><i>密码强度: {{ pwStatus }}</i></div></li></router-link>
+        <div v-if="payStatus == '0'"><router-link to="/userCenter/payPw"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
+        <div v-if="payStatus != '0' && certCode" ><router-link to="/userCenter/checkPhone"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
+        <div v-else><router-link to="/userCenter/payPwAuth"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
       </ul>
     </div>
    </div>
@@ -39,12 +40,10 @@ export default {
       email: '',
       realNameAuthType: '',
       pwStatus: '',
-      payStatus: ''
+      payStatus: '',
+      certCode: ''
     };
   },
-  // afterRouteUpdate () {
-  //   this.$router.replace('/securityCenter/myEmail')
-  // },
   created() {
     try {
       // console.log((new Date()).toLocaleString() + deployName)
@@ -65,6 +64,7 @@ export default {
       }).then(data => {
         if (data.body.obj) {
           let phoneNum = JSON.parse(data.body.obj).mobile
+          this.certCode = JSON.parse(data.body.obj).certCode
           if (phoneNum) {
             this.phoneNum += phoneNum.substring(0, 3)
             for (let i = 0; i < 4; i++) {
@@ -120,7 +120,10 @@ export default {
           this.payStatus = JSON.parse(data.body.obj).status
           console.log('###payStatus:####' + this.payStatus)
         } else {
-          console.log(data.body.msg)
+          this.$toast({
+            message: data.body.msg,
+            position: "bottom"
+          })
         }
       })
     })

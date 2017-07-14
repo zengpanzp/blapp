@@ -45,14 +45,14 @@
                         <p>{{ecp}}</p>
                     </div>
                 </router-link>
-                <!-- <a class="wallet-bd-cell" id="card">
+                <a class="wallet-bd-cell child7" id="ok" @click="okCard">
                     <div class="wallet-balance-img">
                     </div>
                     <div class="wallet-balance-con">
-                        <h4>OK卡</h4>
-                        <p>0.00</p>
+                        <h4>OK卡包</h4>
+                        <p>百联卡／OK卡</p>
                     </div>
-                </a> -->
+                </a>
             </div>
         </div>
         <div class="bl-mywallet-list">
@@ -103,10 +103,11 @@ export default {
         ecpLength: "",
         ecp: "",
         status: "",
-        freeFlagDesc: ""
+        freeFlagDesc: "",
+        encode_memberId: "",
+        realNameAuthType: "",
         // idFlag: "",
-        // mobile: "",
-        // realNameLevel: "",
+        // okCardUrl: ""
     };
   },
   created() {
@@ -120,6 +121,8 @@ export default {
     utils.isLogin().then(data => {
         this.memberId = data.member_id;
         this.memberToken = data.member_token;
+        this.mobile = data.mobile;
+        this.encode_memberId = data.encode_memberId
         api.myWallet.getBalance({
             "memberNo": this.memberId
         }).then(data => {
@@ -172,14 +175,28 @@ export default {
                 }
             }
         })
+        api.myWallet.realNameAuth({
+            memberId: this.memberId
+        }).then(data => {
+            if (data.body.msg && data.body.msg.indexOf("查询结果为空") != -1) {
+            }
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                this.realNameAuthType = obj.realNameAuthType
+            }
+        })
     })
   },
   methods: {
     setPayWord: function() {
-        if (this.status == 0) {
-            this.$router.push('../securityCenter/payPw')
+        if (this.realNameAuthType >= 2) {
+            if (this.status == 0) {
+                this.$router.push('../userCenter/payPw')
+            } else {
+                this.$router.push('../userCenter/checkPhone')
+            }
         } else {
-            this.$router.push('../securityCenter/payPwAuth')
+            this.$router.push('../userCenter/payPwAuth')
         }
     },
     couponEcard: function() {
@@ -200,7 +217,7 @@ export default {
               }, {
                 text: '去设置',
                 onClick: () => {
-                  this.$router.push('../securityCenter/payPwAuth')
+                  this.setPayWord()
                 }
               }]
           })
@@ -216,25 +233,65 @@ export default {
                 pageId: 'paymentcode'
             })
         } else {
-            if (this.status == 0) {
-                this.$router.push('../securityCenter/payPw')
-            } else {
-                this.$modal({
+            this.$modal({
                 title: '提示',
                 content: '请设置支付密码',
                 buttons: [{
-                  text: '取消',
-                  onClick: () => {
-                  }
+                    text: '取消',
+                    onClick: () => {
+                    }
                 }, {
-                  text: '去设置',
-                  onClick: () => {
-                    this.$router.push('../securityCenter/payPwAuth')
-                  }
+                    text: '去设置',
+                    onClick: () => {
+                        this.setPayWord()
+                    }
                 }]
             })
-            }
         }
+    },
+    okCard: function () {
+        api.myWallet.okCard({
+            "memberId": this.memberId
+        }).then(data => {
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj)
+                if (obj.msg.indexOf("查询结果为空") != -1) {
+                    if (this.encode_memberId && this.mobile) {
+                        api.myWallet.okCardUrl({
+                            "method": "corgBindRequest.do",
+                            "thd_usr_no": this.encode_memberId,
+                            "thd_usr_id": this.mobile,
+                            "callback_url": "blmodule://okCardHomePage",
+                            "state": "1"
+                        }).then(data => {
+                            if (data.body.obj) {
+                                let obj = JSON.parse(data.body.obj)
+                                window.location.href = obj.retUrl
+                            }
+                        }, err => {
+                            console.log(err)
+                        })
+                    }
+                } else {
+                    if (this.encode_memberId) {
+                        api.myWallet.okCardUrl({
+                            "method": "corgAfbMain.do",
+                            "thd_usr_no": this.encode_memberId,
+                            "afb_usr_id": ""
+                        }).then(data => {
+                            if (data.body.obj) {
+                                let obj = JSON.parse(data.body.obj)
+                                window.location.href = obj.retUrl
+                            }
+                        }, err => {
+                            console.log(err)
+                        })
+                    }
+                }
+            }
+        }, err => {
+            console.log(err)
+        })
     },
     scanner() {
         window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
