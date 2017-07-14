@@ -1,17 +1,17 @@
 Arguments: 
-  /Users/shenma/.nvm/versions/node/v6.9.2/bin/node /usr/local/bin/yarn install
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add v-qrcode
 
 PATH: 
-  /Users/shenma/.nvm/versions/node/v6.9.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+  C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Java\jdk1.8.0_101\bin;C:\Program Files\Java\jdk1.8.0_101\jre\bin;D:\SVN\bin;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin;C:\Users\gj74\AppData\Roaming\npm;C:\Users\gj74\AppData\Local\Yarn\bin
 
 Yarn version: 
-  0.24.6
+  0.27.5
 
 Node version: 
-  6.9.2
+  6.5.0
 
 Platform: 
-  darwin x64
+  win32 x64
 
 npm manifest: 
   {
@@ -6403,14 +6403,14 @@ Lockfile:
     resolved yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419
 
 Trace: 
-  Error: https://registry.npm.taobao.org/fastclick-1.0.6.tgz: Request failed "404 Not Found"
-      at Request.handleRequestError (/usr/local/Cellar/yarn/0.24.6/libexec/lib/yarn-cli.js:54448:20)
+  Error: https://registry.npm.taobao.org/vue-popup-0.2.14.tgz: Request failed "404 Not Found"
+      at Request.handleRequestError (C:\Program Files (x86)\Yarn\lib\yarn-cli.js:56351:20)
       at emitOne (events.js:96:13)
       at Request.emit (events.js:188:7)
-      at Request.onRequestResponse (/usr/local/Cellar/yarn/0.24.6/libexec/lib/yarn-cli.js:108740:10)
+      at Request.onRequestResponse (C:\Program Files (x86)\Yarn\lib\yarn-cli.js:115128:10)
       at emitOne (events.js:96:13)
       at ClientRequest.emit (events.js:188:7)
-      at HTTPParser.parserOnIncomingClient (_http_client.js:474:21)
-      at HTTPParser.parserOnHeadersComplete (_http_common.js:99:23)
-      at TLSSocket.socketOnData (_http_client.js:363:20)
+      at HTTPParser.parserOnIncomingClient (_http_client.js:472:21)
+      at HTTPParser.parserOnHeadersComplete (_http_common.js:105:23)
+      at TLSSocket.socketOnData (_http_client.js:361:20)
       at emitOne (events.js:96:13)
