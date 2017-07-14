@@ -56,6 +56,13 @@ export default {
     },
     querymyorderdetail: params => {
       return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params);
+    },
+    // 绑定OK卡
+    okCard: params => {
+      return Vue.http.post(baseUrl + '/anFuBao/queryAnFuBaoBindInfoByMemberId.htm', params);
+    },
+    okCardUrl: params => {
+      return Vue.http.post(baseUrl + '/rsa/getAfbUrl.htm', params);
     }
     // // 查看实名认证等级
     // realNameAuth: params => {
