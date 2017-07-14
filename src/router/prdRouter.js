@@ -244,6 +244,14 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/userCenter/nickName')), 'nickName'),
   },
+  /* 薛天玲 设置 我的车牌 */
+  {
+    path: '/userCenter/mycar',
+    meta: {
+      title: '我的车牌'
+    },
+    component: r => require.ensure([], () => r(require('../views/userCenter/myCar')), 'myCar'),
+  },
   /* 薛天玲 安全中心 */
   {
     path: '/userCenter/securityCenter',
