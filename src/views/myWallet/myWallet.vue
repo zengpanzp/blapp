@@ -45,7 +45,7 @@
                         <p>{{ecp}}</p>
                     </div>
                 </router-link>
-                <a :href="okCardUrl ? okCardUrl : 'javascript:;'" class="wallet-bd-cell child7" id="ok" @click="okCard">
+                <a class="wallet-bd-cell child7" id="ok" @click="okCard">
                     <div class="wallet-balance-img">
                     </div>
                     <div class="wallet-balance-con">
@@ -105,9 +105,9 @@ export default {
         status: "",
         freeFlagDesc: "",
         encode_memberId: "",
-        okCardUrl: ""
+        realNameAuthType: "",
         // idFlag: "",
-        // realNameLevel: "",
+        // okCardUrl: ""
     };
   },
   created() {
@@ -175,14 +175,28 @@ export default {
                 }
             }
         })
+        api.myWallet.realNameAuth({
+            memberId: this.memberId
+        }).then(data => {
+            if (data.body.msg && data.body.msg.indexOf("查询结果为空") != -1) {
+            }
+            if (data.body.obj) {
+                let obj = JSON.parse(data.body.obj);
+                this.realNameAuthType = obj.realNameAuthType
+            }
+        })
     })
   },
   methods: {
     setPayWord: function() {
-        if (this.status == 0) {
-            this.$router.push('../securityCenter/payPw')
+        if (this.realNameAuthType >= 2) {
+            if (this.status == 0) {
+                this.$router.push('../userCenter/payPw')
+            } else {
+                this.$router.push('../userCenter/checkPhone')
+            }
         } else {
-            this.$router.push('../securityCenter/payPwAuth')
+            this.$router.push('../userCenter/payPwAuth')
         }
     },
     couponEcard: function() {
@@ -203,7 +217,7 @@ export default {
               }, {
                 text: '去设置',
                 onClick: () => {
-                  this.$router.push('../securityCenter/payPwAuth')
+                  this.setPayWord()
                 }
               }]
           })
@@ -219,24 +233,20 @@ export default {
                 pageId: 'paymentcode'
             })
         } else {
-            if (this.status == 0) {
-                this.$router.push('../securityCenter/payPw')
-            } else {
-                this.$modal({
+            this.$modal({
                 title: '提示',
                 content: '请设置支付密码',
                 buttons: [{
-                  text: '取消',
-                  onClick: () => {
-                  }
+                    text: '取消',
+                    onClick: () => {
+                    }
                 }, {
-                  text: '去设置',
-                  onClick: () => {
-                    this.$router.push('../securityCenter/payPwAuth')
-                  }
+                    text: '去设置',
+                    onClick: () => {
+                        this.setPayWord()
+                    }
                 }]
             })
-            }
         }
     },
     okCard: function () {
@@ -256,8 +266,22 @@ export default {
                         }).then(data => {
                             if (data.body.obj) {
                                 let obj = JSON.parse(data.body.obj)
-                                this.okCardUrl = obj.retUrl
-                                console.log(this.okCardUrl)
+                                window.location.href = obj.retUrl
+                            }
+                        }, err => {
+                            console.log(err)
+                        })
+                    }
+                } else {
+                    if (this.encode_memberId) {
+                        api.myWallet.okCardUrl({
+                            "method": "corgAfbMain.do",
+                            "thd_usr_no": this.encode_memberId,
+                            "afb_usr_id": ""
+                        }).then(data => {
+                            if (data.body.obj) {
+                                let obj = JSON.parse(data.body.obj)
+                                window.location.href = obj.retUrl
                             }
                         }, err => {
                             console.log(err)
