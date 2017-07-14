@@ -23,7 +23,7 @@
 
 <script>
 import api from './api'
-import lrz from 'lrz'
+require('./js/lrz.all.bundle')
 export default {
 
   name: 'comment-upload',
@@ -56,7 +56,7 @@ export default {
       }
       let files = event.target.files
       for (let i = 0; i < files.length; i++) {
-        lrz(files[i], {
+        window.lrz(files[i], {
           width: 640
         }).then(res => {
           console.log(res.formData)
