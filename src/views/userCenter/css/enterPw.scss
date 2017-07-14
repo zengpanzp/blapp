@@ -12,7 +12,7 @@
   background: #fff;
   line-height: rem(88);
   border-bottom: 1px solid #e9e9e9;
-  color: #343434;
+  color: #ccc;
   position: relative;
 }
 
@@ -31,6 +31,10 @@
 
 .modal-button {
   font-size :rem(100)
+}
+
+#left input {
+  padding-left: 0;
 }
 
 input {
@@ -151,4 +155,11 @@ span b {
     border: 1px solid #e9e9e9;
     margin-left: rem(10);
     border-radius: rem(5);
+}
+
+.arrow-back {
+  -webkit-transform:rotate(270deg);
+  line-height: rem(88);
+  font-size: rem(20);
+  font-weight: bold;
 }
