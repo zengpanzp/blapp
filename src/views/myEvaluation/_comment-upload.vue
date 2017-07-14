@@ -23,7 +23,6 @@
 
 <script>
 import api from './api'
-require('./js/lrz.all.bundle')
 export default {
 
   name: 'comment-upload',
@@ -54,49 +53,52 @@ export default {
         })
         return
       }
-      let files = event.target.files
-      for (let i = 0; i < files.length; i++) {
-        window.lrz(files[i], {
-          width: 640
-        }).then(res => {
-          console.log(res.formData)
-          // let sourceSize = this.toFixed2(file.size / 1024) // 实际大小
-          let resultSize = this.toFixed2(res.fileLen / 1024) // 压缩后的大小
-          // let scale = parseInt(100 - (resultSize / sourceSize * 100)) // 缩小了多少
-          if (resultSize > 5 * 1024) {
-            this.$modal({
-              title: '提示',
-              content: '图片最大5M'
-            })
-            return
-          }
-          api.upload({
-            appId: 'BL_IBLAPP',
-            base64Content: res.base64.split(",")[1],
-            fileName: new Date().getTime(),
-            mediaType: 'jpg',
-            reSize: 1
+      require.ensure([], require => {
+        require('src/lib/lrz.all.bundle')
+        let files = event.target.files
+        for (let i = 0; i < files.length; i++) {
+          window.lrz(files[i], {
+            width: 640
           }).then(res => {
-            if (i == files.length - 1) {
-              this.inlineLoading.close()
-            }
-            console.log('上传图片返回:', JSON.parse(res.body.obj))
-            if (res.body.obj) {
-              let resData = JSON.parse(res.body.obj)
-              this.upload.push({
-                pid: i,
-                url: resData[0].mediaCephUrl,
-                mediaId: resData[0].mediaId,
-                cephUrl: resData[0].mediaCephUrl
+            console.log(res.formData)
+            // let sourceSize = this.toFixed2(file.size / 1024) // 实际大小
+            let resultSize = this.toFixed2(res.fileLen / 1024) // 压缩后的大小
+            // let scale = parseInt(100 - (resultSize / sourceSize * 100)) // 缩小了多少
+            if (resultSize > 5 * 1024) {
+              this.$modal({
+                title: '提示',
+                content: '图片最大5M'
               })
-            } else {
-              this.$toast(res.body.msg)
+              return
             }
-          }, () => {
-            this.inlineLoading.close()
+            api.upload({
+              appId: 'BL_IBLAPP',
+              base64Content: res.base64.split(",")[1],
+              fileName: new Date().getTime(),
+              mediaType: 'jpg',
+              reSize: 1
+            }).then(res => {
+              if (i == files.length - 1) {
+                this.inlineLoading.close()
+              }
+              console.log('上传图片返回:', JSON.parse(res.body.obj))
+              if (res.body.obj) {
+                let resData = JSON.parse(res.body.obj)
+                this.upload.push({
+                  pid: i,
+                  url: resData[0].mediaCephUrl,
+                  mediaId: resData[0].mediaId,
+                  cephUrl: resData[0].mediaCephUrl
+                })
+              } else {
+                this.$toast(res.body.msg)
+              }
+            }, () => {
+              this.inlineLoading.close()
+            })
           })
-        })
-      }
+        }
+      }, 'lrz')
     },
     toFixed2(num) {
       return parseFloat(+num.toFixed(2));
