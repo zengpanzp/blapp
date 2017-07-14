@@ -96,5 +96,5 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./css/enterPw.scss"scoped>
+<style lang="scss" src="./css/enterPw.scss">
 </style>

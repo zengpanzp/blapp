@@ -321,7 +321,6 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
     },
     progress: data => { console.log(data) }
   })
-<<<<<<< HEAD
 
   <!-- iOS 上传图片-->
   window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
@@ -332,12 +331,11 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
     },
     fail: () => {
       console.log('fail')
-=======
-<!-- 清理缓存 -->
+
+  <!-- 清理缓存 -->
   window.CTJSBridge.LoadMethod('BLCache', 'clearAllCache', {}, {
     success: result => {
       console.log(result)
->>>>>>> aj-develop
     }
   })
 ======================================End

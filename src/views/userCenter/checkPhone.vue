@@ -122,5 +122,5 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./css/payPw.scss" scoped>
+<style lang="scss" src="./css/payPw.scss">
 </style>

@@ -87,5 +87,5 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./css/myEmail.scss" scoped>
+<style lang="scss" src="./css/myEmail.scss">
 </style>
