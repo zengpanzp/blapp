@@ -63,10 +63,10 @@ export default {
     },
     okCardUrl: params => {
       return Vue.http.post(baseUrl + '/rsa/getAfbUrl.htm', params);
+    },
+    // 查看实名认证等级
+    realNameAuth: params => {
+      return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
     }
-    // // 查看实名认证等级
-    // realNameAuth: params => {
-    //   return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params);
-    // },
     }
   }
