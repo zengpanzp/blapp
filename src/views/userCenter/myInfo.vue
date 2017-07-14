@@ -1,5 +1,7 @@
 <template>
   <div class="wholepage">
+  <!-- 上传头像 -->
+  <input type="file" accept="image/*" @change="readImage" ref="file" hidden>
   <bl-popup v-model="showModel" position="right" class="sxerji">
     <div class="topHeader" ref="topHeader">
       <a class="cancel" @click="showModel = false">取消</a><span>筛选</span><a class="ok" @click="[showModel = false, sureFilter()]"><svg class="icon"><use xlink:href="#icon-check"></use></svg>确认</a>
@@ -84,7 +86,9 @@ export default {
         method: this.secret
       }],
       enth: [{
-      }]
+      }],
+
+      inlineLoading: null
     };
   },
   created () {
@@ -192,18 +196,53 @@ export default {
       this.sheetVisible = true
     },
     avatar () {
-      window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-        // type: 'camera'
-      }, {success: data => {
-              console.log('success' + data)
-              // let image = JSON.parse { }
-            },
-            fail: () => {
-              console.log('fail')
-            }})
+      this.$refs.file.click()
+      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
+      //   // type: 'camera'
+      // }, {success: data => {
+      //         console.log('success' + data)
+      //         // let image = JSON.parse { }
+      //       },
+      //       fail: () => {
+      //         console.log('fail')
+      //       }})
       // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
       //   params: params
       // })
+    },
+    readImage(event) {
+      this.inlineLoading = this.$toast({
+        iconClass: 'preloader white',
+        duration: 'loading',
+        className: 'loading-bg'
+      })
+      require.ensure([], require => {
+        require('src/lib/lrz.all.bundle')
+        let files = event.target.files
+        window.lrz(files[0], {
+          width: 640
+        }).then(resLrz => {
+          api.userCenter.upload({
+            appId: 'BL_IBLAPP',
+            base64Content: resLrz.base64.split(",")[1],
+            fileName: new Date().getTime(),
+            mediaType: 'jpg',
+            reSize: 0
+          }).then(res => {
+            this.inlineLoading.close()
+            if (res.body.obj) {
+              console.log('上传图片返回:', JSON.parse(res.body.obj))
+              let resData = JSON.parse(res.body.obj)
+              this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
+              console.log(this.avatarUrl)
+            } else {
+              this.$toast(res.body.msg)
+            }
+          }, () => {
+            this.inlineLoading.close()
+          })
+        })
+      }, 'lrz')
     },
     male () {
       console.log('###selection: ' + '男性')
