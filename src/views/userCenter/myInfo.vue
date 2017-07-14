@@ -23,8 +23,7 @@
       <ul>
         <li class="first" @click="avatar">头像
           <b>
-            <img v-if="avatarUrl == ''" src="../..//assets/headPic.png"/>
-            <img v-if="avatarUrl" :src="avatarUrl">
+            <img :src="avatarUrl || require('../..//assets/headPic.png')">
             <i class="head iconfont arrow-back"></i>
           </b>
         </li>
@@ -95,7 +94,6 @@ export default {
   	utils.isLogin().then(data => {
       console.log(data)
   	  this.memberToken = data.member_token
-      this.avatarUrl = data.avatarUrl
   	  // let member_id = data.member_id
   	  api.userCenter.getMyInformation({
   	    member_token: this.memberToken,
@@ -103,12 +101,13 @@ export default {
   	  }).then(data => {
         console.log(data)
   	    if (data.body.obj) {
-  	    	this.nickName = JSON.parse(data.body.obj).nickName
-  	    	let y = JSON.parse(data.body.obj).birthYear
-  	    	let m = JSON.parse(data.body.obj).birthMonth
-  	    	let d = JSON.parse(data.body.obj).birthDay
+          let resData = JSON.parse(data.body.obj)
+  	    	this.nickName = resData.nickName
+  	    	let y = resData.birthYear
+  	    	let m = resData.birthMonth
+  	    	let d = resData.birthDay
   	    	this.bday = y + '-' + m + '-' + d
-          let gender = JSON.parse(data.body.obj).gender
+          let gender = resData.gender
           if (gender == '0') {
             this.gd = '女性'
           } else if (gender == '1') {
@@ -118,6 +117,7 @@ export default {
           } else {
             this.gd = ''
           }
+          this.avatarUrl = resData.avatarUrl
   	    } else {
   	    	this.$toast({
   	    	  message: data.body.msg,
@@ -235,6 +235,7 @@ export default {
               let resData = JSON.parse(res.body.obj)
               this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
               console.log(this.avatarUrl)
+              this.updateGender()
             } else {
               this.$toast(res.body.msg)
             }
@@ -275,7 +276,9 @@ export default {
         member_token: this.memberToken,
         timestamp: utils.getTimeFormatToday(),
         sysid: '1103',
-        gender: this.genderNo
+        gender: this.genderNo,
+        avatarUrl: this.avatarUrl,
+        mediaCephUrl: this.avatarUrl
       }).then(data => {
         console.log(data)
         if (data.body.obj) {
