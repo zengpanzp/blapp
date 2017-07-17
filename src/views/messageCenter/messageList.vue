@@ -84,7 +84,8 @@ export default {
 		this.noRows = false
 	  	let list = [];
 	  	this.typeId = this.$route.params.typeId;
-      // window.CTJSBridge._setNativeTitle(this.$route.params.title);
+      document.title = this.$route.params.title
+      window.CTJSBridge._setNativeTitle(this.$route.params.title);
       window.CTJSBridge.LoadMethod('BLMessageCenter', 'messageCenterWebViewControllerShowClearButton', {})
 	  	utils.isLogin().then(data => {
 	  		let memberId = data.member_id;
