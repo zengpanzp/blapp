@@ -56,6 +56,10 @@ export default {
     // 设置 更新用户信息
     update: params => {
       return Vue.http.post(baseUrl + '/baseinfo/update.htm', params);
+    },
+    // 上传图片
+    upload: params => {
+      return Vue.http.post(baseUrl + '/media/upload.htm', params)
     }
   }
 }

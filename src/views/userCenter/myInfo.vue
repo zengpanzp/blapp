@@ -1,5 +1,7 @@
 <template>
   <div class="wholepage">
+  <!-- 上传头像 -->
+  <input type="file" accept="image/*" @change="readImage" ref="file" hidden>
   <bl-popup v-model="showModel" position="right" class="sxerji">
     <div class="topHeader" ref="topHeader">
       <a class="cancel" @click="showModel = false">取消</a><span>筛选</span><a class="ok" @click="[showModel = false, sureFilter()]"><svg class="icon"><use xlink:href="#icon-check"></use></svg>确认</a>
@@ -21,8 +23,7 @@
       <ul>
         <li class="first" @click="avatar">头像
           <b>
-            <img v-if="avatarUrl == ''" src="../..//assets/headPic.png"/>
-            <img v-if="avatarUrl" :src="avatarUrl">
+            <img :src="avatarUrl || require('../..//assets/headPic.png')">
             <i class="head iconfont arrow-back"></i>
           </b>
         </li>
@@ -84,14 +85,15 @@ export default {
         method: this.secret
       }],
       enth: [{
-      }]
+      }],
+
+      inlineLoading: null
     };
   },
   created () {
   	utils.isLogin().then(data => {
       console.log(data)
   	  this.memberToken = data.member_token
-      this.avatarUrl = data.avatarUrl
   	  // let member_id = data.member_id
   	  api.userCenter.getMyInformation({
   	    member_token: this.memberToken,
@@ -99,12 +101,13 @@ export default {
   	  }).then(data => {
         console.log(data)
   	    if (data.body.obj) {
-  	    	this.nickName = JSON.parse(data.body.obj).nickName
-  	    	let y = JSON.parse(data.body.obj).birthYear
-  	    	let m = JSON.parse(data.body.obj).birthMonth
-  	    	let d = JSON.parse(data.body.obj).birthDay
+          let resData = JSON.parse(data.body.obj)
+  	    	this.nickName = resData.nickName
+  	    	let y = resData.birthYear
+  	    	let m = resData.birthMonth
+  	    	let d = resData.birthDay
   	    	this.bday = y + '-' + m + '-' + d
-          let gender = JSON.parse(data.body.obj).gender
+          let gender = resData.gender
           if (gender == '0') {
             this.gd = '女性'
           } else if (gender == '1') {
@@ -114,6 +117,7 @@ export default {
           } else {
             this.gd = ''
           }
+          this.avatarUrl = resData.avatarUrl
   	    } else {
   	    	this.$toast({
   	    	  message: data.body.msg,
@@ -192,18 +196,54 @@ export default {
       this.sheetVisible = true
     },
     avatar () {
-      window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-        // type: 'camera'
-      }, {success: data => {
-              console.log('success' + data)
-              // let image = JSON.parse { }
-            },
-            fail: () => {
-              console.log('fail')
-            }})
+      this.$refs.file.click()
+      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
+      //   // type: 'camera'
+      // }, {success: data => {
+      //         console.log('success' + data)
+      //         // let image = JSON.parse { }
+      //       },
+      //       fail: () => {
+      //         console.log('fail')
+      //       }})
       // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
       //   params: params
       // })
+    },
+    readImage(event) {
+      this.inlineLoading = this.$toast({
+        iconClass: 'preloader white',
+        duration: 'loading',
+        className: 'loading-bg'
+      })
+      require.ensure([], require => {
+        require('src/lib/lrz.all.bundle')
+        let files = event.target.files
+        window.lrz(files[0], {
+          width: 640
+        }).then(resLrz => {
+          api.userCenter.upload({
+            appId: 'BL_IBLAPP',
+            base64Content: resLrz.base64.split(",")[1],
+            fileName: new Date().getTime(),
+            mediaType: 'jpg',
+            reSize: 0
+          }).then(res => {
+            this.inlineLoading.close()
+            if (res.body.obj) {
+              console.log('上传图片返回:', JSON.parse(res.body.obj))
+              let resData = JSON.parse(res.body.obj)
+              this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
+              console.log(this.avatarUrl)
+              this.updateGender()
+            } else {
+              this.$toast(res.body.msg)
+            }
+          }, () => {
+            this.inlineLoading.close()
+          })
+        })
+      }, 'lrz')
     },
     male () {
       console.log('###selection: ' + '男性')
@@ -236,7 +276,9 @@ export default {
         member_token: this.memberToken,
         timestamp: utils.getTimeFormatToday(),
         sysid: '1103',
-        gender: this.genderNo
+        gender: this.genderNo,
+        avatarUrl: this.avatarUrl,
+        mediaCephUrl: this.avatarUrl
       }).then(data => {
         console.log(data)
         if (data.body.obj) {
@@ -260,4 +302,4 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./css/securityCenter.scss"></style>
+<style lang="scss" src="./css/securityCenter.scss" scoped></style>

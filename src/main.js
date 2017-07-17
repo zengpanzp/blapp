@@ -198,6 +198,16 @@ sa.register({
 })
 jsBridgeReady("_maiDian", false, () => {
   try {
+    // 版本号
+    window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchAppInfo', '', {
+      success: res => {
+        let resData = JSON.parse(res)
+        console.log('app版本号:', resData)
+        sa.register({
+          $app_version: resData.app_version
+        })
+      }
+    })
     // 资源位埋点
     window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchUserInfo', {}, {
       success: res => {

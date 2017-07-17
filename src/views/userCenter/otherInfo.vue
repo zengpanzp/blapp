@@ -42,6 +42,7 @@
       </ul>
     </div>
    </div>
+   </div>
 </template>
 
 <script>
@@ -72,5 +73,5 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./css/securityCenter.scss"></style>
+<style lang="scss" src="./css/securityCenter.scss" scoped>
 </style>

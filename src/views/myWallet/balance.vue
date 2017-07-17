@@ -57,6 +57,15 @@ export default {
     };
   },
   created() {
+    try {
+        sa.track('$pageview', {
+          pageId: 'APP_账户余额页',
+          categoryId: 'APP_Wallet',
+          $title: "账户余额页"
+        })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
     utils.isLogin().then(data => {
       this.memberId = data.member_id;
       this.memberToken = data.member_token;

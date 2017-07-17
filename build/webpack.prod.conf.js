@@ -45,7 +45,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css')
+      filename: utils.assetsPath('css/[name].css')
     }),
     // this is needed in webpack 2 for minifying CSS
     new webpack.LoaderOptionsPlugin({
@@ -62,7 +62,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       manifest: config.build.manifest,
       remotejs: config.build.remotejs,
       template: 'index.html',
-      inject: true,
+      inject: false,
       minify: {
         removeComments: true,
         collapseWhitespace: true,

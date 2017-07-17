@@ -20,8 +20,6 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
-    manifest: '',
-    sence: 'production',
     remotejs: ''
   },
   dev: {
@@ -45,8 +43,6 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
-    manifest: '',
-    sence: 'default',
     remotejs: '<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>'
   }
 }
