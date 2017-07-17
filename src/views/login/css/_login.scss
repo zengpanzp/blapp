@@ -16,6 +16,13 @@ body{
     width: 100%;
     text-align: center;
   }
+  .getSMSCode{
+    width: rem(220);
+  }
+  .getSMSCode:disabled{
+    background: #b9b9b9;
+    color:#fff;
+  }
   .hasAccount{
     display: block;
     text-align: right;

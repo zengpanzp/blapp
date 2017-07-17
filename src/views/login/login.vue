@@ -29,13 +29,13 @@
           <ul>
             <li>
               <div class="joint-input j-input">
-                <input type="tel" maxlength="11" placeholder="请输入账号" class="j-login">
+                <input v-model="phone" type="tel" maxlength="11" placeholder="请输入账号" class="j-login">
                 <div class="form-close"></div>
               </div>
             </li>
             <li>
               <div class="joint-input j-input">
-                <input type="text" placeholder="请输入密码" class="j-code">
+                <input v-model="pass" type="password" placeholder="请输入密码" class="j-code">
                 <div class="form-close"></div>
               </div>
             </li>
@@ -49,23 +49,23 @@
           <ul>
             <li>
               <div class="joint-input j-input">
-                <input type="tel" maxlength="11" placeholder="请输入手机号码" class="j-login">
+                <input type="tel" v-model="mobile" maxlength="11" placeholder="请输入手机号码" class="j-login">
               </div>
             </li>
             <li>
               <div class="joint-input j-input">
-                <input type="text" placeholder="请输入短信验证码" class="j-code">
-                <button>获取短信验证码</button>
+                <input type="text" v-model="code" placeholder="请输入短信验证码" class="j-code">
+                <button class="getSMSCode" @click="getSMSCode" :disabled="codeDisabled">{{smsCodeText}}</button>
               </div>
             </li>
           </ul>
         </div>
-        <div class="bottom"><input class="circle-select" v-model="checked" id="checkbox2" type="checkbox" ><label class="tips" for="checkbox2">两周内免登录</label> <label></label></div>
+        <div class="bottom"><input class="circle-select" v-model="checkedSMS" id="checkbox2" type="checkbox" ><label class="tips" for="checkbox2">两周内免登录</label> <label></label></div>
       </bl-tab-container-item>
     </bl-tab-container>
     <!-- content end -->
     <div class="submitBind">
-      <input type="button" class="joint-submit" value="登 录">
+      <input type="button" class="joint-submit" @click="login" value="登 录">
     </div>
     <div class="unionLogin">
       <div class="line flex-m"></div>
@@ -75,30 +75,134 @@
 </div>
 </template>
 <script>
-  //  import api from './api/index'
+  import api from './api/index'
+  import {MD5} from 'src/md5';
   //  import utils from 'src/utils'
-  //  import mock from '../../../mock/getCouponDetail'
-  //  import abc from './i/banners/ia_10001-750x240q40.jpg'
   export default {
     name: 'login',
     data() {
       return {
-        checked: true, // 默认是否2周免登录
+        phone: "", // 账号
+        pass: "",  // 密码
+        code: "", // 验证码
+        mobile: "", // 手机号
+        codeDisabled: false,  // 能否点击发送验证码
+        checked: false, // 默认是否2周免登录
+        checkedSMS: false, // 短信登录是否2周内免登录
         tabsModel: 0, // tab 默认第一个
         tab: [{text: '账号密码登录', type: "account"}, {text: '手机动态密码登录', type: "phone"}],
-        tabItem: {}
+        tabItem: {},
+        smsCodeText: "获取短信验证码"
       }
     },
     created() {
       this.tabItem = this.tab[0];
-      this.$loading.close();
+      // 登录成功的回调地址
+      this.backUrl = this.$route.query.backUrl;
+      window.MD5 = MD5;
     },
     mounted() {
+      this.$loading.close();
     },
     methods: {
-        register() {
-          this.$router.push({path: 'register'})
+      // 登录
+      login() {
+        if (this.tabItem.type == "account") { // 账号密码登录
+          if (this.valPhone(this.phone)) {
+            if (this.pass != "") {
+              if (this.pass.length < 8) {
+                this.$toast({
+                  position: 'bottom',
+                  message: "密码长度不能少于8位!"
+                });
+                return false;
+              }
+              api.login({
+                loginName: this.phone,
+                password: MD5(this.pass),
+                type: 1,
+                relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html?",
+                mpFlag: ""
+              }).then(data => {
+                console.log(data)
+              });
+            } else {
+              this.$toast({
+                position: 'bottom',
+                message: "密码不能为空!"
+              });
+            }
+          }
+        } else { // 短信验证码登录
+          if (this.valPhone(this.mobile)) {
+            if (this.code != "") {
+              // 短信验证码登录
+              api.loginWithSmsCode({
+                loginName: this.mobile,
+                smsCode: this.code,
+                type: "2",
+                relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html",
+                mpFlag: ""
+              }).then(data => {
+                console.log(data);
+              });
+            } else {
+              this.$toast({
+                position: 'bottom',
+                message: "短信验证码不能为空!"
+              });
+            }
+          }
         }
+      },
+      // 获取短信验证码
+      getSMSCode() {
+        if (this.mobile && /^1[34578]\d{9}$/.test(this.mobile)) {
+          api.sendSMSCode({
+            mobile: this.mobile
+          }).then(data => {
+            let json = JSON.parse(data.body.obj);
+            console.log(json)
+            let that = this;
+            if (json.resCode == "00100000") {
+              let times = 60;
+              this.timeId = setInterval(function() {
+                if (times > 0) {
+                  that.codeDisabled = true;
+                  that.smsCodeText = "重新获取(" + (--times) + "s)";
+                } else {
+                  that.codeDisabled = false;
+                  that.smsCodeText = "获取短信验证码";
+                  clearInterval(that.timeId)
+                }
+              }, 1000);
+            }
+          });
+        } else {
+          this.valPhone(this.mobile);
+        }
+      },
+      // 验证手机号
+      valPhone(phone) {
+        if (phone == "") {
+          this.$toast({
+            position: 'bottom',
+            message: "手机号不能为空!"
+          });
+          return false;
+        } else if (!/^1[34578]\d{9}$/.test(phone)) {
+          this.$toast({
+            position: 'bottom',
+            message: "手机号码有误!"
+          });
+          return false;
+        }
+        return true;
+      },
+      // 去注册
+      register() {
+        this.$router.push({path: 'register'})
+      }
     }
   };
 </script>

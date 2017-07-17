@@ -56,7 +56,7 @@
     <div class="submitBind">
       <input type="button" class="joint-submit" value="立即注册">
     </div>
-    <a class="hasAccount" href="login">已有百联通账户？直接登录</a>
+    <a class="hasAccount" href="/#/login">已有百联通账户？直接登录</a>
     <!-- content end -->
 </div>
 </template>
