@@ -449,4 +449,12 @@ export const prdRouter = [
   },
   component: r => require.ensure([], () => r(require('../views/login/register')), 'register')
 },
+  /* 郭健 转一转 */
+  {
+    path: '/lucky/:coupon/:ruleId/:isSigninFlag',
+    meta: {
+      title: '转一转'
+    },
+    component: r => require.ensure([], () => r(require('../views/lucky/lucky')), 'lucky')
+  },
 ]

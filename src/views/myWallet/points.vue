@@ -63,6 +63,15 @@ export default {
     };
   },
   created() {
+    try {
+        sa.track('$pageview', {
+          pageId: 'APP_我的积分',
+          categoryId: 'APP_User',
+          $title: "积分明细"
+        })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
   },
   methods: {
       getPointsInfo() {
