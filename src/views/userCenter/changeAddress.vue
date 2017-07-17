@@ -68,29 +68,67 @@ export default {
   		})
   	},
     save () {
-      utils.isLogin().then(data => {
-        let memberToken = data.member_token
-        api.userCenter.update({
-          member_token: memberToken,
-          timestamp: utils.getTimeFormatToday(),
-          postCode: this.postcode,
-          province: this.provinceId,
-          city: this.cityId,
-          district: this.distirctId,
-          address: this.detail,
-          sysid: '1103'
-        }).then(data => {
-          if (data.body.obj) {
-            console.log(data)
-            alert('update success')
-          } else {
-            console.log(data.body.msg)
-          }
-        })
-      })
       console.log(this.selected)
       console.log(this.postcode)
       console.log(this.detail)
+      if (this.postcode && this.selected && this.detail) {
+        let patrn = /^[1-9][0-9]{5}$/
+        if (!patrn.exec(this.postcode)) {
+          this.$toast({
+            message: "对不起,您只能输入开头不能为0的6位数字邮政编码!",
+            position: "bottom"
+          })
+        } else if (this.detail.length > 30) {
+          this.$toast({
+            message: "详细地址超过最大长度!",
+            position: "bottom"
+          })
+        } else {
+          utils.isLogin().then(data => {
+            let memberToken = data.member_token
+            api.userCenter.update({
+              member_token: memberToken,
+              timestamp: utils.getTimeFormatToday(),
+              postCode: this.postcode,
+              province: this.provinceId,
+              city: this.cityId,
+              district: this.distirctId,
+              address: this.detail,
+              sysid: '1103'
+            }).then(data => {
+              if (data.body.obj) {
+                console.log(data)
+                this.$toast({
+                  message: "地址已经修改",
+                  position: "bottom"
+                })
+                setTimeout(() => {
+                  this.$router.go(-1)
+                }, 2000)
+              } else {
+                console.log(data.body.msg)
+              }
+            })
+          })
+        }
+      } else {
+        if (!this.postcode) {
+          this.$toast({
+            message: "请输入邮政编码",
+            position: "bottom"
+          })
+        } else if (!this.selected) {
+          this.$toast({
+            message: "请选择省市",
+            position: "bottom"
+          })
+        } else if (!this.detail) {
+          this.$toast({
+            message: "详细地址不能为空!",
+            position: "bottom"
+          })
+        }
+      }
     }
   }
 };
