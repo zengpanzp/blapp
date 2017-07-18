@@ -160,7 +160,7 @@ export default {
             buttons: [{
               text: '确定',
               onClick: () => {
-                this.$router.push({ path: '/flashSales' })
+                this.$router.replace({ path: '/flashSales' })
               }
             }]
           })
