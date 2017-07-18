@@ -296,6 +296,12 @@ export default {
       window.CTJSBridge.LoadMethod('BLCache', 'clearAllCache', {}, {
           success: result => {
             console.log(result)
+            setTimeout(() => {
+              this.$toast({
+                message: "清理缓存成功",
+                position: "bottom"
+              })
+            }, 1500)
           }
         })
     }
