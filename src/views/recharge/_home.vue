@@ -67,7 +67,7 @@ export default {
     nativeGo(type, url) {
       utils.isLogin().then(data => {
         if (process.env.NODE_ENV !== 'production') {
-          this.$router.push({ path: url })
+          this.$router.push({ path: `/${url}` })
           return
         }
         window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
