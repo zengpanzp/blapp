@@ -248,7 +248,7 @@ export const prdRouter = [
   {
     path: '/userCenter/mycar',
     meta: {
-      title: '我的车牌'
+      title: '我的车辆'
     },
     component: r => require.ensure([], () => r(require('../views/userCenter/myCar')), 'myCar'),
   },
