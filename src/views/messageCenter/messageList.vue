@@ -77,6 +77,22 @@ export default {
     };
   },
   created() {
+     window.CTJSBridge.LoadMethod('changeTitle', 'Android', {
+      "type": "1",
+      "widgets": [{
+      "clickAble": true,
+      "text": "清空",
+      "widgetIndex": "1",
+      }, {
+      "text": this.$route.params.title,
+      "widgetIndex": "0",
+      }]
+    }, {
+      success: result => {
+        console.log(result)
+        this.clearAll()
+      }
+    })
   },
   methods: {
   	loadMore() {

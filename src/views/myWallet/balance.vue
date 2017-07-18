@@ -33,11 +33,6 @@
             </div>
         </div>
     </div>
-    <div class="recharge-container">
-      <router-link :to="{ path : '/balanceList'}" class="simple-password-buttom corner larger-button recharge-button">
-      余额明细
-    </router-link>
-    </div>
 	</div>
 </template>
 
@@ -79,6 +74,24 @@ export default {
           }
       })
     })
+    window.CTJSBridge.LoadMethod('changeTitle', 'Android', {
+      "type": "1",
+      "widgets": [{
+      "clickAble": true,
+      "text": "余额明细",
+      "widgetIndex": "1",
+      }, {
+      "text": "账户余额",
+      "widgetIndex": "0",
+      }]
+    }, {
+      success: result => {
+        console.log(result)
+        this.$router.push('./balanceList')
+      }
+    })
+    document.title = "账户余额"
+    window.CTJSBridge._setNativeTitle("账户余额");
   },
   methods: {
     recharge: function() {
