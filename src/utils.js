@@ -51,8 +51,11 @@ const ssdbRemove = (name) => {
  * @return {[type]}        [description]
  */
 
-const dateFormat = (time = new Date(), format = 'yyyy-MM-dd hh:mm:ss') => {
-    let dt = new Date(time);
+const dateFormat = (format = 'yyyy-MM-dd hh:mm:ss', time) => {
+    let dt = new Date();
+    if (time) {
+      dt = new Date(time);
+    }
     var date = {
       "M+": dt.getMonth() + 1,
       "d+": dt.getDate(),
