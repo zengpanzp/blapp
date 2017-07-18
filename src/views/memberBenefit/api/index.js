@@ -34,6 +34,34 @@ export default {
   },
   // 查询坐标
   selectForIos: params => {
-    return Vue.http.post(baseUrl + 'lbsApi/regeo.htm', params)
+    return Vue.http.post(baseUrl + '/lbsApi/regeo.htm', params)
+  },
+  // 查询坐标
+  selectCity: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/queryProCityAreas.htm', params)
+  },
+  // 查询所有省市区
+  queryAllProvince: params => {
+    return Vue.resource('/static/js/json/allCityAreas.json').get(params)
+  },
+  // 查询所有合作商户
+  queryAllShop: params => {
+    return Vue.http.post(baseUrl + '/myInformation/queryMriMerchants.htm', params)
+  },
+  // 查会员详情
+  memberRNAuthDetail: params => {
+    return Vue.http.post(baseUrl + '/memberRNAuthList/queryMemberRNAuthDetail.htm', params)
+  },
+  // 绑定
+  getBind: params => {
+    return Vue.http.post(baseUrl + '/memberPointExchange/assembleBindParameters.htm', params)
+  },
+  // 查询第三方积分
+  getThirdPoint: params => {
+    return Vue.http.post(baseUrl + '/memberPointExchange/queryThirdRemainPoint.htm', params)
+  },
+  // 查询积分
+  getPointDel: params => {
+    return Vue.http.post(baseUrl + '/memberPoint/externalQueryRemainPoint.htm', params)
   }
 }

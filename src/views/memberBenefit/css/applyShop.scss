@@ -146,6 +146,21 @@
   font-size: rem(24)
 }
 
+.empty {
+  width: 80%;
+  line-height: rem(80);
+  margin: 0 auto;
+  color: #494949;
+  padding-top: rem(320);
+  font-size: rem(34);
+  text-align: center
+}
+
+.storeEmpty {
+  background: url(../i/no-shopsearch.png) 50% 60% no-repeat;
+  background-size: 30% auto
+}
+
 img {
   max-width: 100%;
   height: auto
