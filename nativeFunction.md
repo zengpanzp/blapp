@@ -338,5 +338,21 @@ window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
       console.log(result)
     }
   })
+
+  <!-- Android setting header -->
+    clickbutton() {
+    window.CTJSBridge.LoadMethod('changeTitle', 'Android', {
+      "type": "",
+      "widgets": [{
+      "clickAble": true,
+      "text": "清空",
+      "widgetIndex": "1"
+      }]
+    }, {
+      success: result => {
+        console.log(result)
+      }
+    })
+  }
 ======================================End
 ```
