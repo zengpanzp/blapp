@@ -23,7 +23,7 @@
       <ul>
         <li class="first" @click="avatar">头像
           <b>
-            <img :src="avatarUrl || require('../..//assets/headPic.png')">
+            <img :src="avatarUrl" v-show="avatarUrl">
             <i class="head iconfont arrow-back"></i>
           </b>
         </li>
@@ -102,6 +102,7 @@ export default {
         console.log(data)
   	    if (data.body.obj) {
           let resData = JSON.parse(data.body.obj)
+          utils.dbSet('myInfo', data.body.obj)
   	    	this.nickName = resData.nickName
   	    	let y = resData.birthYear
   	    	let m = resData.birthMonth
@@ -117,7 +118,7 @@ export default {
           } else {
             this.gd = ''
           }
-          this.avatarUrl = resData.avatarUrl
+          this.avatarUrl = resData.avatarUrl || require('../..//assets/headPic.png')
   	    } else {
   	    	this.$toast({
   	    	  message: data.body.msg,

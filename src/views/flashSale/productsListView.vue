@@ -345,6 +345,13 @@ export default {
         console.log("sa error => " + err);
       }
     }
+  },
+  watch: {
+    showModel(val) {
+      if (!val) {
+        this.brandSid = []
+      }
+    }
   }
 }
 </script>

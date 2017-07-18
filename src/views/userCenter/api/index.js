@@ -61,5 +61,13 @@ export default {
     upload: params => {
       return Vue.http.post(baseUrl + '/media/upload.htm', params)
     }
+  },
+  otherInfo: {
+    dictInfo: params => {
+      return Vue.http.post(baseUrl + '/dict/list.htm', params)
+    },
+    ueryDictList: params => {
+      return Vue.http.post(baseUrl + '/store/getDetailsByCodeAndType.htm', params)
+    }
   }
 }
