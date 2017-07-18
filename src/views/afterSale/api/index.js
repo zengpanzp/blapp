@@ -13,7 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 export default {
   // 曾攀 查询状态名
-  getStatusName: params => {
+  getStatusByname: params => {
     return Vue.http.post(baseUrl + '/dict/list.htm', params)
   },
 	// 曾攀 根据powerId查权益详情

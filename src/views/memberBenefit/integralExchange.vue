@@ -151,7 +151,7 @@ export default {
         memberId: this.memberId
       })).then(data => {
         this.$loading.close()
-        console.log("---action---", data.body.obj)
+        console.log("---action---", data)
         if (data.body.obj) {
           let obj = JSON.parse(data.body.obj)
           if (obj) {
@@ -166,7 +166,6 @@ export default {
               // 跳实名认证
             } else if (dom.hasClass("color-in")) {
               url += 'in'
-              console.log(url)
               this.$router.push({path: url})
             } else if (dom.hasClass("unbind")) {
               // 跳验证

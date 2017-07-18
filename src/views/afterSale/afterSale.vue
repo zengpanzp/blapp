@@ -4,19 +4,19 @@
         <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
         <div class="payList corner return" v-if="afterList.length > 0" v-for="item in afterList">
           <ul>
-            <li class="payListTit2"><label class="colorRed">{{item.statusName}}</label>售后编号：{{item.returnNo}}</li>
+            <li class="payListTit2"><label class="colorRed">{{getStatusName(item.statusCode)}}</label>售后编号：{{item.returnNo}}</li>
             <li class="payPic" v-if="item.refunds.length != 0">
-                <router-link :to="{path: '/afterSaleDetail/' + item.returnNo + '/' + encodeURIComponent(item.statusName)}" class="awrap">
+                <router-link :to="{path: '/afterSaleDetail/' + item.returnNo + '/' + encodeURIComponent(getStatusName(item.statusCode))}" class="awrap">
                 <div class="pic" v-for="it in item.refunds.slice(0,3)"><img v-lazy="{src: it.goodsImage}"
                 /></div>
                 <span class="picMore" v-if="item.refunds.length > 3"><i class="iconfont icon-more"></i></span>
                 <label>共{{item.refunds.length}}件<i class="iconfont icon-enter"></i></label>
                 </router-link>
-                <div class="time"><p>申请时间：{{item.applyTime}}</p></div>
+                <div class="time"><p>申请时间：{{formate(item.applyTime)}}</p></div>
             </li>
             <li class="orderbtn">
             <a  class="btn-sub cancelRefund" :id="item.returnNo" @click="cancel($event)" v-if="item.statusCode == '2001'||item.statusCode == '2002'">取消申请</a>
-            <router-link :to="{path: '/afterSaleDetail/' + item.returnNo + '/' + encodeURIComponent(item.statusName)}" class="btn-sub">查看进度</router-link>
+            <router-link :to="{path: '/afterSaleDetail/' + item.returnNo + '/' + encodeURIComponent(getStatusName(item.statusCode))}" class="btn-sub">查看进度</router-link>
             </li>
           </ul>
       </div>
@@ -64,9 +64,9 @@ export default {
   },
   methods: {
     getStatus() {
-      api.getStatusName(JSON.stringify({
+      api.getStatusByname({
         "type": "refund_front_status"
-      })).then(data => {
+      }).then(data => {
         this.$loading.close()
         console.log("dfafd", data.body.obj)
         if (data.body.obj) {
@@ -83,39 +83,29 @@ export default {
     loadMore() {
       this.busy = true
       this.noList = false
-      api.getList(JSON.stringify({
+      api.getList({
         memberId: this.memberId,
         currentPage: this.curPageNo ++,
         pageSize: 20
-      })).then(data => {
+      }).then(data => {
         this.$loading.close()
         console.log("pppppp", data.body.obj)
         if (data.body.obj) {
           let obj = JSON.parse(data.body.obj)
-          this.totalPage = obj.pages
           if (obj && obj.list) {
-            for (let i = 0; i < obj.list.length; i++) {
-              let order = {
-                orderNo: obj.list[i].orderNo,
-                returnNo: obj.list[i].returnNo,
-                applyTime: this.formate(new Date(obj.list[i].applyTime)),
-                statusCode: obj.list[i].statusCode,
-                statusName: this.getStatusName(obj.list[i].statusCode),
-                lastUpdate: obj.list[i].lastUpdate,
-                refunds: obj.list[i].refunds
-              }
-              this.afterList = this.afterList.concat(order)
-            }
-            console.log("zpzpz", JSON.stringify(this.afterList))
+            this.totalPage = obj.pages
+            this.afterList = obj.list
             this.busy = false
             this.loading = true
             if (this.afterList.length < 10) {
-              this.busy = true
-              this.loading = false
+            this.busy = true
+            this.loading = false
             }
           } else {
             this.noList = true
           }
+        } else {
+          this.$toast(data.body.msg)
         }
       }, err => {
         console.log(err)
@@ -131,34 +121,7 @@ export default {
     },
     // 时间戳转换yyyy-mm-dd hh:mm:ss
     formate(date) {
-        let year = date.getFullYear();       // 年
-        let month = date.getMonth() + 1;     // 月
-        let day = date.getDate();            // 日
-        let hh = date.getHours();            // 时
-        let mm = date.getMinutes();          // 分
-        let ss = date.getSeconds();          // 秒
-        let clock = year + "-"
-        if (month < 10) {
-          clock += "0";
-        }
-        clock += month + "-";
-        if (day < 10) {
-          clock += "0";
-        }
-        clock += day + " ";
-        if (hh < 10) {
-          clock += "0";
-        }
-        clock += hh + ":";
-        if (mm < 10) {
-          clock += '0';
-        }
-        clock += mm + ":";
-        if (ss < 10) {
-          clock += '0';
-        }
-        clock += ss;
-        return clock;
+        return utils.dateFormat(date)
     },
     cancel($event) {
       let returnId = $($event.currentTarget).attr('id')

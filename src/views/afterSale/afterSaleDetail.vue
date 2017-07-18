@@ -1,7 +1,6 @@
 <style lang="scss" src="./css/afterSaleDetail.scss" scoped></style>
 <template>
 <div class="new">
-    <div class="main">
         <div class="service-manage-head corner">
             <ul>
                 <li>
@@ -201,7 +200,6 @@
                 </li>
             </ul>
         </div>
-    </div>
     <footer>
         <div class="fixedMainbtn orderbtn orderbtnSize return">
             <a href="#" class="btn-sub">订单详细</a>
@@ -227,6 +225,7 @@ export default {
   },
   created() {
   	this.$loading.close()
+    console.log(this.$route.params)
   },
   methods: {
 

@@ -7,7 +7,7 @@
 					权益对比
 				</div>
 				<div class="menu flex-item flex-space flex-m">
-					<div class="menuli flex-item" v-for="({power, name}, index) in list" :class="{select: powerId == power}" @click="powerId = power">{{ name }}
+					<div class="menuli flex-item" v-for="({power, name}, index) in list" :class="{select: powerId == power}" @click="change(power)">{{ name }}
 						<div class="trigle"></div>
 					</div>
 				</div>
@@ -15,24 +15,32 @@
 		</div>
 		<div class="up-container">
 			<div class="up-limit" v-if="powerId == '10'">
+				<div class="con">
 				<p>升级条件：会员累计积分达2000分，升级为银卡会员</p>
 				<p>保级条件：未达升级标准，保持普卡会员身份</p>
 				<p>降级条件：普卡会员不会产生降级</p>
+				</div>
 			</div>
 			<div class="up-limit" v-if="powerId == '20'">
+				<div class="con">
 				<p>升级条件：银卡会员在等级有效期内累计积分达20000分，升级为金卡会员</p>
 				<p>保级条件：等级有效期内，累计积分大于等于2000分但小于20000分，保持银卡会员身份</p>
 				<p>降级条件：等级有效期内，累计积分小于2000分，降级为普卡会员</p>
+				</div>
 			</div>
 			<div class="up-limit" v-if="powerId == '30'">
+				<div class="con">
 				<p>升级条件：金卡会员在等级有效期内累计积分达100000分，升级为钻石卡会员</p>
 				<p>保级条件：等级有效期内，累计积分大于等于20000分但小于100000分，保持金卡会员</p>
 				<p>降级条件：等级有效期内，累计积分小于20000分，降级为银卡会员</p>
+				</div>
 			</div>
 			<div class="up-limit" v-if="powerId == '40'">
+				<div class="con">
 				<p>升级条件：钻石卡为百联通会员最高等级，不会再产生升级</p>
 				<p>保级条件：等级有效期内，累计积分大于等于100000分，保持钻石卡会员身份</p>
 				<p>降级条件：等级有效期内，累计积分小于100000分，降级为金卡会员</p>
+				</div>
 			</div>
 		</div>
 		<div class="detail-list">
@@ -315,6 +323,7 @@ export default {
   data () {
     return {
     	powerId: this.$route.query.powerId || 20,
+    	conHeight: '',
     	list: [
     	{
 			name: '普通会员',
@@ -347,7 +356,24 @@ export default {
       } catch (err) {
         console.log("sa error => " + err);
       }
-  }
+  },
+  methods: {
+  	change(power) {
+  		this.powerId = power
+  		this.$nextTick(() => {
+  			let height = $(".con").height() + 32
+  			$(".up-limit").css("height", height + 'px')
+  			$(".detail-list").css("padding-top", (height + 88) + 'px')
+  		})
+  	}
+	},
+	mounted() {
+		this.$nextTick(() => {
+  			let height = $(".con").height() + 32
+  			$(".up-limit").css("height", height + 'px')
+  			$(".detail-list").css("padding-top", (height + 88) + 'px')
+  		})
+	}
 };
 </script>
 

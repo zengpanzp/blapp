@@ -55,5 +55,13 @@ export default {
   // 绑定
   getBind: params => {
     return Vue.http.post(baseUrl + '/memberPointExchange/assembleBindParameters.htm', params)
+  },
+  // 查询第三方积分
+  getThirdPoint: params => {
+    return Vue.http.post(baseUrl + '/memberPointExchange/queryThirdRemainPoint.htm', params)
+  },
+  // 查询积分
+  getPointDel: params => {
+    return Vue.http.post(baseUrl + '/memberPoint/externalQueryRemainPoint.htm', params)
   }
 }

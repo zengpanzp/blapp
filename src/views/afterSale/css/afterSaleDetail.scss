@@ -124,12 +124,13 @@
 
 .service-manage-head {
   background: #52a3cc;
-  padding: rem(30)
+  padding: rem(20)
 }
 
 .service-manage-head li {
   margin-top: rem(40);
-  color: #fff
+  color: #fff;
+  overflow: hidden
 }
 
 .service-manage-head li:first-child {
@@ -147,7 +148,7 @@
 }
 
 .manage-head-detail {
-  font-size: rem(28);
+  font-size: rem(24);
   opacity: .6
 }
 

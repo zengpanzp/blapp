@@ -347,9 +347,6 @@ export const prdRouter = [
   /* 曾攀 积分换入换出 */
   {
     path: '/exchangePoint/:index/:type',
-    meta: {
-      title: '积分',
-    },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/exchangePoint')), 'exchangePoint')
   },
   /* 曾攀 售后 */
