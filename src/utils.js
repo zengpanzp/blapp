@@ -51,7 +51,7 @@ const ssdbRemove = (name) => {
  * @return {[type]}        [description]
  */
 
-const dateFormat = (format = 'yyyy-MM-dd hh:mm:ss', time) => {
+const dateFormat = (format, time) => {
     let dt = new Date();
     if (time) {
       dt = new Date(time);
