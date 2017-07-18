@@ -96,16 +96,33 @@ export default {
     return {
     	lottery: null,
     	click: false,
+        remain: 1,
+        ruleId: "",
+        coupon: "",
+        drawId: "4",
+        isSigninFlag: '',
     	memberId: "",
     	memberToken: ""
     };
   },
   created() {
+  	if (this.$route.params.ruleId && this.$route.params.ruleId != "null") {
+  		this.ruleId = this.$route.params.ruleId
+  	} else {
+  		this.ruleId = "1"
+  	}
+  	if (this.$route.params.coupon && this.$route.params.coupon != "null") {
+  		this.coupon = this.$route.params.coupon
+  	}
+  	if (this.$route.params.isSigninFlag && this.$route.params.isSigninFlag != "null") {
+  		this.isSigninFlag = this.$route.params.isSigninFlag
+  	}
+  	console.log(this.ruleId)
+  	console.log(this.isSigninFlag)
   	utils.isLogin().then(data => {
-  	  this.$loading.close()
-      this.memberId = data.member_id;
-      this.memberToken = data.member_token;
-      this.bindRoll()
+  		this.$loading.close()
+    	this.memberId = data.member_id;
+     	this.memberToken = data.member_token;
     })
   },
   methods: {
