@@ -11,19 +11,19 @@
 		    </div>
 		    <div class="lottery-list">
 		        <dl id="lottery">
-		        	<dd class="lottery-unit lottery-unit-0"><img src="<%- luckyList[0].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-1"><img src="<%- luckyList[1].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-2"><img src="<%- luckyList[2].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-3"><img src="<%- luckyList[3].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-11"><img src="<%- luckyList[11].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-4"><img src="<%- luckyList[4].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-10"><img src="<%- luckyList[10].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-5"><img src="<%- luckyList[5].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-9"><img src="<%- luckyList[9].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-8"><img src="<%- luckyList[8].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-7"><img src="<%- luckyList[7].showPic%>"></dd>
-					<dd class="lottery-unit lottery-unit-6"><img src="<%- luckyList[6].showPic%>"></dd>
-					<dt id="lucky_ruler_start"><img src="<%-button%>"/></dt>
+		        	<dd class="lottery-unit lottery-unit-0"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-1"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-2"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-3"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-11"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-4"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-10"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-5"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-9"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-8"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-7"><img src=""></dd>
+					<dd class="lottery-unit lottery-unit-6"><img src=""></dd>
+					<dt id="lucky_ruler_start" @click="roll()"><img src=""/></dt>
 		        </dl>
 		    </div>
 		    <div class="ruler" style="display: none">
@@ -86,18 +86,105 @@
 </template>
 
 <script>
+// import api from './api/index'
+import utils from 'src/utils'
 export default {
 
   name: 'lucky',
 
   data () {
     return {
+    	lottery: null,
+    	click: false,
+    	memberId: "",
+    	memberToken: ""
     };
   },
   created() {
-  	this.$loading.close()
+  	utils.isLogin().then(data => {
+  	  this.$loading.close()
+      this.memberId = data.member_id;
+      this.memberToken = data.member_token;
+      this.bindRoll()
+    })
   },
   methods: {
+  	bindRoll: function () {
+        // var current = this;
+        this.lottery = {
+            id: 'lottery',
+            // 当前转动到哪个位置，起点位置
+            index: -1,
+            // 总共有多少个位置
+            count: 0,
+            // setTimeout的ID，用clearTimeout清除
+            timer: 0,
+            // 初始转动速度
+            speed: 20,
+            // 转动次数
+            times: 0,
+            // 转动基本次数：即至少需要转动多少次再进入抽奖环节
+            cycle: 50,
+            // 中奖位置
+            prize: -1,
+            init: function (id) {
+                this.id = id;
+                if ($("#" + id).find(".lottery-unit").length > 0) {
+                    this.obj = $("#" + id);
+                    // 获取有多少个奖品格子
+                    this.count = this.obj.find(".lottery-unit").length;
+                    this.obj.find(".lottery-unit-" + this.index).addClass("active");
+                }
+            },
+            roll: function () {
+                var index = this.index;
+                var count = this.count;
+                this.obj.find(".lottery-unit-" + index).removeClass("active");
+                index += 1;
+                if (index > count - 1) {
+                    index = 0;
+                }
+                this.obj.find(".lottery-unit-" + index).addClass("active");
+                this.index = index;
+                return false;
+            }
+        };
+        this.lottery.init("lottery");
+    },
+  	roll: function (coupon) {
+        this.lottery.times += 1;
+        this.lottery.roll();
+        if (this.lottery.times > this.lottery.cycle + 10 && this.lottery.prize == this.lottery.index) {
+            clearTimeout(this.lottery.timer);
+            this.lottery.prize = -1;
+            this.lottery.times = 0;
+            this.click = false;
+            // this.showCoupon(coupon);
+            return false;
+        }
+        if (this.lottery.times < this.lottery.cycle) {
+            this.lottery.speed -= 10;
+        } else if (this.lottery.times == this.lottery.cycle) {
+            if (coupon) {
+                this.lottery.prize = parseInt(coupon.showWeight) - 1;
+            } else {
+                this.lottery.prize = parseInt(Math.random() * 11);
+            }
+        } else {
+            if (this.lottery.times > (this.lottery.cycle + 10) && ((this.lottery.prize == 0 && this.lottery.index == 7) || this.lottery.prize == (this.lottery.index + 1))) {
+                this.lottery.speed += 110;
+            } else {
+                this.lottery.speed += 20;
+            }
+        }
+        if (this.lottery.speed < 40) {
+            this.lottery.speed = 40;
+        }
+        var current = this;
+        this.lottery.timer = setTimeout(function () {
+            current.roll(coupon);
+        }, this.lottery.speed);
+    }
   }
 };
 </script>
