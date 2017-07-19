@@ -24,16 +24,8 @@
       <ul>
       	<li v-for="inner in item.options" @click="chooseHandle(inner)">
           <div class="label">{{ inner.title }}</div>
-          <div class="label-right" v-if="inner.list">
-            <template v-for="innerItem in inner.list">
-              <template v-if="innerItem.value == myInfo[inner.dictKeys]">
-                {{ innerItem.label }}
-              </template>
-            </template>
-            <i class="iconfont arrow-back"></i>
-          </div>
-          <div class="label-right" v-else>
-            {{ myInfo.districtName }}{{ myInfo.address }}
+          <div class="label-right">
+            {{ inner.currentInfo }}
             <i class="iconfont arrow-back"></i>
           </div>
         </li>
@@ -54,12 +46,24 @@ export default {
     return {
       showModel: false,
       list: [],
-      desTitle: [{
+      desTitle: [],
+      myInfo: {},
+      value: [],
+      isMutil: false,
+      dictKeys: ''
+    };
+  },
+  created () {
+  	this.$loading.close()
+    this.getMyInfo()
+  },
+  methods: {
+    init() {
+      let desTitle = [{
         options: [{
           title: '民族',
           type: 'sys_data_mbr_nation_type',
-          dictKeys: 'nation',
-          list: this.getDictInfo('sys_data_mbr_nation_type', 'nation')
+          dictKeys: 'nation'
         }, {
           title: '所属地址',
           path: '/userCenter/changeAddress',
@@ -69,50 +73,97 @@ export default {
         options: [{
           title: '学历',
           type: 'sys_data_mbr_education_type',
-          dictKeys: 'eduLevel',
-          list: this.getDictInfo('sys_data_mbr_education_type', 'eduLevel')
+          dictKeys: 'eduLevel'
         }, {
           title: '行业',
           type: 'sys_data_smbr_industry_type',
-          dictKeys: 'industry',
-          list: this.getDictInfo('sys_data_smbr_industry_type', 'industry')
+          dictKeys: 'industry'
         }, {
           title: '职位',
           type: 'sys_data_mbr_position_type',
-          dictKeys: 'title',
-          list: this.getDictInfo('sys_data_mbr_position_type', 'title')
+          dictKeys: 'title'
         }, {
           title: '收入',
           type: 'sys_data_mbr_income_type',
-          dictKeys: 'incomeLevel',
-          list: this.getDictInfo('sys_data_mbr_income_type', 'incomeLevel')
+          dictKeys: 'incomeLevel'
         }]
       }, {
         options: [{
           title: '星座',
           type: 'sys_data_mbr_constellation_type',
           dictKeys: 'constellation',
-          list: this.getDictInfo('sys_data_mbr_constellation_type', 'constellation')
+          list: []
         }, {
           title: '爱好',
           type: 'sys_data_mbr_hobby',
           dictKeys: 'hobby',
-          list: this.getDictInfo('sys_data_mbr_hobby', 'hobby'),
           isMutil: true
         }]
-      }],
-      myInfo: {},
-      value: [],
-      isMutil: false
-    };
-  },
-  created () {
-  	this.$loading.close()
-    this.getMyInfo()
-  },
-  methods: {
+      }]
+      for (let i = 0; i < desTitle.length; i++) {
+        for (let j = 0; j < desTitle[i].options.length; j++) {
+          if (desTitle[i].options[j].dictKeys !== 'districtName') {
+            // start
+            let type = desTitle[i].options[j].type
+            let key = desTitle[i].options[j].dictKeys
+            if (utils.dbGet(`otherInfo_${key}`)) {
+              desTitle[i].options[j].list = utils.dbGet(`otherInfo_${key}`).list
+              desTitle[i].options[j].currentInfo = this.inInfo(desTitle[i].options[j])
+              if (i === 2 && j === 1) {
+                this.desTitle = desTitle
+              }
+            } else {
+              api.otherInfo.dictInfo({
+                type: type
+              }).then(data => {
+                console.log('=-=-=-=-=-=-', i, j)
+                if (data.body.obj) {
+                  utils.dbSet(`otherInfo_${key}`, data.body.obj)
+                  desTitle[i].options[j].list = utils.dbGet(`otherInfo_${key}`).list
+                  desTitle[i].options[j].currentInfo = this.inInfo(desTitle[i].options[j])
+                  if (i === 2 && j === 1) {
+                    this.desTitle = desTitle
+                  }
+                }
+              })
+            }
+            // end
+          } else {
+            desTitle[i].options[j].currentInfo = `${this.myInfo.districtName || ''}${this.myInfo.address || ''}`
+          }
+        }
+      }
+    },
     confirmHandle() {
-      console.log(121212)
+      console.log('更新用户信息')
+      let reqData = {
+        member_token: utils.dbGet('userInfo').member_token,
+        timestamp: utils.getTimeFormatToday(),
+        sysid: '1103'
+      }
+      console.log(typeof this.value)
+      if (typeof this.value == 'string') {
+        reqData[this.dictKeys] = this.value
+      } else {
+        reqData[this.dictKeys] = this.value.join(',')
+      }
+      api.userCenter.update(reqData).then(data => {
+        console.log(data)
+        if (data.body.obj) {
+          let resData = JSON.parse(data.body.obj)
+          console.log('###updateGender success', resData)
+          this.$modal({
+            title: '提示',
+            content: '修改成功'
+          })
+          this.getMyInfo(true)
+        } else {
+          this.$toast({
+            message: data.body.msg,
+            position: "bottom"
+          })
+        }
+      })
     },
     chooseHandle(item) {
       console.log(item)
@@ -125,7 +176,8 @@ export default {
       }
       this.showModel = true // 显示
       this.list = item.list // 赋值list
-      this.isMutil = item.isMutil // 是否可以多选
+      this.isMutil = item.isMutil || false // 是否可以多选
+      this.dictKeys = item.dictKeys // key
       if (item.dictKeys == 'hobby') {
         if (this.myInfo[item.dictKeys]) {
           this.value = this.myInfo[item.dictKeys].split(',')
@@ -136,23 +188,10 @@ export default {
         this.value = this.myInfo[item.dictKeys]
       }
     },
-    getDictInfo(type, key) {
-      if (utils.dbGet(`otherInfo_${key}`)) {
-        return utils.dbGet(`otherInfo_${key}`).list
-      } else {
-        api.otherInfo.dictInfo({
-          type: type
-        }).then(data => {
-          if (data.body.obj) {
-            utils.dbSet(`otherInfo_${key}`, data.body.obj)
-            return JSON.parse(data.body.obj).list
-          }
-        })
-      }
-    },
-    getMyInfo() {
-      if (utils.dbGet('myInfo')) {
+    getMyInfo(force = false) {
+      if (utils.dbGet('myInfo') && !force) {
         this.myInfo = utils.dbGet('myInfo')
+        this.init()
       } else {
         api.userCenter.getMyInformation({
           member_token: utils.dbGet('userInfo').member_token,
@@ -161,9 +200,25 @@ export default {
           if (data.body.obj) {
             utils.dbSet('myInfo', data.body.obj)
             this.myInfo = utils.dbGet('myInfo')
+            this.init()
           }
         })
       }
+    },
+    inInfo(inner) {
+      let inLabel = []
+      if (this.myInfo[inner.dictKeys] && inner.list) {
+        for (let innerItem of inner.list) {
+          if (this.myInfo[inner.dictKeys]) {
+            for (let listItem of this.myInfo[inner.dictKeys].split(',').splice(0, 3)) {
+              if (innerItem.value == listItem) {
+                inLabel.push(innerItem.label)
+              }
+            }
+          }
+        }
+      }
+      return inLabel.join(',')
     }
   },
   watch: {
@@ -172,6 +227,12 @@ export default {
         this.value = []
       }
     }
+  },
+  // 控制路由跳转
+  beforeRouteEnter(to, from, next) {
+    utils.isLogin().then(user => {
+      next()
+    })
   }
 };
 </script>

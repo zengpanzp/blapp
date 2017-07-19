@@ -102,7 +102,6 @@ export default {
         console.log(data)
   	    if (data.body.obj) {
           let resData = JSON.parse(data.body.obj)
-          utils.dbSet('myInfo', data.body.obj)
   	    	this.nickName = resData.nickName
   	    	let y = resData.birthYear
   	    	let m = resData.birthMonth

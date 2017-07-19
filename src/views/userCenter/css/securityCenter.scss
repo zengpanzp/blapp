@@ -10,6 +10,11 @@
 .section1 {
   margin-top: rem(20);
 }
+.dot-box{
+  span.dot:last-child i{
+    display: none;
+  }
+}
 
 .list {
   li {
@@ -77,10 +82,7 @@ b {
 .priceSelect {
   margin-bottom: rem(.375*31.25);
   background: #fff;
-  > ul{
-    height: 100%;
-    overflow-y: auto;
-  }
+  font-size: rem(28);
   li{
     position: relative;
   }
@@ -100,6 +102,9 @@ b {
     z-index: 100;
     &:checked + a .icon{
       display: block;
+    }
+    &:checked + a{
+      color: #e6133c;
     }
   }
   a {
@@ -212,10 +217,12 @@ b {
   }
 }
 .serviceWrap {
-  padding-top: rem(90);
+  top: rem(90);
   bottom: 0;
   left: 0;
   right: 0;
+  position: absolute;
+  overflow-y: auto;
 }
 
 .topHeader,

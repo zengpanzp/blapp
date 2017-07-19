@@ -44,7 +44,7 @@ export default {
   methods: {
   	address () {
   		window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', {
-  			title: "aaaa",
+  			title: "修改地址",
   			limitedProvinceIds: []
   		}, {
   			success: data => {
