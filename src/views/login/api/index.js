@@ -14,7 +14,7 @@ if (process.env.NODE_ENV !== 'production') {
 export default {
   // 账号密码登录
   login: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/jn/login.htm', params);
+    return Vue.http.post(baseUrl + '/member/login.htm', params);
   },
   // 发送短信验证码
   sendSMSCode: params => {
@@ -22,6 +22,14 @@ export default {
   },
   // 根据短信验证码登录
   loginWithSmsCode: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/jn/loginWithSmsCode.htm', params);
+    return Vue.http.post(baseUrl + '/member/login.htm', params);
+  },
+  // 注册账号
+  register: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/jn/appWeixinRegister', params);
+  },
+  // 注册账号
+  validatePhone: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/jn/checkPhoneUnique', params);
   }
 }

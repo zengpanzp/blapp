@@ -120,11 +120,14 @@
               api.login({
                 loginName: this.phone,
                 password: MD5(this.pass),
-                type: 1,
+                type: "1",
                 relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html?",
                 mpFlag: ""
               }).then(data => {
-                console.log(data)
+                let json = data.body.obj;
+                console.log(json)
+                if (this.checked) { // 2周内免登录
+                }
               });
             } else {
               this.$toast({
@@ -144,7 +147,10 @@
                 relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html",
                 mpFlag: ""
               }).then(data => {
-                console.log(data);
+                let json = JSON.parse(data.body);
+                console.log(json)
+                if (this.checkedSMS) { // 2周内免登录
+                }
               });
             } else {
               this.$toast({
@@ -169,7 +175,7 @@
               this.timeId = setInterval(function() {
                 if (times > 0) {
                   that.codeDisabled = true;
-                  that.smsCodeText = "重新获取(" + (--times) + "s)";
+                  that.smsCodeText = "重新获取(" + (times--) + "s)";
                 } else {
                   that.codeDisabled = false;
                   that.smsCodeText = "获取短信验证码";

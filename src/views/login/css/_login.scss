@@ -236,9 +236,14 @@ body{
       }
       .joint-code{
         height: rem(58);
-        background-color: rgba(247,247,247,1);
+        background-color: rgba(0, 62, 118, 0.39);
+        background: -webkit-linear-gradient(top,#999, #fff);
         border-radius: rem(4);
         margin-left: rem(40);
+        text-align: center;
+        line-height: rem(58);
+        font-size: rem(37);
+        color:#666;
         button{
           width: 100%;
           height: 100%;

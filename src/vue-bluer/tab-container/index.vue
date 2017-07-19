@@ -68,6 +68,7 @@ export default {
 
   watch: {
     value(val) {
+        console.log(val)
       this.currentActive = val;
     },
 
