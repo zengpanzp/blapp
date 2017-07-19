@@ -1,15 +1,15 @@
 <template>
-  <div class="modal-mask" @touchmove.prevent v-show="showVisible">
+  <div class="modal-mask" @touchmove.prevent v-if="showVisible">
     <div class="modal" :class="[className, effect]" :style="halfModal" ref="modal" @touchmove.prevent>
       <div class="modal-inner">
         <div class="modal-title" v-if="title !== ''">{{ title }}</div>
         <div class="modal-input" v-if="input"><!--<label>{{labelText}}</label>--><input type="text" v-model="inputValue" :placeholder="placeholder"></div>
         <div class="modal-text" v-else>{{ content }}<slot name="inner"></slot></div>
       </div>
-      <div class="modal-buttons">
-        <div class="modal-button" v-for="button in buttons" v-if="!input" v-text="button.text" @click="[button.onClick(), close()]"></div>
-        <div class="modal-button" v-if="input" v-text="buttons[0].text" @click="[sure(), close()]"></div>
-        <div class="modal-button" v-if="input" v-text="buttons[1].text" @click="close()"></div>
+      <div class="modal-buttons flex">
+        <div class="modal-button flex-c-m" v-for="button in buttons" v-if="!input" v-text="button.text" @click="[button.onClick(), close()]"></div>
+        <div class="modal-button flex-c-m" v-if="input" v-text="buttons[0].text" @click="[sure(), close()]"></div>
+        <div class="modal-button flex-c-m" v-if="input" v-text="buttons[1].text" @click="close()"></div>
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@
     margin-left: rem(-270);
     margin-top: 0;
     overflow: hidden;
-    top: 40%;
+    top: 50%;
     text-align: center;
     border-radius: $border-radius;
     // opacity: 0;
@@ -105,15 +105,10 @@
   }
   .modal-input{
     margin-top: rem(20);
-    /*label{*/
-    /*font-size: rem(28);*/
-    /*margin-right:rem(20) ;*/
-    /*}*/
     input{
       font-size: rem(32);
       height: rem(70);
       line-height: rem(70);
-      /*border:rem(.8) solid #3ea2ff;*/
       padding-left: rem(10);
       width: 90%;
       color:#666;
@@ -123,16 +118,6 @@
     font-weight: 500;
     font-size: rem(32);
     text-align: center;
-    &.hairline{
-      @include hairline(bottom, $borderColor);
-      position: relative;
-      padding-bottom: rem(20);
-      &:after{
-        left: rem(-30);
-        right: rem(-30);
-        width: auto;
-      }
-    }
     +.modal-text {
       margin: 0;
       padding-top: rem(10);
@@ -152,79 +137,23 @@
   .modal-buttons {
     height: rem(88);
     overflow: hidden;
-    @include display(flex);
-    &.modal-buttons-vertical {
-      display: block;
-      height: auto;
-    }
   }
   .modal-button {
     width: 100%;
     padding: 0 rem(10);
     height: $modalButtonHeight;
     font-size: rem(34);
-    border: 0;
     text-align: center;
     color: $modalButonColor;
     background: $modalButonBg;
     position: relative;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    cursor: pointer;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    @extend %comm-flex;
-    @include justify-content(center);
     @include hairline(right, $borderColor);
-    @include flex(1);
-    &:first-child {
-      border-radius: 0 0 0 $border-radius;
-    }
-    &:last-child {
-      background-image: none;
-      border-radius: 0 0 $border-radius 0;
-      color: #fff;
-    }
-    &:first-child:last-child {
+    &:first-child:last-child, &:last-child {
       border-radius: 0 0 $border-radius $border-radius;
-      background-origin: padding-box;
-      color: $modalButonColor;
+      background: #fd7072;
+      color: #fff;
       @include hairline-remove(right);
     }
-    &.modal-button-bold {
-      font-weight: bold;
-    }
-    .modal-buttons-vertical & {
-      background-image: none;
-      @include hair(bottom, $borderColor);
-      border-radius: 0;
-      &:last-child {
-        border-radius: 0 0 $border-radius $border-radius;
-        background-image: none;
-      }
-    }
-  }
-  .modal-no-buttons {
-    .modal-inner {
-      border-radius: $border-radius;
-      background-image: none;
-    }
-    .modal-buttons {
-      display: none;
-    }
-  }
-  .modal-button:last-child {
-    background-image: none;
-    border-radius: 0 0 0.08rem 0;
-    color: #fff;
-    background-color: #fd7072;
-    border-radius: 0px 0px 0px 0.08rem;
-  }
-  .modal-button:first-child:last-child {
-    border-radius: 0 0 0.08rem 0.08rem;
-    background-origin: padding-box;
-    color: #fff;
   }
   .modal-mask{
     position: fixed;

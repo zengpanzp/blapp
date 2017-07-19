@@ -27,7 +27,8 @@
     <link rel="stylesheet" type="text/css" id="classLink">
     <script type="text/javascript" src="static/js/lasloader.min.js"></script>
     <script type="text/javascript">
-      lsloader.load('iconfont','static/js/iconfont.js')
+      var lsloaderBase = 'bl_resource_'
+      lsloader.load(lsloaderBase + 'iconfont','static/js/iconfont.js')
     </script>
   </head>
   <body ontouchstart>
@@ -48,11 +49,11 @@
       });
     </script>
     <script type="text/javascript">
-      lsloader.load('jq','static/js/jq.min.js')
-      lsloader.load('vendor_common','static/js/lib/vendor/vendor.common.js')
-      lsloader.load('sensorsdata','static/js/sensorsdata.min.js')
+      lsloader.load(lsloaderBase + 'jq','static/js/jq.min.js')
+      lsloader.load(lsloaderBase + 'vendor_common','static/js/lib/vendor/vendor.common.js')
+      lsloader.load(lsloaderBase + 'sensorsdata','static/js/sensorsdata.min.js')
       if (<%= process.env.NODE_ENV == 'production' %>) {
-        lsloader.load('app', "<%= htmlWebpackPlugin.files.chunks['app'].entry %>")
+        lsloader.load(lsloaderBase + 'app', "<%= htmlWebpackPlugin.files.chunks['app'].entry %>")
       }
     </script>
   </body>

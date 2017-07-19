@@ -15,8 +15,9 @@
                 <div class="time"><p>申请时间：{{formate(item.applyTime)}}</p></div>
             </li>
             <li class="orderbtn">
-            <a  class="btn-sub cancelRefund" :id="item.returnNo" @click="cancel($event)" v-if="item.statusCode == '2001'||item.statusCode == '2002'">取消申请</a>
+            <a  class="btn-sub cancelRefund"  @click="cancel($event,item.returnNo)" v-if="item.statusCode == '2001'||item.statusCode == '2002'">取消申请</a>
             <router-link :to="{path: '/afterSaleDetail/' + item.returnNo + '/' + encodeURIComponent(getStatusName(item.statusCode))}" class="btn-sub">查看进度</router-link>
+            <router-link :to="{path: '//' + encodeURIComponent(JSON.stringify({qrcode:item.extrCode, title:'退货码'}))}" class="btn-sub" v-if="item.statusCode == '20032'">查看退货码</router-link>
             </li>
           </ul>
       </div>
@@ -60,7 +61,7 @@ export default {
       console.log("sa error => " + err);
     }
     this.memberId = utils.dbGet('userInfo').member_id
-  	this.getStatus()
+    this.getStatus()
   },
   methods: {
     getStatus() {
@@ -85,7 +86,7 @@ export default {
       this.noList = false
       api.getList({
         memberId: this.memberId,
-        currentPage: this.curPageNo ++,
+        currentPage: this.curPageNo++,
         pageSize: 20
       }).then(data => {
         this.$loading.close()
@@ -94,13 +95,15 @@ export default {
           let obj = JSON.parse(data.body.obj)
           if (obj && obj.list) {
             this.totalPage = obj.pages
-            this.afterList = obj.list
-            this.busy = false
-            this.loading = true
-            if (this.afterList.length < 10) {
-            this.busy = true
-            this.loading = false
+            let list = obj.list
+            if (this.curPageNo <= this.totalPage) {
+              this.busy = false
+              this.loading = true
+            } else {
+              this.busy = true
+              this.loading = false
             }
+            this.afterList = this.afterList.concat(list)
           } else {
             this.noList = true
           }
@@ -112,19 +115,18 @@ export default {
       })
     },
     getStatusName(id) {
-      for (let i = 0; i < this.dictionary.length; i++) {
-          if (this.dictionary[i].value == parseInt(id)) {
-              return this.dictionary[i].label
-          }
-      }
-      return "已取消"
+        for (let i = 0; i < this.dictionary.length; i++) {
+            if (this.dictionary[i].value == parseInt(id)) {
+                return this.dictionary[i].label
+            }
+        }
+        return "已取消";
     },
     // 时间戳转换yyyy-mm-dd hh:mm:ss
     formate(date) {
-        return utils.dateFormat(date)
+        return utils.dateFormat("yyyy-MM-dd hh:mm:ss", date)
     },
-    cancel($event) {
-      let returnId = $($event.currentTarget).attr('id')
+    cancel($event, returnId) {
       api.getCancel(JSON.stringify({
         memberId: this.memberId,
         returnNo: returnId
@@ -136,6 +138,7 @@ export default {
         }
         this.afterList = []
         this.curPageNo = 1
+        this.loadMore()
       }, err => {
         console.log(err)
         this.$toast(err)
@@ -143,7 +146,7 @@ export default {
     },
     goHome() {
       window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
-    },
+    }
   },
   // 路由取memberId
   beforeRouteEnter (to, from, next) {
@@ -153,4 +156,3 @@ export default {
   }
 };
 </script>
-

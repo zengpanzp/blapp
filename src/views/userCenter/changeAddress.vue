@@ -35,18 +35,53 @@ export default {
       detail: '',
       provinceId: '',
       cityId: '',
-      distirctId: ''
+      distirctId: '',
+      myInfo: null
     };
   },
   created () {
   	this.$loading.close()
+    this.getMyInfo()
   },
   methods: {
+    init() {
+      console.log('start')
+      console.log(this.myInfo.provinceName + this.myInfo.cityName + this.myInfo.districtName)
+      this.selected = this.myInfo.provinceName + this.myInfo.cityName + this.myInfo.districtName
+      this.postcode = this.myInfo.postCode
+      this.detail = this.myInfo.address
+    },
+    getMyInfo(force = false) {
+      if (utils.dbGet('myInfo') && !force) {
+        this.myInfo = utils.dbGet('myInfo')
+        this.init()
+      } else {
+        api.userCenter.getMyInformation({
+          member_token: utils.dbGet('userInfo').member_token,
+          timestamp: utils.getTimeFormatToday()
+        }).then(data => {
+          if (data.body.obj) {
+            utils.dbSet('myInfo', data.body.obj)
+            this.myInfo = utils.dbGet('myInfo')
+            this.init()
+          }
+        })
+      }
+    },
   	address () {
-  		window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', {
-  			title: "aaaa",
-  			limitedProvinceIds: []
-  		}, {
+      let reqData = {
+        title: "修改地址",
+        limitedProvinceIds: []
+      }
+      if (this.myInfo.province && this.myInfo.city && this.myInfo.district) {
+        reqData.selectedAddressData = {
+          provinceId: this.myInfo.province,
+          cityId: this.myInfo.city,
+          districtId: this.myInfo.district,
+        }
+      }
+      console.log(reqData)
+  		window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', reqData, {
   			success: data => {
           console.log(data)
   				let province = JSON.parse(data).kBLAddressSelectPickerViewProvince.nm
@@ -102,9 +137,18 @@ export default {
                   message: "地址已经修改",
                   position: "bottom"
                 })
-                setTimeout(() => {
-                  this.$router.go(-1)
-                }, 2000)
+                // 地址修改后更新用户信息
+                api.userCenter.getMyInformation({
+                  member_token: utils.dbGet('userInfo').member_token,
+                  timestamp: utils.getTimeFormatToday()
+                }).then(data => {
+                  if (data.body.obj) {
+                    utils.dbSet('myInfo', data.body.obj)
+                    setTimeout(() => {
+                      this.$router.go(-1)
+                    }, 2000)
+                  }
+                })
               } else {
                 console.log(data.body.msg)
               }

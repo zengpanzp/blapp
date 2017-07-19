@@ -485,5 +485,13 @@ export const prdRouter = [
       title: '售后详情',
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/afterSaleDetail')), 'afterSaleDetail')
+  },
+  /* 曾攀 售后处理进度 */
+  {
+    path: '/returnHistoryPage/:returnNo/:returnHistory',
+    meta: {
+      title: '售后处理进度',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/returnHistoryPage')), 'returnHistoryPage')
   }
 ]

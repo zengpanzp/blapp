@@ -2,21 +2,6 @@
   <div class="wholepage">
   <!-- 上传头像 -->
   <input type="file" accept="image/*" @change="readImage" ref="file" hidden>
-  <bl-popup v-model="showModel" position="right" class="sxerji">
-    <div class="topHeader" ref="topHeader">
-      <a class="cancel" @click="showModel = false">取消</a><span>筛选</span><a class="ok" @click="[showModel = false, sureFilter()]"><svg class="icon"><use xlink:href="#icon-check"></use></svg>确认</a>
-    </div>
-    <div class="serviceWrap">
-      <div class="priceSelect">
-        <ul id="flashSale_brand">
-          <li v-for="item in brandList">
-            <input class="filter-input" type="checkbox" :value="enth" v-model="enth">
-            <a>{{ enth }}<svg class="icon"><use xlink:href="#icon-check"></use></svg></a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </bl-popup>
   <bl-actionsheet :actions="actions" v-model="sheetVisible" cancelText=""></bl-actionsheet>
    <div class="section1">
      <div class="list">
@@ -102,7 +87,6 @@ export default {
         console.log(data)
   	    if (data.body.obj) {
           let resData = JSON.parse(data.body.obj)
-          utils.dbSet('myInfo', data.body.obj)
   	    	this.nickName = resData.nickName
   	    	let y = resData.birthYear
   	    	let m = resData.birthMonth
