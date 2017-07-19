@@ -54,7 +54,6 @@ export default {
     };
   },
   created () {
-  	this.$loading.close()
     this.getMyInfo()
   },
   methods: {
@@ -91,8 +90,7 @@ export default {
         options: [{
           title: '星座',
           type: 'sys_data_mbr_constellation_type',
-          dictKeys: 'constellation',
-          list: []
+          dictKeys: 'constellation'
         }, {
           title: '爱好',
           type: 'sys_data_mbr_hobby',
@@ -111,6 +109,7 @@ export default {
               desTitle[i].options[j].currentInfo = this.inInfo(desTitle[i].options[j])
               if (i === 2 && j === 1) {
                 this.desTitle = desTitle
+                this.$loading.close()
               }
             } else {
               api.otherInfo.dictInfo({
@@ -123,6 +122,7 @@ export default {
                   desTitle[i].options[j].currentInfo = this.inInfo(desTitle[i].options[j])
                   if (i === 2 && j === 1) {
                     this.desTitle = desTitle
+                    this.$loading.close()
                   }
                 }
               })
