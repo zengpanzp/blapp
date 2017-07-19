@@ -15,7 +15,7 @@
         <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
         <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
-        <router-link to="/userCenter/mycar"><li>我的车牌<i class="iconfont arrow-back"></i></li></router-link>
+        <li @click="mycar">我的车牌<i><i class="iconfont arrow-back"></i></i></li>
         <router-link to="/userCenter/otherInfo"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
       </ul>
     </div>
@@ -57,6 +57,7 @@ export default {
     	bday: '',
     	nickName: '',
       avatarUrl: '',
+      licenseCode: '',
       sheetVisible: false,
       showModel: false,
       actions: [{
@@ -87,6 +88,9 @@ export default {
         console.log(data)
   	    if (data.body.obj) {
           let resData = JSON.parse(data.body.obj)
+          if (resData.carlicenses != '') {
+            this.licenseCode = resData.carlicenses[0].licenseCode
+          }
   	    	this.nickName = resData.nickName
   	    	let y = resData.birthYear
   	    	let m = resData.birthMonth
@@ -255,6 +259,20 @@ export default {
           nickName: this.nickName
         }
       })
+    },
+    mycar() {
+      if (this.licenseCode) {
+        this.$router.push({
+          path: 'myCar',
+          query: {
+            licenseCode: encodeURIComponent(this.licenseCode)
+          }
+        })
+      } else {
+        this.$router.push({
+          path: 'myCar'
+        })
+      }
     },
     updateGender () {
       api.userCenter.update({

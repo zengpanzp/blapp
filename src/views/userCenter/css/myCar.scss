@@ -1,8 +1,25 @@
 @import "src/sass/tobe/function";
-
+.mycar {
+	background: #fff;
+	padding: rem(20) rem(40);
+	font-size: rem(40);
+	margin-top: rem(30);
+	overflow: hidden;
+	.car-item {
+		.carPic{
+			width: rem(40);
+			margin-right: rem(30);
+		}
+	}
+	.delete {
+		width: rem(35);
+		float: right;
+		margin-top: rem(10)
+	}
+}
 .car {
 	img {
-		max-width: rem(250);
+		max-width: rem(270);
 		position: absolute;
 		top: 0;
 		bottom: 0;
@@ -12,19 +29,29 @@
 	}
 	.noCar {
 		text-align: center;
-		font-size: rem(40);
+		font-size: rem(45);
 		color: #848689;
 		padding-top: rem(780)
 	}
 }
+
 .bt {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
+	color: #848689;
+	text-align: center;
 	.remind {
-		text-align: center;
 		padding: rem(10);
-		color: #848689;
+	}
+	.detail {
+		font-size: rem(30);
+		padding: rem(30);
+		border-bottom: 1px solid #e9e9e9;
+	}
+	.error {
+		font-size: rem(40);
+		float: left;
 	}
 	#bottom {
 		border-top: 1px solid #e9e9e9;
@@ -33,5 +60,18 @@
 		.bindCar {
 			padding: rem(15) rem(15);
 		}
+	}
+	.carNo{
+		padding: rem(25) rem(15) rem(10);
+	}
+	input {
+		font-size: rem(60);
+		width: 100%;
+		text-align: center;
+		color: #000;
+		border: rem(2.1) solid #ccc;
+		border-radius: rem(10);
+		letter-spacing: rem(30);
+		font-weight: bolder
 	}
 }
