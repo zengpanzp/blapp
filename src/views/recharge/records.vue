@@ -119,6 +119,14 @@
         }
       },
       toPay(item) {
+        if (item.canpaymsg[0] == "未销账") {
+          sa.track('clickButton', {
+            buttonPage: 'APP_水电煤有线电视、铁通_查询结果页',
+            buttonName: '未缴费',
+            categoryId: 'APP_Fees',
+            $title: 'APP_水电煤有线电视、铁通_查询结果页 ' + '未缴费'
+          })
+        }
         console.log(item)
         if (item) {
           let first = item;

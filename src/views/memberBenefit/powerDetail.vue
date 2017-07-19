@@ -41,7 +41,7 @@
     <div class="freedom-details freedom-button">
         <a href="tel:4009008800" class="simple-password-buttom" v-if="power.rightCode == '009'">一键接通贵宾客服</a>
         <router-link :to="{path: '/applyShop/' + encodeURIComponent(JSON.stringify(power))}" class="simple-password-buttom" v-if="power.rightCode == '002'||power.rightCode == '004'||power.rightCode == '007'||power.rightCode == '008'">查看门店清单</router-link>
-        <a href="#" class="simple-password-buttom" v-if="power.rightCode == '011'">合作商户积分互换</a>
+        <router-link :to="{path: '/integralExchange'}" class="simple-password-buttom" v-if="power.rightCode == '011'">合作商户积分互换</router-link>
         <a href="#" class="simple-password-buttom green-button" style="display:none"
            id="appointment">快速预约</a>
         <a href="#" class="simple-password-buttom green-button" style="display:none"
@@ -166,19 +166,21 @@ export default {
         console.log("-----checkQualify--" + data.body.obj)
         if (data.body.obj) {
           let obj = JSON.parse(data.body.obj)
-          $("#count").find("label").eq(0).html(obj.memberPoint)
-                $("#count").find("label").eq(1).html(obj.remainTimes)
-                $("#count").find("label").eq(2).html(obj.usedTimes)
-                $("#count").show();
-                if (parseInt(obj.usedTimes) > 0) {
-                    $("#appointment").show()
-                    return
-                }
-                if (parseInt(obj.remainTimes) > 0) {
-                    $("#qualify").show()
-                } else {
-                    $("#qualify").removeClass("green-button").attr("disabled", "disabled").show()
-                }
+          this.$nextTick(() => {
+            $("#count").find("label").eq(0).html(obj.memberPoint)
+            $("#count").find("label").eq(1).html(obj.remainTimes)
+            $("#count").find("label").eq(2).html(obj.usedTimes)
+            $("#count").show();
+            if (parseInt(obj.usedTimes) > 0) {
+                $("#appointment").show()
+                return
+            }
+            if (parseInt(obj.remainTimes) > 0) {
+                $("#qualify").show()
+            } else {
+                $("#qualify").removeClass("green-button").attr("disabled", "disabled").show()
+            }
+          })
         } else {
           this.$toast(data.body.msg)
         }

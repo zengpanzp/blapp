@@ -248,7 +248,7 @@ export const prdRouter = [
   {
     path: '/userCenter/mycar',
     meta: {
-      title: '我的车牌'
+      title: '我的车辆'
     },
     component: r => require.ensure([], () => r(require('../views/userCenter/myCar')), 'myCar'),
   },
@@ -409,7 +409,7 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
   },
-  /* 曾攀  */
+  /* 曾攀 适用门店 */
   {
     path: '/applyShop/:power',
     meta: {
@@ -449,4 +449,41 @@ export const prdRouter = [
   },
   component: r => require.ensure([], () => r(require('../views/login/register')), 'register')
 },
+  /* 郭健 转一转 */
+  {
+    path: '/lucky/:coupon/:ruleId/:isSigninFlag',
+    meta: {
+      title: '转一转'
+    },
+    component: r => require.ensure([], () => r(require('../views/lucky/lucky')), 'lucky')
+  },
+  /* 曾攀 积分互换 */
+  {
+    path: '/integralExchange',
+    meta: {
+      title: '选择积分互换商户',
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/integralExchange')), 'integralExchange')
+  },
+  /* 曾攀 积分换入换出 */
+  {
+    path: '/exchangePoint/:index/:type',
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/exchangePoint')), 'exchangePoint')
+  },
+  /* 曾攀 售后 */
+  {
+    path: '/afterSale',
+    meta: {
+      title: '售后单列表',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/afterSale')), 'afterSale')
+  },
+  /* 曾攀 售后详情 */
+  {
+    path: '/afterSaleDetail/:returnNo/:statusName',
+    meta: {
+      title: '售后详情',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/afterSaleDetail')), 'afterSaleDetail')
+  }
 ]

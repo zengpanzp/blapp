@@ -77,6 +77,22 @@ export default {
     };
   },
   created() {
+     window.CTJSBridge.LoadMethod('changeTitle', 'Android', {
+      "type": "1",
+      "widgets": [{
+      "clickAble": true,
+      "text": "清空",
+      "widgetIndex": "1",
+      }, {
+      "text": this.$route.params.title,
+      "widgetIndex": "0",
+      }]
+    }, {
+      success: result => {
+        console.log(result)
+        this.clearAll()
+      }
+    })
   },
   methods: {
   	loadMore() {
@@ -84,7 +100,8 @@ export default {
 		this.noRows = false
 	  	let list = [];
 	  	this.typeId = this.$route.params.typeId;
-      // window.CTJSBridge._setNativeTitle(this.$route.params.title);
+      document.title = this.$route.params.title
+      window.CTJSBridge._setNativeTitle(this.$route.params.title);
       window.CTJSBridge.LoadMethod('BLMessageCenter', 'messageCenterWebViewControllerShowClearButton', {})
 	  	utils.isLogin().then(data => {
 	  		let memberId = data.member_id;

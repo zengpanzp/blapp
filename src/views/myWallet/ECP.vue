@@ -119,6 +119,17 @@ export default {
     };
   },
   created() {
+    try {
+        sa.track('$pageview', {
+          pageId: 'APP_ECP账户明细',
+          categoryId: 'APP_User',
+          $title: "ECP账户明细"
+        })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
+    document.title = "ECP账户明细"
+    window.CTJSBridge._setNativeTitle("ECP账户明细");
   },
   methods: {
     getECPList() {

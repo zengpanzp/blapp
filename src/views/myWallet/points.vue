@@ -63,6 +63,17 @@ export default {
     };
   },
   created() {
+    try {
+        sa.track('$pageview', {
+          pageId: 'APP_我的积分',
+          categoryId: 'APP_User',
+          $title: "积分明细"
+        })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
+    document.title = "积分明细"
+    window.CTJSBridge._setNativeTitle("积分明细");
   },
   methods: {
       getPointsInfo() {

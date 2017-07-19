@@ -1,7 +1,7 @@
 <style lang="scss" src="./css/_home.scss" scoped></style>
 <template>
   <div class="order-show-icon">
-    <a href="javascript:;" v-for="{type, url, icon, text} in list" @click="nativeGo(type, url)">
+    <a href="javascript:;" v-for="{type, url, icon, text} in list" @click="nativeGo(type, url, text)">
       <i :class="icon"></i>
       <p class="order-font">{{ text }}</p>
     </a>
@@ -64,16 +64,22 @@ export default {
     };
   },
   methods: {
-    nativeGo(type, url) {
+    nativeGo(type, url, text) {
+      sa.track('clickButton', {
+        buttonPage: 'APP_充值缴费首页',
+        buttonName: text + '入口',
+        categoryId: 'APP_Fees',
+        $title: 'APP_充值缴费首页 ' + text + '入口'
+      })
       utils.isLogin().then(data => {
         if (process.env.NODE_ENV !== 'production') {
-          this.$router.push({ path: url })
+          // this.$router.push({ path: `/${url}` })
           return
         }
-        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
-          type: type,
-          url: url
-        }, {})
+        // window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
+        //   type: type,
+        //   url: url
+        // }, {})
       }, (res) => {
         console.log(res)
       })

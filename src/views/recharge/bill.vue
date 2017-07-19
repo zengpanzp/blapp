@@ -387,10 +387,22 @@
       },
       showMore() {
         this.more = true;
+        sa.track('clickButton', {
+          buttonPage: 'APP_常付账单页',
+          buttonName: '更多缴费按钮',
+          categoryId: 'APP_Fees',
+          $title: 'APP_常付账单页 ' + '更多缴费按钮'
+        })
       },
       // 跳转到新增账号页面
       addAccount() {
         this.$router.push({path: "/recharge/addAccount"});
+        sa.track('clickButton', {
+          buttonPage: 'APP_常付账单页',
+          buttonName: '新增账号按钮',
+          categoryId: 'APP_Fees',
+          $title: 'APP_常付账单页 ' + '新增账号按钮'
+        })
       },
       // 选择缴费分组
       showCategory(msg) {
@@ -417,7 +429,13 @@
         }
       },
       go(obj, $event) {
-          console.log($event)
+        sa.track('clickButton', {
+          buttonPage: 'APP_常付账单页',
+          buttonName: '分组下的账号查询',
+          categoryId: 'APP_Fees',
+          $title: 'APP_常付账单页 ' + '分组下的账号查询'
+        })
+        console.log($event)
         if ($event.target.className.indexOf("menubtn") >= 0) {
             return false;
         }
@@ -519,6 +537,13 @@
         }
       },
       selectItem(item, index) {
+        console.log(item.groupName)
+        sa.track('clickButton', {
+          buttonPage: 'APP_常付账单页',
+          buttonName: '分组名称查看',
+          categoryId: 'APP_Fees',
+          $title: 'APP_常付账单页 ' + '分组名称查看'
+        })
         this.inlineLoading = this.$toast({
           iconClass: 'preloader white',
           message: '加载中',

@@ -248,7 +248,10 @@ export default {
               this.empty = true
             }
           } else {
-            this.$toast(data.body.msg)
+            this.$toast({
+              message: data.body.msg,
+              position: "bottom"
+            })
           }
         }).then(err => {
           console.log(err)

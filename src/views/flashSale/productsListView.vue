@@ -160,7 +160,7 @@ export default {
             buttons: [{
               text: '确定',
               onClick: () => {
-                this.$router.push({ path: '/flashSales' })
+                this.$router.replace({ path: '/flashSales' })
               }
             }]
           })
@@ -343,6 +343,13 @@ export default {
         })
       } catch (err) {
         console.log("sa error => " + err);
+      }
+    }
+  },
+  watch: {
+    showModel(val) {
+      if (!val) {
+        this.brandSid = []
       }
     }
   }

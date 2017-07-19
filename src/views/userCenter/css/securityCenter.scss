@@ -15,7 +15,7 @@
   li {
     font-size: rem(28);
     line-height: normal;
-    padding: 0 rem(20);
+    padding: 0 rem(30);
     background: #fff;
     line-height: rem(88);
     border-bottom: 1px solid #e9e9e9;
@@ -24,6 +24,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    .label-right{
+      color: #9e9e9e;
+    }
   }
   img {
     border-radius: 50%;
@@ -51,7 +54,7 @@
   line-height: rem(160);
 }
 
-.back-transition { 
+.back-transition {
   transition: transform .5s ease;
 }
 .back-enter{
@@ -75,7 +78,7 @@ b {
   margin-bottom: rem(.375*31.25);
   background: #fff;
   > ul{
-    max-height: rem(800);
+    height: 100%;
     overflow-y: auto;
   }
   li{

@@ -65,6 +65,12 @@
     methods: {
         // 编辑缴费分类
         edit(item) {
+          sa.track('clickButton', {
+            buttonPage: 'APP_常付账单页',
+            buttonName: '账号编辑',
+            categoryId: 'APP_Fees',
+            $title: 'APP_常付账单页 ' + '账号编辑'
+          })
           this.item = item;  // 要修改的item
           this.visible = true;
           this.groupName = item.groupName;
@@ -113,6 +119,12 @@
         },
         // 添加新的分类
         addNewGroup() {
+            sa.track('clickButton', {
+              buttonPage: 'APP_常付账单页',
+              buttonName: '分组的新增',
+              categoryId: 'APP_Fees',
+              $title: 'APP_常付账单页 ' + '分组的新增'
+            })
             if (this.newGroupName == "") {
                 this.$toast({
                   position: 'bottom',
@@ -153,6 +165,12 @@
         },
         // 删除分类
         deleteItem(item) {
+          sa.track('clickButton', {
+            buttonPage: 'APP_常付账单页',
+            buttonName: '账号删除',
+            categoryId: 'APP_Fees',
+            $title: 'APP_常付账单页 ' + '账号删除'
+          })
           // 添加分类名称
           utils.isLogin().then(user => {
               let timestamp = utils.getTimeFormatToday();

@@ -4,11 +4,11 @@
       <!-- 轮播图 -->
       <bl-slide class="evaluation-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
       <!-- end -->
-      <bl-navbar class="collection-tab flex" v-model="tabsModel">
+      <bl-navbar class="collection-tab flex" v-model="tabsModel" v-show="!$route.query.orderNo">
         <bl-tab-item class="flex-item flex-c-m" v-for="(item, index) in filterEleTabs" :id="index" @click.native="changeTab(index, item)"><span>{{ item.deployName }}({{ item.num }})</span></bl-tab-item>
       </bl-navbar>
     </div>
-    <div class="fix-height" :style="{ height: fixHeight + 'px' }"></div>
+    <div class="fix-height" :style="{ height: fixHeight + 'px' }" v-show="!$route.query.orderNo"></div>
     <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div class="goods-item flex" v-for="item in list">
         <div class="goods-img lazy-box">
@@ -115,7 +115,7 @@ export default {
               });
             }
             if (item.resourceId == 1225) {
-              window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', item.advList[0])
+              item.advList[0] && window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', item.advList[0])
             }
           }
         }
@@ -182,7 +182,7 @@ export default {
       if (data.body.obj) {
         let obj = data.body.obj.replace(/http:\/\//g, "https://")
         let resData = JSON.parse(obj)
-        if (resData && resData.resultInfo) {
+        if (resData && resData.resultInfo && resData.resultInfo.rows) {
           let resRow = resData.resultInfo.rows
           if (resRow && resRow.length) {
             this.loading = true

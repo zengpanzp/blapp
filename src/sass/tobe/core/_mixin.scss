@@ -212,7 +212,20 @@
 
 // px转rem
 @function rem($px, $remBase: $remBase) {
-  @return ($px / $remBase) * 1rem;
+  @if $px > 0 {
+    @if $px <= 2 {
+      @return 1px
+    } @else {
+      @return ($px / $remBase) * 1rem;
+    }
+  } @else {
+    @return ($px / $remBase) * 1rem;
+  }
+  // $px <= 2 {
+  //   @return 1px
+  // } @else {
+  //   @return ($px / $remBase) * 1rem;
+  // }
 }
 
 // 为颜色添加白色，以百分比形式
