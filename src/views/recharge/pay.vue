@@ -133,6 +133,12 @@
       },
       // 去支付
       goPay() {
+          sa.track('clickButton', {
+            buttonPage: 'APP_水电煤有线电视、铁通_订单确认页',
+            buttonName: '立即支付',
+            categoryId: 'APP_Fees',
+            $title: 'APP_水电煤有线电视、铁通_订单确认页 ' + '立即支付'
+          })
           let current = this
           this.inlineLoading = this.$toast({
             iconClass: 'preloader white',
