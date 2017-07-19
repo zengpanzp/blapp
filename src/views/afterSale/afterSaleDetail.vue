@@ -233,6 +233,7 @@ export default {
         this.returnNo = this.$route.params.returnNo
         this.statusName = decodeURIComponent(this.$route.params.statusName)
     }
+    this.getReturnDetail()
   },
   methods: {
     getReturnDetail() {
@@ -242,6 +243,8 @@ export default {
         }).then(data => {
           this.$loading.close()
           console.log("detail", data.body.obj)
+          if (data.body.obj) {
+          }
         }, err => {
           console.log(err)
         })

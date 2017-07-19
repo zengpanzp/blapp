@@ -25,6 +25,6 @@ export default {
     return Vue.http.post(baseUrl + '/order/cancelReturn.htm', params)
   },
   getDetail: params => {
-    return Vue.http.post(baseUrl + '/order/getReturnList.htm', params)
+    return Vue.http.post(baseUrl + '/order/getReturn.htm', params)
   }
 }

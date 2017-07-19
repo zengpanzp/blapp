@@ -61,7 +61,7 @@ export default {
       console.log("sa error => " + err);
     }
     this.memberId = utils.dbGet('userInfo').member_id
-  	this.getStatus()
+    this.getStatus()
   },
   methods: {
     getStatus() {
@@ -84,6 +84,7 @@ export default {
     loadMore() {
       this.busy = true
       this.noList = false
+      debugger
       api.getList({
         memberId: this.memberId,
         currentPage: this.curPageNo++,
@@ -97,13 +98,13 @@ export default {
             this.totalPage = obj.pages
             let list = obj.list
             if (this.curPageNo <= this.totalPage) {
-              this.afterList = this.afterList.concat(list)
               this.busy = false
               this.loading = true
             } else {
               this.busy = true
               this.loading = false
             }
+            this.afterList = this.afterList.concat(list)
           } else {
             this.noList = true
           }
@@ -156,4 +157,3 @@ export default {
   }
 };
 </script>
-
