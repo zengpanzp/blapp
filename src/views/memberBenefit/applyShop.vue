@@ -31,7 +31,7 @@
             <img src="./i/doorlist-adress.png"></div>
             <p class="logo-store" v-if="item.curUsableStock && item.curUsableStock == 0">已借光了</p>
             <p class="logo-store" v-if="item.curUsableStock && item.curUsableStock != 0">还剩{{item.curUsableStock}}把</p>
-            <p class="logo-store store-park" :id="item.index" @click="goPacking($event)" v-if="type == '6'">查看停车</p>
+            <p class="logo-store store-park"  @click="goPacking($event, item.index)" v-if="type == '6'">查看停车</p>
         </div>
       </li>
       </ul>
@@ -381,16 +381,14 @@ export default {
           return distance
       }
     },
-    goPacking($event) {
+    goPacking($event, index) {
       $event.stopPropagation()
-      let id = $event.currentTarget.id
-      let store = this.storeList[id]
+      let store = this.storeList[index]
       store.varCharge = '暂无';
       if (store.charge != null && store.charge != '') {
           store.varCharge = store.charge;
       }
       let arr = store.o2oList.split(' ');
-      console.log(arr)
       store.hasFindCar = 0;
       store.hasPayCarFee = 0;
       if (arr.indexOf('7') > -1) {
@@ -399,9 +397,10 @@ export default {
       if (arr.indexOf('8') > -1) {
           store.hasPayCarFee = 1;
       }
+      console.log("dfadfd", JSON.stringify(store))
       window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
         pageId: 'parkinglotInfo',
-        params: encodeURIComponent(JSON.stringify(store))
+        params: JSON.stringify(store)
       })
     }
   }
