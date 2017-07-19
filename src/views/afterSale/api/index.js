@@ -24,7 +24,12 @@ export default {
   getCancel: params => {
     return Vue.http.post(baseUrl + '/order/cancelReturn.htm', params)
   },
+  // 曾攀 查看售后订单详情
   getDetail: params => {
     return Vue.http.post(baseUrl + '/order/getReturn.htm', params)
+  },
+  // 曾攀 查看售后
+  queryConfig: params => {
+    return Vue.http.post(baseUrl + '/dict/list.htm', params)
   }
 }
