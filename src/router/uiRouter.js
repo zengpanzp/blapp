@@ -16,6 +16,15 @@ export const uiRouter = [
       title: '引导页',
       isWeb: true
     },
-    component: r => require.ensure([], () => r(require('../views/UI/guide.vue')), 'guide')
+    component: r => require.ensure([], () => r(require('../views/UI/guide')), 'guide')
+  },
+  {
+    path: '/calendar',
+    meta: {
+      title: '日历',
+      isWeb: true,
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../components/iBailianApp/calendar/calendar')), 'calendar')
   }
 ]
