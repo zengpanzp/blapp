@@ -23,5 +23,8 @@ export default {
   // 曾攀 取消售后订单
   getCancel: params => {
     return Vue.http.post(baseUrl + '/order/cancelReturn.htm', params)
+  },
+  getDetail: params => {
+    return Vue.http.post(baseUrl + '/order/getReturn.htm', params)
   }
 }
