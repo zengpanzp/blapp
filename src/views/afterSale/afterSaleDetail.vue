@@ -214,21 +214,44 @@
 </template>
 
 <script>
+import api from './api'
+import utils from 'src/utils'
 export default {
 
   name: 'afterSaleDetail',
 
   data () {
     return {
-
+        returnNo: '',
+        statusName: '',
+        memberId: ''
     };
   },
   created() {
-  	this.$loading.close()
-    console.log(this.$route.params)
+    this.memberId = utils.dbGet('userInfo').member_id
+    if (this.$route.params.returnNo && this.$route.params.statusName) {
+        this.returnNo = this.$route.params.returnNo
+        this.statusName = decodeURIComponent(this.$route.params.statusName)
+    }
   },
   methods: {
-
+    getReturnDetail() {
+        api.getDetail({
+          memberId: this.memberId,
+          returnNo: this.returnNo
+        }).then(data => {
+          this.$loading.close()
+          console.log("detail", data.body.obj)
+        }, err => {
+          console.log(err)
+        })
+    }
+  },
+  // 路由取memberId
+  beforeRouteEnter (to, from, next) {
+    utils.isLogin().then(user => {
+      next()
+    })
   }
 };
 </script>
