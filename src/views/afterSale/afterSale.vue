@@ -84,7 +84,6 @@ export default {
     loadMore() {
       this.busy = true
       this.noList = false
-      debugger
       api.getList({
         memberId: this.memberId,
         currentPage: this.curPageNo++,
