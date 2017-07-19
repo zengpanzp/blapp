@@ -43,7 +43,8 @@ export default {
         1: "sf",  // 水费
         2: "dl",  // 电费
         3: "mq"   // 煤气
-      }
+      },
+      results: null
     }
   },
   mounted() {
@@ -129,30 +130,18 @@ export default {
         timestamp: timestamp,
         token: this.memberToken
       }
+      console.log(JSON.stringify(queryData))
       // 获取内容
       api.recharge.getGoodsDetail(queryData).then(data => {
         if (data.body.resCode == "00100000") {
           let json = JSON.parse(data.body.obj);
-          delete json.Result_code;
-          let results = [];
-          for (let obj in json) {
-            if (json[obj] && json[obj].date) {
-              json[obj].date = json[obj].date.toString().substring(0, 4) + '-' + json[obj].date.toString().substring(4);
-            }
-            if (json[obj] && json[obj].Result_code == "200") {
-              results.unshift(json[obj]);
-            } else {
-              results.push(json[obj]);
+          console.log(json)
+          for (let i in json) {
+            console.log(json[i].canpay ? json[i].canpay[0] == '01' : '无')
+            if (json[i].canpay && json[i].canpay[0] == '01' && json[i] != '200') {
+              this.billCount ++
             }
           }
-          this.results = results;
-          results.forEach((obj, i) => {
-            if (obj) {
-              if (obj.canpay && obj.canpay[0] == "01") { // 存在未交账单
-                this.billCount += 1;
-              }
-            }
-          })
           this.billLength += 1;
           if (this.billLength == this.allLength) {
             this.hasFinish = true;
@@ -251,7 +240,7 @@ export default {
             if (data.result == "fail") {
               this.$toast({
                 position: 'bottomTop',
-                message: data.msg
+                message: '已取消'
               });
             }
         }
