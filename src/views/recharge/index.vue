@@ -7,9 +7,11 @@
         <p>扫一扫</p>
       </a>
       <router-link :to="{ path: 'recharge/bill' }" class="wallet-hd-cell">
-        <span class="ss-icon" v-show="billCount>0 && hasFinish">{{billCount}}</span>
-        <img class="hd-cell-icon" src="./i/index/bill-index-icon2.png" alt="">
-        <p>付账单</p>
+        <div @click="bill">
+          <span class="ss-icon" v-show="billCount>0 && hasFinish">{{billCount}}</span>
+          <img class="hd-cell-icon" src="./i/index/bill-index-icon2.png" alt="">
+          <p>付账单</p>
+        </div>
       </router-link>
     </div>
     <!--通用菜单-->
@@ -54,46 +56,54 @@ export default {
         timestamp: timestamp,
         member_token: user.member_token
       }).then(data => {
-        let json = JSON.parse(data.body.obj);
-        this.groupList = json.list;
-        let allLength = 0;
-        this.groupList.forEach((obj) => {
-          api.recharge.queryPaySubNo({
-            "member_token": user.member_token,
-            "groupId": obj.id,
-            "timestamp": timestamp
-          }).then(data => {
-            let json = JSON.parse(data.body.obj);
-            json.list.forEach((obj, i) => {
-              allLength += 1;
-              this.allLength = allLength;
-              // 水电煤的
-              if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
-                switch (obj.paymentType) {
-                  case "20" :  // 水费
-                  case "01" :  // 水费
-                    this.queryBill(obj, 1);
-                    break;
-                  case "21" :  // 电费
-                  case "02" :  // 水费
-                    this.queryBill(obj, 2);
-                    break;
-                  case "22" :  // 煤气
-                  case "03" :  // 水费
-                    this.queryBill(obj, 3);
-                    break;
-                }
+        if (data.body.obj) {
+          let json = JSON.parse(data.body.obj);
+          this.groupList = json.list;
+          let allLength = 0;
+          this.groupList.forEach((obj) => {
+            api.recharge.queryPaySubNo({
+              "member_token": user.member_token,
+              "groupId": obj.id,
+              "timestamp": timestamp
+            }).then(data => {
+              if (data.body.obj) {
+                let json = JSON.parse(data.body.obj);
+                json.list.forEach((obj, i) => {
+                  allLength += 1;
+                  this.allLength = allLength;
+                  // 水电煤的
+                  if (obj.paymentType == "21" || obj.paymentType == "22" || obj.paymentType == "23" || obj.paymentType == "01" || obj.paymentType == "02" || obj.paymentType == "03") {
+                    switch (obj.paymentType) {
+                      case "20" :  // 水费
+                      case "01" :  // 水费
+                        this.queryBill(obj, 1);
+                        break;
+                      case "21" :  // 电费
+                      case "02" :  // 水费
+                        this.queryBill(obj, 2);
+                        break;
+                      case "22" :  // 煤气
+                      case "03" :  // 水费
+                        this.queryBill(obj, 3);
+                        break;
+                    }
+                  }
+                });
+              } else {
+                alert(0)
               }
             });
           });
-        });
+        } else {
+          this.$toast(data.body.msg)
+        }
       });
     })
     sa.track('$pageview', {
       pageId: 'APP_充值缴费首页',
       categoryId: 'APP_Fees',
       $title: 'APP_充值缴费首页',
-    });
+    })
     let show = localStorage.getItem("BL_RECHARGE_INDEX_TIPS") || 0
     this.show = show != 1;
     this.$loading.close()
@@ -157,6 +167,12 @@ export default {
     },
     // 扫一扫
     scanner() {
+      sa.track('clickButton', {
+        buttonPage: 'APP_充值缴费首页',
+        buttonName: '扫码缴费入口',
+        categoryId: 'APP_Fees',
+        $title: 'APP_充值缴费首页 ' + '扫码缴费入口'
+      })
       window.CTJSBridge && window.CTJSBridge.LoadMethod('BLBarScanner', 'presentH5BLBarScanner', '', {
         success: data => {
           data = JSON.parse(data);
@@ -239,6 +255,14 @@ export default {
               });
             }
         }
+      })
+    },
+    bill() {
+      sa.track('clickButton', {
+        buttonPage: 'APP_充值缴费首页',
+        buttonName: '付账单入口',
+        categoryId: 'APP_Fees',
+        $title: 'APP_充值缴费首页 ' + '付账单入口'
       })
     }
   }

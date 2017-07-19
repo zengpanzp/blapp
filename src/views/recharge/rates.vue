@@ -198,6 +198,12 @@
       },
       // 选择缴费分组
       showCategory() {
+          sa.track('clickButton', {
+            buttonPage: 'APP_常付账单页',
+            buttonName: '更变分组',
+            categoryId: 'APP_Fees',
+            $title: 'APP_常付账单页 ' + '更变分组'
+          })
           this.toShow = false;
           this.loadGroup = true;
           this.$router.push({path: "/recharge/rates/" + this.rateType + "/category"});
