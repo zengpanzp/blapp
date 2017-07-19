@@ -26,10 +26,10 @@
                 </li>
                 <li>
                     <div class="joint-input j-input">
-                        <input v-model="imgCode" type="text" placeholder="请输入验证码" class="j-code">
+                        <input v-model="imgCodeInput" type="text" placeholder="请输入验证码" class="j-code">
                     </div>
-                    <div class="joint-code joint-code2">
-                        {{generateImg()}}
+                    <div @click="generateImg" class="joint-code joint-code2">
+                        {{imgCode}}
                     </div>
                 </li>
                 <li>
@@ -47,12 +47,12 @@
             </ul>
             <div class="joint-login-checkbox">
                 <label>
-                    <input type="checkbox" checked=""> <span>同意百联会员注册协议</span></label>
+                    <input type="checkbox" v-model="hasChecked"> <span>同意百联会员注册协议</span></label>
             </div>
         </div>
     </div>
     <div class="submitBind">
-      <input type="button" @click="register" class="joint-submit" value="立即注册">
+      <input type="button" @click.stop="register" class="joint-submit" value="立即注册">
     </div>
     <a class="hasAccount" href="/#/login">已有百联通账户？直接登录</a>
     <!-- content end -->
@@ -66,7 +66,9 @@
     name: 'register',
     data() {
       return {
+        hasChecked: true,
         mobile: '', // 手机号
+        imgCodeInput: '', // 图片验证码
         imgCode: '', // 图片验证码
         smsCode: '', // 短信验证码
         pass: '',     // 密码
@@ -75,9 +77,12 @@
       }
     },
     created() {
+      this.backUrl = this.$route.query.backUrl;
       this.$loading.close();
+      this.generateImg();
     },
     mounted() {
+      this.$loading.close();
     },
     methods: {
       generateImg() {
@@ -100,35 +105,100 @@
           code += arrays[r];
         }
         this.imgCode = code;
-        return code;
       },
       // 立即注册
       register() {
-        api.register({
-          telNo: this.mobile,
-          password: MD5(this.pass),
-          smsCode: this.smsCode,
-          store_id: "",
-          buid: "",
-          reg_type: "",
-          picCode: this.imgCode
-        }).then(data => {
-            console.log(data)
+        if (this.validate()) {
+          // 验证手机号唯一性
+          api.validatePhone({
+            loginId: this.mobile
+          }).then(data => {
+            let json = JSON.parse(data.body.obj);
+            if (json.resCode == "05111008") {
+              this.$toast({
+                position: 'bottom',
+                message: "手机号已经被注册!"
+              });
+            } else {
+              api.register({
+                appName: "h5",
+                appVersion:	"",
+                channelId: "1",
+                email: "",
+                loginId: this.mobile,
+                mobile: this.mobile,
+                mobileType: "",
+                password:	MD5(this.pass),
+                pwdStrength: "2",
+                requestId: "",
+                smsCode: this.smsCode,
+                snNo: "",
+                sysid: "1103"
+              }).then(data => {
+                console.log(data)
+                let json = JSON.parse(data.body.obj);
+                if (json.resCode == "00100000") { // 注册成功
+                  this.$router.push({path: 'login?backUrl=' + this.backUrl})
+                }
+              });
+            }
+          });
+        }
+      },
+      alertTip(msg) {
+        this.$toast({
+          position: 'bottom',
+          message: msg
         });
+      },
+      // 验证填写的基本信息
+      validate() {
+        let msg = "";
+        if (this.valPhone(this.mobile)) {
+          if (this.imgCodeInput == "") {
+              msg = "验证码不能为空!";
+              this.alertTip(msg);
+              return false;
+          }
+          if (this.imgCode.toLowerCase() != this.imgCodeInput.trim().toLowerCase()) {
+            msg = "验证码输入不正确!";
+            this.alertTip(msg);
+            return false;
+          }
+          if (this.smsCode == "") {
+            msg = "短信验证码不能为空!";
+            this.alertTip(msg);
+            return false;
+          }
+          if (this.pass == "") {
+            msg = "密码不能为空!";
+            this.alertTip(msg);
+            return false;
+          }
+          if (this.pass.length < 8) {
+            msg = "密码长度不能少于8位!";
+            this.alertTip(msg);
+            return false;
+          }
+          if (!this.hasChecked) {
+            msg = "注册百联通账号需同意注册协议!";
+            this.alertTip(msg);
+            return false;
+          }
+        } else {
+            return false;
+        }
+        return true;
       },
       // 验证手机号
       valPhone(phone) {
         if (phone == "") {
-          this.$toast({
-            position: 'bottom',
-            message: "手机号不能为空!"
-          });
+          this.alertTip("手机号码不能为空!");
+          console.log("====false")
           return false;
-        } else if (!/^1[34578]\d{9}$/.test(phone)) {
-          this.$toast({
-            position: 'bottom',
-            message: "手机号码有误!"
-          });
+        }
+        if (phone && !/^1[34578]\d{9}$/.test(phone)) {
+          this.alertTip("手机号码有误!");
           return false;
         }
         return true;
@@ -136,7 +206,7 @@
       // 获取短信验证码
       getSMSCode() {
         if (this.mobile && /^1[34578]\d{9}$/.test(this.mobile)) {
-          api.sendSMSCode({
+          api.sendSMSCodeByRegister({
             mobile: this.mobile
           }).then(data => {
             let json = JSON.parse(data.body.obj);

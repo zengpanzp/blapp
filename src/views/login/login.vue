@@ -41,7 +41,7 @@
             </li>
           </ul>
         </div>
-        <div class="bottom"><input class="circle-select" v-model="checked" id="checkbox" type="checkbox" ><label class="tips" for="checkbox">两周内免登录</label> <label>忘记密码?</label></div>
+        <div class="bottom"><input class="circle-select" v-model="checked" id="checkbox" type="checkbox" ><label class="tips" for="checkbox">两周内免登录</label> <label @click="forget">忘记密码?</label></div>
       </bl-tab-container-item>
       <bl-tab-container-item :id="1">
         <!--短信验证码登录-->
@@ -207,7 +207,11 @@
       },
       // 去注册
       register() {
-        this.$router.push({path: 'register'})
+        this.$router.push({path: 'register?backUrl=' + this.backUrl})
+      },
+      // 忘记密码
+      forget() {
+        this.$router.push({path: 'findpass/1'})
       }
     }
   };

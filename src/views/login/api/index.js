@@ -20,16 +20,32 @@ export default {
   sendSMSCode: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/sendRegisterOrLoginValidateCodeMessage.htm', params);
   },
+  // 注册的短信验证码
+  sendSMSCodeByRegister: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/jn/sendRegisterValidateCodeMessage.htm', params);
+  },
+  // 重置密码的短信验证码
+  sendSMSCodeByResetPass: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/sendResetPasswordValidateCodeMessage.htm', params);
+  },
+  // 重置密码验证短信验证码的有效性
+  validatePasswordSMSCode: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/verifyPasswordSmsCode.htm', params);
+  },
+  // 重置密码
+  resetPassword: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/resetPasswordBySmsCode.htm', params);
+  },
   // 根据短信验证码登录
   loginWithSmsCode: params => {
     return Vue.http.post(baseUrl + '/member/login.htm', params);
   },
   // 注册账号
   register: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/jn/appWeixinRegister', params);
+    return Vue.http.post(baseUrl + '/baseinfo/jn/appWeixinRegister.htm', params);
   },
-  // 注册账号
+  // 验证唯一性手机号
   validatePhone: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/jn/checkPhoneUnique', params);
+    return Vue.http.post(baseUrl + '/baseinfo/jn/checkPhoneUnique.htm', params);
   }
 }
