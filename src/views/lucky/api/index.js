@@ -8,6 +8,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 export default {
 // 转一转
-  lucky: {
-    }
+  // 抽奖券设置信息查询接口
+  queryLuckySetting: params => {
+    return Vue.http.post(baseUrl + '/coupon/querySettigCampDrawCoupons.htm', params);
+  },
   }
