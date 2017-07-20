@@ -69,10 +69,19 @@ export default {
       }
     },
   	address () {
-  		window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', {
-  			title: "修改地址",
-  			limitedProvinceIds: []
-  		}, {
+      let reqData = {
+        title: "修改地址",
+        limitedProvinceIds: []
+      }
+      if (this.myInfo.province && this.myInfo.city && this.myInfo.district) {
+        reqData.selectedAddressData = {
+          provinceId: this.myInfo.province,
+          cityId: this.myInfo.city,
+          districtId: this.myInfo.district,
+        }
+      }
+      console.log(reqData)
+  		window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', reqData, {
   			success: data => {
           console.log(data)
   				let province = JSON.parse(data).kBLAddressSelectPickerViewProvince.nm

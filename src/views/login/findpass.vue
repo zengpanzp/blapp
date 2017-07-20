@@ -9,7 +9,7 @@
         </a>
       </div>
       <div class="title">
-        <img src="./i/bl3.png" alt=""> 找回密码
+        <img src="./i/bl3.png" alt=""> 重置密码
       </div>
     </header>
     <!-- header end -->
@@ -22,15 +22,17 @@
             <ul>
               <li>
                 <div class="joint-input j-input">
-                  <input type="tel" maxlength="11" placeholder="请输入手机号码" class="j-login">
+                  <input  type="tel" maxlength="11" placeholder="请输入手机号码" class="j-login">
                 </div>
               </li>
-              <div class="joint-input j-input">
-                <input type="text" placeholder="请输入验证码" class="j-code">
-              </div>
-              <div class="joint-code joint-code2">
-                <img src="images/Joint-login/yzcode.png">
-              </div>
+              <li>
+                <div class="joint-input j-input">
+                  <input  v-model="imgCodeInput" type="text" placeholder="请输入验证码" class="j-code">
+                </div>
+                <div @click="generateImg" class="joint-code joint-code2">
+                    {{imgCode}}
+                </div>
+              </li>
             </ul>
           </div>
         </bl-tab-container-item>
@@ -84,6 +86,7 @@
     name: 'login',
     data() {
       return {
+        imgCode: "",
         step: 1, // 找回密码步骤
         checked: true, // 默认是否2周免登录
         tabsModel: 1, // tab 默认第一个
@@ -92,6 +95,7 @@
       }
     },
     created() {
+      this.generateImg();
       this.step = parseInt(this.$route.params.step);
       this.tabsModel = this.step;
       let pre = this.step - 1;
@@ -112,6 +116,27 @@
     mounted() {
     },
     methods: {
+      generateImg() {
+        // 验证码组成库
+        var arrays = [
+          '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+          'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+          'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+          'u', 'v', 'w', 'x', 'y', 'z',
+          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+          'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+          'U', 'V', 'W', 'X', 'Y', 'Z'
+        ];
+        // 重新初始化验证码
+        let code = '';
+        // 随机从数组中获取四个元素组成验证码
+        for (let i = 0; i < 4; i++) {
+          // 随机获取一个数组的下标
+          let r = parseInt(Math.random() * arrays.length);
+          code += arrays[r];
+        }
+        this.imgCode = code;
+      },
         next() {
           this.tabsModel += 1;
           this.step = this.tabsModel;
