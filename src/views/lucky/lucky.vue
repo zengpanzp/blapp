@@ -4,7 +4,7 @@
 		<div class="new main">
 		    <div class="message">
 		        <div class="txt" v-if="ruleId == 1"><i></i>每人一次，祝你好运~</div>
-		        <div class="txt" v-else><i></i>今天还有 <span class="yellow">{{remainMaxNumUserDay}}</span> 次机会哟~~</div>
+		        <div class="txt" v-else><i></i>今天还有 <span class="yellow">{{remain}}</span> 次机会哟~~</div>
 		    </div>
 		    <div class="lottery-list">
 		        <dl id="lottery">
@@ -34,25 +34,25 @@
 		        </div>
 		    </div>
 		</div>
-		<div class="mask" v-if="maskFlag"></div>
-		<div class="modal modal-out not-change" id="modal-success">
-		    <div class="modal-close"></div>
+		<div class="mask" v-if="successFlag || errorFlag || failFlag"></div>
+		<div class="modal not-change" id="modal-success" :class="{ 'modal-in' : successFlag , 'modal-out' : !successFlag }">
+		    <div class="modal-close" @click="closeMask"></div>
 		    <div class="modal-inner">
 		        <div class="modal-title">哇，抽到了！</div>
 		        <div class="modal-text">
 		            <div class="modal-img">
 		                <img src="./i/lucky-ok.png">
 		            </div>
-		            <p class="shake-text"><span class="color-red"></span></p>
+		            <p class="shake-text"><span class="color-red">{{couponName}}</span></p>
 		        </div>
 		    </div>
 		    <div class="modal-buttons shake-buttons">
-		        <a class="modal-button active" data-role="none">关闭</a>
-		        <a id="coupon" class="modal-button" data-role="none">我的优惠券</a>
+		        <a class="modal-button active" data-role="none" @click="closeMask">关闭</a>
+		        <a id="coupon" class="modal-button" data-role="none" @click="goCoupon">我的优惠券</a>
 		    </div>
 		</div>
-		<div class="modal modal-out not-change" id="modal-fail">
-		    <div class="modal-close"></div>
+		<div class="modal not-change" id="modal-fail" :class="{ 'modal-in' : failFlag , 'modal-out' : !failFlag }">
+		    <div class="modal-close" @click="closeMask"></div>
 		    <div class="modal-inner">
 		        <div class="modal-title">啊哟，没有抽中~</div>
 		        <div class="modal-text">
@@ -61,11 +61,11 @@
 		            </div>
 		        </div>
 		    </div>
-		    <div class="modal-buttons shake-buttons">
+		    <div class="modal-buttons shake-buttons" @click="closeMask">
 		        <a class="modal-button active" data-role="none">关闭</a>
 		    </div>
 		</div>
-		<div class="modal not-change" id="modal-error" :class="{ 'modal-in' : maskFlag , 'modal-out' : !maskFlag }">
+		<div class="modal not-change" id="modal-error" :class="{ 'modal-in' : errorFlag , 'modal-out' : !errorFlag }">
 		    <div class="modal-close" @click="closeMask"></div>
 		    <div class="modal-inner">
 		        <div class="modal-title">{{errorTitle}}</div>
@@ -106,8 +106,11 @@ export default {
     	enableTimeTo: "",
     	rulerFlag: false,
     	remainMaxNumUserDay: "",
-    	maskFlag: false,
+    	errorFlag: false,
     	errorTitle: "",
+    	successFlag: false,
+    	couponName: "",
+    	failFlag: false,
     	showPic: []
     };
   },
@@ -182,11 +185,9 @@ export default {
   				for (let i = 0; i < obj.campDrawCoupons.length; i++) {
                 	list.push(obj.campDrawCoupons[i])
                 	this.showPic.push(list[i].showPic)
-                    // list[parseInt(obj.campDrawCoupons[i].showWeight) - 1] = JSON.parse(JSON.stringify(obj.campDrawCoupons[i]));
                 }
                 if (this.ruleId != '1') {
                     this.remain = parseInt(obj.remainMaxNumUserDay);
-                    this.remainMaxNumUserDay = obj.remainMaxNumUserDay
                 }
   				$("#lucky").css({
                     "background": "url(" + obj.backPic + ")" + obj.backColor,
@@ -207,18 +208,18 @@ export default {
   				this.enableTimeTo = obj.enableTimeTo
   				this.rulerFlag = true
   				if (obj.remainMaxNumUser != 0 && obj.remainMaxNumUserDay == 0) {
-                    this.maskFlag = true
+                    this.errorFlag = true
                     this.errorTitle = "抽奖次数当天已用完"
                     return;
                 }
                 if (obj.remainMaxNumUser == 0) {
-                    this.maskFlag = true
+                    this.errorFlag = true
                     this.errorTitle = "抽奖总次数已用完"
                     return;
                 }
                 this.bindRoll();
   			} else {
-  				this.maskFlag = true
+  				this.errorFlag = true
   				this.errorTitle = data.body.msg
   			}
   		}, err => {
@@ -226,9 +227,50 @@ export default {
   		})
   	},
   	getCoupon: function () {
+  		let requestData = {
+	  		userToken: this.memberToken,
+	        acquireChannel: "1",
+	        drawType: "3",
+	        drawId: this.ruleId
+	  	}
+	  	if (this.isSigninFlag == 'Y') {
+	        requestData.isSigninFlag = 'Y'
+	    }
+	    if (this.ruleId == '1') {
+            requestData.couponTemplateId = this.coupon.couponTemplateId;
+            requestData.couponCode = this.coupon.couponCode;
+            requestData.drawType = "0";
+        }
+        api.getCoupon(
+        	JSON.stringify(requestData)
+        ).then(data => {
+        	if (data.body.obj) {
+        		let obj = JSON.parse(data.body.obj)
+        		console.log(obj)
+        		if (this.ruleId != '1') {
+                    this.remain = parseInt(obj.remainMaxNumUserDay);
+                } else {
+                    this.remain--;
+                }
+                this.roll(obj);
+        	} else {
+        		if (data.body.resCode == "04111035" || data.body.msg.indexOf("不好意思，刚好未中奖") != -1) {
+        			this.click = false;
+        			this.remain--;
+        			this.roll()
+        		} else {
+        			this.errorFlag = true
+  					this.errorTitle = data.body.msg
+        		}
+        	}
+        }, err => {
+        	console.log(err)
+        })
   	},
   	closeMask: function () {
-  		this.maskFlag = false
+  		this.errorFlag = false
+  		this.successFlag = false
+  		this.failFlag = false
   	},
   	bindRoll: function () {
         // var current = this;
@@ -280,7 +322,7 @@ export default {
             this.lottery.prize = -1;
             this.lottery.times = 0;
             this.click = false;
-            // this.showCoupon(coupon);
+            this.showCoupon(coupon);
             return false;
         }
         if (this.lottery.times < this.lottery.cycle) {
@@ -305,6 +347,23 @@ export default {
         this.lottery.timer = setTimeout(function () {
             current.roll(coupon);
         }, this.lottery.speed);
+    },
+    showCoupon: function (coupon) {
+    	if (coupon && coupon.couponTemplateId != "-1") {
+    		this.successFlag = true
+    		this.couponName = coupon.couponName
+        } else {
+            this.failFlag = true
+        }
+    },
+    goCoupon: function () {
+    	if (this.ruleId != "1") {
+    		window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+	            pageId: 'couponEcard',
+	            params: { type: 0 }
+	        })
+    	} else {
+    	}
     }
   }
 };

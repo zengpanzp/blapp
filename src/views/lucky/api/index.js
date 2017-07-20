@@ -12,4 +12,8 @@ export default {
   queryLuckySetting: params => {
     return Vue.http.post(baseUrl + '/coupon/querySettigCampDrawCoupons.htm', params);
   },
+  // 抽奖接口
+  getCoupon: params => {
+    return Vue.http.post(baseUrl + '/coupon/getCouponByDraw.htm', params);
+  },
   }
