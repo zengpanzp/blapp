@@ -27,7 +27,7 @@
 				</div>
 			</div>
 			<div class="bindCar">
-				<bl-button @click="bindCar">绑定车辆</bl-button>
+				<bl-button @click="bindCar" :disabled="licenseCode">绑定车辆</bl-button>
 			</div>
 		</div>
 	</div>
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import api from './api'
+import utils from 'src/utils'
 export default {
 
   name: 'myCar',
@@ -42,8 +44,22 @@ export default {
   data () {
     return {
     	input: '', // 输入的车牌号
-    	bind: false,
-    	licenseCode: ''
+    	bind: false, // 是否已绑定
+    	licenseCode: '', // 绑定的车牌号
+      buttons: [{
+        text: '取消',
+        onClick: () => {
+          this.$toast({
+            message: '已取消',
+            position: "bottom"
+          })
+        }
+      }, {
+        text: '确定',
+        onClick: () => {
+          this.unbind()
+        }
+      }]
     };
   },
   created () {
@@ -54,38 +70,74 @@ export default {
   		this.licenseCode = false
   	}
   	this.$loading.close()
+    try {
+      sa.track('$pageview', {
+        pageId: 'APP_我的车牌',
+        categoryId: 'APP_User',
+        $title: 'APP_我的车牌'
+      })
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
   },
   methods: {
   	bindCar() {
-  		this.bind = !this.bind
-  		if (this.bind) {
-  			// 绑定车牌
-  		}
+      this.bind = !this.bind
+      let reg = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/
+  		if (!this.bind && reg.test(this.input)) {
+        utils.isLogin().then(data => {
+          let memberToken = data.member_token
+          console.log(this.input)
+          api.userCenter.modifyCar({
+            member_token: memberToken,
+            carLicense: this.input,
+            actionType: 1
+          }).then(data => {
+            console.log(data)
+            this.licenseCode = this.input
+          })
+        })
+  		} else {
+        if (!this.bind) {
+          this.$toast({
+            message: '请输入正确的车牌号！',
+            position: "bottom"
+          })
+        }
+      }
   	},
   	close() {
   		this.bind = false
   	},
   	remove() {
-  		window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
-  		  title: "提示",
-  		  message: "确认解除绑定？",
-  		  buttons: [
-  		  {
-  		    title: "取消"
-  		  }, {
-  		    title: "确定",
-  		    style: "highlighted"
-  		  }]
-  		}, { success: data => {
-	  		  console.log("####success#####" + data)
-	  		  let bd = JSON.parse(data)
-	  		  let button = bd.buttonTitle
-	  		  if (button == "确定") {
-	  		  	console.log(button)
-	  		  }
-  		  }
-  		})
-  	}
+      this.$modal({
+        title: '提示',
+        content: '确定解除绑定？',
+        buttons: this.buttons
+      })
+  	},
+    unbind() {
+      utils.isLogin().then(data => {
+        let memberToken = data.member_token
+        api.userCenter.modifyCar({
+          member_token: memberToken,
+          carLicense: this.licenseCode,
+          actionType: 2
+        }).then(data => {
+          console.log(data.body.resCode)
+          let resCode = data.body.resCode
+          if (resCode == '00100000') {
+            // 解绑成功
+            this.licenseCode = false
+          } else {
+            this.$toast({
+              message: data.body.msg,
+              position: "bottom"
+            })
+          }
+        })
+      })
+    }
   }
 };
 </script>

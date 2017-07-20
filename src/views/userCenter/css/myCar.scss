@@ -34,7 +34,11 @@
 		padding-top: rem(780)
 	}
 }
-
+.bl-button.disabled {
+    color: #fff;
+    background-color: #dddddd;
+    border-color: transparent;
+}
 .bt {
 	position: absolute;
 	bottom: 0;
