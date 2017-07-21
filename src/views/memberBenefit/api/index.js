@@ -68,5 +68,13 @@ export default {
   // 龙腾贵宾室提交信息
   submitVIPRoomBookInf: params => {
     return Vue.http.post(baseUrl + '/memberActivity/submitVIPRoomBookInf.htm', params)
+  },
+  // 龙腾贵宾室查看预约状态
+  queryVIPRoomBookStatus: params => {
+    return Vue.http.post(baseUrl + '/memberActivity/queryVIPRoomBookStatus.htm', params)
+  },
+  // 龙腾贵宾室资格
+  memberActivityQualification: params => {
+    return Vue.http.post(baseUrl + '/memberActivity/memberActivityQualification.htm', params)
   }
 }

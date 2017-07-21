@@ -223,6 +223,7 @@ b {
   right: 0;
   position: absolute;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .topHeader,

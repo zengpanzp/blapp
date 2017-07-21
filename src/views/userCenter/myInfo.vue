@@ -19,7 +19,7 @@
         <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
         <li @click="mycar">我的车牌<i><i class="iconfont arrow-back"></i></i></li>
-        <router-link to="/userCenter/otherInfo"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
+        <router-link to="/userCenter/otherInfo" tag="div"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
       </ul>
     </div>
    </div>
@@ -27,7 +27,7 @@
      <div class="list">
       <ul>
         <li class="first" @click="address">地址管理<i class="iconfont arrow-back"></i></li>
-        <router-link to="/userCenter/securityCenter"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li></router-link>
+        <router-link to="/userCenter/securityCenter" tag="div"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li></router-link>
       </ul>
     </div>
    </div>
