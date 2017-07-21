@@ -26,11 +26,11 @@ export default {
   },
   // 重置密码的短信验证码
   sendSMSCodeByResetPass: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/sendResetPasswordValidateCodeMessage.htm', params);
+    return Vue.http.post(baseUrl + '/baseinfo/jn/sendResetPasswordValidateCodeMessage.htm', params);
   },
   // 重置密码验证短信验证码的有效性
   validatePasswordSMSCode: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/verifyPasswordSmsCode.htm', params);
+    return Vue.http.post(baseUrl + '/baseinfo/jn/verifyPasswordSmsCode.htm', params);
   },
   // 重置密码
   resetPassword: params => {

@@ -211,7 +211,7 @@
       },
       // 忘记密码
       forget() {
-        this.$router.push({path: 'findpass/1'})
+        this.$router.push({path: 'findpass/1?backUrl=' + this.backUrl})
       }
     }
   };

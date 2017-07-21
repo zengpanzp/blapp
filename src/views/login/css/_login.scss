@@ -215,11 +215,11 @@ body{
           height: 100%;
           border: none;
           outline: none;
-          font-size: rem(28);
+          font-size: rem(33);
           background: none;
-          color: #4DACF0;
+          color: #666;
           text-shadow: 0 0 0 #cccccc;
-          -webkit-text-fill-color: transparent;
+          //-webkit-text-fill-color: transparent;
           &::-webkit-input-placeholder{
             color: #cccccc;
             opacity: 1;
@@ -283,6 +283,10 @@ body{
     color: rgba(#ffffff, .5);
     opacity: 1;
   }
+}
+.joint-submit:active{
+  background: #e6000f;
+  opacity: .5;
 }
 .joint-login-checkbox{
   @extend %comm-flex;

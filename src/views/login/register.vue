@@ -229,7 +229,7 @@
         } else {
           this.valPhone(this.mobile);
         }
-      },
+      }
     }
   };
 </script>
