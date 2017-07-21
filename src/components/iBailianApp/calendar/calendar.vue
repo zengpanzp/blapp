@@ -14,10 +14,10 @@
         :class="{
           weekend: index % 7 === 0 || index % 7 === 6,
           unselect: unselectArr.includes(index),
-          select: index === firstDayInWeek + trueSelectDay - 1
+          select: selectDate && selectDate.getFullYear() == selectYear && selectDate.getMonth() + 1 == selectMonth && index === firstDayInWeek + trueSelectDay - 1
         }"
         @click="changeSelectDay(index)">
-          <em class="cal-tag" v-if="toDay.getFullYear() == selectYear && toDay.getMonth() + 1 == selectMonth && toDay.getDate() == item">今天</em>
+          <em class="cal-tag" v-if="toDay.getFullYear() == selectYear && toDay.getMonth() + 1 == selectMonth && toDay.getDate() == index - lastMonthDay.length + 1">今天</em>
           <i>{{ item }}</i>
       </span>
     </div>
@@ -32,22 +32,44 @@ export default {
   data () {
     return {
       week: ["日", "一", "二", "三", "四", "五", "六"],
-      selectYear: this.date.getFullYear(),
-      selectMonth: this.date.getMonth() + 1,
-      selectDay: this.date.getDate(),
-      toDay: new Date()
+      selectYear: this.value.getFullYear(),
+      selectMonth: this.value.getMonth() + 1,
+      selectDay: this.value.getDate(),
+      toDay: new Date(),
     };
   },
   props: {
-    // 时间,默认当前时间
-    date: {
+    // 日期,默认当前时间
+    value: {
       type: null,
-      default: new Date(),
+      default: new Date()
     },
-    unselectData: Array
-  },
-  created() {
-    console.log(this.date, this.selectYear, this.selectMonth, this.selectDay)
+    // 不可选的日期数组
+    unselectData: {
+      type: Array,
+      default: []
+    },
+    // 选中的日期
+    selectDate: {
+      type: null,
+      default: null
+    },
+    // 是否显示上个月的天数, 默认显示
+    showLastDays: {
+      type: Boolean,
+      default: true
+    },
+    // 是否显示下个月的天数, 默认不显示
+    showNextDays: {
+      type: Boolean,
+      default: false
+    },
+    limit: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
   },
   methods: {
     subMonth() {
@@ -58,6 +80,12 @@ export default {
       } else {
         this.selectMonth -= 1
       }
+      if (this.limit.minYear && this.selectYear < this.limit.minYear) this.selectYear = this.limit.minYear;
+      if (this.limit.minYear && this.selectYear === this.limit.minYear) {
+        if (this.limit.minMonth && this.selectMonth <= this.limit.minMonth) {
+          this.selectMonth = this.limit.minMonth;
+        }
+      }
     },
     addMonth() {
       // 如果月份是12则变成1,年份+1
@@ -67,10 +95,18 @@ export default {
       } else {
         this.selectMonth += 1
       }
+      if (this.limit.maxYear && this.selectYear > this.limit.maxYear) this.selectYear = this.limit.maxYear;
+      if (this.limit.maxYear && this.selectYear === this.limit.maxYear) {
+        if (this.limit.maxMonth && this.selectMonth >= this.limit.maxMonth) {
+          this.selectMonth = this.limit.maxMonth;
+        }
+      }
     },
     changeSelectDay(index) {
       if (this.unselectArr.includes(index)) return false;
       this.selectDay = index - this.firstDayInWeek + 1;
+      // 点击后的时间赋给选中日期
+      this.selectDate = new Date(this.selectValue.replace(/-/g, "/"))
     }
   },
   computed: {
@@ -95,6 +131,7 @@ export default {
     dayCount () {
       return new Date(this.trueSelectYear, this.trueSelectMonth, 0).getDate();
     },
+    // 上个月的天
     lastMonthDay () {
       let lastNum = this.firstDayInWeek;
       let lastDays = [];
@@ -105,8 +142,10 @@ export default {
         lastDays.unshift(lastDayNum);
         lastDayNum--;
       }
+      if (!this.showLastDays) return new Array(lastDays.length)
       return lastDays;
     },
+    // 下个月的天
     nextMonthDay () {
       let num = 42 - this.firstDayInWeek - this.dayCount;
       let nextDays = [];
@@ -115,6 +154,7 @@ export default {
       for (; i <= num; i++) {
         nextDays.push(i);
       }
+      if (!this.showNextDays) return []
       return nextDays;
     },
     renderData () {
@@ -123,8 +163,7 @@ export default {
       for (; i <= this.dayCount; i++) {
         nowDays.push(i);
       }
-      // return [...this.lastMonthDay, ...nowDays, ...this.nextMonthDay];
-      return [...this.lastMonthDay, ...nowDays];
+      return [...this.lastMonthDay, ...nowDays, ...this.nextMonthDay];
     },
     unselectArr () {
       let index = 0;
@@ -138,16 +177,16 @@ export default {
       for (; index < 42; index++) {
         arr.push(index);
       }
-      return arr;
+      return [...arr, ...this.unselectData]
     }
   },
   watch: {
     selectValue(val) {
-      this.$emit('getValue', val);
+      this.$emit('input', val);
     }
   },
   mounted() {
-    this.$emit('getValue', this.selectValue);
+    this.$emit('input', this.selectValue);
   }
 };
 </script>
