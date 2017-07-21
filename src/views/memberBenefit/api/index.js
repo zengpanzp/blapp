@@ -63,5 +63,10 @@ export default {
   // 查询积分
   getPointDel: params => {
     return Vue.http.post(baseUrl + '/memberPoint/externalQueryRemainPoint.htm', params)
+  },
+
+  // 龙腾贵宾室提交信息
+  submitVIPRoomBookInf: params => {
+    return Vue.http.post(baseUrl + '/memberActivity/submitVIPRoomBookInf.htm', params)
   }
 }

@@ -172,6 +172,10 @@ label {
 button,
 input {
     line-height: normal;
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
 }
 
 // Address inconsistent `text-transform` inheritance for `button` and `select`.

@@ -1,16 +1,19 @@
 <template>
   <div class="wholepage">
-  <!-- 上传头像 -->
-  <input type="file" accept="image/*" @change="readImage" ref="file" hidden>
   <bl-actionsheet :actions="actions" v-model="sheetVisible" cancelText=""></bl-actionsheet>
    <div class="section1">
      <div class="list">
       <ul>
-        <li class="first" @click="avatar">头像
-          <b>
-            <img :src="avatarUrl" v-show="avatarUrl">
-            <i class="head iconfont arrow-back"></i>
-          </b>
+        <li class="first">
+          <div>头像</div>
+          <div class="up-img flex-item">
+            <b>
+              <img :src="avatarUrl" v-show="avatarUrl">
+              <i class="head iconfont arrow-back"></i>
+            </b>
+            <!-- 上传头像 -->
+            <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file">
+          </div>
         </li>
         <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
         <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
@@ -183,21 +186,6 @@ export default {
     },
     gender () {
       this.sheetVisible = true
-    },
-    avatar () {
-      this.$refs.file.click()
-      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-      //   // type: 'camera'
-      // }, {success: data => {
-      //         console.log('success' + data)
-      //         // let image = JSON.parse { }
-      //       },
-      //       fail: () => {
-      //         console.log('fail')
-      //       }})
-      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-      //   params: params
-      // })
     },
     readImage(event) {
       this.inlineLoading = this.$toast({

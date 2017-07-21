@@ -401,6 +401,16 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
   },
+  /* 陈鹏 龙腾贵宾室预约 */
+  {
+    path: '/LtVipReserve',
+    meta: {
+      title: '龙腾贵宾室预约',
+      isWeb: true,
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipReserve')), 'LtVipReserve')
+  },
   /* 曾攀 更多权益 */
   {
     path: '/blprivilegeClub',

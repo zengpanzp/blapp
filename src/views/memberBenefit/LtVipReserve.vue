@@ -1,18 +1,42 @@
+<style lang="scss" src="./css/LtVip.scss" scoped></style>
 <template>
-  <bl-calendar ref="calendar" :unselectData="unselectData" :limit="limit" v-model="dateTime"></bl-calendar>
+  <div class="vip-box">
+    <div class="vip-cell">
+      <div class="vip-cell-item flex-m">
+        <div class="vip-item-title">预约人名</div>
+        <div class="vip-item-input flex-item"><input type="text" placeholder="请填写姓名" name=""></div>
+      </div>
+      <div class="vip-cell-item flex-m">
+        <div class="vip-item-title">联系电话</div>
+        <div class="vip-item-input flex-item"><input type="tel" placeholder="请填写电话" name=""></div>
+      </div>
+    </div>
+    <div class="cell-title">选择日期</div>
+    <bl-calendar ref="calendar" :unselectData="unselectData" :limit="limit" v-model="dateTime"></bl-calendar>
+    <div class="reserve-box" v-if="selectDate">
+      <div class="reserve-date">
+        <div>{{ adZeo(selectDate.getMonth() + 1) }}·{{ adZeo(selectDate.getDate()) }}</div>
+        <div class="reserve-week">周{{ weekDays(selectDate.getDay()) }}预约</div>
+        <i class="iconfont error" @click="removeSelectDate"></i>
+      </div>
+    </div>
+    <div class="vip-di">
+      <button class="vip-btn" @click="submitVIPRoomBookInf" :disabled="false">立即预约</button>
+      <div class="vip-tip">只能预约今天后的第7至第30天的自然日号源</div>
+    </div>
+  </div>
 </template>
 
 <script>
+let once = true
+// import api from './api'
 export default {
 
   name: 'LtVipReserve',
 
-  components: {
-    blCalendar: System.import('components/iBailianApp/calendar/calendar')
-  },
-
   data () {
     return {
+      selectDate: null,
       unselectData: [],
       limit: {},
       now: new Date(),
@@ -21,7 +45,7 @@ export default {
     };
   },
   components: {
-    BlCalendar: calendar
+    BlCalendar: () => System.import('components/iBailianApp/calendar/calendar')
   },
   created() {
     this.limit = {
@@ -42,6 +66,19 @@ export default {
       }
       this.unselectData = unselectData
     },
+    adZeo(data) {
+      return data > 10 ? data : `0${data}`
+    },
+    weekDays(index) {
+      return ["日", "一", "二", "三", "四", "五", "六"][index]
+    },
+    removeSelectDate() {
+      this.selectDate = null
+    },
+    // 提交预约信息
+    submitVIPRoomBookInf() {
+      // TODO
+    }
   },
   computed: {
     // 获取月份的第一天的星期
@@ -71,6 +108,12 @@ export default {
       let nowTimeYear = this.now.getFullYear() // 今天的年份
       let nowTimeMonth = this.now.getMonth() // 今天的月份
       let toTays = this.now.getDate() // 今天的天数
+
+      if (once) {
+        once = false
+      } else {
+        this.selectDate = changeTime
+      }
       // 在当前时间到下1个月之内的日期正常显示,超过1个月的全部不可选
       if (changeTimeYear == nowTimeYear && changeTimeMonth < nowTimeMonth + 1 + 2) {
         if (changeTimeMonth === nowTimeMonth + 1) {
