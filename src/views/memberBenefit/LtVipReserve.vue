@@ -4,38 +4,41 @@
     <div class="vip-cell">
       <div class="vip-cell-item flex-m">
         <div class="vip-item-title">预约人名</div>
-        <div class="vip-item-input flex-item"><input type="text" placeholder="请填写姓名" name=""></div>
+        <div class="vip-item-input flex-item"><input type="text" v-model="patientName" placeholder="请填写姓名" name=""></div>
       </div>
       <div class="vip-cell-item flex-m">
         <div class="vip-item-title">联系电话</div>
-        <div class="vip-item-input flex-item"><input type="tel" placeholder="请填写电话" name=""></div>
+        <div class="vip-item-input flex-item"><input type="tel" v-model="patientMobile" placeholder="请填写电话" name=""></div>
       </div>
     </div>
     <div class="cell-title">选择日期</div>
-    <bl-calendar ref="calendar" :unselectData="unselectData" :limit="limit" v-model="dateTime"></bl-calendar>
+    <bl-calendar ref="calendar" :unselectData="unselectData" :selectDate="selectDate" @selectDate="selectFn" :limit="limit" v-model="dateTime"></bl-calendar>
     <div class="reserve-box" v-if="selectDate">
       <div class="reserve-date">
-        <div>{{ adZeo(selectDate.getMonth() + 1) }}·{{ adZeo(selectDate.getDate()) }}</div>
-        <div class="reserve-week">周{{ weekDays(selectDate.getDay()) }}预约</div>
+        <div>{{ selectDate.month }}·{{ selectDate.days }}</div>
+        <div class="reserve-week">周{{ selectDate.week }}预约</div>
         <i class="iconfont error" @click="removeSelectDate"></i>
       </div>
     </div>
     <div class="vip-di">
-      <button class="vip-btn" @click="submitVIPRoomBookInf" :disabled="false">立即预约</button>
+      <button class="vip-btn" @click="submitVIPRoomBookInf" :disabled="canReserveStatus">立即预约</button>
       <div class="vip-tip">只能预约今天后的第7至第30天的自然日号源</div>
     </div>
   </div>
 </template>
 
 <script>
-let once = true
-// import api from './api'
+import api from './api'
+import utils from 'src/utils'
 export default {
 
   name: 'LtVipReserve',
 
   data () {
     return {
+      patientName: null,
+      patientMobile: null,
+      canReserveStatus: false,
       selectDate: null,
       unselectData: [],
       limit: {},
@@ -67,7 +70,7 @@ export default {
       this.unselectData = unselectData
     },
     adZeo(data) {
-      return data > 10 ? data : `0${data}`
+      return data >= 10 ? data : `0${data}`
     },
     weekDays(index) {
       return ["日", "一", "二", "三", "四", "五", "六"][index]
@@ -77,7 +80,43 @@ export default {
     },
     // 提交预约信息
     submitVIPRoomBookInf() {
-      // TODO
+      if (!this.testName) return this.$toast('请输入真实姓名')
+      if (!this.testPhone) return this.$toast('请输入正确手机号码')
+      if (!this.selectDate) return this.$toast('请选择日期')
+      if (this.canReserveStatus) return
+      let userInfo = utils.dbGet('userInfo')
+      let reqData = {
+        ruleCode: '20161130166214',
+        bookDate: this.selectDate.year + this.selectDate.month + this.selectDate.days,
+        patientName: this.patientName,
+        patientMobile: this.patientMobile,
+        memberId: userInfo.member_id,
+        channelId: 1,
+        memberMobile: userInfo.mobile
+      }
+      api.submitVIPRoomBookInf(reqData).then(data => {
+        if (data.body.obj) {
+          let resData = JSON.parse(data.body.obj)
+          console.log('提交信息', resData)
+          this.$router.replace({
+            path: '/LtVipSuccess',
+            query: {
+              time: `${this.selectDate.year}-${this.selectDate.month}-${this.selectDate.days}`
+            }
+          })
+        } else {
+          this.$toast(data.body.msg)
+          this.canReserveStatus = true
+        }
+      })
+    },
+    selectFn(changeTime) {
+      this.selectDate = {
+        year: changeTime.getFullYear(),
+        month: this.adZeo(changeTime.getMonth() + 1),
+        days: this.adZeo(changeTime.getDate()),
+        week: this.weekDays(changeTime.getDay())
+      }
     }
   },
   computed: {
@@ -97,10 +136,19 @@ export default {
         fullSelectData.push(i)
       }
       return fullSelectData
+    },
+    testPhone() {
+      let patrn = /^1\d{2}(-?\d{4}){2}$/;
+      return patrn.test(this.patientMobile)
+    },
+    testName() {
+      let patrn = /^[\u4E00-\u9FA5]{2,8}$/;
+      return patrn.test(this.patientName)
     }
   },
   watch: {
     dateTime(selectTime) {
+      console.log(selectTime)
       let changeTime = new Date(selectTime.replace(/-/g, "/")) // 选择的日期
       let changeTimeYear = changeTime.getFullYear() // 选择的日期的年份
       let changeTimeMonth = changeTime.getMonth() + 1  // 选择的日期的月份
@@ -109,11 +157,6 @@ export default {
       let nowTimeMonth = this.now.getMonth() // 今天的月份
       let toTays = this.now.getDate() // 今天的天数
 
-      if (once) {
-        once = false
-      } else {
-        this.selectDate = changeTime
-      }
       // 在当前时间到下1个月之内的日期正常显示,超过1个月的全部不可选
       if (changeTimeYear == nowTimeYear && changeTimeMonth < nowTimeMonth + 1 + 2) {
         if (changeTimeMonth === nowTimeMonth + 1) {
@@ -138,6 +181,12 @@ export default {
         this.unselectData = this.fullSelect
       }
     }
+  },
+  // 控制路由跳转
+  beforeRouteEnter(to, from, next) {
+    utils.isLogin().then(user => {
+      next()
+    })
   }
 };
 </script>

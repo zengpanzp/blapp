@@ -14,7 +14,7 @@
         :class="{
           weekend: index % 7 === 0 || index % 7 === 6,
           unselect: unselectArr.includes(index),
-          select: selectDate && selectDate.getFullYear() == selectYear && selectDate.getMonth() + 1 == selectMonth && index === firstDayInWeek + trueSelectDay - 1
+          select: selectDate && (selectDate.year || selectDate.getFullYear()) == selectYear && (selectDate.month || selectDate.getMonth() + 1) == selectMonth && index === firstDayInWeek + trueSelectDay - 1
         }"
         @click="changeSelectDay(index)">
           <em class="cal-tag" v-if="toDay.getFullYear() == selectYear && toDay.getMonth() + 1 == selectMonth && toDay.getDate() == index - lastMonthDay.length + 1">今天</em>
@@ -106,7 +106,7 @@ export default {
       if (this.unselectArr.includes(index)) return false;
       this.selectDay = index - this.firstDayInWeek + 1;
       // 点击后的时间赋给选中日期
-      this.selectDate = new Date(this.selectValue.replace(/-/g, "/"))
+      this.$emit('selectDate', new Date(this.selectValue.replace(/-/g, "/")))
     }
   },
   computed: {

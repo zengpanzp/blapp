@@ -406,10 +406,18 @@ export const prdRouter = [
     path: '/LtVipReserve',
     meta: {
       title: '龙腾贵宾室预约',
-      isWeb: true,
       notLoading: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipReserve')), 'LtVipReserve')
+  },
+  /* 陈鹏 龙腾贵宾室预约 */
+  {
+    path: '/LtVipSuccess',
+    meta: {
+      title: '预约成功',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipSuccess')), 'LtVipSuccess')
   },
   /* 曾攀 更多权益 */
   {
