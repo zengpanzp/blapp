@@ -14,7 +14,7 @@
         :class="{
           weekend: index % 7 === 0 || index % 7 === 6,
           unselect: unselectArr.includes(index),
-          select: selectDate && (selectDate.year || selectDate.getFullYear()) == selectYear && (selectDate.month || selectDate.getMonth() + 1) == selectMonth && index === firstDayInWeek + trueSelectDay - 1
+          select: value && value.year == selectYear && value.month == selectMonth && index === firstDayInWeek + trueSelectDay - 1
         }"
         @click="changeSelectDay(index)">
           <em class="cal-tag" v-if="toDay.getFullYear() == selectYear && toDay.getMonth() + 1 == selectMonth && toDay.getDate() == index - lastMonthDay.length + 1">今天</em>
@@ -32,27 +32,37 @@ export default {
   data () {
     return {
       week: ["日", "一", "二", "三", "四", "五", "六"],
-      selectYear: this.value.getFullYear(),
-      selectMonth: this.value.getMonth() + 1,
-      selectDay: this.value.getDate(),
       toDay: new Date(),
+      selectYear: this.selectDate.getFullYear(),
+      selectMonth: this.selectDate.getMonth() + 1,
+      selectDay: this.selectDate.getDate()
     };
   },
   props: {
-    // 日期,默认当前时间
+    // 选中日期,默认无
+    /**
+     * [value description]
+     * @type {Object}
+     * {
+     *   year: 2017,
+     *   month: 07,
+     *   days: 20,
+     *   week: 二
+     * }
+     */
     value: {
       type: null,
-      default: new Date()
+      default: null
     },
     // 不可选的日期数组
     unselectData: {
       type: Array,
       default: []
     },
-    // 选中的日期
+    // 指定日期,默认用当前日期
     selectDate: {
       type: null,
-      default: null
+      default: new Date()
     },
     // 是否显示上个月的天数, 默认显示
     showLastDays: {
@@ -64,6 +74,7 @@ export default {
       type: Boolean,
       default: false
     },
+    // 限制日期范围
     limit: {
       type: Object,
       default() {
@@ -106,7 +117,18 @@ export default {
       if (this.unselectArr.includes(index)) return false;
       this.selectDay = index - this.firstDayInWeek + 1;
       // 点击后的时间赋给选中日期
-      this.$emit('selectDate', new Date(this.selectValue.replace(/-/g, "/")))
+      let changeTime = new Date(this.selectValue.replace(/-/g, "/"))
+      let objDate = {
+        year: changeTime.getFullYear(),
+        month: this.adZeo(changeTime.getMonth() + 1),
+        days: this.adZeo(changeTime.getDate()),
+        week: this.week[changeTime.getDay()],
+        date: changeTime
+      }
+      this.$emit('input', objDate)
+    },
+    adZeo(data) {
+      return data >= 10 ? data : `0${data}`
     }
   },
   computed: {
@@ -181,12 +203,10 @@ export default {
     }
   },
   watch: {
-    selectValue(val) {
-      this.$emit('input', val);
+    trueSelectMonth(val) {
+      // 月份改变了传播changeMonth事件
+      this.$emit('changeMonth', this.selectValue);
     }
-  },
-  mounted() {
-    this.$emit('input', this.selectValue);
   }
 };
 </script>

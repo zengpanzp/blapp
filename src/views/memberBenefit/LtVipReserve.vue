@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="cell-title">选择日期</div>
-    <bl-calendar ref="calendar" :unselectData="unselectData" :selectDate="selectDate" @selectDate="selectFn" :limit="limit" v-model="dateTime"></bl-calendar>
+    <bl-calendar ref="calendar" :unselectData="unselectData" v-model="selectDate" :limit="limit" @changeMonth="changeMonth"></bl-calendar>
     <div class="reserve-box" v-if="selectDate">
       <div class="reserve-date">
         <div>{{ selectDate.month }}·{{ selectDate.days }}</div>
@@ -43,7 +43,6 @@ export default {
       unselectData: [],
       limit: {},
       now: new Date(),
-      dateTime: new Date(),
       disabledDays: 7 // 几天后不能选
     };
   },
@@ -56,6 +55,7 @@ export default {
       minMonth: this.now.getMonth() + 1,
       minDay: this.now.getDate()
     }
+    this.init()
   },
   methods: {
     init() {
@@ -68,12 +68,6 @@ export default {
         unselectData.push(i)
       }
       this.unselectData = unselectData
-    },
-    adZeo(data) {
-      return data >= 10 ? data : `0${data}`
-    },
-    weekDays(index) {
-      return ["日", "一", "二", "三", "四", "五", "六"][index]
     },
     removeSelectDate() {
       this.selectDate = null
@@ -110,45 +104,7 @@ export default {
         }
       })
     },
-    selectFn(changeTime) {
-      this.selectDate = {
-        year: changeTime.getFullYear(),
-        month: this.adZeo(changeTime.getMonth() + 1),
-        days: this.adZeo(changeTime.getDate()),
-        week: this.weekDays(changeTime.getDay())
-      }
-    }
-  },
-  computed: {
-    // 获取月份的第一天的星期
-    firstDayInWeek () {
-      return new Date(this.now.getFullYear(), this.now.getMonth(), 1).getDay();
-    },
-    // 月份总天数
-    dayCount () {
-      return new Date(this.now.getFullYear(), this.now.getMonth() + 1, 0).getDate();
-    },
-    // 全部不能选
-    fullSelect() {
-      let fullSelectData = []
-      // 日期总共6*7个,所以排满是42个
-      for (let i = 0; i <= 42; i++) {
-        fullSelectData.push(i)
-      }
-      return fullSelectData
-    },
-    testPhone() {
-      let patrn = /^1\d{2}(-?\d{4}){2}$/;
-      return patrn.test(this.patientMobile)
-    },
-    testName() {
-      let patrn = /^[\u4E00-\u9FA5]{2,8}$/;
-      return patrn.test(this.patientName)
-    }
-  },
-  watch: {
-    dateTime(selectTime) {
-      console.log(selectTime)
+    changeMonth(selectTime) {
       let changeTime = new Date(selectTime.replace(/-/g, "/")) // 选择的日期
       let changeTimeYear = changeTime.getFullYear() // 选择的日期的年份
       let changeTimeMonth = changeTime.getMonth() + 1  // 选择的日期的月份
@@ -180,6 +136,33 @@ export default {
       } else {
         this.unselectData = this.fullSelect
       }
+    }
+  },
+  computed: {
+    // 获取月份的第一天的星期
+    firstDayInWeek () {
+      return new Date(this.now.getFullYear(), this.now.getMonth(), 1).getDay();
+    },
+    // 月份总天数
+    dayCount () {
+      return new Date(this.now.getFullYear(), this.now.getMonth() + 1, 0).getDate();
+    },
+    // 全部不能选
+    fullSelect() {
+      let fullSelectData = []
+      // 日期总共6*7个,所以排满是42个
+      for (let i = 0; i <= 42; i++) {
+        fullSelectData.push(i)
+      }
+      return fullSelectData
+    },
+    testPhone() {
+      let patrn = /^1\d{2}(-?\d{4}){2}$/;
+      return patrn.test(this.patientMobile)
+    },
+    testName() {
+      let patrn = /^[\u4E00-\u9FA5]{2,8}$/;
+      return patrn.test(this.patientName)
     }
   },
   // 控制路由跳转
