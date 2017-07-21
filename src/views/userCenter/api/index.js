@@ -60,6 +60,9 @@ export default {
     // 上传图片
     upload: params => {
       return Vue.http.post(baseUrl + '/media/upload.htm', params)
+    },
+    modifyCar: params => {
+      return Vue.http.post(baseUrl + '/myInformation/modifyCarNumberNew.htm', params)
     }
   },
   otherInfo: {

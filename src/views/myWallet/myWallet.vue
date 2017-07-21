@@ -415,10 +415,16 @@ export default {
         },
         fail: (data) => {
             data = JSON.parse(data);
+            let txt = ""
+            if (data.msg) {
+                txt = data.msg
+            } else {
+                txt = "已取消"
+            }
             if (data.result == "fail") {
               this.$toast({
                 position: 'bottomTop',
-                message: data.msg
+                message: txt
               });
             }
         }

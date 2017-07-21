@@ -215,11 +215,11 @@ body{
           height: 100%;
           border: none;
           outline: none;
-          font-size: rem(28);
+          font-size: rem(33);
           background: none;
-          color: #4DACF0;
+          color: #666;
           text-shadow: 0 0 0 #cccccc;
-          -webkit-text-fill-color: transparent;
+          //-webkit-text-fill-color: transparent;
           &::-webkit-input-placeholder{
             color: #cccccc;
             opacity: 1;
@@ -236,9 +236,14 @@ body{
       }
       .joint-code{
         height: rem(58);
-        background-color: rgba(247,247,247,1);
+        background-color: rgba(0, 62, 118, 0.39);
+        background: -webkit-linear-gradient(top,#999, #fff);
         border-radius: rem(4);
         margin-left: rem(40);
+        text-align: center;
+        line-height: rem(58);
+        font-size: rem(37);
+        color:#666;
         button{
           width: 100%;
           height: 100%;
@@ -278,6 +283,10 @@ body{
     color: rgba(#ffffff, .5);
     opacity: 1;
   }
+}
+.joint-submit:active{
+  background: #e6000f;
+  opacity: .5;
 }
 .joint-login-checkbox{
   @extend %comm-flex;
