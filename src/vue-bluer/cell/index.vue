@@ -26,7 +26,7 @@ export default {
   @import "../sass/tobe/function";
   .bl-cell{
     background-color: #fff;
-    padding: 0 rem(20);
+    margin: 0 rem(20);
     font-size: rem(28);
     border-bottom: 1px solid #ddd;
     min-height: rem(88);

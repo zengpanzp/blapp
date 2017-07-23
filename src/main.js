@@ -11,7 +11,7 @@ import App from './App'
 import router from './router'
 import bluer from './vue-bluer'
 
-import 'src/utils'
+import utils from 'src/utils'
 import 'src/sass/comm.scss'
 
 Vue.config.devtools = process.env.NODE_ENV !== 'production'
@@ -241,9 +241,7 @@ jsBridgeReady("_maiDian", false, () => {
 let linkCssObj = document.getElementById('classLink')
   // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
-  if (Vue.$loading) {
-    Vue.$loading.close()
-  }
+  Vue.$loading && Vue.$loading.close()
   if (!meta.notLoading) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
@@ -253,6 +251,30 @@ router.beforeEach(({ meta, path }, from, next) => {
     })
   }
   jsBridgeReady("_loginInfo", meta.isWeb, () => {
+    // 过渡效果 start
+    try {
+      let firstDom = $('#app > div')[0] || {}
+      if (firstDom.classList) {
+        firstDom.classList.add('page-content')
+      }
+      let _to = path
+      let _from = from.path
+      let h = utils.dbGet(_to)
+      if (h && h.history || (_from && _from.indexOf(_to) === 0)) {
+        document.body.className = 'transition-reverse'
+        h.history = false
+        utils.dbSet(_to, h)
+      } else {
+        utils.dbSet(_from, {
+          history: true
+        })
+        document.body.className = ''
+      }
+    } catch (e) {
+      // swallo error
+      console.log(e)
+    }
+    // 过渡效果 end
     if (meta.title) {
       document.title = meta.title
       if (window.isiOS) {
@@ -273,6 +295,15 @@ router.beforeEach(({ meta, path }, from, next) => {
     }
   })
 })
+
+// 过渡效果 start
+router.afterEach(function (to) {
+  setTimeout(() => {
+    $('#app > div')[0] && $('#app > div')[0].classList.remove('page-content')
+  }, 500)
+})
+// 过渡效果 end
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
