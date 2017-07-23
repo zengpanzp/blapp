@@ -33,7 +33,6 @@
     margin: 0 auto;
     font-size: rem(34);
     text-align: center;
-    color: #ffffff;
     height: rem(88);
     width: 100%;
     border: 1px solid #c5c5c5;
