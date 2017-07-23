@@ -1,19 +1,15 @@
 <style lang="scss" src="./css/LtVip.scss" scoped></style>
 <template>
   <div class="vip-box">
-    <div class="vip-cell">
-      <div class="vip-cell-item flex-m">
-        <div class="vip-item-title">预约人名</div>
-        <div class="vip-item-input flex-item"><input type="text" v-model="patientName" placeholder="请填写姓名" name=""></div>
-      </div>
-      <div class="vip-cell-item flex-m">
-        <div class="vip-item-title">联系电话</div>
-        <div class="vip-item-input flex-item"><input type="tel" v-model="patientMobile" placeholder="请填写电话" name=""></div>
-      </div>
-    </div>
+    <bl-cell title="预约人名" :showArrowRight="false">
+      <input slot="cell-main" type="text" v-model="patientName" placeholder="请填写姓名" name="">
+    </bl-cell>
+    <bl-cell title="联系电话" :showArrowRight="false">
+      <input slot="cell-main" type="tel" v-model="patientMobile" placeholder="请填写电话" name="">
+    </bl-cell>
     <div class="cell-title">选择日期</div>
-    <bl-calendar ref="calendar" :unselectData="unselectData" v-model="selectDate" :limit="limit" @changeMonth="changeMonth"></bl-calendar>
-    <div class="reserve-box" v-if="selectDate">
+    <bl-calendar ref="calendar" :unselectData="unselectData" v-model="selectDate" :limit="limit" :showNextDays="false" @changeMonth="changeMonth"></bl-calendar>
+    <div class="reserve-box" v-if="selectDate && selectDate.year">
       <div class="reserve-date">
         <div>{{ selectDate.month }}·{{ selectDate.days }}</div>
         <div class="reserve-week">周{{ selectDate.week }}预约</div>
@@ -39,7 +35,7 @@ export default {
       patientName: null,
       patientMobile: null,
       canReserveStatus: false,
-      selectDate: null,
+      selectDate: {},
       unselectData: [],
       limit: {},
       now: new Date(),
@@ -164,12 +160,6 @@ export default {
       let patrn = /^[\u4E00-\u9FA5]{2,8}$/;
       return patrn.test(this.patientName)
     }
-  },
-  // 控制路由跳转
-  beforeRouteEnter(to, from, next) {
-    utils.isLogin().then(user => {
-      next()
-    })
   }
 };
 </script>

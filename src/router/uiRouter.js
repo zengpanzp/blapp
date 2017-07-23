@@ -19,15 +19,6 @@ export const uiRouter = [
     component: r => require.ensure([], () => r(require('../views/UI/guide')), 'guide')
   },
   {
-    path: '/calendar',
-    meta: {
-      title: '日历',
-      isWeb: true,
-      notLoading: true
-    },
-    component: r => require.ensure([], () => r(require('../components/iBailianApp/calendar/calendar')), 'calendar')
-  },
-  {
     path: '/testCalendar',
     meta: {
       title: '日历demo',

@@ -419,6 +419,15 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipSuccess')), 'LtVipSuccess')
   },
+  /* 陈鹏 专家预约 */
+  {
+    path: '/expertReserve',
+    meta: {
+      title: '专家预约',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/expertReserve')), 'expertReserve')
+  },
   /* 曾攀 更多权益 */
   {
     path: '/blprivilegeClub',

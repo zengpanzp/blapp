@@ -1,11 +1,11 @@
 <template>
   <div class="calendar-container">
-    <div class="calendar-header flex">
-      <div class="arrow" @click="subMonth">&lt;</div>
+    <div class="calendar-header flex" :style="calendarHeaderStyle">
+      <div class="arrow flex-c-m" @click="subMonth"><div class="iconfont arrow-back"></div></div>
       <div class="date-box flex-item">{{ trueSelectYear }}年{{ trueSelectMonth }}月</div>
-      <div class="arrow" @click="addMonth">&gt;</div>
+      <div class="arrow flex-c-m" @click="addMonth"><div class="iconfont arrow-back tran-right"></div></div>
     </div>
-    <div class="week flex">
+    <div class="week flex" :style="[ weekStyle ]">
       <div class="flex-item" v-for="(item, index) in week" :class="{weekend: index === 0 || index === 6}">{{ item }}</div>
     </div>
     <div class="days">
@@ -13,7 +13,7 @@
         v-for="(item, index) in renderData"
         :class="{
           weekend: index % 7 === 0 || index % 7 === 6,
-          unselect: unselectArr.includes(index),
+          unselect: unselectArr.indexOf(index) !== -1,
           select: value && value.year == selectYear && value.month == selectMonth && index === firstDayInWeek + trueSelectDay - 1
         }"
         @click="changeSelectDay(index)">
@@ -33,9 +33,9 @@ export default {
     return {
       week: ["日", "一", "二", "三", "四", "五", "六"],
       toDay: new Date(),
-      selectYear: this.selectDate.getFullYear(),
-      selectMonth: this.selectDate.getMonth() + 1,
-      selectDay: this.selectDate.getDate()
+      selectYear: this.value.year || new Date().getFullYear(),
+      selectMonth: this.value.month || new Date().getMonth() + 1,
+      selectDay: this.value.days || new Date().getDate()
     };
   },
   props: {
@@ -51,28 +51,25 @@ export default {
      * }
      */
     value: {
-      type: null,
-      default: null
+      type: Object,
+      default() {
+        return {}
+      }
     },
     // 不可选的日期数组
     unselectData: {
       type: Array,
       default: []
     },
-    // 指定日期,默认用当前日期
-    selectDate: {
-      type: null,
-      default: new Date()
-    },
     // 是否显示上个月的天数, 默认显示
     showLastDays: {
       type: Boolean,
       default: true
     },
-    // 是否显示下个月的天数, 默认不显示
+    // 是否显示下个月的天数, 默认显示
     showNextDays: {
       type: Boolean,
-      default: false
+      default: true
     },
     // 限制日期范围
     limit: {
@@ -80,7 +77,9 @@ export default {
       default() {
         return {}
       }
-    }
+    },
+    calendarHeaderStyle: Object,
+    weekStyle: Object
   },
   methods: {
     subMonth() {
@@ -114,7 +113,7 @@ export default {
       }
     },
     changeSelectDay(index) {
-      if (this.unselectArr.includes(index)) return false;
+      if (this.unselectArr.indexOf(index) !== -1) return false;
       this.selectDay = index - this.firstDayInWeek + 1;
       // 点击后的时间赋给选中日期
       let changeTime = new Date(this.selectValue.replace(/-/g, "/"))
@@ -139,6 +138,7 @@ export default {
       return this.selectMonth
     },
     trueSelectDay() {
+      if (this.selectDay > this.dayCount) return this.dayCount;
       return this.selectDay
     },
     // 当前选择的时间
@@ -191,13 +191,17 @@ export default {
       let index = 0;
       let arr = [];
       // 该月份下星期几之前的下标都是上个月的日期
-      for (; index < this.firstDayInWeek; index++) {
-        arr.push(index)
+      if (this.showLastDays) {
+        for (; index < this.firstDayInWeek; index++) {
+          arr.push(index)
+        }
       }
       // 该月份下星期几加上总天数小于42之内的数据则是下个月的日期
-      index = this.firstDayInWeek + this.dayCount;
-      for (; index < 42; index++) {
-        arr.push(index);
+      if (this.showNextDays) {
+        index = this.firstDayInWeek + this.dayCount;
+        for (; index < 42; index++) {
+          arr.push(index);
+        }
       }
       return [...arr, ...this.unselectData]
     }
