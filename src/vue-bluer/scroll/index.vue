@@ -249,10 +249,6 @@ $layerHeight: rem(66);
   text-align: center;
 }
 
-.label-refresh {
-  // width: 5*0.4rem;
-}
-
 .pull-down .label-down,
 .pull-up .label-up,
 .refreshing .label-refresh {
@@ -263,18 +259,6 @@ $layerHeight: rem(66);
 .pull-to-refresh-layer {
   @extend %comm-flex;
   @include justify-content(center);
-}
-
-.infinite-layer {
-  width: 100%;
-  height: rem(66);
-  @extend %comm-flex;
-  @include justify-content(center);
-  color: #ccc;
-}
-
-.infinite-preloader {
-  margin-right: rem(20);
 }
 
 </style>

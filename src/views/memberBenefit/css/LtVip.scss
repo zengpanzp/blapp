@@ -1,0 +1,61 @@
+@charset "utf-8";
+@import "src/sass/tobe/function";
+
+.vip-box{
+  background-color: #fff;
+}
+.cell-title{
+  padding: rem(20) rem(20);
+  font-size: rem(28);
+}
+
+.reserve-box{
+  padding: rem(20);
+  overflow-y: hidden;
+  .reserve-date{
+    display: inline-block;
+    float: left;
+    text-align: center;
+    padding: rem(10) rem(20) rem(10) rem(10);
+    background-color: #f7f7f7;
+    min-width: rem(180);
+    font-size: rem(28);
+    position: relative;
+    .reserve-week{
+      font-size: rem(22);
+    }
+    .iconfont.error{
+      position: absolute;
+      right: 0;
+      top: 0;
+      color: #cacaca;
+      padding: rem(10);
+      font-size: rem(24);
+    }
+  }
+}
+
+.vip-di{
+  padding: rem(20) rem(30);
+  text-align: center;
+  font-size: rem(24);
+}
+.vip-btn{
+  background-color: #feb600;
+  color: #fff;
+  height: rem(88);
+  display: block;
+  width: 100%;
+  font-size: rem(36);
+  border-radius: rem(8);
+  &:active{
+    background-color: #eaaa08;
+  }
+  &:disabled{
+    background-color: #ccc;
+  }
+}
+.vip-tip{
+  margin-top: rem(20);
+  color: #999999;
+}

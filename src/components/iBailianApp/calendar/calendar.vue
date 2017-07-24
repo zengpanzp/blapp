@@ -1,11 +1,11 @@
 <template>
   <div class="calendar-container">
-    <div class="calendar-header flex">
-      <div class="arrow" @click="subMonth">&lt;</div>
+    <div class="calendar-header flex" :style="calendarHeaderStyle">
+      <div class="arrow flex-c-m" @click="subMonth"><div class="iconfont arrow-back"></div></div>
       <div class="date-box flex-item">{{ trueSelectYear }}年{{ trueSelectMonth }}月</div>
-      <div class="arrow" @click="addMonth">&gt;</div>
+      <div class="arrow flex-c-m" @click="addMonth"><div class="iconfont arrow-back tran-right"></div></div>
     </div>
-    <div class="week flex">
+    <div class="week flex" :style="[ weekStyle ]">
       <div class="flex-item" v-for="(item, index) in week" :class="{weekend: index === 0 || index === 6}">{{ item }}</div>
     </div>
     <div class="days">
@@ -13,11 +13,11 @@
         v-for="(item, index) in renderData"
         :class="{
           weekend: index % 7 === 0 || index % 7 === 6,
-          unselect: unselectArr.includes(index),
-          select: index === firstDayInWeek + trueSelectDay - 1
+          unselect: unselectArr.indexOf(index) !== -1,
+          select: value && value.year == selectYear && value.month == selectMonth && index === firstDayInWeek + trueSelectDay - 1
         }"
         @click="changeSelectDay(index)">
-          <em class="cal-tag" v-if="toDay.getFullYear() == selectYear && toDay.getMonth() + 1 == selectMonth && toDay.getDate() == item">今天</em>
+          <em class="cal-tag" v-if="toDay.getFullYear() == selectYear && toDay.getMonth() + 1 == selectMonth && toDay.getDate() == index - lastMonthDay.length + 1">今天</em>
           <i>{{ item }}</i>
       </span>
     </div>
@@ -32,22 +32,54 @@ export default {
   data () {
     return {
       week: ["日", "一", "二", "三", "四", "五", "六"],
-      selectYear: this.date.getFullYear(),
-      selectMonth: this.date.getMonth() + 1,
-      selectDay: this.date.getDate(),
-      toDay: new Date()
+      toDay: new Date(),
+      selectYear: this.value.year || new Date().getFullYear(),
+      selectMonth: this.value.month || new Date().getMonth() + 1,
+      selectDay: this.value.days || new Date().getDate()
     };
   },
   props: {
-    // 时间,默认当前时间
-    date: {
-      type: null,
-      default: new Date(),
+    // 选中日期,默认无
+    /**
+     * [value description]
+     * @type {Object}
+     * {
+     *   year: 2017,
+     *   month: 07,
+     *   days: 20,
+     *   week: 二
+     * }
+     */
+    value: {
+      type: Object,
+      default() {
+        return {}
+      }
     },
-    unselectData: Array
-  },
-  created() {
-    console.log(this.date, this.selectYear, this.selectMonth, this.selectDay)
+    // 不可选的日期数组
+    unselectData: {
+      type: Array,
+      default: []
+    },
+    // 是否显示上个月的天数, 默认显示
+    showLastDays: {
+      type: Boolean,
+      default: true
+    },
+    // 是否显示下个月的天数, 默认显示
+    showNextDays: {
+      type: Boolean,
+      default: true
+    },
+    // 限制日期范围
+    limit: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    calendarHeaderStyle: Object,
+    weekStyle: Object
   },
   methods: {
     subMonth() {
@@ -58,6 +90,12 @@ export default {
       } else {
         this.selectMonth -= 1
       }
+      if (this.limit.minYear && this.selectYear < this.limit.minYear) this.selectYear = this.limit.minYear;
+      if (this.limit.minYear && this.selectYear === this.limit.minYear) {
+        if (this.limit.minMonth && this.selectMonth <= this.limit.minMonth) {
+          this.selectMonth = this.limit.minMonth;
+        }
+      }
     },
     addMonth() {
       // 如果月份是12则变成1,年份+1
@@ -67,10 +105,29 @@ export default {
       } else {
         this.selectMonth += 1
       }
+      if (this.limit.maxYear && this.selectYear > this.limit.maxYear) this.selectYear = this.limit.maxYear;
+      if (this.limit.maxYear && this.selectYear === this.limit.maxYear) {
+        if (this.limit.maxMonth && this.selectMonth >= this.limit.maxMonth) {
+          this.selectMonth = this.limit.maxMonth;
+        }
+      }
     },
     changeSelectDay(index) {
-      if (this.unselectArr.includes(index)) return false;
+      if (this.unselectArr.indexOf(index) !== -1) return false;
       this.selectDay = index - this.firstDayInWeek + 1;
+      // 点击后的时间赋给选中日期
+      let changeTime = new Date(this.selectValue.replace(/-/g, "/"))
+      let objDate = {
+        year: changeTime.getFullYear(),
+        month: this.adZeo(changeTime.getMonth() + 1),
+        days: this.adZeo(changeTime.getDate()),
+        week: this.week[changeTime.getDay()],
+        date: changeTime
+      }
+      this.$emit('input', objDate)
+    },
+    adZeo(data) {
+      return data >= 10 ? data : `0${data}`
     }
   },
   computed: {
@@ -81,6 +138,7 @@ export default {
       return this.selectMonth
     },
     trueSelectDay() {
+      if (this.selectDay > this.dayCount) return this.dayCount;
       return this.selectDay
     },
     // 当前选择的时间
@@ -95,6 +153,7 @@ export default {
     dayCount () {
       return new Date(this.trueSelectYear, this.trueSelectMonth, 0).getDate();
     },
+    // 上个月的天
     lastMonthDay () {
       let lastNum = this.firstDayInWeek;
       let lastDays = [];
@@ -105,8 +164,10 @@ export default {
         lastDays.unshift(lastDayNum);
         lastDayNum--;
       }
+      if (!this.showLastDays) return new Array(lastDays.length)
       return lastDays;
     },
+    // 下个月的天
     nextMonthDay () {
       let num = 42 - this.firstDayInWeek - this.dayCount;
       let nextDays = [];
@@ -115,6 +176,7 @@ export default {
       for (; i <= num; i++) {
         nextDays.push(i);
       }
+      if (!this.showNextDays) return []
       return nextDays;
     },
     renderData () {
@@ -123,31 +185,32 @@ export default {
       for (; i <= this.dayCount; i++) {
         nowDays.push(i);
       }
-      // return [...this.lastMonthDay, ...nowDays, ...this.nextMonthDay];
-      return [...this.lastMonthDay, ...nowDays];
+      return [...this.lastMonthDay, ...nowDays, ...this.nextMonthDay];
     },
     unselectArr () {
       let index = 0;
       let arr = [];
       // 该月份下星期几之前的下标都是上个月的日期
-      for (; index < this.firstDayInWeek; index++) {
-        arr.push(index)
+      if (this.showLastDays) {
+        for (; index < this.firstDayInWeek; index++) {
+          arr.push(index)
+        }
       }
       // 该月份下星期几加上总天数小于42之内的数据则是下个月的日期
-      index = this.firstDayInWeek + this.dayCount;
-      for (; index < 42; index++) {
-        arr.push(index);
+      if (this.showNextDays) {
+        index = this.firstDayInWeek + this.dayCount;
+        for (; index < 42; index++) {
+          arr.push(index);
+        }
       }
-      return arr;
+      return [...arr, ...this.unselectData]
     }
   },
   watch: {
-    selectValue(val) {
-      this.$emit('getValue', val);
+    trueSelectMonth(val) {
+      // 月份改变了传播changeMonth事件
+      this.$emit('changeMonth', this.selectValue);
     }
-  },
-  mounted() {
-    this.$emit('getValue', this.selectValue);
   }
 };
 </script>

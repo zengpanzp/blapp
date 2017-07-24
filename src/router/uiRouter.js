@@ -19,12 +19,12 @@ export const uiRouter = [
     component: r => require.ensure([], () => r(require('../views/UI/guide')), 'guide')
   },
   {
-    path: '/calendar',
+    path: '/testCalendar',
     meta: {
-      title: '日历',
+      title: '日历demo',
       isWeb: true,
       notLoading: true
     },
-    component: r => require.ensure([], () => r(require('../components/iBailianApp/calendar/calendar')), 'calendar')
+    component: r => require.ensure([], () => r(require('../views/UI/calendarDemo')), 'calendarDemo')
   }
 ]

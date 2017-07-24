@@ -73,13 +73,13 @@ export default {
       })
       utils.isLogin().then(data => {
         if (process.env.NODE_ENV !== 'production') {
-          // this.$router.push({ path: `/${url}` })
+          this.$router.push({ path: `/${url}` })
           return
         }
-        // window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
-        //   type: type,
-        //   url: url
-        // }, {})
+        window.CTJSBridge && window.CTJSBridge.LoadMethod('BLChargeAndPayment', 'chargeAndPaymentViewController', {
+          type: type,
+          url: url
+        }, {})
       }, (res) => {
         console.log(res)
       })

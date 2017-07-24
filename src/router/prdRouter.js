@@ -401,6 +401,33 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
   },
+  /* 陈鹏 龙腾贵宾室预约 */
+  {
+    path: '/LtVipReserve',
+    meta: {
+      title: '龙腾贵宾室预约',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipReserve')), 'LtVipReserve')
+  },
+  /* 陈鹏 龙腾贵宾室预约 */
+  {
+    path: '/LtVipSuccess',
+    meta: {
+      title: '预约成功',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipSuccess')), 'LtVipSuccess')
+  },
+  /* 陈鹏 专家预约 */
+  {
+    path: '/expertReserve',
+    meta: {
+      title: '专家预约',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/expertReserve')), 'expertReserve')
+  },
   /* 曾攀 更多权益 */
   {
     path: '/blprivilegeClub',

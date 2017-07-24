@@ -1,22 +1,25 @@
 <template>
   <div class="wholepage">
-  <!-- 上传头像 -->
-  <input type="file" accept="image/*" @change="readImage" ref="file" hidden>
   <bl-actionsheet :actions="actions" v-model="sheetVisible" cancelText=""></bl-actionsheet>
    <div class="section1">
      <div class="list">
       <ul>
-        <li class="first" @click="avatar">头像
-          <b>
-            <img :src="avatarUrl" v-show="avatarUrl">
-            <i class="head iconfont arrow-back"></i>
-          </b>
+        <li class="first">
+          <div>头像</div>
+          <div class="up-img flex-item">
+            <b>
+              <img :src="avatarUrl" v-show="avatarUrl">
+              <i class="head iconfont arrow-back"></i>
+            </b>
+            <!-- 上传头像 -->
+            <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file">
+          </div>
         </li>
         <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
         <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
         <li @click="mycar">我的车牌<i><i class="iconfont arrow-back"></i></i></li>
-        <router-link to="/userCenter/otherInfo"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
+        <router-link to="/userCenter/otherInfo" tag="div"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
       </ul>
     </div>
    </div>
@@ -24,7 +27,7 @@
      <div class="list">
       <ul>
         <li class="first" @click="address">地址管理<i class="iconfont arrow-back"></i></li>
-        <router-link to="/userCenter/securityCenter"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li></router-link>
+        <router-link to="/userCenter/securityCenter" tag="div"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li></router-link>
       </ul>
     </div>
    </div>
@@ -183,21 +186,6 @@ export default {
     },
     gender () {
       this.sheetVisible = true
-    },
-    avatar () {
-      this.$refs.file.click()
-      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-      //   // type: 'camera'
-      // }, {success: data => {
-      //         console.log('success' + data)
-      //         // let image = JSON.parse { }
-      //       },
-      //       fail: () => {
-      //         console.log('fail')
-      //       }})
-      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-      //   params: params
-      // })
     },
     readImage(event) {
       this.inlineLoading = this.$toast({

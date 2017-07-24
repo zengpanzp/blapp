@@ -1,6 +1,6 @@
 <style lang="scss" src="./css/_electricHome.scss" scoped></style>
 <template>
-  <div class="main" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+  <div class="main">
     <div class="new" v-scroll-top.window>
       <form id="searchForm" v-on:submit.prevent="search">
         <div class="nav-app">
@@ -96,7 +96,7 @@
             </bl-navbar>
           </div>
         </div>
-        <div class="tab-content">
+        <div class="tab-content" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="tab-c-item">
             <a class="item-href" href="javascript:;" v-for="item in filterTabRows" :key="item.goodsId" v-go-native-goods-detail="item">
               <div class="col c-item-img lazy-box"><img class="lazy" v-lazy="{ src: item.goodsImgPath }" alt=""></div>
