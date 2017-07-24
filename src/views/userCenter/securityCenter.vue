@@ -149,7 +149,10 @@ export default {
             window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
               success: result => {
                 console.log(result)
-                this.$toast('退出成功!')
+                this.$toast({
+                  message: '退出成功!',
+                  position: "bottom"
+                })
                 setTimeout(function () {
                 window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
                 }, 2500)

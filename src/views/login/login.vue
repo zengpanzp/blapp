@@ -105,10 +105,16 @@
       this.$loading.close();
     },
     methods: {
+      alertTip(msg) {
+        this.$toast({
+          position: 'bottom',
+          message: msg
+        });
+      },
       // 登录
       login() {
         if (this.tabItem.type == "account") { // 账号密码登录
-          if (this.valPhone(this.phone)) {
+          if (this.phone != "") {
             if (this.pass != "") {
               if (this.pass.length < 8) {
                 this.$toast({
@@ -124,17 +130,26 @@
                 relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html?",
                 mpFlag: ""
               }).then(data => {
-                let json = data.body.obj;
-                console.log(json)
+                  console.log(data);
                 if (this.checked) { // 2周内免登录
+                }
+                if (data.body.resCode == "00100000") {
+                  let url = decodeURIComponent(this.backUrl);
+                  if (url.indexOf("?") > 0) {
+                      url += '&token=' + data.body.token;
+                  } else {
+                      url += "?token=" + data.body.token
+                  }
+                  location.href = url;
+                } else {
+                    this.alertTip(data.body.msg);
                 }
               });
             } else {
-              this.$toast({
-                position: 'bottom',
-                message: "密码不能为空!"
-              });
+              this.alertTip("密码不能为空!")
             }
+          } else {
+            this.alertTip("账号不能为空!")
           }
         } else { // 短信验证码登录
           if (this.valPhone(this.mobile)) {
@@ -147,16 +162,22 @@
                 relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html",
                 mpFlag: ""
               }).then(data => {
-                let json = JSON.parse(data.body);
-                console.log(json)
                 if (this.checkedSMS) { // 2周内免登录
+                }
+                if (data.body.resCode == "00100000") {
+                  let url = decodeURIComponent(this.backUrl);
+                  if (url.indexOf("?") > 0) {
+                    url += '&token=' + data.body.obj.member_token;
+                  } else {
+                    url += "?token=" + data.body.obj.member_token;
+                  }
+                  location.href = url;
+                } else {
+                  this.alertTip(data.body.msg);
                 }
               });
             } else {
-              this.$toast({
-                position: 'bottom',
-                message: "短信验证码不能为空!"
-              });
+              this.alertTip("短信验证码不能为空!")
             }
           }
         }
@@ -191,16 +212,10 @@
       // 验证手机号
       valPhone(phone) {
         if (phone == "") {
-          this.$toast({
-            position: 'bottom',
-            message: "手机号不能为空!"
-          });
+          this.alertTip("手机号不能为空!")
           return false;
         } else if (!/^1[34578]\d{9}$/.test(phone)) {
-          this.$toast({
-            position: 'bottom',
-            message: "手机号码有误!"
-          });
+          this.alertTip("手机号码有误!")
           return false;
         }
         return true;
