@@ -219,6 +219,7 @@ export default {
                 }
                 this.bindRoll();
   			} else {
+  				this.remain = 0
   				this.errorFlag = true
   				this.errorTitle = data.body.msg
   			}
