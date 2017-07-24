@@ -193,34 +193,29 @@ export default {
         duration: 'loading',
         className: 'loading-bg'
       })
-      require.ensure([], require => {
-        require('src/lib/lrz.all.bundle')
-        let files = event.target.files
-        window.lrz(files[0], {
-          width: 640
-        }).then(resLrz => {
-          api.userCenter.upload({
-            appId: 'BL_IBLAPP',
-            base64Content: resLrz.base64.split(",")[1],
-            fileName: new Date().getTime(),
-            mediaType: 'jpg',
-            reSize: 0
-          }).then(res => {
-            this.inlineLoading.close()
-            if (res.body.obj) {
-              console.log('上传图片返回:', JSON.parse(res.body.obj))
-              let resData = JSON.parse(res.body.obj)
-              this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
-              console.log(this.avatarUrl)
-              this.updateGender()
-            } else {
-              this.$toast(res.body.msg)
-            }
-          }, () => {
-            this.inlineLoading.close()
-          })
+      let files = event.target.files
+      window.compressImg(files[0], 640, base64 => {
+        api.userCenter.upload({
+          appId: 'BL_IBLAPP',
+          base64Content: base64.split(",")[1],
+          fileName: new Date().getTime(),
+          mediaType: 'jpg',
+          reSize: 0
+        }).then(res => {
+          this.inlineLoading.close()
+          if (res.body.obj) {
+            console.log('上传图片返回:', JSON.parse(res.body.obj))
+            let resData = JSON.parse(res.body.obj)
+            this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
+            console.log(this.avatarUrl)
+            this.updateGender()
+          } else {
+            this.$toast(res.body.msg)
+          }
+        }, () => {
+          this.inlineLoading.close()
         })
-      }, 'lrz')
+      })
     },
     male () {
       console.log('###selection: ' + '男性')

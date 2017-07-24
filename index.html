@@ -42,6 +42,8 @@
       lsloader.load(lsloaderBase + 'vendor_common','static/js/lib/vendor/vendor.common.js');
       lsloader.load(lsloaderBase + 'sensorsdata','static/js/sensorsdata.min.js');
       if (<%= process.env.NODE_ENV == 'production' %>) lsloader.load(lsloaderBase + 'app', "<%= htmlWebpackPlugin.files.chunks['app'].entry %>");
+
+      lsloader.load(lsloaderBase + 'processImg', 'static/js/processImg.js');
     </script>
   </body>
 </html>
