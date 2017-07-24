@@ -197,19 +197,7 @@
                 this.alertTip("短信验证码不能为空!");
                 flag = false;
               } else {
-                api.validatePasswordSMSCode({
-                  mobile: this.mobile,
-                  sms_code: this.receiveSMSCode
-                }).then(data => {
-                  let json = JSON.parse(data.body.obj);
-                  console.log(json)
-                  if (json.resCode == "00100000") {
-                      flag = true;
-                  } else {
-                      this.alertTip("验证码输入不正确!")
-                      flag = false;
-                  }
-                });
+                flag = true;
               }
               break;
             case 3:  // 修改密码
@@ -217,7 +205,7 @@
                 this.alertTip("密码不能为空!");
                 flag = false;
               }
-              if (this.pass.length < 8) {
+              if (this.pass && this.pass.length < 8) {
                 this.alertTip("密码长度不能少于8位!");
                 flag = false;
               }
@@ -225,11 +213,11 @@
                 this.alertTip("确认密码不能为空!");
                 flag = false;
               }
-              if (this.passagain.length < 8) {
+              if (this.passagain && this.passagain.length < 8) {
                 this.alertTip("确认密码长度不能少于8位!");
                 flag = false;
               }
-              if (this.pass != this.passagain) {
+              if (this.pass && this.passagain && (this.pass != this.passagain)) {
                 this.alertTip("两次密码不一样!");
                 flag = false;
               }
@@ -272,7 +260,16 @@
           }
         } else if (this.tabItem.type == 2) { // 验证短信
           if (this.valStep(2)) {
-            this.goNext()
+            api.validatePasswordSMSCode({
+              mobile: this.mobile,
+              sms_code: this.receiveSMSCode
+            }).then(data => {
+              if (data.body.resCode == "00100000") {
+                this.goNext()
+              } else {
+                this.alertTip("验证码输入不正确!")
+              }
+            });
           }
         } else { // 修改密码
           if (this.valStep(3)) {
@@ -284,7 +281,10 @@
               let json = JSON.parse(data.body.obj);
               console.log(json)
               if (json.resCode == "00100000") { // 修改成功
-                this.$router.push({path: 'login?backUrl=' + this.backUrl})
+                this.alertTip("密码修改成功!");
+                setTimeout(() => {
+                  this.$router.push({path: '/login?backUrl=' + this.backUrl})
+                }, 2500);
               }
             })
           }

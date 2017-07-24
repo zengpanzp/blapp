@@ -34,7 +34,7 @@ export default {
   },
   // 重置密码
   resetPassword: params => {
-    return Vue.http.post(baseUrl + '/baseinfo/resetPasswordBySmsCode.htm', params);
+    return Vue.http.post(baseUrl + '/baseinfo/jn/resetPasswordBySmsCode.htm', params);
   },
   // 根据短信验证码登录
   loginWithSmsCode: params => {
@@ -47,5 +47,6 @@ export default {
   // 验证唯一性手机号
   validatePhone: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/checkPhoneUnique.htm', params);
-  }
+  },
+  // 安付宝 登录 或者 绑定
 }
