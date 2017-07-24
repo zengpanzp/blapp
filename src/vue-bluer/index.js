@@ -26,7 +26,7 @@ import ModalJs from './modal'
 import Navbar from './navbar'
 import TabItem from './tab-item'
 import Cell from './cell'
-// import scrollRecord from './route-data/scroll-record'
+import scrollRecord from './route-data/scroll-record'
 const install = function(Vue) {
   if (install.installed) return;
   // Vue.component('bl' + Bar.name, Bar);
@@ -74,9 +74,7 @@ const install = function(Vue) {
   Vue.$toast = Vue.prototype.$toast = Toast;
   Vue.$modal = Vue.prototype.$modal = ModalJs;
 
-  Vue.directive('scroll-record', resolve => {
-    require(['./route-data/scroll-record'], resolve)
-  })
+  Vue.directive('scroll-record', scrollRecord)
 }
 
 // auto install
