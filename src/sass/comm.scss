@@ -188,6 +188,18 @@ body,html{
   }
 }
 
+.infinite-layer {
+  width: 100%;
+  height: rem(66);
+  @extend %comm-flex;
+  @include justify-content(center);
+  color: #ccc;
+}
+
+.infinite-preloader {
+  margin-right: rem(20);
+}
+
 //page transition
 .fade-enter-active, .fade-leave-active {
   transition: opacity .3s;
