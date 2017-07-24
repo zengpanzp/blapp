@@ -297,11 +297,11 @@ router.beforeEach(({ meta, path }, from, next) => {
 })
 
 // 过渡效果 start
-router.afterEach(function (to) {
-  setTimeout(() => {
-    $('#app > div')[0] && $('#app > div')[0].classList.remove('page-content')
-  }, 500)
-})
+// router.afterEach(function (to) {
+//   setTimeout(() => {
+//     $('#app > div')[0] && $('#app > div')[0].classList.remove('page-content')
+//   }, 500)
+// })
 // 过渡效果 end
 
 /* eslint-disable no-new */
