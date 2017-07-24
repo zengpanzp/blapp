@@ -20,7 +20,7 @@ export default {
     Vue.nextTick(() => {
       setTimeout(() => {
         this.slide = 'slide'
-      }, 500)
+      }, 800)
     });
     document.querySelector('body').removeChild(document.querySelector('.ant-transparent'))
   }
