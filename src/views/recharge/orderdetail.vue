@@ -22,7 +22,7 @@
     <ul>
       <li class="pay-bill">
         <label>￥</label><span>{{orderDetail.orderStatus =="1001"?orderDetail.changeMoney:orderDetail.needMoney}}</span>
-        <p v-show="orderDetail.serviceFee>0">(含￥{{orderDetail.serviceFee}}服务费)</p>
+        <p v-show="orderDetail.serviceFee>0">(需收取￥{{orderDetail.serviceFee}}服务费)</p>
         <div v-if="orderDetail.payMetSid==1">在线支付</div>
         <div v-if="orderDetail.payMetSid==2">货到付款</div>
       </li>
