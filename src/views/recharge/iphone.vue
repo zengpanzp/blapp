@@ -184,10 +184,8 @@
     created() {
       let rechargeType = this.$route.params.type
       if (this.$route.query.type !== 'petrol') {
-        setTimeout(() => {
-          document.title = '手机充值'
-          window.CTJSBridge && window.CTJSBridge._setNativeTitle('手机充值')
-        }, 400)
+        document.title = '手机充值'
+        window.CTJSBridge && window.CTJSBridge._setNativeTitle('手机充值')
         this.maxlength = 11
         this.placeholder = '请输入充值手机号'
         this.historyName = 'historyNum'
@@ -207,15 +205,13 @@
           });
         }
       } else {
-        setTimeout(() => {
-          document.title = '加油卡充值'
-          window.CTJSBridge && window.CTJSBridge._setNativeTitle('加油卡充值')
-          sa.track('$pageview', {
-            pageId: 'APP_加油卡',
-            categoryId: 'APP_Fees',
-            $title: "APP_加油卡"
-          });
-        }, 400)
+        document.title = '加油卡充值'
+        window.CTJSBridge && window.CTJSBridge._setNativeTitle('加油卡充值')
+        sa.track('$pageview', {
+          pageId: 'APP_加油卡',
+          categoryId: 'APP_Fees',
+          $title: "APP_加油卡"
+        });
         this.getPhoneInfo('yk', 1)
         this.maxlength = 19
         this.placeholder = '请输入油卡号'

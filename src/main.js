@@ -151,26 +151,26 @@ Vue.directive('go-native-resource', {
  * @param    {[Obj]}                 link  [link标签元素]
  * @return   {[Boolean]}             [加载成功返回true，失败返回false]
  */
-const cssReady = (fn, link) => {
-  let d = document
-  let t = d.createStyleSheet
-  let r = t ? 'rules' : 'cssRules'
-  let s = t ? 'styleSheet' : 'sheet'
-  let l = d.getElementsByTagName('link');
-  // passed link or last link node
-  link || (link = l[l.length - 1]);
+// const cssReady = (fn, link) => {
+//   let d = document
+//   let t = d.createStyleSheet
+//   let r = t ? 'rules' : 'cssRules'
+//   let s = t ? 'styleSheet' : 'sheet'
+//   let l = d.getElementsByTagName('link');
+//   // passed link or last link node
+//   link || (link = l[l.length - 1]);
 
-  function check() {
-    try {
-      return link && link[s] && link[s][r] && link[s][r][0]
-    } catch (e) {
-      return false
-    }
-  }
-  (function poll() {
-    check() && setTimeout(fn, 0) || setTimeout(poll, 100);
-  })();
-}
+//   function check() {
+//     try {
+//       return link && link[s] && link[s][r] && link[s][r][0]
+//     } catch (e) {
+//       return false
+//     }
+//   }
+//   (function poll() {
+//     check() && setTimeout(fn, 0) || setTimeout(poll, 100);
+//   })();
+// }
 
 // const isiBailianApp = /iBailian/.test(navigator.userAgent) // 判断userAgent是否是百联APP
 // window.isiBailianApp = isiBailianApp
@@ -238,14 +238,13 @@ jsBridgeReady("_maiDian", false, () => {
   }
 })
 
-let linkCssObj = document.getElementById('classLink')
+// let linkCssObj = document.getElementById('classLink')
   // 登录拦截
 router.beforeEach(({ meta, path }, from, next) => {
   Vue.$loading && Vue.$loading.close()
   if (!meta.notLoading) {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
-      // message: '加载中',
       duration: 'loading',
       className: 'white-bg loading-bg'
     })
@@ -277,22 +276,24 @@ router.beforeEach(({ meta, path }, from, next) => {
     // 过渡效果 end
     if (meta.title) {
       document.title = meta.title
-      if (window.isiOS) {
-        setTimeout(() => {
-          window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
-        }, 400)
-      } else {
-        window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
-      }
+      window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
+      // if (window.isiOS) {
+      //   setTimeout(() => {
+      //     window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
+      //   }, 400)
+      // } else {
+      //   window.CTJSBridge && window.CTJSBridge._setNativeTitle(meta.title)
+      // }
     }
-    if (meta.class) {
-      linkCssObj.href = `static/css/${meta.class}.css`
-      cssReady(() => {
-        return next()
-      }, linkCssObj)
-    } else {
-      next()
-    }
+    // if (meta.class) {
+    //   linkCssObj.href = `static/css/${meta.class}.css`
+    //   cssReady(() => {
+    //     return next()
+    //   }, linkCssObj)
+    // } else {
+    //   next()
+    // }
+    next()
   })
 })
 
