@@ -305,7 +305,7 @@ export const prdRouter = [
   {
     path: '/memberCard',
     meta: {
-      title: '百联通会员卡二维码'
+      title: '百联通会员卡'
     },
     component: r => require.ensure([], () => r(require('../views/memberCard/memberCard')), 'memberCard')
   },
