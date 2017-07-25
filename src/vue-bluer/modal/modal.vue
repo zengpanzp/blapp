@@ -250,7 +250,10 @@
       }
     },
     mounted() {
-      this.$refs.modal && this.halfHeight = -(this.$refs.modal.offsetHeight / 2) + 'px'
+      if (this.$refs.modal) {
+        this.halfHeight = -(this.$refs.modal.offsetHeight / 2) + 'px'
+      }
     }
   }
 </script>
+
