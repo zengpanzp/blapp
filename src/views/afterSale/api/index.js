@@ -31,5 +31,13 @@ export default {
   // 曾攀 查看售后
   queryConfig: params => {
     return Vue.http.post(baseUrl + '/dict/list.htm', params)
+  },
+  /* 检查退货情况 */
+  checkRtn: params => {
+    return Vue.http.post(baseUrl + '/order/checkReturn.htm', params)
+  },
+  /* 获取退货原因 */
+  getReason: params => {
+    return Vue.http.post(baseUrl + '/dict/list.htm', params)
   }
 }
