@@ -538,5 +538,13 @@ export const prdRouter = [
       title: '申请售后服务',
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/applyAftersale')), 'applyAftersale')
+  },
+    /* 薛天玲 售后 退货码 */
+  {
+    path: '/code',
+    meta: {
+      title: '退货码',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/code')), 'code')
   }
 ]
