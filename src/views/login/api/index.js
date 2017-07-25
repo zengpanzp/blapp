@@ -24,6 +24,10 @@ export default {
   sendSMSCodeByRegister: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/sendRegisterValidateCodeMessage.htm', params);
   },
+  // 生成图片验证码
+  showImgCode: params => {
+    return Vue.http.post(baseUrl + '/captcha/getCaptchaCode.htm', params)
+  },
   // 重置密码的短信验证码
   sendSMSCodeByResetPass: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/sendResetPasswordValidateCodeMessage.htm', params);
@@ -49,4 +53,7 @@ export default {
     return Vue.http.post(baseUrl + '/baseinfo/jn/checkPhoneUnique.htm', params);
   },
   // 安付宝 登录 或者 绑定
+  unionLogin: params => {
+    return Vue.http.post(baseUrl + '/rsa/getAFBUrl.htm', params);
+  }
 }
