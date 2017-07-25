@@ -41,7 +41,7 @@ bridge.prototype.LoadMethod = function(targetName, actionName, data, callback) {
     /* 充值缴费相关 */
     // 充值缴费--缴费记录跳转
     case 'chargeAndPaymentViewController':
-      window.location.href = '/index2.html#/' + data.url + '?orderType=' + data.type
+      window.location.href = '/index2.html#/' + data.url
       break;
     // 收银台跳转
     case 'cashierNavigationController':
