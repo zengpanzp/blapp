@@ -17,7 +17,7 @@
             <li class="orderbtn">
             <a  class="btn-sub cancelRefund"  @click="cancel($event,item.returnNo)" v-if="item.statusCode == '2001'||item.statusCode == '2002'">取消申请</a>
             <router-link :to="{path: '/afterSaleDetail/' + item.returnNo + '/' + encodeURIComponent(getStatusName(item.statusCode))}" class="btn-sub">查看进度</router-link>
-            <router-link :to="{path: '//' + encodeURIComponent(JSON.stringify({qrcode:item.extrCode, title:'退货码'}))}" class="btn-sub" v-if="item.statusCode == '20032'">查看退货码</router-link>
+            <a class="btn-sub" v-if="item.statusCode == '20032'" @click="refundCode(item.extrCode)">查看退货码</a>
             </li>
           </ul>
       </div>
@@ -146,6 +146,15 @@ export default {
     },
     goHome() {
       window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
+    },
+    // 查看退货码
+    refundCode(val) {
+      this.$router.push({
+        path: 'code',
+        query: {
+          code: val
+        }
+      })
     }
   },
   // 路由取memberId
