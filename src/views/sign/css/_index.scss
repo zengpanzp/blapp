@@ -84,7 +84,6 @@ body {
     left: 0;
     z-index: 10;
   }
-  overflow: hidden;
   background: #fff;
   .fixed{
     z-index: 11;
@@ -177,7 +176,7 @@ body {
       position: relative;
       height: rem(120);
       top: rem(35);
-      left: rem(30);
+      padding-left: rem(30);
       font-size: rem(36);
       color: #333;
       line-height: rem(60);
