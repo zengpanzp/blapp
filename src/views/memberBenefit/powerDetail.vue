@@ -83,7 +83,7 @@ export default {
     this.member_mobile = utils.dbGet('userInfo').member_mobile
     console.log(this.memberToken)
   //	let powerId = this.$route.params.powerId
-    let powerId = '004'
+    let powerId = '014'
   	console.log(powerId)
   	api.getPowerDel(JSON.stringify({
     	'rightCode': powerId

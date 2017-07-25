@@ -14,7 +14,7 @@
       <ul>
         <router-link to="/userCenter/enterPw"><li class="first">登录密码<div><i class="iconfont arrow-back"></i><i>密码强度: {{ pwStatus }}</i></div></li></router-link>
         <div v-if="payStatus == '0'"><router-link to="/userCenter/payPw"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
-        <div v-if="payStatus != '0' && certCode" ><router-link to="/userCenter/checkPhone"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
+        <div v-else-if="payStatus != '0' && certCode" ><router-link to="/userCenter/checkPhone"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
         <div v-else><router-link to="/userCenter/payPwAuth"><li>支付密码<div><i class="iconfont arrow-back"></i><i>{{ payStatus == 0 ? '已设置' : '绑定手机且实名认证后可设置' }}</i></div></li></router-link></div>
       </ul>
     </div>
@@ -149,7 +149,10 @@ export default {
             window.CTJSBridge.LoadAPI('BLLogoutAPIManager', {}, {
               success: result => {
                 console.log(result)
-                this.$toast('退出成功!')
+                this.$toast({
+                  message: '退出成功!',
+                  position: "bottom"
+                })
                 setTimeout(function () {
                 window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerNavigateToHome', {pageId: ''})
                 }, 2500)

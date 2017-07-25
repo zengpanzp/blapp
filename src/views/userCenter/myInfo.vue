@@ -1,22 +1,25 @@
 <template>
   <div class="wholepage">
-  <!-- 上传头像 -->
-  <input type="file" accept="image/*" @change="readImage" ref="file" hidden>
   <bl-actionsheet :actions="actions" v-model="sheetVisible" cancelText=""></bl-actionsheet>
    <div class="section1">
      <div class="list">
       <ul>
-        <li class="first" @click="avatar">头像
-          <b>
-            <img :src="avatarUrl" v-show="avatarUrl">
-            <i class="head iconfont arrow-back"></i>
-          </b>
+        <li class="first">
+          <div>头像</div>
+          <div class="up-img flex-item">
+            <b>
+              <img :src="avatarUrl" v-show="avatarUrl">
+              <i class="head iconfont arrow-back"></i>
+            </b>
+            <!-- 上传头像 -->
+            <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file">
+          </div>
         </li>
         <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
         <li @click="gender">性别<i>{{ gd }}<i class="iconfont arrow-back"></i></i></li>
         <li>出生日期<i>{{ bday }}</i></li>
-        <router-link to="/userCenter/mycar"><li>我的车牌<i class="iconfont arrow-back"></i></li></router-link>
-        <router-link to="/userCenter/otherInfo"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
+        <li @click="mycar">我的车牌<i><i class="iconfont arrow-back"></i></i></li>
+        <router-link to="/userCenter/otherInfo" tag="div"><li>其他个人资料<i class="iconfont arrow-back"></i></li></router-link>
       </ul>
     </div>
    </div>
@@ -24,7 +27,7 @@
      <div class="list">
       <ul>
         <li class="first" @click="address">地址管理<i class="iconfont arrow-back"></i></li>
-        <router-link to="/userCenter/securityCenter"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li></router-link>
+        <router-link to="/userCenter/securityCenter" tag="div"><li>安全中心<div><i class="iconfont arrow-back"></i><i>修改登录密码、支付密码等</i></div></li></router-link>
       </ul>
     </div>
    </div>
@@ -57,6 +60,7 @@ export default {
     	bday: '',
     	nickName: '',
       avatarUrl: '',
+      licenseCode: '',
       sheetVisible: false,
       showModel: false,
       actions: [{
@@ -87,6 +91,9 @@ export default {
         console.log(data)
   	    if (data.body.obj) {
           let resData = JSON.parse(data.body.obj)
+          if (resData.carlicenses != '') {
+            this.licenseCode = resData.carlicenses[0].licenseCode
+          }
   	    	this.nickName = resData.nickName
   	    	let y = resData.birthYear
   	    	let m = resData.birthMonth
@@ -180,55 +187,35 @@ export default {
     gender () {
       this.sheetVisible = true
     },
-    avatar () {
-      this.$refs.file.click()
-      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-      //   // type: 'camera'
-      // }, {success: data => {
-      //         console.log('success' + data)
-      //         // let image = JSON.parse { }
-      //       },
-      //       fail: () => {
-      //         console.log('fail')
-      //       }})
-      // window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-      //   params: params
-      // })
-    },
     readImage(event) {
       this.inlineLoading = this.$toast({
         iconClass: 'preloader white',
         duration: 'loading',
         className: 'loading-bg'
       })
-      require.ensure([], require => {
-        require('src/lib/lrz.all.bundle')
-        let files = event.target.files
-        window.lrz(files[0], {
-          width: 640
-        }).then(resLrz => {
-          api.userCenter.upload({
-            appId: 'BL_IBLAPP',
-            base64Content: resLrz.base64.split(",")[1],
-            fileName: new Date().getTime(),
-            mediaType: 'jpg',
-            reSize: 0
-          }).then(res => {
-            this.inlineLoading.close()
-            if (res.body.obj) {
-              console.log('上传图片返回:', JSON.parse(res.body.obj))
-              let resData = JSON.parse(res.body.obj)
-              this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
-              console.log(this.avatarUrl)
-              this.updateGender()
-            } else {
-              this.$toast(res.body.msg)
-            }
-          }, () => {
-            this.inlineLoading.close()
-          })
+      let files = event.target.files
+      window.compressImg(files[0], 640, base64 => {
+        api.userCenter.upload({
+          appId: 'BL_IBLAPP',
+          base64Content: base64.split(",")[1],
+          fileName: new Date().getTime(),
+          mediaType: 'jpg',
+          reSize: 0
+        }).then(res => {
+          this.inlineLoading.close()
+          if (res.body.obj) {
+            console.log('上传图片返回:', JSON.parse(res.body.obj))
+            let resData = JSON.parse(res.body.obj)
+            this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
+            console.log(this.avatarUrl)
+            this.updateGender()
+          } else {
+            this.$toast(res.body.msg)
+          }
+        }, () => {
+          this.inlineLoading.close()
         })
-      }, 'lrz')
+      })
     },
     male () {
       console.log('###selection: ' + '男性')
@@ -255,6 +242,20 @@ export default {
           nickName: this.nickName
         }
       })
+    },
+    mycar() {
+      if (this.licenseCode) {
+        this.$router.push({
+          path: 'myCar',
+          query: {
+            licenseCode: encodeURIComponent(this.licenseCode)
+          }
+        })
+      } else {
+        this.$router.push({
+          path: 'myCar'
+        })
+      }
     },
     updateGender () {
       api.userCenter.update({

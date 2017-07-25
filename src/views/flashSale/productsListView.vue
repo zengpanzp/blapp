@@ -228,6 +228,11 @@ export default {
     sureFilter() {
       /* 参数调整 */
       this.requestData.pageNo = 1
+      if (this.brandSid.length !== 0) {
+        this.requestData.brandSid = this.brandSid.toString()
+      } else {
+        this.requestData.brandSid = undefined
+      }
       /* 清空商品列表 */
       this.listGoodsData = []
       this.getListGoods()
@@ -269,13 +274,6 @@ export default {
     },
     getListGoods(done) {
       this.noGoods = false
-
-      if (this.brandSid.length !== 0) {
-        this.requestData.brandSid = this.brandSid.toString()
-      } else {
-        this.requestData.brandSid = undefined
-      }
-
       window.CTJSBridge.LoadAPI("BLQueryBrandDetailSearchActivityAPIManager", this.requestData, {
         success: res => {
           let resData = utils.transData(res)
@@ -343,13 +341,6 @@ export default {
         })
       } catch (err) {
         console.log("sa error => " + err);
-      }
-    }
-  },
-  watch: {
-    showModel(val) {
-      if (!val) {
-        this.brandSid = []
       }
     }
   }

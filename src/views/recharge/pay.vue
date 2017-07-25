@@ -30,13 +30,13 @@
             <!--<div class='dummy-goods-list line-tv-box'>
                 <ul>-->
             <li class="flex-m">缴费金额
-              <div class="name"><label style="color:#e6133c">￥{{queryData.total||0}}</label></div>
+              <div class="name"><label style="color:#e6133c">￥{{queryData.price||0}}</label></div>
             </li>
           </ul>
         <div class='pay-remind'><img src='./i/iphone/remind-light.png'>如需为3个月前的缴费，请使用扫一扫扫描条形码</div>
         <div class="phoneFixBottom">
           <div class="config-button-contain">
-            <button class="edit-config-button middleFont" v-if="queryData.total" @click="goPay" :disabled="queryData.canpay!='01'">立即支付：￥{{ queryData.total }}</button>
+            <button class="edit-config-button middleFont" v-if="queryData.total" @click="goPay" :disabled="queryData.canpay!='01'">立即支付：￥{{ queryData.price }}</button>
             <button class="edit-config-button middleFont" v-else  :disabled="queryData.canpay!='01'">未查询到付费信息</button>
           </div>
         </div>

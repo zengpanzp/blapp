@@ -305,7 +305,7 @@ export const prdRouter = [
   {
     path: '/memberCard',
     meta: {
-      title: '百联通会员卡二维码'
+      title: '百联通会员卡'
     },
     component: r => require.ensure([], () => r(require('../views/memberCard/memberCard')), 'memberCard')
   },
@@ -400,6 +400,33 @@ export const prdRouter = [
       title: '会员权益'
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
+  },
+  /* 陈鹏 龙腾贵宾室预约 */
+  {
+    path: '/LtVipReserve',
+    meta: {
+      title: '龙腾贵宾室预约',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipReserve')), 'LtVipReserve')
+  },
+  /* 陈鹏 龙腾贵宾室预约 */
+  {
+    path: '/LtVipSuccess',
+    meta: {
+      title: '预约成功',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipSuccess')), 'LtVipSuccess')
+  },
+  /* 陈鹏 专家预约 */
+  {
+    path: '/expertReserve',
+    meta: {
+      title: '专家预约',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/expertReserve')), 'expertReserve')
   },
   /* 曾攀 更多权益 */
   {
@@ -511,5 +538,13 @@ export const prdRouter = [
       title: '申请售后服务',
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/applyAftersale')), 'applyAftersale')
+  },
+    /* 薛天玲 售后 退货码 */
+  {
+    path: '/code',
+    meta: {
+      title: '退货码',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/code')), 'code')
   }
 ]

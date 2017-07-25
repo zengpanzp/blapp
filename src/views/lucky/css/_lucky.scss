@@ -707,7 +707,6 @@ html {
   bottom: 0;
   background-color: rgba(0, 0, 0, .6);
   z-index: 1000;
-  display: none;
   z-index: 10002
 }
 
@@ -757,7 +756,7 @@ html {
   background-size: contain;
   overflow-y: auto;
   overflow-x: hidden;
-  position: relative;
+  // position: relative;
 }
 
 #lucky .modal-button,
@@ -776,17 +775,16 @@ html {
 }
 
 #lucky .modal {
-  width: 16.875rem;
-  max-height: 32rem;
+  width: rem(486);
   position: fixed;
   z-index: 11000;
   left: 50%;
-  margin-left: -8.4375rem;
+  margin-left: rem(-243);
   margin-top: 0;
   overflow: hidden;
   top: 50%;
   text-align: center;
-  border-radius: .46875rem;
+  border-radius: rem(15);
   opacity: 0;
   -webkit-transform: translate(0, -50%)!important;
   transform: translate(0, -50%)!important;
@@ -814,17 +812,17 @@ html {
 #lucky .modal-close {
   position: absolute;
   z-index: 3;
-  right: .8125rem;
-  top: .8125rem;
+  right: rem(23.4);
+  top: rem(23.4);
   background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NTc3MiwgMjAxNC8wMS8xMy0xOTo0NDowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTQgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzJFQTFDMUM2MDU0MTFFNjlCNTNEOTRBQzE4QjcxMjQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzJFQTFDMUQ2MDU0MTFFNjlCNTNEOTRBQzE4QjcxMjQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1QTREOUYwOTYwNTIxMUU2OUI1M0Q5NEFDMThCNzEyNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1QTREOUYwQTYwNTIxMUU2OUI1M0Q5NEFDMThCNzEyNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PppJXL0AAAGXSURBVHjazNjBSsQwEAbgdOjZq+/hw3jw5rp68OKKIr6EsIKXoq43Ee8efCOvHtRbdQYihLJtk8xkMoG/pd3AfoRpmrTpum7lnLvCvGAuML/OXmswa8wSc9vi4RqziznH7GCOjcEJ/IBZ+OszwMNz0OHId2iMgqk9EvoSswluLozAt4GfMCtC974kLMHHwFTTPfgbluCTYLqA4AcL8FnwEF0bHgXehq4FjwaPobXhSeAptBY8GTyHLg2HHHAMuhSc/vc+BxyLloazwCloKTgbnIrmwkXAOehcuBg4Fz0F3y8N5qDH4D+lwdRa5lzbe8A75gvzVhosgXZ+a/aqMcIS5eE0HjoNdHGwNFoFLIlWA0uhVcES6FTwqe/PWta2yuA7D244X7JAsST2ghFmfckCxRo+kdpIgOJDJ7aRAOVZQgQOFaY1NhyUwSJwqABmw6Hymy4LDgZezclwsLCWSIWDAXAyHIyAk+BgCBwNb42Bh3AXuP7PS0KvjYHn4J80yocGwVOlcgB+Yf7tz5bAQzhVxAfm5k+AAQD3TPHzRpkLSAAAAABJRU5ErkJggg==) no-repeat center center;
   background-size: contain;
-  width: .9375rem;
-  height: .9375rem
+  width: rem(26);
+  height: rem(26)
 }
 
 #lucky .modal-inner {
-  padding: .9375rem;
-  border-radius: .46875rem .46875rem 0 0;
+  padding: rem(27);
+  border-radius: rem(15) rem(15) 0 0;
   position: relative;
   background: #F8F8F8
 }
@@ -852,13 +850,13 @@ html {
 
 #lucky .modal-title {
   font-weight: 500;
-  font-size: 1rem;
+  font-size: rem(30);
   text-align: center
 }
 
 #lucky .modal-title.hairline {
   position: relative;
-  padding-bottom: .625rem
+  padding-bottom: rem(18)
 }
 
 #lucky .modal-title.hairline:after {
@@ -890,22 +888,21 @@ html {
 
 #lucky .modal-title+.modal-text {
   margin: 0;
-  padding-top: .3125rem;
-  font-size: .875rem;
+  padding-top: rem(9);
+  font-size: rem(24);
   color: #666;
   text-align: left
 }
 
 #lucky .modal-text {
-  margin-top: .3125rem;
-  font-size: 1rem;
+  margin-top: rem(9);
+  font-size: rem(24);
   color: #666;
-  margin: .9375rem 0;
-  max-height: 15.25rem
+  margin: rem(27) 0;
 }
 
 #lucky .modal-buttons {
-  height: 2.75rem;
+  height: rem(78);
   overflow: hidden;
   display: -webkit-box;
   display: -moz-box;
@@ -921,9 +918,9 @@ html {
 
 #lucky .modal-button {
   width: 100%;
-  padding: 0 .3125rem;
-  height: 2.75rem;
-  font-size: 1.0625rem;
+  padding: 0 rem(9);
+  height: rem(80);
+  font-size: rem(30);
   border: 0;
   text-align: center;
   color: #333;
@@ -971,17 +968,17 @@ html {
 }
 
 #lucky .modal-button:first-child {
-  border-radius: 0 0 0 .46875rem
+  border-radius: 0 0 0 rem(15)
 }
 
 #lucky .modal-button:last-child {
   background-image: none;
-  border-radius: 0 0 .46875rem 0;
+  border-radius: 0 0 rem(15) 0;
   color: #E6143C
 }
 
 #lucky .modal-button:first-child:last-child {
-  border-radius: 0 0 .46875rem .46875rem;
+  border-radius: 0 0 rem(15) rem(15);
   background-origin: padding-box;
   color: #333
 }
@@ -1011,7 +1008,7 @@ html {
 }
 
 #lucky .modal-no-buttons .modal-inner {
-  border-radius: .46875rem;
+  border-radius: rem(15);
   background-image: none
 }
 
@@ -1068,7 +1065,7 @@ html {
   height: rem(586);
   border: rem(8) solid #48357e;
   margin-top: rem(27);
-  border-radius: rem(10)
+  border-radius: rem(10);
 }
 
 #lucky .lottery-list dl {
@@ -1154,12 +1151,11 @@ html {
   bottom: 0;
   background-color: rgba(0, 0, 0, .6);
   z-index: 1000;
-  display: none;
   z-index: 10002
 }
 
 #lucky .modal-img {
-  height: 11.25rem;
+  height: rem(316);
   -webkit-box-pack: center;
   -moz-box-pack: center;
   box-pack: center;
@@ -1169,19 +1165,19 @@ html {
 }
 
 #lucky .modal-img img {
-  width: 10.9375rem
+  width: rem(340)
 }
 
 #lucky .shake-text {
-  font-size: .875rem;
+  font-size: rem(24);
   color: #666;
   text-align: center;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 2rem;
-  line-height: 1rem;
+  height: rem(56);
+  line-height: rem(28);
   display: -webkit-box;
 }
 

@@ -41,7 +41,7 @@
             </li>
           </ul>
         </div>
-        <div class="bottom"><input class="circle-select" v-model="checked" id="checkbox" type="checkbox" ><label class="tips" for="checkbox">两周内免登录</label> <label>忘记密码?</label></div>
+        <div class="bottom"><input class="circle-select" v-model="checked" id="checkbox" type="checkbox" ><label class="tips" for="checkbox">两周内免登录</label> <label @click="forget">忘记密码?</label></div>
       </bl-tab-container-item>
       <bl-tab-container-item :id="1">
         <!--短信验证码登录-->
@@ -105,10 +105,16 @@
       this.$loading.close();
     },
     methods: {
+      alertTip(msg) {
+        this.$toast({
+          position: 'bottom',
+          message: msg
+        });
+      },
       // 登录
       login() {
         if (this.tabItem.type == "account") { // 账号密码登录
-          if (this.valPhone(this.phone)) {
+          if (this.phone != "") {
             if (this.pass != "") {
               if (this.pass.length < 8) {
                 this.$toast({
@@ -120,18 +126,30 @@
               api.login({
                 loginName: this.phone,
                 password: MD5(this.pass),
-                type: 1,
+                type: "1",
                 relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html?",
                 mpFlag: ""
               }).then(data => {
-                console.log(data)
+                  console.log(data);
+                if (this.checked) { // 2周内免登录
+                }
+                if (data.body.resCode == "00100000") {
+                  let url = decodeURIComponent(this.backUrl);
+                  if (url.indexOf("?") > 0) {
+                      url += '&token=' + data.body.token;
+                  } else {
+                      url += "?token=" + data.body.token
+                  }
+                  location.href = url;
+                } else {
+                    this.alertTip(data.body.msg);
+                }
               });
             } else {
-              this.$toast({
-                position: 'bottom',
-                message: "密码不能为空!"
-              });
+              this.alertTip("密码不能为空!")
             }
+          } else {
+            this.alertTip("账号不能为空!")
           }
         } else { // 短信验证码登录
           if (this.valPhone(this.mobile)) {
@@ -144,13 +162,22 @@
                 relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html",
                 mpFlag: ""
               }).then(data => {
-                console.log(data);
+                if (this.checkedSMS) { // 2周内免登录
+                }
+                if (data.body.resCode == "00100000") {
+                  let url = decodeURIComponent(this.backUrl);
+                  if (url.indexOf("?") > 0) {
+                    url += '&token=' + data.body.obj.member_token;
+                  } else {
+                    url += "?token=" + data.body.obj.member_token;
+                  }
+                  location.href = url;
+                } else {
+                  this.alertTip(data.body.msg);
+                }
               });
             } else {
-              this.$toast({
-                position: 'bottom',
-                message: "短信验证码不能为空!"
-              });
+              this.alertTip("短信验证码不能为空!")
             }
           }
         }
@@ -169,7 +196,7 @@
               this.timeId = setInterval(function() {
                 if (times > 0) {
                   that.codeDisabled = true;
-                  that.smsCodeText = "重新获取(" + (--times) + "s)";
+                  that.smsCodeText = "重新获取(" + (times--) + "s)";
                 } else {
                   that.codeDisabled = false;
                   that.smsCodeText = "获取短信验证码";
@@ -185,23 +212,21 @@
       // 验证手机号
       valPhone(phone) {
         if (phone == "") {
-          this.$toast({
-            position: 'bottom',
-            message: "手机号不能为空!"
-          });
+          this.alertTip("手机号不能为空!")
           return false;
         } else if (!/^1[34578]\d{9}$/.test(phone)) {
-          this.$toast({
-            position: 'bottom',
-            message: "手机号码有误!"
-          });
+          this.alertTip("手机号码有误!")
           return false;
         }
         return true;
       },
       // 去注册
       register() {
-        this.$router.push({path: 'register'})
+        this.$router.push({path: 'register?backUrl=' + this.backUrl})
+      },
+      // 忘记密码
+      forget() {
+        this.$router.push({path: 'findpass/1?backUrl=' + this.backUrl})
       }
     }
   };
