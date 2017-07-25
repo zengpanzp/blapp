@@ -1,4 +1,9 @@
 <style lang="scss" src="./css/applyAftersale.scss" scoped></style>
+<style type="text/css">
+  body{
+    background: #eeeeee;
+  }
+</style>
 <template>
 <div class="new">
     <div class="main">
@@ -51,16 +56,16 @@
             <span class="disAble"><a>换货</a></span>
             <span class="disAble"><a>维修</a></span>
 
-            <div class="agreement" @click="goQuestion"><a>什么情况下不可以申请退换货？<i class="iconfont icon-enter"></i></a>
+            <div class="agreement" @click="goQuestion"><a>什么情况下不可以申请退换货？</a>
             </div>
         </div>
 
         <div class="columnTitle border corner-top">申请数量<label class="colorRed">*</label></div>
-        <div class="proColor proColorPadding proColorBg corner-bottom return">
+        <div class="proColor  proColorBg corner-bottom  applyNum">
             <div class="proNum proNumMar">
-                <a class="proAdd iconfont icon-minus" id="reduce"></a>
+                <a class="proAdd " id="reduce">-</a>
                 <input type="number" class="proNumInput" value="1" id="returnCnt">
-                <a class="proAdd iconfont icon-add" id="add"></a>
+                <a class="proAdd " id="add">+</a>
             </div>
             <label class="max">最大可提交数量为<b>{{returnData.maxNum}}</b>个</label>
         </div>

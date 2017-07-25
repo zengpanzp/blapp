@@ -1,5 +1,8 @@
 @charset "utf-8";
 @import "src/sass/tobe/function";
+.new .main{
+    padding: 0 rem(20);
+}
 .new .cartCheckbox {
     width: rem(48);
     height: rem(48);
@@ -59,7 +62,7 @@
 .new .payList {
     background: #fff;
     border: 1px solid #e9e9e9;
-    margin-bottom: rem(12);
+    margin-bottom: rem(20);
     font-size: rem(28);
     overflow: hidden
 }
@@ -312,7 +315,7 @@ border-bottom-left-radius: rem(12);
 
 .proColorPadding {
     padding: rem(12);
-    margin-bottom: rem(12)
+    margin-bottom: rem(20)
 }
 
 .proColor b.cue2 {
@@ -813,4 +816,29 @@ div.plusMark {
     background: rgba(0, 0, 0, .6);
     display: none;
     opacity: 1
+}
+.applyNum{
+    @include display(flex);
+    @include align-items(center);
+    padding: rem(14) rem(20);
+}
+.proAdd{
+    width: rem(50);
+    height: rem(50);
+    line-height: rem(50);
+    text-align: center;
+    background:#FF6F6F;
+    display: block;
+    color: #ffffff;
+}
+.proNum{
+    @include display(flex);
+    @include align-items(center);
+    margin-right: rem(20);
+    input{
+        width: rem(80);
+        height: rem(50);
+        border: 1px solid #FF6F6F;
+        text-align: center;
+    }
 }
