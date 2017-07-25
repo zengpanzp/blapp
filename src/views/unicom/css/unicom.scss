@@ -308,9 +308,12 @@
 .modal-button.full-button {
 	width: 100%;
 	border-width: 1px 0 0 0;
-	color: #3ea2ff;
+	color: #E6143C;
 	font-family: "微软雅黑";
 	font-size: rem(30);
+	display: inline-block;
+	background: white;
+	line-height: rem(88)
 }
 
 .modal .modal-inner.unic-modal-inner {

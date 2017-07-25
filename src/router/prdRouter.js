@@ -305,7 +305,7 @@ export const prdRouter = [
   {
     path: '/memberCard',
     meta: {
-      title: '百联通会员卡二维码'
+      title: '百联通会员卡'
     },
     component: r => require.ensure([], () => r(require('../views/memberCard/memberCard')), 'memberCard')
   },
@@ -520,5 +520,31 @@ export const prdRouter = [
       title: '售后处理进度',
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/returnHistoryPage')), 'returnHistoryPage')
+  },
+  /* 曾攀 售后商品列表 */
+  {
+    path: '/seeMore/:goods',
+    name: 'seeMore',
+    meta: {
+      title: '售后商品列表',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/seeMore')), 'seeMore')
+  },
+  /* 曾攀 申请售后服务/:orderNo/:orderDetail/:address */
+  {
+    path: '/applyAftersale',
+    name: 'applyAftersale',
+    meta: {
+      title: '申请售后服务',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/applyAftersale')), 'applyAftersale')
+  },
+    /* 薛天玲 售后 退货码 */
+  {
+    path: '/code',
+    meta: {
+      title: '退货码',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/code')), 'code')
   }
 ]

@@ -255,7 +255,8 @@ export default {
         }).then(data => {
             if (data.body.obj) {
                 let obj = JSON.parse(data.body.obj)
-                if (obj.msg.indexOf("查询结果为空") != -1) {
+                console.log(obj)
+                if (obj.msg && obj.msg.indexOf("查询结果为空") != -1) {
                     if (this.encode_memberId && this.mobile) {
                         api.myWallet.okCardUrl({
                             "method": "corgBindRequest.do",

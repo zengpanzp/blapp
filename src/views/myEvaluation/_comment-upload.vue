@@ -14,7 +14,7 @@
       </div>
       <div class="upload-pic-get lazy-box" v-if="upload.length < maxLength">
         <img :src="require('./i/assess-shoot.png')" alt="" class="lazy">
-        <input type="file" multiple="multiple" accept="image/*" @change="readImage" class="cutfile">
+        <input type="file" accept="image/*" multiple="multiple" @change="readImage" class="cutfile">
       </div>
     </div>
     <div class="upload-pic-bottom">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ maxLength }}</span>张）</div>
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+window.lsloader.load(window.lsloaderBase + 'processImg', 'static/js/processImg.js');
 import api from './api'
 export default {
 
@@ -46,66 +47,61 @@ export default {
         duration: 'loading',
         className: 'loading-bg'
       })
-      require.ensure([], require => {
-        require('src/lib/lrz.all.bundle')
-        let files = event.target.files
-        let filesLen = files.length
-        if (this.upload.length + filesLen > this.maxLength) {
-          this.inlineLoading.close()
-          this.$modal({
-            title: '提示',
-            content: `最多上传${this.maxLength}张`
-          })
-          filesLen = 1
-        }
-        for (let i = 0; i < filesLen; i++) {
-          window.lrz(files[i], {
-            width: 640
-          }).then(lrzRes => {
-            // let sourceSize = this.toFixed2(file.size / 1024) // 实际大小
-            let resultSize = this.toFixed2(lrzRes.fileLen / 1024) // 压缩后的大小
-            // let scale = parseInt(100 - (resultSize / sourceSize * 100)) // 缩小了多少
-            if (resultSize > 5 * 1024) {
-              this.$modal({
-                title: '提示',
-                content: '图片最大5M'
+      let files = event.target.files
+      let filesLen = files.length
+      if (this.upload.length + filesLen > this.maxLength) {
+        this.inlineLoading.close()
+        this.$modal({
+          title: '提示',
+          content: `最多上传${this.maxLength}张`
+        })
+        filesLen = 1
+      }
+      for (let i = 0; i < filesLen; i++) {
+        window.compressImg(files[i], 640, base64 => {
+          // let sourceSize = this.toFixed2(file.size / 1024) // 实际大小
+          // let resultSize = this.toFixed2(lrzRes.fileLen / 1024) // 压缩后的大小
+          // let scale = parseInt(100 - (resultSize / sourceSize * 100)) // 缩小了多少
+          // if (resultSize > 5 * 1024) {
+          //   this.$modal({
+          //     title: '提示',
+          //     content: '图片最大5M'
+          //   })
+          // }
+          if (this.upload.length + i + 1 > this.maxLength) {
+            this.inlineLoading.close()
+            return
+          }
+          api.upload({
+            appId: 'BL_IBLAPP',
+            base64Content: base64.split(",")[1],
+            fileName: new Date().getTime(),
+            mediaType: 'jpg',
+            reSize: 1
+          }).then(res => {
+            if (i == filesLen - 1) {
+              this.inlineLoading.close()
+            }
+            if (res.body.obj) {
+              console.log('上传图片返回:', JSON.parse(res.body.obj))
+              let resData = JSON.parse(res.body.obj)
+              if (resData.length > 0) {
+                resData = resData[0]
+              }
+              this.upload.push({
+                pid: i,
+                url: resData.mediaCephUrl,
+                mediaId: resData.mediaId,
+                cephUrl: resData.mediaCephUrl
               })
+            } else {
+              this.$toast(res.body.msg)
             }
-            if (this.upload.length + i + 1 > this.maxLength) {
-              this.inlineLoading.close()
-              return
-            }
-            api.upload({
-              appId: 'BL_IBLAPP',
-              base64Content: lrzRes.base64.split(",")[1],
-              fileName: new Date().getTime(),
-              mediaType: 'jpg',
-              reSize: 1
-            }).then(res => {
-              if (i == filesLen - 1) {
-                this.inlineLoading.close()
-              }
-              if (res.body.obj) {
-                console.log('上传图片返回:', JSON.parse(res.body.obj))
-                let resData = JSON.parse(res.body.obj)
-                if (resData.length > 0) {
-                  resData = resData[0]
-                }
-                this.upload.push({
-                  pid: i,
-                  url: resData.mediaCephUrl,
-                  mediaId: resData.mediaId,
-                  cephUrl: resData.mediaCephUrl
-                })
-              } else {
-                this.$toast(res.body.msg)
-              }
-            }, () => {
-              this.inlineLoading.close()
-            })
+          }, () => {
+            this.inlineLoading.close()
           })
-        }
-      }, 'lrz')
+        })
+      }
     },
     toFixed2(num) {
       return parseFloat(+num.toFixed(2));
