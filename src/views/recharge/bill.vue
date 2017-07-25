@@ -72,7 +72,7 @@
       <transition name="fade">
         <bl-home-menu class="homeMenu" v-if="more"></bl-home-menu>
       </transition>
-      <bl-modal  v-show="visible" :visible="visible" title="删除账号将删除所有缴费信息" :buttons="buttons"></bl-modal>
+      <bl-modal  v-if="visible" :visible="visible" title="删除账号将删除所有缴费信息" :buttons="buttons"></bl-modal>
       <div @click="addAccount" class="addAccount">绑定账号,下次直接付账单</div>
     </div>
   </div>
