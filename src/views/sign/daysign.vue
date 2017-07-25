@@ -45,8 +45,8 @@
         {{lotteryText}}
       </div>
       <div class="tips2 other2" v-show="this.hideTips">没有省不下的钱，只有不坚持的签</div>
-      <ul class="menu">
-        <li v-for="item in iconMenu" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
+      <ul class="menu flex">
+        <li class="flex-item" v-for="item in iconMenu" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
           <img :src="item.advList[0].mediaUrl">
           <div>{{item.advList[0].deployName.substring(0,4)}}</div>
         </li>
@@ -671,21 +671,28 @@
                   member_token: this.memberToken
                 }).then(data => {
                   let json = JSON.parse(data.body.obj);
-                  this.changeStatus(json, 1);
-                  // 获得我的积分
-                  api.sign.getScores({
-                    member_token: this.memberToken
-                  }).then(data => {
-                    if (data.body.resCode == "00100000") {
-                      let json = JSON.parse(data.body.obj);
-                      // 将抽奖资格状态缓存
-                      localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
-                      localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
-                      this.myPoints = json.points;
-                    }
-                  });
-                  // 查询签到日历
-                  this.getCalendarHistory();
+                  if (json.resCode == "00100000") {
+                    this.changeStatus(json, 1);
+                    // 获得我的积分
+                    api.sign.getScores({
+                      member_token: this.memberToken
+                    }).then(data => {
+                      if (data.body.resCode == "00100000") {
+                        let json = JSON.parse(data.body.obj);
+                        // 将抽奖资格状态缓存
+                        localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
+                        localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
+                        this.myPoints = json.points;
+                      }
+                    });
+                    // 查询签到日历
+                    this.getCalendarHistory();
+                  } else {
+                    this.$toast({
+                      position: 'bottom',
+                      message: data.body.msg
+                    });
+                  }
                   this.inlineLoading.close();
                 });
               } else {
