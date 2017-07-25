@@ -245,9 +245,7 @@ export default {
 	          params: { index: 1 }
 	      	})
       	} else if (type == '203') {
-      		window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-	          pageId: 'pointsDetail'
-	      	})
+      		this.$router.push('/points')
       	}
   	},
     clearAll: function () {
