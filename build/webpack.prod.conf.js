@@ -61,6 +61,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       production: isTesting ? config.dev.sence : config.build.sence,
       manifest: config.build.manifest,
       remotejs: config.build.remotejs,
+      tingyunjs: config.build.tingyunjs,
       template: 'index.html',
       inject: false,
       minify: {

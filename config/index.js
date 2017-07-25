@@ -20,7 +20,8 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
-    remotejs: ''
+    remotejs: '',
+    tingyunjs: '<script type="text/javascript" src="static/js/tingyun-rum.js"><\/script>'
   },
   dev: {
     env: require('./dev.env'),
@@ -43,6 +44,7 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false,
-    remotejs: '<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>'
+    remotejs: '<script type="text/javascript" src="./static/js/CTJSBridge_remote.js"><\/script>',
+    tingyunjs: ''
   }
 }
