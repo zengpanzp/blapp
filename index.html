@@ -27,7 +27,6 @@
     <link rel="stylesheet" type="text/css" id="classLink">
     <script type="text/javascript" src="static/js/iconfont.js"></script>
     <script type="text/javascript" src="static/js/lasloader.min.js"></script>
-    <%= htmlWebpackPlugin.options.tingyunjs %>
   </head>
   <body ontouchstart>
     <div class="ant-transparent loading-bg white-bg"><div class="ant-toast middle"><i class="ant-icon circle-preloader"></i> <span class="ant-toast-text"></span></div></div>
@@ -45,6 +44,7 @@
       if (<%= process.env.NODE_ENV == 'production' %>) lsloader.load(lsloaderBase + 'app', "<%= htmlWebpackPlugin.files.chunks['app'].entry %>");
 
       lsloader.load(lsloaderBase + 'processImg', 'static/js/processImg.js');
+      <%= htmlWebpackPlugin.options.tingyunjs %>
     </script>
   </body>
 </html>
