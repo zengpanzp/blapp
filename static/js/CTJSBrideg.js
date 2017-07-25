@@ -1,8 +1,7 @@
-window.CTJSBridge = {}
+var bridge = function () {};
 
 var h5BaseUrl = 'https://m.bl.com/h5-web';
-
-CTJSBridge.prototype.LoadMethod = function(targetName, actionName, data, callback) {
+bridge.prototype.LoadMethod = function(targetName, actionName, data, callback) {
   switch (actionName) {
     // 埋点信息
     case 'fetchUserInfo':
@@ -14,7 +13,7 @@ CTJSBridge.prototype.LoadMethod = function(targetName, actionName, data, callbac
       break;
     // 获取APP用户登录信息
     case 'fetchLoginInfo':
-      callback.success(localStorage.getItem('userInfo'))
+      callback.success(localStorage.getItem('userInfo') || '{"memberLevel":"261","realNameLevel":"1","nickName":"","memberLevelCode":"10","passportId":"1_df40ee2b337f452b9dc5cb2b8959d439_5634","mediaCephUrl":"http:\/\/img.st.iblimg.com\/bl-iblapp-1\/1997980134.jpg","member_id":"100000002715634","high_risk":false,"groupIds":"","usable_stat":"0","black_account":false,"idFlag":"1","avatarUrl":"http:\/\/img.st.iblimg.com\/bl-iblapp-1\/1997980134.jpg","isSalesman":"0","expire_in":"2592000","remain_times":"3","need_complete":false,"callbackIdentifier":"-2051622763","member_token":"4acf40fa4a3f2a4165215fc682bf2ae65d772b2f386606f891e0ee426b9e065d","newRegFlag":false,"encode_memberId":"5cba905c18be762b6c352541ba81e6f8","encode_mobile":"4e3966d6c3493e3251c20148ef9c6e20","pwdStrength":"2","locked_reason":"","shellId":"BL_d55b0adf3ca845c8bf399e86f49e3184_5634","loginCode":"","mobile":"18679475831","error_times":"0","result":"success","member_name":"陈鹏"}')
       break;
     // 商品详情页
     case 'BLGoodsDetailViewController':
@@ -42,19 +41,11 @@ CTJSBridge.prototype.LoadMethod = function(targetName, actionName, data, callbac
     /* 充值缴费相关 */
     // 充值缴费--缴费记录跳转
     case 'chargeAndPaymentViewController':
-      window.location.href = '/' + data.url + '?orderType=' + data.type
-      break;
-    // 充值缴费--缴费记录跳转 TODO: 订单类型传值
-    case 'chargeAndPaymentViewController':
-      window.location.href = '/' + data.url + '?orderType=' + data.type
+      window.location.href = '/index2.html#/' + data.url + '?orderType=' + data.type
       break;
     // 收银台跳转
     case 'cashierNavigationController':
       // TODO
-      break;
-    // 返回H5首页
-    case 'pagemanagerNavigateToHome':
-      window.location.href = h5BaseUrl + '/page/view_Index.html?pageNumber=1&pageSize=5'
       break;
     // 返回H5首页
     case 'pagemanagerNavigateToHome':
@@ -65,7 +56,7 @@ CTJSBridge.prototype.LoadMethod = function(targetName, actionName, data, callbac
   }
 };
 
-CTJSBridge.prototype.LoadAPI = function(apiName, data, callback) {
+bridge.prototype.LoadAPI = function(apiName, data, callback) {
   // TODO
   switch (apiName) {
     // 添加购物车
@@ -74,6 +65,8 @@ CTJSBridge.prototype.LoadAPI = function(apiName, data, callback) {
   }
 };
 
-CTJSBridge.prototype._setNativeTitle = function(title) {
+bridge.prototype._setNativeTitle = function(title) {
   // body...
 };
+
+var CTJSBridge = new bridge();
