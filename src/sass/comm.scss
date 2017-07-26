@@ -166,24 +166,27 @@ body,html{
 }
 
 /* 懒加载 */
-.lazy-box{
-  @extend %lazy-box;
-  img[lazy="loading"], img[lazy="error"] {
-    width: rem(40) !important;
-    padding: 0;
-  }
-}
-
-.lazyload{
+.lazy-box, .lazyload{
   position: relative;
   background-color: #fff;
-  img[lazy="loading"], img[lazy="error"] {
+  &:after {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+  &.half:after {
+    padding-top: 50%;
+  }
+  .lazy{
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     margin: auto;
+    padding: 0;
+  }
+  img[lazy="loading"], img[lazy="error"] {
     width: rem(40);
   }
 }
