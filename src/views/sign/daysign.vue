@@ -386,8 +386,6 @@
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
         this.needSignNum = obj.needSignNum == "null" ? -1 : obj.needSignNum;
         let lotteryStatus = obj.lotteryStatus;
-        obj.signStatus = 2;
-        lotteryStatus = 2;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
         if (obj.signStatus == 0 && this.isLogin) {  // 没有签到资格
