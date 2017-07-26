@@ -26,5 +26,14 @@ export const uiRouter = [
       notLoading: true
     },
     component: r => require.ensure([], () => r(require('../views/UI/calendarDemo')), 'calendarDemo')
+  },
+  {
+    path: '/testSlideBar',
+    meta: {
+      title: 'slideBardemo',
+      isWeb: true,
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/UI/slideBardemo')), 'slideBardemo')
   }
 ]
