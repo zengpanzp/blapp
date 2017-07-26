@@ -37,12 +37,6 @@ const install = function(Vue) {
   Vue.component('blActionsheet', resolve => {
     require(['./actionsheet'], resolve)
   });
-  Vue.component('blTabContainer', resolve => {
-    require(['./tab-container'], resolve)
-  });
-  Vue.component('blTabContainerItem', resolve => {
-    require(['./tab-container-item'], resolve)
-  });
   Vue.component('blPopup', resolve => {
     require(['./popup'], resolve)
   });
@@ -58,13 +52,9 @@ const install = function(Vue) {
   Vue.component('blSwipeoutButton', resolve => {
     require(['./swipeout/swipeout-button'], resolve)
   });
-  Vue.component('blTabContainer', resolve => {
-    require(['./tab-container'], resolve)
-  });
 
   Vue.component('bl' + tabContainer.name, tabContainer);
   Vue.component('bl' + tabContainerItem.name, tabContainerItem);
-
   Vue.component('bl' + Cell.name, Cell);
   Vue.component('bl' + Navbar.name, Navbar);
   Vue.component('bl' + TabItem.name, TabItem);
