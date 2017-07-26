@@ -841,6 +841,11 @@ div.plusMark {
     transform: rotate(180deg)
 }
 
+.tran-con {
+    transform: rotate(180deg);
+    display: inline-block;
+}
+
 .checkbox-box{
     padding: rem(14) rem(20);
     background: #fff;

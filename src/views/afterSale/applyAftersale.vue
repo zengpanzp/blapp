@@ -144,7 +144,7 @@
         <div class="payList corner">
             <ul id="reason">
                 <li><a><label>请点击选择退货原因
-                    <i class="iconfont icon-enter"></i></label>退货原因<span class="colorRed">*</span></a>
+                    <i class="iconfont arrow-back tran-con"></i></label>退货原因<span class="colorRed">*</span></a>
                 </li>
             </ul>
         </div>
@@ -201,14 +201,14 @@ export default {
   data () {
     return {
       memberId: '',
-      picked: 'true',
+      picked: true,
       check: false,
     	orderDetail: '',
     	orderNo: '',
       inlineLoading: null,
       level: '',
     	address: '',
-      returnData: {},
+      returnData: null,
       list: [],
       upload: [],
       maxLen: 3,
@@ -237,23 +237,12 @@ export default {
           orderDetailNo: this.orderDetail.orderDetailNo,
           memberId: this.memberId
         }).then(data => {
+          console.log("zp", data.body.obj)
           this.$loading.close()
-          console.log("zpzpzpzpz", data.body.obj)
-          /* this.returnData.maxNum = obj.maxReturnQuantity
-          this.returnData.payMethodList = obj.refundMethodList
-          this.returnData.deliveryMethodList = obj.deliveryMethodList
-          this.returnData.canReturn = obj.canReturn
-          this.returnData.serviceTypeList = obj.serviceType ? obj.serviceType : []
-          this.returnData.hasFreight = parseInt(obj.hasFreight) */
           if (data.body.obj) {
-            let obj = JSON.parse(data.body.obj)
-            this.returnData = obj
-            this.maxReturnQuantity = obj.maxReturnQuantity
-            this.canReturn = obj.canReturn
-            console.log(this.canReturn)
-            if (this.maxReturnQuantity == 0 || this.canReturn != 1) {
-              this.isCan = false
-            }
+            let resData = JSON.parse(data.body.obj)
+            this.returnData = resData
+            this.maxReturnQuantity = resData.maxReturnQuantity
             this.getRefundReason()
           } else {
             this.$toast(data.body.msg)
