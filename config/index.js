@@ -21,7 +21,7 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
     remotejs: '',
-    tingyunjs: '<script type="text/javascript" src="static/js/tingyun-rum.js"><\/script>'
+    tingyunjs: "lsloader.load(lsloaderBase + 'tingyun', 'static/js/tingyun-rum.js')"
   },
   dev: {
     env: require('./dev.env'),
