@@ -215,9 +215,9 @@
                       let Pay = require('src/paymodel').default
                       current.inlineLoading.close()
                       Pay.goPay(order, current.getOrderTypeCode(current.typeObj[current.rateType]), (data) => {
-                        let result = JSON.parse(data);
+                        // let result = JSON.parse(data);
                         // 跳转到paysuccess
-                        current.$router.push({path: "/recharge/paysuccess?money=" + result.payAmount + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
+                        current.$router.push({path: "/recharge/paysuccess?money=" + resData.changeMoney + "&orderNo=" + resData.orderNo + "&type=" + current.getOrderTypeCode(current.typeObj[current.rateType])});
                       }, (data) => {
                         // 跳转到详情
                         current.$router.push({path: "/recharge/orderdetail/" + current.getOrderTypeCode(current.typeObj[current.rateType]) + "/" + resData.orderNo});
