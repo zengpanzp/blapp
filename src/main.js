@@ -246,16 +246,12 @@ router.beforeEach(({ meta, path }, from, next) => {
     Vue.$loading = Vue.prototype.$loading = Vue.$toast({
       iconClass: 'preloader white',
       duration: 'loading',
-      className: 'white-bg loading-bg'
+      className: 'loading-bg'
     })
   }
   jsBridgeReady("_loginInfo", meta.isWeb, () => {
     // 过渡效果 start
     try {
-      let firstDom = $('#app > div')[0] || {}
-      if (firstDom.classList) {
-        firstDom.classList.add('page-content')
-      }
       let _to = path
       let _from = from.path
       let h = utils.dbGet(_to)

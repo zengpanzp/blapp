@@ -248,7 +248,7 @@ export default {
 <style lang="scss" src="./css/evaluation.scss" scoped></style>
 <style lang="scss">
 @import "src/sass/tobe/function";
-.evaluation-swipe {
+.swiper-container.evaluation-swipe {
   height: rem(200);
 }
 </style>

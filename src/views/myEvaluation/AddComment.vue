@@ -41,11 +41,6 @@ export default {
 
   name: 'AddComment',
 
-  components: {
-    'blComment': () => System.import('./_comment-textarea.vue'),
-    'blUpload': () => System.import('./_comment-upload.vue'),
-  },
-
   data () {
     return {
       inlineLoading: null,

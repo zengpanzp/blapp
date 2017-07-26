@@ -70,7 +70,7 @@
     <div class="unionLogin">
       <div class="line flex-m"></div>
       <div class="text">联合登录</div>
-      <img src="./i/unionLogin.png">
+      <img @click="unionlogin" src="./i/unionLogin.png">
     </div>
 </div>
 </template>
@@ -102,6 +102,9 @@
       window.MD5 = MD5;
     },
     mounted() {
+      api.showImgCode().then(data => {
+          console.log(data)
+      })
       this.$loading.close();
     },
     methods: {
@@ -109,6 +112,23 @@
         this.$toast({
           position: 'bottom',
           message: msg
+        });
+      },
+      // 联合登录
+      unionlogin() {
+        let callbackUrl = location.href.substring(0, location.href.lastIndexOf("/") + 1);
+        callbackUrl += "bindlogin"
+        api.unionLogin({
+          state: "login",
+          returnUrl: encodeURIComponent(this.backUrl),
+          callbackUrl: encodeURIComponent(callbackUrl),
+          memeberid: "",
+          mobile: ""
+        }).then(data => {
+          if (data.body.resCode == "00100000") {
+             let json = JSON.parse(data.body.obj);
+             location.href = json.url;
+          }
         });
       },
       // 登录

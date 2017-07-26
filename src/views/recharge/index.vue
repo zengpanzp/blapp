@@ -91,7 +91,10 @@ export default {
                   }
                 });
               } else {
-                alert(0)
+                this.$toast({
+                  position: 'bottom',
+                  message: data.body.msg
+                });
               }
             });
           });

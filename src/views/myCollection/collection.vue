@@ -5,14 +5,14 @@
     </bl-navbar>
     <bl-tab-container v-model="tabsModel">
       <bl-tab-container-item id="0">
-        <div class="empty" v-if="list.length == 0">
+        <div class="empty" v-if="!goodsTotalPage">
           <div class="noStore">暂无收藏的商品</div>
           <bl-button type="outlineMain" @click="homePage" inline size="small">去逛逛</bl-button>
         </div>
         <div class="goods-box" v-infinite-scroll="loadGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
           <div class="goods-item flex" v-for="item in list" v-go-native-goods-detail="item">
             <div class="goods-img lazy-box">
-              <img class="lazy" v-lazy="{ src: item.goodsImgPath }">
+              <img class="lazy" v-lazy.collection="{ src: item.goodsImgPath }">
             </div>
             <div class="goods-des flex-item">
               <div class="goods-title">{{ item.goodsMsg }}</div>
@@ -26,7 +26,7 @@
         </div>
       </bl-tab-container-item>
       <bl-tab-container-item id="1">
-        <div class="empty" v-if="storeList.length == 0">
+        <div class="empty" v-if="!shopsTotalPage">
           <div class="noStore">暂无收藏的门店</div>
           <bl-button type="outlineMain" @click="homePage" inline size="small">去逛逛</bl-button>
         </div>
@@ -81,7 +81,9 @@ export default {
         jumpId: 'stores'
       }],
       list: [],
-      storeList: []
+      storeList: [],
+      goodsTotalPage: true,
+      shopsTotalPage: true
     };
   },
   mounted() {
@@ -190,6 +192,7 @@ export default {
                 systemNo: "11111111"
               }).then(data => {
                 let resData = JSON.parse(data.body.obj)
+                this.goodsTotalPage = resData.resultInfo.totalPage
                 let rows = resData.resultInfo.rows
                 let check = JSON.stringify(rows)
                 console.log(check + '============')
@@ -231,7 +234,7 @@ export default {
             this.currentPage = currentPage
             let storeList = JSON.parse(data.body.obj).list
             let totalPageNum = JSON.parse(data.body.obj).pages
-            console.log(storeList)
+            this.shopsTotalPage = totalPageNum
               // alert('totalPageNum:' + totalPageNum + 'currentPage:' + this.currentPage)
             if (currentPage <= totalPageNum) {
               if (storeList && storeList.length) {
@@ -296,3 +299,4 @@ export default {
 };
 </script>
 <style lang="scss" src="./css/collection.scss" scoped></style>
+
