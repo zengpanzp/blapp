@@ -55,7 +55,7 @@
     </section>
     <!--四个资源位-->
     <ul class="top-menu" v-if="recommendList&&recommendList.length>0">
-      <li v-for="item in recommendList" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
+      <li  v-for="item in recommendList" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
         <img  :src="item.advList[0].mediaUrl">
       </li>
       <div class="clearfix"></div>

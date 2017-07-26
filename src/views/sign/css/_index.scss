@@ -283,13 +283,13 @@ body {
     }
   }
   .top-menu {
-    padding: rem(20);
+    padding: rem(10);
     width: 100%;
     li {
       position: relative;
-      float: left;
-      width: rem(350);
       //height: rem(220);
+      width: 49.07%;
+      float:left;
       background: #f9f9f9;
       font-size: rem(24);
       &:nth-child(2n+1){
@@ -400,7 +400,7 @@ body {
     li{
       float: left;
       height: rem(467);
-      width: rem(345);
+      width: 50%;
       margin-bottom: rem(26);
       position: relative;
       .pic{
@@ -428,7 +428,6 @@ body {
         color:#666;
       }
       .name{
-        width: rem(325);
         height: rem(66);
         line-height: rem(33);
         margin-left: rem(10);
