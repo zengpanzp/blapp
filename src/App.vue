@@ -2,7 +2,7 @@
   <div id="app">
     <transition :name="slide">
       <keep-alive :include="/keep/">
-        <router-view></router-view>
+        <router-view class="page-content"></router-view>
       </keep-alive>
     </transition>
   </div>
