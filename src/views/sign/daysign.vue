@@ -671,7 +671,7 @@
                   member_token: this.memberToken
                 }).then(data => {
                   let json = JSON.parse(data.body.obj);
-                  if (json.resCode == "00100000") {
+                  if (data.body.resCode == "00100000") {
                     this.changeStatus(json, 1);
                     // 获得我的积分
                     api.sign.getScores({
