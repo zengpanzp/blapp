@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <button @click="clichHandle">点我</button>
+  <div style="padding: 100px">
+    <bl-button @click="clichHandle">点我</bl-button>
+    <div>值:{{ defaultValue }}</div>
     <bl-slide-bar
       :showModal="showModal"
       @modalChange="showModal = $event"

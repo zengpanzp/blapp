@@ -3,7 +3,7 @@
     <div class="topHeader">
       <a class="cancel" @click="cancel">取消</a>
       <span>{{ title }}</span>
-      <a class="ok" @click="[confirmHandle(), cancel()]">
+      <a href="javascript:;" class="ok" @click="confirmHandle">
         <svg class="icon"><use xlink:href="#icon-check"></use></svg>确认
       </a>
     </div>
@@ -54,12 +54,15 @@ export default {
       this.showModal = false
     },
     confirmHandle() {
+      this.$emit('modalChange', false)
       this.$emit('input', this.value)
     }
   },
   watch: {
     showModal(val) {
-      this.$emit('modalChange', val)
+      if (!val) {
+        this.$emit('modalChange', val)
+      }
     }
   }
 };
