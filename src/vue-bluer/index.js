@@ -52,6 +52,12 @@ const install = function(Vue) {
   Vue.component('blSwipeoutButton', resolve => {
     require(['./swipeout/swipeout-button'], resolve)
   });
+  Vue.component('blUpload', resolve => {
+    require(['src/components/iBailianApp/comment/comment-upload'], resolve)
+  });
+  Vue.component('blComment', resolve => {
+    require(['src/components/iBailianApp/comment/comment-textarea'], resolve)
+  });
 
   Vue.component('bl' + tabContainer.name, tabContainer);
   Vue.component('bl' + tabContainerItem.name, tabContainerItem);

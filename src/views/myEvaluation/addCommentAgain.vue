@@ -55,10 +55,6 @@ export default {
 
   name: 'addCommentAgain',
 
-  components: {
-    'blComment': () => System.import('./_comment-textarea.vue'),
-  },
-
   data () {
     return {
       star: 5,
