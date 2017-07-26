@@ -44,6 +44,10 @@
       <div class="btnSign" @click="lottery" v-show="canLottery">
         {{lotteryText}}
       </div>
+      <!--去抽奖-->
+      <div class="btnSign" v-show="hasLottery">
+        {{lotteryText}}
+      </div>
       <div class="tips2 other2" v-show="this.hideTips">没有省不下的钱，只有不坚持的签</div>
       <ul class="menu flex">
         <li class="flex-item" v-for="item in iconMenu" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
@@ -168,6 +172,7 @@
           bigGoodsList: [], // 大图的商品推荐
           signRemark: '',    // 签到说明
           signRuleCode: '', // 抽奖规则ID
+          hasLottery: false // 是否是已抽奖
       }
     },
     components: {
@@ -315,9 +320,6 @@
         this.pageLoad();
       },
       pageLoad() {
-        let localStatus = localStorage.getItem("BL_SIGN_STATUS");
-        let localStatusTime = localStorage.getItem("BL_SIGN_STATUS_DATE");
-        let nowTime = utils.dateFormat("yyyy-MM-dd"); // 当前时间
         utils.isLogin(false).then(user => {
           this.memberId = user.member_id;
           this.memberToken = user.member_token;
@@ -334,15 +336,6 @@
                 this.myPoints = json.points;
               }
             });
-            if (localStatusTime == nowTime) { // 不需要请求
-               localStatus = localStatus ? JSON.parse(localStatus) : '';
-               if (localStatus) {
-                 this.signRemark = localStatus.signRemark;
-                 this.signPoint = localStatus.signPoint;
-                 this.changeStatus(localStatus);
-                 return true;
-               }
-            }
             // 查询用户是否有签到资格
             this.getSignQualification((data) => {
               if (data.body.resCode == "00100000") {
@@ -352,9 +345,6 @@
                 }
                 this.signRemark = json.signRemark;
                 this.signPoint = json.signPoint;
-                // 将抽奖资格状态缓存
-                localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
-                localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
                 // singStatus 0-不可签到 1-可签到，未签到，2-已签到
                 this.changeStatus(json);
               } else {
@@ -396,6 +386,8 @@
           // 状态为 已签到 并且  可以抽奖的状态的时候  调转盘促销接口
         this.needSignNum = obj.needSignNum == "null" ? -1 : obj.needSignNum;
         let lotteryStatus = obj.lotteryStatus;
+        obj.signStatus = 2;
+        lotteryStatus = 2;
         this.lotteryCount = obj.acquiredLottery; // 抽奖次数
         // singStatus 0-不可签到 1-可签到，未签到，2-已签到
         if (obj.signStatus == 0 && this.isLogin) {  // 没有签到资格
@@ -464,8 +456,13 @@
             this.message2 = "获得1次抽奖机会";
             this.hideTips = false;
           } else if (lotteryStatus == 2) {
+            console.log("已经抽奖")
+            this.hide = false;
+            this.hasLottery = true;
+            this.signText = ""  // 隐藏
+            this.justSigned = false;
             this.hideTips = false;
-            this.canLottery = true;
+            this.canLottery = false;
             this.lotteryText = "已抽奖"
             this.message1 = "恭喜您！";
             this.message2 = "已完成本次抽奖";
@@ -584,9 +581,6 @@
               }
               this.signRemark = json.signRemark;
               this.signPoint = json.signPoint;
-              // 将抽奖资格状态缓存
-              localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
-              localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
               // singStatus 0-不可签到 1-可签到，未签到，2-已签到
               this.changeStatus(json);
             } else {
@@ -679,9 +673,6 @@
                     }).then(data => {
                       if (data.body.resCode == "00100000") {
                         let json = JSON.parse(data.body.obj);
-                        // 将抽奖资格状态缓存
-                        localStorage.setItem("BL_SIGN_STATUS", JSON.stringify(json));
-                        localStorage.setItem("BL_SIGN_STATUS_DATE", utils.dateFormat("yyyy-mm-dd"));
                         this.myPoints = json.points;
                       }
                     });

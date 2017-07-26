@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <body ontouchstart>
+    <script type="text/javascript">
+      // 从安付宝登录成功的回调页面
+      var reg = new RegExp("(^|&)"+ 'param' +"=([^&]*)(&|$)");
+      var r = window.location.search.substr(1).match(reg);
+      var callbackUrl = location.href.substring(0, location.href.indexOf("/static/") + 1);
+      callbackUrl += "#/bindlogin?param="+r[2];
+      location.href=callbackUrl;
+    </script>
+  </body>
+</html>

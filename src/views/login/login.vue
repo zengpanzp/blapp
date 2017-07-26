@@ -116,17 +116,18 @@
       },
       // 联合登录
       unionlogin() {
-        let callbackUrl = location.href.substring(0, location.href.lastIndexOf("/") + 1);
-        callbackUrl += "bindlogin"
+        let callbackUrl = location.href.substring(0, location.href.indexOf("/#/") + 1);
+        callbackUrl += "static/direct.html"
         api.unionLogin({
           state: "login",
           returnUrl: encodeURIComponent(this.backUrl),
-          callbackUrl: encodeURIComponent(callbackUrl),
+          callbackUrl: (callbackUrl),
           memeberid: "",
           mobile: ""
         }).then(data => {
           if (data.body.resCode == "00100000") {
              let json = JSON.parse(data.body.obj);
+//             location.href = decodeURIComponent(json.url);
              location.href = json.url;
           }
         });

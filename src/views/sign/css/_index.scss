@@ -283,12 +283,12 @@ body {
     }
   }
   .top-menu {
-    padding: rem(10);
     width: 100%;
+    padding: rem(20);
     li {
       position: relative;
       //height: rem(220);
-      width: 49.07%;
+      width: 49%;
       float:left;
       background: #f9f9f9;
       font-size: rem(24);
@@ -296,19 +296,6 @@ body {
         margin-right: rem(10);
       }
       margin-bottom: rem(10);
-      //.name{
-      //  font-family: PingFang-SC-Medium;
-      //  color: #333;
-      //  padding: rem(20) 0 0 rem(20);
-      //}
-      //.desc{
-      //  color:#666;
-      //  padding: 0 rem(20);
-      //}
-      img {
-        //top:rem(44);
-        //right: rem(8);
-      }
     }
     &::after{
       content:'';display:block;height:0;visibility:hidden;clear:both;
