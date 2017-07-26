@@ -51,6 +51,10 @@ bridge.prototype.LoadMethod = function(targetName, actionName, data, callback) {
     case 'pagemanagerNavigateToHome':
       window.location.href = h5BaseUrl + '/page/view_Index.html?pageNumber=1&pageSize=5'
       break;
+    // 登录界面
+    case 'PresentLoginViewController':
+      window.location.href = h5BaseUrl + '/login'
+      break;
     default:
       // TODO default
   }
