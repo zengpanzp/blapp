@@ -252,6 +252,11 @@ router.beforeEach(({ meta, path }, from, next) => {
   jsBridgeReady("_loginInfo", meta.isWeb, () => {
     // 过渡效果 start
     try {
+      if (meta.noSlide) {
+        $('#app > div').removeClass('page-content')
+      } else {
+        $('#app > div').addClass('page-content')
+      }
       let _to = path
       let _from = from.path
       let h = utils.dbGet(_to)
