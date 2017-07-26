@@ -79,7 +79,7 @@
 
 /* 标题 */
 .quickbuy-active{
-  margin-top: rem(88);
+  padding-top: rem(88);
   ul{
     height: rem(136*2);
   }
@@ -418,8 +418,6 @@ div.plusMark {
         }
       }
       img {
-        width: 100%;
-        display: block;
         border-top-left-radius: rem(.375*31.25);
         border-top-right-radius: rem(.375*31.25)
       }

@@ -57,11 +57,6 @@ export default {
 
   name: 'commentAfter',
 
-  components: {
-    'blComment': () => System.import('./_comment-textarea.vue'),
-    'blUpload': () => System.import('./_comment-upload.vue'),
-  },
-
   data () {
     return {
       star: 5,

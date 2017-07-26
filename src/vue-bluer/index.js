@@ -16,8 +16,8 @@
 // import Swipeout from './swipeout/swipeout'
 // import SwipeoutItem from './swipeout/swipeout-item'
 // import SwipeoutButton from './swipeout/swipeout-button'
-// import tabContainer from './tab-container/index'
-// import tabContainerItem from './tab-container-item'
+import tabContainer from './tab-container/index'
+import tabContainerItem from './tab-container-item'
 
 import Scroll from './scroll'
 import Toast from './toast'
@@ -37,12 +37,6 @@ const install = function(Vue) {
   Vue.component('blActionsheet', resolve => {
     require(['./actionsheet'], resolve)
   });
-  Vue.component('blTabContainer', resolve => {
-    require(['./tab-container'], resolve)
-  });
-  Vue.component('blTabContainerItem', resolve => {
-    require(['./tab-container-item'], resolve)
-  });
   Vue.component('blPopup', resolve => {
     require(['./popup'], resolve)
   });
@@ -58,13 +52,19 @@ const install = function(Vue) {
   Vue.component('blSwipeoutButton', resolve => {
     require(['./swipeout/swipeout-button'], resolve)
   });
-  Vue.component('blTabContainer', resolve => {
-    require(['./tab-container'], resolve)
+  Vue.component('blUpload', resolve => {
+    require(['src/components/iBailianApp/comment/comment-upload'], resolve)
   });
-  Vue.component('blTabContainerItem', resolve => {
-    require(['./tab-container-item'], resolve)
+  Vue.component('blComment', resolve => {
+    require(['src/components/iBailianApp/comment/comment-textarea'], resolve)
+  });
+  // slide-bar
+  Vue.component('blSlideBar', resolve => {
+    require(['src/components/iBailianApp/slideBar/bl-slide-bar'], resolve)
   });
 
+  Vue.component('bl' + tabContainer.name, tabContainer);
+  Vue.component('bl' + tabContainerItem.name, tabContainerItem);
   Vue.component('bl' + Cell.name, Cell);
   Vue.component('bl' + Navbar.name, Navbar);
   Vue.component('bl' + TabItem.name, TabItem);

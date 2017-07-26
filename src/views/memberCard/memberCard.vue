@@ -40,8 +40,11 @@
             <div v-else-if="memberLevel == 30">
               <img src="./i/tx-img30.png">
             </div>
-            <div v-else="memberLevel == 40">
+            <div v-else-if="memberLevel == 40">
               <img src="./i/tx-img40.png">
+            </div>
+            <div v-else="memberLevel == 40">
+              <img src="">
             </div>
           </div>
         </transition>

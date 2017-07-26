@@ -17,13 +17,16 @@
         <input type="file" accept="image/*" multiple="multiple" @change="readImage" class="cutfile">
       </div>
     </div>
-    <div class="upload-pic-bottom">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ maxLength }}</span>张）</div>
+    <div class="upload-pic-bottom" v-if="commentType == 'comment'">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ maxLength }}</span>张）</div>
+    <div class="upload-pic-bottom" v-else-if="commentType == 'afterSale'">
+      <div class="main-content">{{ content }}</div>
+      最多上传<span class="upload-length">{{ maxLength }}</span>张,每张不超过<span class="upload-length">{{ maxSize }}M</span>,支持jpg,BMP,Png
+    </div>
   </div>
 </template>
 
 <script>
-window.lsloader.load(window.lsloaderBase + 'processImg', 'static/js/processImg.js');
-import api from './api'
+import api from './api/upload'
 export default {
 
   name: 'comment-upload',
@@ -38,6 +41,14 @@ export default {
     maxLength: {
       type: Number,
       default: 5
+    },
+    maxSize: {
+      type: Number,
+      default: 5
+    },
+    commentType: {
+      type: String,
+      default: 'comment'
     }
   },
   methods: {
