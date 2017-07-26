@@ -16,8 +16,8 @@
 // import Swipeout from './swipeout/swipeout'
 // import SwipeoutItem from './swipeout/swipeout-item'
 // import SwipeoutButton from './swipeout/swipeout-button'
-// import tabContainer from './tab-container/index'
-// import tabContainerItem from './tab-container-item'
+import tabContainer from './tab-container/index'
+import tabContainerItem from './tab-container-item'
 
 import Scroll from './scroll'
 import Toast from './toast'
@@ -61,9 +61,9 @@ const install = function(Vue) {
   Vue.component('blTabContainer', resolve => {
     require(['./tab-container'], resolve)
   });
-  Vue.component('blTabContainerItem', resolve => {
-    require(['./tab-container-item'], resolve)
-  });
+
+  Vue.component('bl' + tabContainer.name, tabContainer);
+  Vue.component('bl' + tabContainerItem.name, tabContainerItem);
 
   Vue.component('bl' + Cell.name, Cell);
   Vue.component('bl' + Navbar.name, Navbar);
