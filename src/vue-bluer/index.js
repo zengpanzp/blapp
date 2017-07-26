@@ -58,6 +58,10 @@ const install = function(Vue) {
   Vue.component('blComment', resolve => {
     require(['src/components/iBailianApp/comment/comment-textarea'], resolve)
   });
+  // slide-bar
+  Vue.component('blSlideBar', resolve => {
+    require(['src/components/iBailianApp/slideBar/bl-slide-bar'], resolve)
+  });
 
   Vue.component('bl' + tabContainer.name, tabContainer);
   Vue.component('bl' + tabContainerItem.name, tabContainerItem);
