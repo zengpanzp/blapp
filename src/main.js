@@ -255,6 +255,8 @@ router.beforeEach(({ meta, path }, from, next) => {
       let firstDom = $('#app > div')[0] || {}
       if (!meta.noSlide) {
         firstDom.classList && firstDom.classList.add('page-content')
+      } else {
+        firstDom.classList && firstDom.classList.remove('page-content')
       }
       let _to = path
       let _from = from.path
