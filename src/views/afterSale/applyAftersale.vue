@@ -22,10 +22,11 @@
                         </div>
                         <div class="package-goods-detail">
                             <p class="two-line-hide">{{item.goodsName}}</p>
-                            <p
-                             v-if="item.goodsColor||item.goodsStan">
-                                <div v-if="item.goodsColor">颜色：<label>{{item.goodsColor}}</label></div>
-                                <div v-if="item.goodsStan">规格：<label>{{item.goodsStan}}</label></div>
+                            <p v-if="item.goodsColor">
+                              颜色：<label>{{item.goodsColor}}</label>
+                            </p>
+                            <p v-if="item.goodsStan">
+                              规格：<label>{{item.goodsStan}}</label>
                             </p>
                         </div>
                         <div class="package-goods-num">
@@ -42,7 +43,6 @@
                         <div class="pic"><img :src="orderDetail.picUrl"/></div>
                         <div class="goodsInfo goodsPadding">
                             {{orderDetail.goodsName}}<br/>
-
                             <p><span class="colorRed">&#65509;{{orderDetail.salePrice}}</span>
                                 数量：{{orderDetail.saleSum}}</p>
                         </div>
@@ -51,46 +51,74 @@
             </ul>
         </div>
         <div class="columnTitle border corner-top">服务类型</div>
-        <div class="proColor proColorPadding proColorBg corner-bottom return" id="serviceType" @click="userService">
-            <span class="disAble"><a>退货</a></span>
-            <span class="disAble"><a>换货</a></span>
-            <span class="disAble"><a>维修</a></span>
+        <div class="proColor proColorPadding proColorBg corner-bottom return" id="serviceType">
+            <span class="disAble" @click="userService"><a>退货</a></span>
+            <span class="disAble" @click="userService"><a>换货</a></span>
+            <span class="disAble" @click="userService"><a>维修</a></span>
 
-            <div class="agreement" @click="goQuestion"><a>什么情况下不可以申请退换货？</a>
+            <div class="agreement" @click="goQuestion"><a>什么情况下不可以申请退换货<i class="iconfont arrow-back tran-right"></i></a>
             </div>
         </div>
 
         <div class="columnTitle border corner-top">申请数量<label class="colorRed">*</label></div>
         <div class="proColor  proColorBg corner-bottom  applyNum">
             <div class="proNum proNumMar">
-                <a class="proAdd " id="reduce">-</a>
-                <input type="number" class="proNumInput" value="1" id="returnCnt">
-                <a class="proAdd " id="add">+</a>
+                <a class="proAdd " @click="reduce">-</a>
+                <input type="number" class="proNumInput" v-model="returnCnt"/>
+                <a class="proAdd " @click="add">+</a>
             </div>
-            <label class="max">最大可提交数量为<b>{{returnData.maxNum}}</b>个</label>
+            <label class="max">最大可提交数量为<b>{{maxReturnQuantity}}</b>个</label>
         </div>
         <div class="columnTitle border corner-top">申请凭证<label class="colorRed">*</label></div>
-        <div class="proColor proColorPadding proColorBg corner-bottom return" id="evidence">
-            <div class="service-miner-box">
-                <label class="cartCheckbox cartCheckboxOn"><svg class="icon"><use xlink:href="#icon-check"></use></svg></label>
-
-                <div class="check-text">无发票</div>
-                <label class="cartCheckbox"></label>
-
-                <div class="check-text">有发票</div>
-            </div>
+        <div class="checkbox-box" id="checkBox">
+          <div class="check-item">
+            <label class="check-label">
+              <input class="check-iput" type="radio" v-model="picked" value="true" />
+              <div class="flex-m">
+                <svg class="icon">
+                  <use xlink:href="#icon-check"></use>
+                </svg>
+                <div>无发票</div>
+              </div>
+            </label>
+          </div>
+          <div class="check-item">
+            <label class="check-label">
+              <input class="check-iput" type="radio" v-model="picked" value="false" />
+              <div class="flex-m">
+                <svg class="icon">
+                  <use xlink:href="#icon-check"></use>
+                </svg>
+                <div>有发票</div>
+              </div>
+            </label>
+          </div>
         </div>
         <div class="columnTitle border corner-top">检测报告<label class="font-color-ash2">（无检测报告会影响售后进度）</label>
         </div>
-        <div class="proColor proColorPadding proColorBg corner-bottom return" id="report">
-            <div class="service-miner-box">
-                <label class="cartCheckbox cartCheckboxOn"><svg class="icon"><use xlink:href="#icon-check"></use></svg></label>
-
-                <div class="check-text">尚无检测报告</div>
-                <label class="cartCheckbox"><i class="iconfont icon-selected"></i></label>
-
-                <div class="check-text">已有监测报告</div>
-            </div>
+        <div class="checkbox-box" id="checkBox">
+          <div class="check-item">
+            <label class="check-label">
+              <input class="check-iput" type="radio" v-model="check" value="false" />
+              <div class="flex-m">
+                <svg class="icon">
+                  <use xlink:href="#icon-check"></use>
+                </svg>
+                <div>尚无检测报告</div>
+              </div>
+            </label>
+          </div>
+          <div class="check-item">
+            <label class="check-label">
+              <input class="check-iput" type="radio" v-model="check" value="true" />
+              <div class="flex-m">
+                <svg class="icon">
+                  <use xlink:href="#icon-check"></use>
+                </svg>
+                <div>已有监测报告</div>
+              </div>
+            </label>
+          </div>
         </div>
         <div class="columnTitle border corner-top">退款方式<label class="colorRed">*</label></div>
         <div class="proColor proColorPadding proColorBg corner-bottom return bank" id="bank">
@@ -130,14 +158,15 @@
             </div>
         </div>
         <div class="columnTitle border corner-top">上传图片凭证</div>
-        <div class="uploadPic corner-bottom">
-            <dd id="getPhoto"><a><i class="iconfont icon-add"></i></a></dd>
+        <!-- <div class="uploadPic corner-bottom">
+            <dd id="getPhoto" class="get-phone">
+              <input class="phone-file" type="file" accept="image/*" multiple="multiple" @change="select" />
+            </dd>
             <span id="inform" class="cue">
                 如果上传商品为大家电，请上传序列号照片
             </span>
-
             <p>最多上传<span>3</span>张，每张不超过<span>5M</span>,支持jpg,BMP,Png</p>
-        </div>
+        </div> -->
     </div>
     <div class="priceSelectCon">
         <div class="topHeader corner">
@@ -154,8 +183,8 @@
     </div>
     <footer>
         <div class="fixedMainbtn orderbtn orderbtnSize return">
-            <a id="service" class="btn-sub">在线客服</a>
-            <button type="submit" class="btn-1" id="nextStep" data-role="none" disabled>下一步</button>
+            <a @click="service" class="btn-sub">在线客服</a>
+            <button type="submit" class="btn-1" :class="{'btn': isCan}" click="nextStep" data-role="none" :disabled="!isCan">下一步</button>
         </div>
     </footer>
     <div class="plusMark" style="display: none"></div>
@@ -172,26 +201,33 @@ export default {
   data () {
     return {
       memberId: '',
+      picked: 'true',
+      check: false,
     	orderDetail: '',
     	orderNo: '',
+      inlineLoading: null,
       level: '',
     	address: '',
       returnData: {},
-      list: []
+      list: [],
+      upload: [],
+      maxLen: 3,
+      returnCnt: 1,
+      maxReturnQuantity: '',
+      canReturn: '',
+      isCan: true
     };
   },
   created() {
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
     console.log(this.level)
-    let obj = {
-    "orderNo": "LAE20170721138260",
-    "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"104230\",\"discountAmount\":\"0\",\"goodsCode\":\"333087\",\"goodsDetSid\":\"0789100001\",\"goodsName\":\"湾仔码头多菜多益玉米彩椒猪肉水饺\",\"goodsSid\":\"735022\",\"goodsType\":\"1\",\"goodsWeight\":\"0\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"35.4\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LAE201707211382600101\",\"oriPrice\":\"0\",\"picUrl\":\"http://img.st.iblimg.com/photo-1/2000/561581810_200x200.jpg\",\"purchaseType\":\"13\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}",
-    "address": "{\"address\":\"上海市 市辖区 黄浦区 想考试考试考试就觉得\",\"receiver\":\"地级市\",\"phone\":\"13764318078\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
+    let data = {
+     "orderNo": "LPE20170713137427", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102892\",\"discountAmount\":\"0\",\"goodsCode\":\"81958\",\"goodsDetSid\":\"0611880001\",\"goodsName\":\"三和四美 糟方腐乳 500g\",\"goodsSid\":\"271091\",\"goodsStan\":\"500g\",\"goodsType\":\"1\",\"goodsWeight\":\"0.5\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"7.3\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707131374270101\",\"oriPrice\":\"8.03\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 四川南路26号\",\"receiver\":\"怎胖\",\"phone\":\"18679475831\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
     }
-		this.orderNo = obj.orderNo
-		this.orderDetail = JSON.parse(obj.orderDetail)
-		this.address = JSON.parse(obj.address)
+		this.orderNo = data.orderNo
+		this.orderDetail = JSON.parse(data.orderDetail)
+		this.address = JSON.parse(data.address)
     this.checkReturn()
   },
   methods: {
@@ -203,14 +239,25 @@ export default {
         }).then(data => {
           this.$loading.close()
           console.log("zpzpzpzpz", data.body.obj)
-          let obj = JSON.parse(data.body.obj)
-          this.returnData.maxNum = obj.maxReturnQuantity
+          /* this.returnData.maxNum = obj.maxReturnQuantity
           this.returnData.payMethodList = obj.refundMethodList
           this.returnData.deliveryMethodList = obj.deliveryMethodList
           this.returnData.canReturn = obj.canReturn
           this.returnData.serviceTypeList = obj.serviceType ? obj.serviceType : []
-          this.returnData.hasFreight = parseInt(obj.hasFreight)
-          this.getRefundReason()
+          this.returnData.hasFreight = parseInt(obj.hasFreight) */
+          if (data.body.obj) {
+            let obj = JSON.parse(data.body.obj)
+            this.returnData = obj
+            this.maxReturnQuantity = obj.maxReturnQuantity
+            this.canReturn = obj.canReturn
+            console.log(this.canReturn)
+            if (this.maxReturnQuantity == 0 || this.canReturn != 1) {
+              this.isCan = false
+            }
+            this.getRefundReason()
+          } else {
+            this.$toast(data.body.msg)
+          }
         }, err => {
           console.log(err)
         })
@@ -247,7 +294,81 @@ export default {
       //     requestData = {url: "http://m.bl.com/h5-web/cms/viewHelpCmsContent.html?pageId=781", title: "退换货说明"};
       // }
       // 需要安卓和ios加方法
+    },
+    reduce() {
+      if (this.maxReturnQuantity == 0) {
+        this.$toast('此商品已提交申请售后服务')
+      }
+      if (this.returnCnt < 1) {
+        this.returnCnt = 1
+        this.$toast('数量不可为0')
+      }
+    },
+    add() {
+      if (this.maxReturnQuantity == 0) {
+        this.$toast('此商品已提交申请售后服务')
+      }
+      if (this.returnCnt > this.maxReturnQuantity) {
+        this.$toast('该商品限购' + this.maxReturnQuantity + '件')
+      }
     }
+    // select(event) {
+    //   this.inlineLoading = this.$toast({
+    //     iconClass: 'preloader white',
+    //     duration: 'loading',
+    //     className: 'loading-bg'
+    //   })
+    //   let files = event.target.files
+    //   let filen = files.lenth
+    //   if (this.upload.lenght + filen > this.maxLen) {
+    //     this.inlineLoading.close()
+    //     this.$modal({
+    //       title: '提示',
+    //       content: `最多上传${this.maxLen}张`
+    //     })
+    //     filen = 1
+    //   }
+    //   // 遍历要上传的图片
+    //   for (let i = 0; i < filen.length; i++) {
+    //     window.compressImg(files[i], 640, base64 => {
+    //       if (this.upload.length + i + 1 > this.maxLen.length) {
+    //         this.inlineLoading.close()
+    //         return
+    //       }
+    //       api.upload({
+    //         appId: 'BL_IBLAPP',
+    //         base64Content: base64.split(",")[1],
+    //         fileName: new Date().getTime(),
+    //         mediaType: 'jpg',
+    //         reSize: 1
+    //       }).then(res => {
+    //         console.log("base64", res)
+    //         this.$loading.close()
+    //         if (i = filen.lenght - 1) {
+    //           this.inlineLoading.close()
+    //         }
+    //         if (res.body.obj) {
+    //           console.log('上传图片返回:', JSON.parse(res.body.obj))
+    //           let resData = JSON.parse(res.body.obj)
+    //           if (resData.length > 0) {
+    //             resData = resData[0]
+    //           }
+    //           this.upload.push({
+    //             pid: i,
+    //             url: resData.mediaCephUrl,
+    //             mediaId: resData.mediaId,
+    //             cephUrl: resData.mediaCephUrl
+    //           })
+    //           console.log("photo", this.upload)
+    //         } else {
+    //           this.$toast(res.body.msg)
+    //         }
+    //       }, () => {
+    //         this.inlineLoading.close()
+    //       })
+    //     })
+    //   }
+    // }
   },
   // 路由取memberId
   beforeRouteEnter (to, from, next) {

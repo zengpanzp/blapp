@@ -39,5 +39,9 @@ export default {
   /* 获取退货原因 */
   getReason: params => {
     return Vue.http.post(baseUrl + '/dict/list.htm', params)
+  },
+  // 上传图片
+  upload: params => {
+    return Vue.http.post(baseUrl + '/media/upload.htm', params)
   }
 }
