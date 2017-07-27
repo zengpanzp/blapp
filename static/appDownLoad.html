@@ -33,39 +33,39 @@
 
 <body>
   <div class="top-log">
-    <img src="css/i/downloadlogo.png" />
+    <img src="img/downloadlogo.png" />
   </div>
   <div class="button-box">
-    <div class="button" onclick="iosurl()">
-      <a><img src="css/i/button1.png" /></a>
+    <div class="button">
+      <a href="https://itunes.apple.com/cn/app/id1059602107"  target="_blank"><img src="img/button1.png" /></a>
     </div>
-    <div class="button" onclick="androidurl()">
-      <a><img src="css/i/button2.png" /></a>
+    <div class="button">
+      <a href="javascript:window.open('http://app.bl.com/release_apk/BaiLianMobileApp-release.apk?' + new Date().getTime())"><img src="img/button2.png" /></a>
     </div>
   </div>
   <div>
-    <img src="css/i/large-show.jpg" />
+    <img src="img/large-show.jpg" />
   </div>
 </body>
 <script type="text/javascript">
-function androidurl() {
-  /*      if(true) {
-          document.getElementById("weixinShare").style.display = "block";
-          return;
-        }*/
-
-  window.open("http://app.bl.com/release_apk/BaiLianMobileApp-release.apk?" + new Date().getTime());
-
+function GetQueryString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var r = window.location.search.substr(1).match(reg);
+  if (r != null) return unescape(r[2]);
+  return null;
+};
+var type = GetQueryString('type');
+switch (type) {
+  case '1':
+    window.location.href = 'blmodule://ibaiLian/home';
+    break;
+  case '2':
+    window.location.href = 'blmodule://ibaiLian/productDetail' + window.location.search
+    break;
+  default:
+    break
 }
-
-function iosurl() {
-  /*      if(true) {
-          document.getElementById("weixinShare").style.display = "block";
-          return;
-        }*/
-  window.open("https://itunes.apple.com/cn/app/id1059602107");
-}
-
 </script>
+
 
 </html>
