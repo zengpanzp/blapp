@@ -22,7 +22,7 @@ Vue.use(VueLazyload, {
   preLoad: 1.3,
   loading: require('src/assets/icon_banner_loading.png'),
   error: require('src/assets/icon_banner_loading.png'),
-  try: 3 // default 1
+  try: 3 // default1
 })
 
 Vue.use(bluer)
