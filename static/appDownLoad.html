@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>app下载页</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="format-detection" content="telephone=no, email=no, address=no">
+  <meta name="applicable-device" content="mobile">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="-1">
+  <meta name="description" content="">
+  <meta name="Keywords" content="">
+  <script type="text/javascript">
+  (function() { var a = this;
+    a.width = 750;
+    a.fontSize = 100;
+    a.widthProportion = function() { var c = (document.getElementsByTagName("html")[0].offsetWidth) / a.width; return c > 1 ? 1 : c < 0.42667 ? 0.42667 : c; };
+    a.changePage = function() { var remVal = (parseFloat(a.widthProportion()) * 100).toFixed(2);
+      document.getElementsByTagName("html")[0].setAttribute("style", "font-size:" + remVal + "px !important"); };
+    a.changePage();
+    window.addEventListener("resize", function() { a.changePage() }, false); })();
+
+  </script>
+  <style type="text/css">
+    *,*:before,*:after{-moz-box-sizing:border-box;box-sizing:border-box;-webkit-tap-highlight-color:transparent}article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary{display:block}audio,canvas,video{display:inline-block}[hidden],template{display:none}html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%}html,button,input,select,textarea{font-family:sans-serif;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-moz-font-feature-settings:"liga", "kern"}body{margin:0}a{background:transparent}a:hover,a:active{outline:0}abbr[title]{border-bottom:1px dotted}b,strong{font-weight:bold}dfn{font-style:italic}mark{background:#ff0;color:#000}code,kbd,pre,samp{font-family:monospace, serif;font-size:1em}pre{white-space:pre;white-space:pre-wrap;word-wrap:break-word}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sup{top:-0.5em}sub{bottom:-0.25em}a,img,button,input,select,textarea,label{font-family:inherit;font-size:100%;margin:0;line-height:inherit;outline:0;outline:medium none}button,input{line-height:normal}button,select{text-transform:none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:none;cursor:pointer;outline:0}button[disabled],input[disabled]{cursor:default}input[type="checkbox"],input[type="radio"]{-moz-box-sizing:border-box;box-sizing:border-box;padding:0}input[type="search"]{-webkit-appearance:none}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height:auto}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}textarea{overflow:auto;vertical-align:top}optgroup{font-weight:bold}table{border-collapse:collapse;border-spacing:0}html{-webkit-overflow-scrolling:touch;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;-webkit-touch-callout:none;-webkit-user-select-none:none;user-select-none:none}body{font-family:"PingFangSC-Regular",Helvetica,sans-serif;font-size:.28rem;line-height:1.5;color:#333;background-color:#eee}img{vertical-align:middle;width:100%;height:auto;border:0;-webkit-touch-callout:none}textarea{resize:vertical}h1,h2,h3,h4,h5,h6,p,figure,form{margin:0}ul,ol,li,dl,dd{margin:0;padding:0;list-style:none outside none}a{text-decoration:none;-webkit-tap-highlight-color:transparent;color:#333}input::-webkit-input-placeholder,textarea::-webkit-input-placeholder{color:#ccc}label>*{pointer-events:none}body{background:#FFFFFF}.top-log{width:3.13rem;height:3.24rem;margin:0 auto .4rem}.button-box{display:-webkit-box;display:-moz-box;display:-webkit-flex;display:-moz-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-moz-box-pack:justify;box-pack:justify;-webkit-justify-content:space-between;-moz-justify-content:space-between;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-moz-box-align:center;box-align:center;-webkit-align-items:center;-moz-align-items:center;-ms-flex-align:center;align-items:center;margin-bottom:.5rem;padding:0 .36rem}.button-box .button{width:3.27rem;height:1rem}
+  </style>
+</head>
+
+<body>
+  <div class="top-log">
+    <img src="css/i/downloadlogo.png" />
+  </div>
+  <div class="button-box">
+    <div class="button" onclick="iosurl()">
+      <a><img src="css/i/button1.png" /></a>
+    </div>
+    <div class="button" onclick="androidurl()">
+      <a><img src="css/i/button2.png" /></a>
+    </div>
+  </div>
+  <div>
+    <img src="css/i/large-show.jpg" />
+  </div>
+</body>
+<script type="text/javascript">
+function androidurl() {
+  /*      if(true) {
+          document.getElementById("weixinShare").style.display = "block";
+          return;
+        }*/
+
+  window.open("http://app.bl.com/release_apk/BaiLianMobileApp-release.apk?" + new Date().getTime());
+
+}
+
+function iosurl() {
+  /*      if(true) {
+          document.getElementById("weixinShare").style.display = "block";
+          return;
+        }*/
+  window.open("https://itunes.apple.com/cn/app/id1059602107");
+}
+
+</script>
+
+</html>

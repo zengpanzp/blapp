@@ -8,7 +8,7 @@
         <bl-tab-item class="flex-item flex-c-m" v-for="(item, index) in filterEleTabs" :id="index" @click.native="changeTab(index, item)"><span>{{ item.deployName }}({{ item.num }})</span></bl-tab-item>
       </bl-navbar>
     </div>
-    <div class="fix-height" :style="{ height: fixHeight + 'px' }" v-show="!$route.query.orderNo"></div>
+    <div class="fix-height" :class="{ 'no-slides': allSlides.length > 0 }" v-show="!$route.query.orderNo"></div>
     <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div class="goods-item flex" v-for="item in list">
         <div class="goods-img lazy-box">
@@ -47,7 +47,6 @@ export default {
 
   data() {
     return {
-      fixHeight: null,
       memberId: '',
       noRows: false,
       loading: true,
@@ -109,10 +108,6 @@ export default {
           for (let item of resData.obj.otherResource) {
             if (item.resourceId == 1223) {
               this.allSlides = item.advList
-                // 设置高度
-              this.$nextTick(() => {
-                this.fixHeight = $(this.$refs.fixBox).height()
-              });
             }
             if (item.resourceId == 1225) {
               item.advList[0] && window.CTJSBridge.LoadMethod('BLMyComment', 'setPopDownInfo', item.advList[0])
