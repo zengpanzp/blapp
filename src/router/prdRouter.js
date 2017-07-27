@@ -539,7 +539,16 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/applyAftersale')), 'applyAftersale')
   },
-    /* 薛天玲 售后 退货码 */
+  /* 曾攀 提交售后 */
+  {
+    path: '/selectReturnMethod/:obj',
+    name: 'selectReturnMethod',
+    meta: {
+      title: '选择售后返还方式',
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/selectReturnMethod')), 'selectReturnMethod')
+  },
+  /* 薛天玲 售后 退货码 */
   {
     path: '/code',
     meta: {

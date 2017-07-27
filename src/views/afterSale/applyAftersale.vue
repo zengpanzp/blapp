@@ -1,9 +1,4 @@
 <style lang="scss" src="./css/applyAftersale.scss" scoped></style>
-<style type="text/css">
-  body{
-    background: #eeeeee;
-  }
-</style>
 <template>
 <div class="new">
     <div class="main">
@@ -59,13 +54,12 @@
             <div class="agreement" @click="goQuestion"><a>什么情况下不可以申请退换货<i class="iconfont arrow-back tran-right"></i></a>
             </div>
         </div>
-
         <div class="columnTitle border corner-top">申请数量<label class="colorRed">*</label></div>
         <div class="proColor  proColorBg corner-bottom  applyNum">
             <div class="proNum proNumMar">
-                <a class="proAdd " @click="reduce">-</a>
+                <a class="proAdd " @click="isCan && reduce()">-</a>
                 <input type="number" class="proNumInput" v-model="returnCnt"/>
-                <a class="proAdd " @click="add">+</a>
+                <a class="proAdd " @click="isCan && add()">+</a>
             </div>
             <label class="max">最大可提交数量为<b>{{maxReturnQuantity}}</b>个</label>
         </div>
@@ -122,8 +116,8 @@
         </div>
         <div class="columnTitle border corner-top">退款方式<label class="colorRed">*</label></div>
         <div class="proColor proColorPadding proColorBg corner-bottom return bank" id="bank">
-            <span class="disAble"><a>原支付返回</a></span>
-            <span class="disAble"><a>其他银行卡</a></span>
+            <span class="disAble" @click="bank"><a>原支付返回</a></span>
+            <span class="disAble" @click="bank"><a>其他银行卡</a></span>
 
             <div class="service-miner-box font-color-ash2 bank" style="display: none">
                 收款人姓名<i class="iconfont icon-enter"></i>
@@ -142,52 +136,34 @@
             </div>
         </div>
         <div class="payList corner">
-            <ul id="reason">
-                <li><a><label>请点击选择退货原因
+            <ul id="reason" @click="isCan && seeReason()">
+                <li><a><label>{{ defaultValue ? trueList : '请点击选择退货原因'}}
                     <i class="iconfont arrow-back tran-con"></i></label>退货原因<span class="colorRed">*</span></a>
                 </li>
             </ul>
         </div>
-
+        <bl-slide-bar :showModal="reason"
+              @modalChange="reason = $event"
+              :list="list"
+              v-model="defaultValue"
+              title="选择退货原因"></bl-slide-bar>
         <div class="columnTitle border corner-top">问题描述<label>(非必填)</label></div>
         <div class="ipt-b common-box r-case corner-bottom border1 return">
             <div class="return-desc corner">
                         <textarea class="fl textareaCon corner"
-                                  placeholder="请描述您遇到的具体问题，将有助于客服人员更快的处理您的申请，最多140个字！"></textarea>
+                        placeholder="请描述您遇到的具体问题，将有助于客服人员更快的处理您的申请，最多140个字！" v-model="question" maxlength="140" :disabled="!isCan">
+                        </textarea>
                 <span>140</span>
             </div>
         </div>
-        <div class="columnTitle border corner-top">上传图片凭证</div>
-        <!-- <div class="uploadPic corner-bottom">
-            <dd id="getPhoto" class="get-phone">
-              <input class="phone-file" type="file" accept="image/*" multiple="multiple" @change="select" />
-            </dd>
-            <span id="inform" class="cue">
-                如果上传商品为大家电，请上传序列号照片
-            </span>
-            <p>最多上传<span>3</span>张，每张不超过<span>5M</span>,支持jpg,BMP,Png</p>
-        </div> -->
-    </div>
-    <div class="priceSelectCon">
-        <div class="topHeader corner">
-            <a class="cancel">取消</a>选择退货原因
-        </div>
-        <div class="priceSelect">
-            <ul style="margin-top: 3rem">
-                <li id="">
-                    <a><i class="iconfont"></i></a>
-                </li>
-            </ul>
-        </div>
-        <div class="return"><a class="btn-1" id="priceOk">确认</a></div>
+        <bl-upload ref="upload" commentType="afterSale" maxLength="3"></bl-upload>
     </div>
     <footer>
         <div class="fixedMainbtn orderbtn orderbtnSize return">
-            <a @click="service" class="btn-sub">在线客服</a>
-            <button type="submit" class="btn-1" :class="{'btn': isCan}" click="nextStep" data-role="none" :disabled="!isCan">下一步</button>
+            <a id="service" class="btn-sub" @click="service">在线客服</a>
+            <button type="submit" class="btn-1" :class="{'btn': isCan}" @click="nextStep" data-role="none" :disabled="!isCan">下一步</button>
         </div>
     </footer>
-    <div class="plusMark" style="display: none"></div>
 </div>
 </template>
 
@@ -203,31 +179,37 @@ export default {
       memberId: '',
       picked: true,
       check: false,
-    	orderDetail: '',
-    	orderNo: '',
+      orderDetail: '',
+      orderNo: '',
       inlineLoading: null,
       level: '',
-    	address: '',
-      returnData: null,
+      address: '',
       list: [],
-      upload: [],
-      maxLen: 3,
+      requestData: null,
       returnCnt: 1,
       maxReturnQuantity: '',
       canReturn: '',
-      isCan: true
+      isCan: true,
+      reason: false,
+      defaultValue: '',
+      question: '',
+      reasonCode: '',
+      serType: [],
+      payMethodList: []
     };
   },
   created() {
-    this.memberId = utils.dbGet('userInfo').member_id
+     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
     console.log(this.level)
     let data = {
      "orderNo": "LPE20170713137427", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102892\",\"discountAmount\":\"0\",\"goodsCode\":\"81958\",\"goodsDetSid\":\"0611880001\",\"goodsName\":\"三和四美 糟方腐乳 500g\",\"goodsSid\":\"271091\",\"goodsStan\":\"500g\",\"goodsType\":\"1\",\"goodsWeight\":\"0.5\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"7.3\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707131374270101\",\"oriPrice\":\"8.03\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 四川南路26号\",\"receiver\":\"怎胖\",\"phone\":\"18679475831\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
     }
-		this.orderNo = data.orderNo
-		this.orderDetail = JSON.parse(data.orderDetail)
-		this.address = JSON.parse(data.address)
+    console.log(data)
+    this.orderNo = data.orderNo
+    this.orderDetail = JSON.parse(data.orderDetail)
+    this.address = JSON.parse(data.address)
+    console.log(this.address)
     this.checkReturn()
   },
   methods: {
@@ -237,12 +219,17 @@ export default {
           orderDetailNo: this.orderDetail.orderDetailNo,
           memberId: this.memberId
         }).then(data => {
-          console.log("zp", data.body.obj)
           this.$loading.close()
+          console.log("zpzpzpzpz", data.body.obj)
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
-            this.returnData = resData
+            this.requestData = resData
             this.maxReturnQuantity = resData.maxReturnQuantity
+            this.canReturn = resData.canReturn
+            this.serType = resData.serviceType
+            if (resData.payMethodList) {
+              this.payMethodList = resData.payMethodList
+            }
             this.getRefundReason()
           } else {
             this.$toast(data.body.msg)
@@ -251,6 +238,9 @@ export default {
           console.log(err)
         })
     },
+    bank(event) {
+
+    },
     getRefundReason() {
       api.getReason({
         type: 'Customer_reason'
@@ -258,12 +248,39 @@ export default {
         this.$loading.close()
         console.log("reason", data.body.obj)
         let obj = JSON.parse(data.body.obj)
-        this.list = obj.list
+        let list = []
+        for (let item of obj.list) {
+          list.push({
+            value: item.value,
+            label: item.label
+          })
+        }
+        this.list = list
+        if (this.maxReturnQuantity == 0 || this.canReturn != 1) {
+              this.isCan = false
+              return
+        }
+        for (let i = 0; i < this.serType.length; i++) {
+            let index = parseInt(this.serType[i]) - 1
+            this.$nextTick(() => {
+              $("#serviceType span").eq(index).removeClass("disAble")
+            })
+        }
+
+        for (let i = 0; i < this.payMethodList.length; i++) {
+            let index = parseInt(this.payMethodList[i]) - 1;
+            this.$nextTick(() => {
+              $("#bank span").eq(index).removeClass("disAble")
+              if (index == 1) {
+                  $("#bank").find(".bank").slideDown()
+              }
+            })
+          }
       }, err => {
         console.log(err)
       })
     },
-    userService() {
+    service() {
       // let vip = 0
       // if (this.level == 40) {
       //   vip = 1
@@ -277,6 +294,9 @@ export default {
 
       // }
     },
+    userService(ev) {
+      console.log("#fadfdf", ev.target.innerText)
+    },
     goQuestion() {
       // let requestData = {url: "http://m.st.bl.com/h5-web/cms/viewCmsContent.html?pageId=571", title: "退换货说明"};
       // if (window.location.host == 'mh5.bl.com') {
@@ -288,7 +308,7 @@ export default {
       if (this.maxReturnQuantity == 0) {
         this.$toast('此商品已提交申请售后服务')
       }
-      if (this.returnCnt < 1) {
+      if (this.returnCnt <= 1) {
         this.returnCnt = 1
         this.$toast('数量不可为0')
       }
@@ -297,67 +317,72 @@ export default {
       if (this.maxReturnQuantity == 0) {
         this.$toast('此商品已提交申请售后服务')
       }
-      if (this.returnCnt > this.maxReturnQuantity) {
+      if (this.returnCnt >= this.maxReturnQuantity) {
         this.$toast('该商品限购' + this.maxReturnQuantity + '件')
       }
+    },
+    seeReason() {
+      this.reason = true
+    },
+    nextStep() {
+      if (this.trueList && this.trueList.indexOf('照片') != -1 && this.$refs.upload.upload.length == 0) {
+          this.$modal({
+            content: '当前退货原因需上传至少一张图片凭证'
+          })
+          return
+      }
+      console.log("nextStep", JSON.stringify(this.$refs.upload.upload))
+      let picList = this.$refs.upload.upload
+      let url = ''
+      for (let i = 0; i < picList.length; i++) {
+        if (picList.length != 0) {
+          url += picList[i].cephUrl + ','
+        }
+      }
+      let req = {
+        orderNo: this.orderNo,
+        orderDetailNo: this.orderDetail.orderDetailNo,
+        memberId: this.memberId,
+        returnQuantity: this.returnCnt,
+        applyCertificate: this.picked == true ? 0 : 1,
+        testReport: this.check == true ? 0 : 1,
+        refundMethodCode: "",
+        refundMethodName: "",
+        accountName: "",
+        bankName: "",
+        accountNo: "",
+        reasonCode: this.defaultValue,
+        reasonName: this.trueList,
+        reasonDesc: this.question,
+        reasonImageList: url,
+        reasonImageListCephUrl: url,
+        deliveryMethodCode: "",
+        deliveryMethodName: "",
+        contactPhone: "",
+        contactPeople: "",
+        state: "",
+        city: "",
+        district: "",
+        detailAddr: "",
+        zipCode: "",
+        deliveryDate: ""
+      }
+      this.$router.push({
+        name: 'selectReturnMethod',
+        params: {
+          obj: encodeURIComponent(JSON.stringify(req))
+        }
+      })
     }
-    // select(event) {
-    //   this.inlineLoading = this.$toast({
-    //     iconClass: 'preloader white',
-    //     duration: 'loading',
-    //     className: 'loading-bg'
-    //   })
-    //   let files = event.target.files
-    //   let filen = files.lenth
-    //   if (this.upload.lenght + filen > this.maxLen) {
-    //     this.inlineLoading.close()
-    //     this.$modal({
-    //       title: '提示',
-    //       content: `最多上传${this.maxLen}张`
-    //     })
-    //     filen = 1
-    //   }
-    //   // 遍历要上传的图片
-    //   for (let i = 0; i < filen.length; i++) {
-    //     window.compressImg(files[i], 640, base64 => {
-    //       if (this.upload.length + i + 1 > this.maxLen.length) {
-    //         this.inlineLoading.close()
-    //         return
-    //       }
-    //       api.upload({
-    //         appId: 'BL_IBLAPP',
-    //         base64Content: base64.split(",")[1],
-    //         fileName: new Date().getTime(),
-    //         mediaType: 'jpg',
-    //         reSize: 1
-    //       }).then(res => {
-    //         console.log("base64", res)
-    //         this.$loading.close()
-    //         if (i = filen.lenght - 1) {
-    //           this.inlineLoading.close()
-    //         }
-    //         if (res.body.obj) {
-    //           console.log('上传图片返回:', JSON.parse(res.body.obj))
-    //           let resData = JSON.parse(res.body.obj)
-    //           if (resData.length > 0) {
-    //             resData = resData[0]
-    //           }
-    //           this.upload.push({
-    //             pid: i,
-    //             url: resData.mediaCephUrl,
-    //             mediaId: resData.mediaId,
-    //             cephUrl: resData.mediaCephUrl
-    //           })
-    //           console.log("photo", this.upload)
-    //         } else {
-    //           this.$toast(res.body.msg)
-    //         }
-    //       }, () => {
-    //         this.inlineLoading.close()
-    //       })
-    //     })
-    //   }
-    // }
+  },
+  computed: {
+    trueList() {
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.list[i].value == this.defaultValue) {
+          return this.list[i].label
+        }
+      }
+    }
   },
   // 路由取memberId
   beforeRouteEnter (to, from, next) {
