@@ -13,7 +13,7 @@ export default {
   },
   created() {
   	this.$loading.close()
-  	console.log(decodeURIComponent(this.$route.params.obj))
+  	console.log("zp", decodeURIComponent(this.$route.params.obj))
   }
 };
 </script>
