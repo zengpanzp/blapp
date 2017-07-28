@@ -9,6 +9,9 @@
 }
 .fix-height{
   height: rem(88);
+  &.no-slides{
+    height: rem(88 + 200);
+  }
 }
 .collection-tab{
   background-color: #fff;

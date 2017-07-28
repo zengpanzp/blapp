@@ -159,7 +159,6 @@ export default {
       }
     },
     loadGoods() {
-      console.log('goods')
       this.busy = true
       let temp = []
       utils.isLogin().then(data => {
