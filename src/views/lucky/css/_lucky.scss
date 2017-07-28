@@ -733,7 +733,8 @@ textarea::-webkit-input-placeholder {
   background: url(../i/lucky-light.png) center center no-repeat;
   background-size: auto 100%;
   text-align: center;
-  padding: 0 rem(9)
+  padding: 0 rem(9);
+  margin: 0 auto
 }
 
 #lucky .message .txt {
@@ -764,9 +765,9 @@ textarea::-webkit-input-placeholder {
 }
 
 #lucky .lottery-list {
-  width: rem(586);
+  width: rem(572);
   height: rem(586);
-  margin-top: rem(27);
+  margin: rem(27) auto;
   border-radius: rem(10);
 }
 
