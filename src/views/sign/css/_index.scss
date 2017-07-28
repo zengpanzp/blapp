@@ -99,7 +99,7 @@ body {
     width: 100%;
     position: fixed;
     background: #fff;
-    //padding-bottom: rem(30);
+    padding-bottom: rem(10);
     .close{
       position: absolute;
       right: rem(30);
@@ -291,19 +291,18 @@ body {
     }
   }
   .top-menu {
-    width: 100%;
     padding: rem(20);
-    li {
-      position: relative;
-      height: rem(220);
-      width: 49%;
-      float:left;
-      background: #f9f9f9;
-      font-size: rem(24);
-      &:nth-child(2n+1){
-        margin-right: rem(10);
+    .new-menu {
+      margin-left: rem(-10);
+      overflow-y: hidden;
+      .new-menu-item {
+        padding-left: rem(10);
+        display: inline-block;
+        margin-bottom: rem(-10);
+        float: left;
+        width: 50%;
+        height: rem(220);
       }
-      margin-bottom: rem(10);
     }
     &::after{
       content:'';display:block;height:0;visibility:hidden;clear:both;

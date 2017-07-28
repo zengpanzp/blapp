@@ -58,12 +58,13 @@
 
     </section>
     <!--四个资源位-->
-    <ul class="top-menu" v-if="recommendList&&recommendList.length>0">
-      <li  v-for="item in recommendList" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
-        <img  :src="item.advList[0].mediaUrl">
-      </li>
-      <div class="clearfix"></div>
-    </ul>
+    <div class="top-menu" v-if="recommendList&&recommendList.length>0">
+      <div class="new-menu">
+        <div class="new-menu-item"  v-for="item in recommendList" v-if="item&&item.advList[0]" v-go-native-resource="item.advList[0]">
+          <img  :src="item.advList[0].mediaUrl">
+        </div>
+      </div>
+    </div>
     <!--推荐的商品-->
     <ul class="recommend" v-for="item in bigGoodsList" v-if="item&&(item.big || item.list.length>0)">
       <li v-go-native-resource="item.big" v-if="item&&item.big">
@@ -117,12 +118,13 @@
       </div>
       <div class="gobuy" @click="goIndex">去买买买</div>
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
-      <ul class="top-menu bottom" v-show="noSignList&&noSignList.length>0">
-        <li v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload">
-          <img v-lazy="{src: item.advList[0]&&item.advList[0].mediaUrl}">
-        </li>
-        <div class="clearfix"></div>
-      </ul>
+      <div class="top-menu bottom" v-show="noSignList&&noSignList.length>0">
+        <div class="new-menu">
+          <div v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload new-menu-item">
+            <img v-lazy="{src: item.advList[0]&&item.advList[0].mediaUrl}">
+          </div>
+        </div>
+      </div>
     </section>
     </transition>
   </div>

@@ -40,7 +40,7 @@
                 </li>
                 <li>
                   <div class="joint-input j-input">
-                    <input v-model="pass" type="password" placeholder="请输入您要设置的密码(8~20位数字字母组合)" class="j-code">
+                    <input v-model="pass" type="password" placeholder="请输入密码(8~20位数字字母组合)" class="j-code">
                     <div class="form-close"></div>
                   </div>
                 </li>
