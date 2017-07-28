@@ -9,18 +9,18 @@
 		    <div class="lottery-list">
 		        <dl id="lottery">
 		        	<dd class="lottery-unit lottery-unit-0"><img :src="showPic[0]"></dd>
-					<dd class="lottery-unit lottery-unit-1"><img :src="showPic[1]"></dd>
-					<dd class="lottery-unit lottery-unit-2"><img :src="showPic[2]"></dd>
-					<dd class="lottery-unit lottery-unit-3"><img :src="showPic[3]"></dd>
-					<dd class="lottery-unit lottery-unit-11"><img :src="showPic[11]"></dd>
-					<dd class="lottery-unit lottery-unit-4"><img :src="showPic[4]"></dd>
-					<dd class="lottery-unit lottery-unit-10"><img :src="showPic[10]"></dd>
-					<dd class="lottery-unit lottery-unit-5"><img :src="showPic[5]"></dd>
-					<dd class="lottery-unit lottery-unit-9"><img :src="showPic[9]"></dd>
-					<dd class="lottery-unit lottery-unit-8"><img :src="showPic[8]"></dd>
-					<dd class="lottery-unit lottery-unit-7"><img :src="showPic[7]"></dd>
-					<dd class="lottery-unit lottery-unit-6"><img :src="showPic[6]"></dd>
-					<dt id="lucky_ruler_start" @click="startLucky"><img :src="templateButtonPic"/></dt>
+    					<dd class="lottery-unit lottery-unit-1"><img :src="showPic[1]"></dd>
+    					<dd class="lottery-unit lottery-unit-2"><img :src="showPic[2]"></dd>
+    					<dd class="lottery-unit lottery-unit-3"><img :src="showPic[3]"></dd>
+    					<dd class="lottery-unit lottery-unit-11"><img :src="showPic[11]"></dd>
+    					<dd class="lottery-unit lottery-unit-4"><img :src="showPic[4]"></dd>
+    					<dd class="lottery-unit lottery-unit-10"><img :src="showPic[10]"></dd>
+    					<dd class="lottery-unit lottery-unit-5"><img :src="showPic[5]"></dd>
+    					<dd class="lottery-unit lottery-unit-9"><img :src="showPic[9]"></dd>
+    					<dd class="lottery-unit lottery-unit-8"><img :src="showPic[8]"></dd>
+    					<dd class="lottery-unit lottery-unit-7"><img :src="showPic[7]"></dd>
+    					<dd class="lottery-unit lottery-unit-6"><img :src="showPic[6]"></dd>
+    					<dt id="lucky_ruler_start" @click="startLucky"><img :src="templateButtonPic"/></dt>
 		        </dl>
 		    </div>
 		    <div class="ruler" v-if="rulerFlag">
@@ -93,11 +93,11 @@ export default {
     return {
     	lottery: null,
     	click: false,
-        remain: 1,
-        ruleId: "",
-        coupon: "",
-        drawId: "4",
-        isSigninFlag: '',
+      remain: 1,
+      ruleId: "",
+      coupon: "",
+      drawId: "4",
+      isSigninFlag: '',
     	memberId: "",
     	memberToken: "",
     	templateButtonPic: "",
@@ -189,13 +189,13 @@ export default {
                 if (this.ruleId != '1') {
                     this.remain = parseInt(obj.remainMaxNumUserDay);
                 }
-  				$("#lucky").css({
-                    "background": "url(" + obj.backPic + ")" + obj.backColor,
-                    "background-size": "100%",
-                    "background-position": "center bottom",
-                    "background-repeat": "no-repeat"
-                });
-  				$("#lottery").css({
+        				$("#lucky").css({
+                          "background": "url(" + obj.backPic + ")" + obj.backColor,
+                          "background-size": "100%",
+                          "background-position": "center bottom",
+                          "background-repeat": "no-repeat"
+                      });
+        				$("#lottery").css({
                     "background": "url(" + obj.templateBackPic + ") " + obj.templateBackColor,
                     "border-color": obj.templateBorderColor,
                     "background-size": "100%",
@@ -204,10 +204,10 @@ export default {
                 document.title = obj.drawName
                 window.CTJSBridge._setNativeTitle(obj.drawName);
                 this.drawDesc = obj.drawDesc
-  				this.enableTimeFrom = obj.enableTimeFrom
-  				this.enableTimeTo = obj.enableTimeTo
-  				this.rulerFlag = true
-  				if (obj.remainMaxNumUser != 0 && obj.remainMaxNumUserDay == 0) {
+        				this.enableTimeFrom = obj.enableTimeFrom
+        				this.enableTimeTo = obj.enableTimeTo
+        				this.rulerFlag = true
+        				if (obj.remainMaxNumUser != 0 && obj.remainMaxNumUserDay == 0) {
                     this.errorFlag = true
                     this.errorTitle = "抽奖次数当天已用完"
                     return;
@@ -219,9 +219,9 @@ export default {
                 }
                 this.bindRoll();
   			} else {
-  				this.remain = 0
-  				this.errorFlag = true
-  				this.errorTitle = data.body.msg
+    				this.remain = 0
+    				this.errorFlag = true
+    				this.errorTitle = data.body.msg
   			}
   		}, err => {
   			console.log(err)

@@ -405,24 +405,6 @@ textarea::-webkit-input-placeholder {
   margin-left: 50%
 }
 
-.lottery-list dl dd:nth-child(1),
-.lottery-list dl dd:nth-child(10),
-.lottery-list dl dd:nth-child(12),
-.lottery-list dl dd:nth-child(3),
-.lottery-list dl dd:nth-child(6),
-.lottery-list dl dd:nth-child(7) {
-  background: #fff79a
-}
-
-.lottery-list dl dd:nth-child(11),
-.lottery-list dl dd:nth-child(2),
-.lottery-list dl dd:nth-child(4),
-.lottery-list dl dd:nth-child(5),
-.lottery-list dl dd:nth-child(8),
-.lottery-list dl dd:nth-child(9) {
-  background: #ffd588
-}
-
 .lottery-list dl dd img {
   width: 100%;
   height: auto;
@@ -784,7 +766,6 @@ textarea::-webkit-input-placeholder {
 #lucky .lottery-list {
   width: rem(586);
   height: rem(586);
-  border: rem(8) solid #48357e;
   margin-top: rem(27);
   border-radius: rem(10);
 }
