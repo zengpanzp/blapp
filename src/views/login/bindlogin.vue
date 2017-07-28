@@ -1,6 +1,6 @@
 <style lang="scss" src="./css/_login.scss" scoped></style>
 <template>
-<div class="register">
+<div class="register" v-show="!hasBind">
     <!-- header start -->
     <header class="bar bar-header bar-light">
       <div class="bar-left">
@@ -20,18 +20,18 @@
             <ul>
                 <li>
                     <div class="joint-input j-input">
-                        <input type="tel" maxlength="11" placeholder="请输入手机号码" class="j-login">
+                        <input type="tel" v-model="mobile" maxlength="11" placeholder="请输入手机号码" class="j-login">
                     </div>
                 </li>
                 <li>
                     <div class="joint-input j-input">
-                        <input type="text" placeholder="请输入短信验证码" class="j-code">
+                        <input v-model="smsCode" type="text" placeholder="请输入短信验证码" class="j-code">
                        <button class="getSMSCode" @click="getSMSCode" :disabled="codeDisabled">{{smsCodeText}}</button>
                     </div>
                 </li>
                 <li>
                     <div class="joint-input j-input">
-                        <input type="text" placeholder="请输入验证码" class="j-code">
+                        <input v-model="imgCodeInput" type="text" placeholder="请输入验证码" class="j-code">
                     </div>
                     <div @click="generateImg" class="joint-code joint-code2">
                       {{imgCode}}
@@ -41,20 +41,21 @@
         </div>
     </div>
     <div class="submitBind">
-      <input type="button" class="joint-submit" value="授权绑定">
+      <input @click="bindAccount" type="button" class="joint-submit" value="授权绑定">
     </div>
 </div>
 </template>
 <script>
     import api from './api/index'
   //  import utils from 'src/utils'
-  //  import mock from '../../../mock/getCouponDetail'
-  //  import abc from './i/banners/ia_10001-750x240q40.jpg'
   export default {
     name: 'bindLogin',
     data() {
       return {
+        hasBind: true,  // 假设已经绑定
+        imgCodeInput: "",
         imgCode: '', // 图片验证码
+        smsCode: "", // 短信验证码
         mobile: "",
         codeDisabled: false,  // 能否点击发送验证码
         smsCodeText: "获取短信验证码"
@@ -62,11 +63,95 @@
     },
     created() {
       this.$loading.close();
-      this.generateImg()
+      this.generateImg();
+      let param = this.$route.query.param;
+      // 验证安付宝是否存在
+      api.validateOKPayExit({
+        param: param
+      }).then(data => {
+        if (data.body.resCode == "00100000") {
+          let json = JSON.parse(data.body.obj);
+          this.hasBind = (json.hasBind === "1");
+          this.obj = json;
+        }
+        console.log(data)
+      });
     },
     mounted() {
     },
     methods: {
+      bindAccount() { // 进行授权绑定
+        if (this.validate()) { // 验证成功
+          // 验证手机号唯一性
+          api.validatePhone({
+            loginId: this.mobile
+          }).then(data => {
+            let json = JSON.parse(data.body.obj);
+            if (json.resCode == "05111008") { // 已经存在可以进行绑定
+              // 进行绑定
+              api.bindOKPay({
+                sysid: "1103",
+                channelId: "1",
+                loginId: this.mobile,
+                loginType: "code",
+                mobile: this.mobile,
+                requestId: this.obj.requestId,
+                smsCode: this.smsCode,
+                third_party_id: this.obj.thirdPartyId,
+                third_party_id_type: "2",
+                third_party_mobile: this.obj.thirdPartyMobile
+              }).then(data => {
+                console.log(data)
+              });
+            } else {
+              this.alertTip("手机号已经被注册!")
+            }
+          });
+        }
+      },
+      alertTip(msg) {
+        this.$toast({
+          position: 'bottom',
+          message: msg
+        });
+      },
+      // 验证填写的基本信息
+      validate() {
+        let msg = "";
+        if (this.valPhone(this.mobile)) {
+          if (this.smsCode == "") {
+            msg = "短信验证码不能为空!";
+            this.alertTip(msg);
+            return false;
+          }
+          if (this.imgCodeInput == "") {
+            msg = "验证码不能为空!";
+            this.alertTip(msg);
+            return false;
+          }
+          if (this.imgCode.toLowerCase() != this.imgCodeInput.trim().toLowerCase()) {
+            msg = "验证码输入不正确!";
+            this.alertTip(msg);
+            return false;
+          }
+        } else {
+          return false;
+        }
+        return true;
+      },
+      // 验证手机号
+      valPhone(phone) {
+        if (phone == "") {
+          this.alertTip("手机号码不能为空!");
+          console.log("====false")
+          return false;
+        }
+        if (phone && !/^1[34578]\d{9}$/.test(phone)) {
+          this.alertTip("手机号码有误!");
+          return false;
+        }
+        return true;
+      },
       generateImg() {
         // 验证码组成库
         var arrays = [

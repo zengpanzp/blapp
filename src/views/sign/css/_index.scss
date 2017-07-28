@@ -14,6 +14,14 @@ body {
 /*我的测试*/
 // 日签
 .daysign{
+  .dcalendar{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    top: 0;
+    left: 0;
+  }
   .fail{
     position: fixed;
     z-index: 9999;
@@ -91,7 +99,7 @@ body {
     width: 100%;
     position: fixed;
     background: #fff;
-    padding-bottom: rem(30);
+    //padding-bottom: rem(30);
     .close{
       position: absolute;
       right: rem(30);
@@ -287,7 +295,7 @@ body {
     padding: rem(20);
     li {
       position: relative;
-      //height: rem(220);
+      height: rem(220);
       width: 49%;
       float:left;
       background: #f9f9f9;

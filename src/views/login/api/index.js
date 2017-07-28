@@ -44,6 +44,14 @@ export default {
   loginWithSmsCode: params => {
     return Vue.http.post(baseUrl + '/member/login.htm', params);
   },
+  // 验证安付宝账号是否存在
+  validateOKPayExit: params => {
+    return Vue.http.post(baseUrl + '/member/successJointlogin.htm', params);
+  },
+  // 绑定安付宝账号
+  bindOKPay: params => {
+    return Vue.http.post(baseUrl + '/baseinfo/jn/registerAndLoginWithThirdPartyUidByCode.htm', params);
+  },
   // 注册账号
   register: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/appWeixinRegister.htm', params);
