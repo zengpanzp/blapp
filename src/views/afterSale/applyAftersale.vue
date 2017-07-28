@@ -47,9 +47,11 @@
         </div>
         <div class="columnTitle border corner-top">服务类型</div>
         <div class="proColor proColorPadding proColorBg corner-bottom return" id="serviceType">
-            <span class="disAble" @click="userService"><a>退货</a></span>
-            <span class="disAble" @click="userService"><a>换货</a></span>
-            <span class="disAble" @click="userService"><a>维修</a></span>
+            <span v-for="(item, index) in serviceTypeArr"
+              :class="{'disAble': item.disabled, 'select': type == index + 1}"
+              @click="userService(item, index)">
+              <a>{{ item.text }}</a>
+            </span>
 
             <div class="agreement" @click="goQuestion"><a>什么情况下不可以申请退换货<i class="iconfont arrow-back tran-right"></i></a>
             </div>
@@ -58,7 +60,7 @@
         <div class="proColor  proColorBg corner-bottom  applyNum">
             <div class="proNum proNumMar">
                 <a class="proAdd " @click="isCan && reduce()">-</a>
-                <input type="number" class="proNumInput" v-model="returnCnt"/>
+                <input type="tel" class="proNumInput" v-model="returnCnt"/>
                 <a class="proAdd " @click="isCan && add()">+</a>
             </div>
             <label class="max">最大可提交数量为<b>{{maxReturnQuantity}}</b>个</label>
@@ -93,7 +95,7 @@
         <div class="checkbox-box" id="checkBox">
           <div class="check-item">
             <label class="check-label">
-              <input class="check-iput" type="radio" v-model="check" value="false" />
+              <input class="check-iput" type="radio" v-model="check" value="true" />
               <div class="flex-m">
                 <svg class="icon">
                   <use xlink:href="#icon-check"></use>
@@ -104,7 +106,7 @@
           </div>
           <div class="check-item">
             <label class="check-label">
-              <input class="check-iput" type="radio" v-model="check" value="true" />
+              <input class="check-iput" type="radio" v-model="check" value="false" />
               <div class="flex-m">
                 <svg class="icon">
                   <use xlink:href="#icon-check"></use>
@@ -116,22 +118,22 @@
         </div>
         <div class="columnTitle border corner-top">退款方式<label class="colorRed">*</label></div>
         <div class="proColor proColorPadding proColorBg corner-bottom return bank" id="bank">
-            <span class="disAble" @click="bank"><a>原支付返回</a></span>
-            <span class="disAble" @click="bank"><a>其他银行卡</a></span>
-
-            <div class="service-miner-box font-color-ash2 bank" style="display: none">
+            <span :class="{'disAble': item.disAble}" @click="bank(item, index)" v-for="(item, index) in bankList"><a>{{item.text}}</a></span>
+            <!-- <span class="disAble"><a>原支付返回</a></span>
+            <span class="disAble"><a>其他银行卡</a></span> -->
+            <div class="service-miner-box font-color-ash2 bank" @click="changeBank" style="display: none">
                 收款人姓名<i class="iconfont icon-enter"></i>
             </div>
-            <div class="service-miner-box font-color-ash2 bank" style="display: none">
+            <div class="service-miner-box font-color-ash2 bank" @click="changeBank" style="display: none">
                 收款人储蓄卡号<i class="iconfont icon-enter"></i>
             </div>
-            <div class="service-miner-box font-color-ash2 bank" style="display: none">
+            <div class="service-miner-box font-color-ash2 bank" @click="changeBank" style="display: none">
                 开户行<i class="iconfont icon-enter"></i>
             </div>
-            <div class="font-color-ash2 font-size-miner" style="display: none">
+            <div class="font-color-ash2 font-size-miner" @click="changeBank" style="display: none">
                 如为银行卡、百联积点卡、百联会员卡支付支持原路返回；如积点卡丢失，请联系客服4009008800。
             </div>
-            <div class="font-color-ash2 font-size-miner" style="display: none">
+            <div class="font-color-ash2 font-size-miner" @click="changeBank" style="display: none">
                 仅支持现金
             </div>
         </div>
@@ -153,7 +155,7 @@
                         <textarea class="fl textareaCon corner"
                         placeholder="请描述您遇到的具体问题，将有助于客服人员更快的处理您的申请，最多140个字！" v-model="question" maxlength="140" :disabled="!isCan">
                         </textarea>
-                <span>140</span>
+                <span>{{140 - question.length}}</span>
             </div>
         </div>
         <bl-upload ref="upload" commentType="afterSale" maxLength="3"></bl-upload>
@@ -176,40 +178,77 @@ export default {
 
   data () {
     return {
-      memberId: '',
-      picked: true,
-      check: false,
-      orderDetail: '',
-      orderNo: '',
-      inlineLoading: null,
-      level: '',
-      address: '',
-      list: [],
-      requestData: null,
-      returnCnt: 1,
-      maxReturnQuantity: '',
-      canReturn: '',
-      isCan: true,
-      reason: false,
-      defaultValue: '',
-      question: '',
-      reasonCode: '',
+      memberId: '', // 会员编号
+      picked: true, // 申请凭证
+      check: true,  // 检测报告
+      orderDetail: '', // 商品详情
+      pic: '', // 商品图片
+      orderNo: '', // 订单编号
+      inlineLoading: null, // 加载
+      level: '', // 会员等级
+      address: '', // 地址
+      list: [], // 原因集合
+      requestData: null, // 申请对象
+      returnCnt: 1, // 申请数量
+      maxReturnQuantity: '', // 最大提交数量
+      canReturn: '', // 是否可以申请 1 是 0 否
+      isCan: true,  // 是否能申请
+      reason: false, // 是否触发slide bar
+      defaultValue: '', // slide bar 默认值
+      question: '', // 问题描述
+      reasonCode: '', // 原因编号
       serType: [],
-      payMethodList: []
+      type: '',
+      payMethodList: [],
+      refundMethodCode: '', // 退款编号
+      refundMethodName: '', // 退款方式名
+      accountName: '',
+      accountNo: '',
+      bankName: '',
+      version: '', // app版本号
+      serviceTypeArr: [{ // 类型
+        text: '退货',
+        disabled: true
+      }, {
+        text: '换货',
+        disabled: true
+      }, {
+        text: '维修',
+        disabled: true
+      }],
+      bankList: [{ // 退款方式
+        text: '原支付返回',
+        disAble: true
+      },
+      {
+        text: '其它银行卡',
+        disAble: true
+      }]
     };
   },
   created() {
-     this.memberId = utils.dbGet('userInfo').member_id
+    // sensor analytics埋点
+    try {
+      console.log((new Date()).toLocaleString() + 'APP_退换货申请')
+      sa.track('$pageview', {
+        pageId: 'APP_退换货申请',
+        categoryId: 'APP_User',
+        $title: '申请售后'
+      });
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
+    this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
-    console.log(this.level)
     let data = {
-     "orderNo": "LPE20170713137427", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102892\",\"discountAmount\":\"0\",\"goodsCode\":\"81958\",\"goodsDetSid\":\"0611880001\",\"goodsName\":\"三和四美 糟方腐乳 500g\",\"goodsSid\":\"271091\",\"goodsStan\":\"500g\",\"goodsType\":\"1\",\"goodsWeight\":\"0.5\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"7.3\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707131374270101\",\"oriPrice\":\"8.03\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 四川南路26号\",\"receiver\":\"怎胖\",\"phone\":\"18679475831\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
+      "orderNo": "LPE20170713137427", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102892\",\"discountAmount\":\"0\",\"goodsCode\":\"81958\",\"goodsDetSid\":\"0611880001\",\"goodsName\":\"三和四美 糟方腐乳 500g\",\"goodsSid\":\"271091\",\"goodsStan\":\"500g\",\"goodsType\":\"1\",\"goodsWeight\":\"0.5\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"7.3\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707131374270101\",\"oriPrice\":\"8.03\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 四川南路26号\",\"receiver\":\"怎胖\",\"phone\":\"18679475831\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
+     // "orderNo": "MAE20170516125850", "orderDetail": "{\"tax\":\"0.00\",\"bgCateSid\":\"103139\",\"discountAmount\":\"14.18\",\"goodsCode\":\"2349427\",\"goodsDetSid\":\"154600\",\"goodsName\":\"新增商品件数设置免邮上海\",\"goodsSid\":\"1353887\",\"goodsType\":\"1\",\"goodsWeight\":\"3\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"80680\",\"salePrice\":\"13\",\"merchantId\":\"2986\",\"orderDetailNo\":\"MAE201705161258500102\",\"oriPrice\":\"3\",\"picUrl\":\"http://img18.st.iblimg.com/mp-212/mp/goods/2078322318_360x360.jpg\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":2,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":2}", "address": "{\"address\":\"上海市 市辖区 黄浦区 哼哼唧唧斤斤计较\",\"receiver\":\"任天野\",\"phone\":\"13813015545\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
     }
     console.log(data)
     this.orderNo = data.orderNo
     this.orderDetail = JSON.parse(data.orderDetail)
+    this.pic = this.orderDetail.picUrl ? this.orderDetail.picUrl : null
     this.address = JSON.parse(data.address)
-    console.log(this.address)
     this.checkReturn()
   },
   methods: {
@@ -227,9 +266,7 @@ export default {
             this.maxReturnQuantity = resData.maxReturnQuantity
             this.canReturn = resData.canReturn
             this.serType = resData.serviceType
-            if (resData.payMethodList) {
-              this.payMethodList = resData.payMethodList
-            }
+            this.payMethodList = resData.refundMethodList
             this.getRefundReason()
           } else {
             this.$toast(data.body.msg)
@@ -238,8 +275,34 @@ export default {
           console.log(err)
         })
     },
-    bank(event) {
-
+    bank(item, index) {
+      if (!this.isCan) return
+      if (item.disAble) return
+      this.$nextTick(() => {
+        if (index == 0) {
+          if (this.accountName) {
+              $("#bank").find(".bank").slideDown()
+          } else {
+              this.changeBank()
+          }
+        } else {
+          $("#bank").find(".bank").slideUp()
+        }
+      })
+    },
+    changeBank() {
+      if (!this.isCan) {
+        return
+      }
+      let req = JSON.stringify({
+          receiver: this.accountName,
+          card: this.accountNo,
+          bank: this.bankName
+        })
+      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'returnBank',
+          params: JSON.stringify(req)
+      })
     },
     getRefundReason() {
       api.getReason({
@@ -260,49 +323,95 @@ export default {
               this.isCan = false
               return
         }
-        for (let i = 0; i < this.serType.length; i++) {
-            let index = parseInt(this.serType[i]) - 1
-            this.$nextTick(() => {
-              $("#serviceType span").eq(index).removeClass("disAble")
-            })
+        if (this.serType.length > 0) {
+            for (let i = 0; i < this.serType.length; i++) {
+                let index = parseInt(this.serType[i]) - 1
+                this.$nextTick(() => {
+                  $("#serviceType span").eq(index).removeClass("disAble")
+                })
+            }
         }
-
         for (let i = 0; i < this.payMethodList.length; i++) {
-            let index = parseInt(this.payMethodList[i]) - 1;
+            let index = parseInt(this.payMethodList[i]) - 1
             this.$nextTick(() => {
               $("#bank span").eq(index).removeClass("disAble")
               if (index == 1) {
                   $("#bank").find(".bank").slideDown()
               }
             })
-          }
+        }
+        if (this.refundMethodCode) {
+          this.$nextTick(() => {
+            $("#bank span").removeClass("hotSpan");
+            let index = parseInt(this.refundMethodCode) - 1
+            $("#bank span").eq(index).addClass("hotSpan")
+            $("#bank .font-size-miner").eq(index).show()
+            if (index == 1) {
+                $("#bank").find(".bank").slideDown()
+            }
+          })
+        }
+        this.checkBar()
       }, err => {
         console.log(err)
       })
     },
     service() {
-      // let vip = 0
-      // if (this.level == 40) {
-      //   vip = 1
-      // }
-      // let u = navigator.userAgent
-      // let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
-      // let isiOS = !!u.match(/\(i[^]+( U)? CPU.+Mac OS X/) // ios终端
-      // if (isAndroid) {
-
-      // } else {
-
-      // }
+      let vip = 0
+      if (this.level == 40) {
+        vip = 1
+      }
+      let u = navigator.userAgent
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+      window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchAppInfo', '', {
+        success: res => {
+          let resData = JSON.parse(res)
+          console.log('app版本号:', resData.app_version)
+          if (resData) {
+            this.version = resData.app_version
+          }
+        }
+      })
+      if (isAndroid) {
+        window.location.href = `http://chat.bl.com/wechat?skill=2003&vip=${vip}&version=${this.version}&goodsId=${this.orderDetail.goodsSid}&goodsName=${this.orderDetail.goodsName}&goodsPicUrl=${this.pic}&orderNo=${this.orderNo}&memberId=${this.memberId}`
+      } else {
+        window.location.href = `http://chat.bl.com/wechat/ios.jsp?skill=2003&vip=${vip}&goodsId=${this.orderDetail.goodsSid}&goodsName=${this.orderDetail.goodsName}&goodsPicUrl=${this.pic}&orderNo=${this.orderNo}&memberId=${this.memberId}`
+      }
     },
-    userService(ev) {
-      console.log("#fadfdf", ev.target.innerText)
+    userService(item, index) {
+      if (item.disabled) return
+        item.disabled = false
+        this.type = index + 1
+    },
+    checkBar() {
+      let that = this
+      this.$nextTick(() => {
+        $("#serviceType span").each(function (index) {
+            if (!$(this).hasClass("disAble")) {
+                $(this).addClass("hotSpan")
+                that.type = index + 1
+                console.log(that.type)
+                return false
+            }
+          })
+        $("#bank span").each(function (index) {
+            if (!$(this).hasClass("disAble")) {
+                $(this).addClass("hotSpan")
+                that.refundMethodCode = index + 1
+                that.refundMethodName = $(this).find("a").text()
+                return false
+            }
+        })
+      })
     },
     goQuestion() {
-      // let requestData = {url: "http://m.st.bl.com/h5-web/cms/viewCmsContent.html?pageId=571", title: "退换货说明"};
-      // if (window.location.host == 'mh5.bl.com') {
-      //     requestData = {url: "http://m.bl.com/h5-web/cms/viewHelpCmsContent.html?pageId=781", title: "退换货说明"};
-      // }
-      // 需要安卓和ios加方法
+      // 测试环境退换货H5地址
+      let url = "https://m.st.bl.com/h5-web/cms/viewCmsContent.html?pageId=571"
+      // 生产环境地址
+      if (window.location.host == 'mh5.bl.com') {
+        url = "https://m.bl.com/h5-web/cms/viewHelpCmsContent.html?pageId=781"
+      }
+      window.location.href = url
     },
     reduce() {
       if (this.maxReturnQuantity == 0) {
@@ -311,13 +420,17 @@ export default {
       if (this.returnCnt <= 1) {
         this.returnCnt = 1
         this.$toast('数量不可为0')
+      } else {
+        this.returnCnt --
       }
     },
     add() {
       if (this.maxReturnQuantity == 0) {
         this.$toast('此商品已提交申请售后服务')
       }
-      if (this.returnCnt >= this.maxReturnQuantity) {
+      if (this.returnCnt < this.maxReturnQuantity) {
+        this.returnCnt ++
+      } else {
         this.$toast('该商品限购' + this.maxReturnQuantity + '件')
       }
     },
@@ -346,27 +459,19 @@ export default {
         returnQuantity: this.returnCnt,
         applyCertificate: this.picked == true ? 0 : 1,
         testReport: this.check == true ? 0 : 1,
-        refundMethodCode: "",
-        refundMethodName: "",
-        accountName: "",
-        bankName: "",
-        accountNo: "",
+        serviceType: this.type,
+        refundMethodCode: this.refundMethodCode,
+        refundMethodName: this.refundMethodName,
+        accountName: this.accountName,
+        bankName: this.bankName,
+        accountNo: this.accountNo,
         reasonCode: this.defaultValue,
         reasonName: this.trueList,
         reasonDesc: this.question,
         reasonImageList: url,
         reasonImageListCephUrl: url,
-        deliveryMethodCode: "",
-        deliveryMethodName: "",
-        contactPhone: "",
-        contactPeople: "",
-        state: "",
-        city: "",
-        district: "",
-        detailAddr: "",
-        zipCode: "",
-        deliveryDate: ""
       }
+      console.log("下一步：", JSON.stringify(req))
       this.$router.push({
         name: 'selectReturnMethod',
         params: {
