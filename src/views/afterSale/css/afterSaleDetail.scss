@@ -1,29 +1,47 @@
 @charset "utf-8";
 @import "src/sass/tobe/function";
-.new .orderbtn {
-  text-align: right
+.btnBox {
+  padding-top: rem(128);
+  .btnFix {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: rem(128);
+    @include display(flex);
+    @include align-items(center);
+    @include justify-content(space-between);
+    background: #ffffff;
+    padding: 0 rem(30);
+    .con {
+      @include display(flex);
+      @include align-items(center);
+      font-size: rem(24);
+    }
+    .btn-sub{
+      width: rem(210);
+      height: rem(88);
+      line-height: rem(88);
+      text-align: center;
+    }
+    .servicePic{
+      width: rem(24);
+      margin-right: rem(10)
+    }
+  }
 }
 
-.new .orderbtn a {
-  display: inline-block;
-  background: #fff;
-  font-size: rem(28);
-  font-weight: 400;
-  padding: rem(10) rem(16);
-  text-align: center;
-  border-radius: rem(6);
-  margin-left: rem(12);
-  min-width: rem(128);
-  width: auto
-}
-
-.new .orderbtn a.btn-sub {
+.btn-sub {
   color: #494949;
   border: 1px solid #a9a9a9
 }
 
 .new .orderbtn {
   padding: rem(12)
+}
+
+.con {
+  display: inline-block;
 }
 
 .new .orderbtn.orderbtnSize a {

@@ -41,7 +41,6 @@
                                     <div></div>
                                 </div>
                                 <div class="schedule-circle-show">
-
                                     <div class="schedule-line"></div>
                                     <div class="schedule-line need"></div>
                                 </div>
@@ -137,8 +136,8 @@
         <div v-if="returnOrder.statusCode == '2001'||pic.length != 0">
         <div class="columnTitle border return corner-top">图片凭证<span id="edit" style="display: none">编辑</span></div>
         <div class="uploadPic corner-bottom">
-            <dd id="getPhoto" style="display: none"><a><i class="iconfont icon-add"></i></a></dd>
-            <p id="tip" style="display: none">最多上传<span>3</span>张，每张不超过<span>5M</span>,支持jpg,BMP,Png</p>
+            <!-- <dd id="getPhoto" style="display: none"><a><i class="iconfont icon-add"></i></a></dd>
+            <p id="tip" style="display: none">最多上传<span>3</span>张，每张不超过<span>5M</span>,支持jpg,BMP,Png</p> -->
             <p class="emptyPic" v-if="pic.length == 0">暂无图片</p>
         </div>
         </div>
@@ -164,16 +163,16 @@
             </ul>
         </div>
         <div class="payList return-pickup corner" id="pickup"  v-if="returnOrder.deliveryMethod == 2 &&config[3]">
-            <ul>
+            <ul v-if="buy">
                 <li><p>取件信息</p></li>
                 <li><p>取件时间：<span class="fr">{{buy.time}}</span></p></li>
             </ul>
             <div class="addressCon">
                 <b class="iconfont icon-address"></b>
                 <ul>
-                    <li><span class="fr">{{buy.phone}}</span><label>联系人：</label>{{buy.name}}
+                    <li v-if="buy"><span class="fr">{{buy.phone}}</span><label>联系人：</label>{{buy.name}}
                     </li>
-                    <li><label>上门取货地址：</label>
+                    <li v-if="buy"><label>上门取货地址：</label>
                         <p>{{buy.address}}</p>
                     </li>
                 </ul>
@@ -185,7 +184,7 @@
             </ul>
             <div class="addressCon">
                 <b class="iconfont icon-address"></b>
-                <ul>
+                <ul v-if="buy">
                     <li><span class="fr">{{buy.phone}}</span><label>联系人：</label>{{buy.name}}
                     </li>
                     <li><label>地址：</label>
@@ -200,18 +199,23 @@
                     <label>物流单号</label>
                     <div>{{store.deliveryCompany}}&nbsp;{{store.deliveryNo}}</div>
                 </li>
+                .
             </ul>
         </div>
-    <footer>
-        <div class="fixedMainbtn orderbtn orderbtnSize return">
+    <div class="btnBox">
+        <div class="btnFix">
+            <a  class="con" @click="serviceForbl(returnNo)">
+              <div class="servicePic"><img src="./i/service.png"/></div>
+            联系客服
+            </a>
             <a href="#" class="btn-sub" @click="goDel(returnOrder.orderNo)">订单详细</a>
             <a href="tel:4009008800" class="btn-sub" v-if="config[5]">
                 致电客服
             </a>
-            <a class="btn-1 delivery" v-if="config[7]">填写发货信息</a>
+            <a class="btn-1 delivery" @click="getInformation" v-if="config[7]">填写发货信息</a>
             <a @click="cancel(returnNo)" class="btn-sub" v-if="config[6]">取消申请</a>
         </div>
-    </footer>
+    </div>
 </div>
 </template>
 
@@ -235,11 +239,15 @@ export default {
         message: {},
         pic: [],
         store: {},
-        buy: {}
+        buy: {},
+        version: '',
+        level: '',
+        picture: ''
     };
   },
   created() {
     this.memberId = utils.dbGet('userInfo').member_id
+    this.level = utils.dbGet('userInfo').memberLevelCode
     if (this.$route.params.returnNo && this.$route.params.statusName) {
         this.returnNo = this.$route.params.returnNo
         this.statusName = decodeURIComponent(this.$route.params.statusName)
@@ -297,10 +305,13 @@ export default {
              }
           }
           this.message = this.returnOrder.items[0]
+          this.picture = this.message.goodsImage ? this.message.goodsImage : null
+          console.log("namename", JSON.stringify(this.message))
           this.wait = this.returnOrder.moneyTime[0]
           this.midle = this.returnOrder.moneyTime[1]
           this.succ = this.returnOrder.moneyTime[2]
           this.pic = this.returnOrder.picList
+          console.log("pic", JSON.stringify(this.pic))
           this.buy = this.returnOrder.buyer
           this.store = this.returnOrder.store
           console.log("hahhahahah", JSON.stringify(this.returnOrder))
@@ -398,6 +409,10 @@ export default {
       })
     },
     cancel(returnNo) {
+      this.$modal({
+        title: '提示',
+        content: '是否取消退货申请?'
+      })
       api.getCancel(JSON.stringify({
         memberId: this.memberId,
         returnNo: returnNo
@@ -411,7 +426,33 @@ export default {
         console.log(err)
         this.$toast(err)
       })
+    },
+    serviceForbl(returnNo) {
+      let vip = 0
+      if (this.level == 40) { // 会员等级
+        vip = 1
+      }
+      let u = navigator.userAgent
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1 // android终端
+      window.CTJSBridge && window.CTJSBridge.LoadMethod('NativeEnv', 'fetchAppInfo', '', {
+        success: res => {
+          let resData = JSON.parse(res)
+          console.log('app版本号:', resData.app_version)
+          if (resData) {
+            this.version = resData.app_version
+          }
+        }
+      })
+      if (isAndroid) {
+        window.location.href = `http://chat.bl.com/wechat?skill=2003&vip=${vip}&version=${this.version}&goodsId=${this.message.goodsId}&goodsName=${this.message.goodsName}&goodsPicUrl=${this.picture}&orderNo=${this.returnOrder.orderNo}&memberId=${this.memberId}`
+      } else {
+        window.location.href = `http://chat.bl.com/wechat/ios.jsp?skill=2003&vip=${vip}&goodsId=${this.message.goodsId}&goodsName=${this.message.goodsName}&goodsPicUrl=${this.picture}&orderNo=${this.returnOrder.orderNo}&memberId=${this.memberId}`
+      }
     }
+    // getInformation() {
+    //   if (this.config[7]) {
+    //   }
+    // }
   },
   // 路由取memberId
   beforeRouteEnter (to, from, next) {
