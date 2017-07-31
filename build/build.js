@@ -19,6 +19,7 @@ shell.rm('-rf', assetsPath)
 shell.mkdir('-p', assetsPath)
 shell.config.silent = true;
 shell.cp('-R', 'static/*', assetsPath)
+shell.cp('-R', 'apple-app-site-association', config.build.assetsRoot)
 shell.config.silent = false
 
 webpack(webpackConfig, function (err, stats) {
