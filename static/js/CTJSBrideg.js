@@ -5,11 +5,11 @@ bridge.prototype.LoadMethod = function(targetName, actionName, data, callback) {
   switch (actionName) {
     // 埋点信息
     case 'fetchUserInfo':
-      callback.success({
+      callback.success(JSON.stringify({
         platform: 'H5',
         mmc: '',
         memberId: JSON.parse(localStorage.getItem('userInfo')).member_id
-      })
+      }))
       break;
     // 获取APP用户登录信息
     case 'fetchLoginInfo':
