@@ -179,7 +179,6 @@ export default {
   },
   methods: {
     getList() {
-      console.log(12112)
       this.busy = true
       this.showNo = false
       this.requestData.pageNum ++
@@ -288,8 +287,8 @@ export default {
       if (isAndroid) {
         let nNavTop = $('.navigation')[0].offsetTop
         let nNavHeight = $('.navigation').height()
-        $(window).on('scroll', function(event) {
-          let w = document.body.scrollTop
+        $('#container').on('scroll', function(event) {
+          let w = $(this)[0].scrollTop
           if (w > nNavTop) {
             $('.navigation').eq(0).css('padding-top', nNavHeight + 'px').children().addClass('fixed')
           } else {
