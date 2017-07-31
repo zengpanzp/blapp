@@ -19,3 +19,4 @@ test/unit/coverage
 /databaseSettings.xml
 config/index.js
 Makefile
+build.sh
