@@ -5,6 +5,7 @@ module.exports = {
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/app/new/index.html'),
+    h5Index: path.resolve(__dirname, '../dist/app/new/h5.html'),
     assetsRoot: path.resolve(__dirname, '../dist/app/new'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '',

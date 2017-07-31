@@ -73,6 +73,29 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+    }),
+    // generate dist index.html with correct asset hash for caching.
+    // you can customize output by editing /index.html
+    // see https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      filename: isTesting
+        ? 'h5.html'
+        : config.build.h5Index,
+      production: isTesting ? config.dev.sence : config.build.sence,
+      manifest: config.build.manifest,
+      remotejs: config.build.remotejs,
+      tingyunjs: config.build.tingyunjs,
+      template: 'h5.html',
+      inject: false,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
     })
     // // split vendor js into its own file
     // new webpack.optimize.CommonsChunkPlugin({

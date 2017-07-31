@@ -32,6 +32,15 @@ module.exports = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true
     }),
+    // https://github.com/ampedandwired/html-webpack-plugin
+    new HtmlWebpackPlugin({
+      production: config.dev.sence,
+      manifest: config.dev.manifest,
+      remotejs: config.dev.remotejs,
+      filename: 'h5.html',
+      template: 'h5.html',
+      inject: true
+    }),
     new FriendlyErrorsPlugin()
   ]
 })

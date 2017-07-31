@@ -2,6 +2,12 @@
 @import "src/sass/tobe/function";
 .flash-sales{
   background-color: #f7f7f7;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 分类 */
@@ -10,7 +16,7 @@
   &.fixed{
     position: fixed;
     top: 0;
-    z-index: 1000;
+    z-index: 1003;
   }
   .ovfs-item {
     padding: rem(20) 0;
@@ -271,5 +277,8 @@
 }
 .no-flash-list{
   text-align: center;
+  margin-top: rem(20);
+}
+.infinite-layer{
   margin-top: rem(20);
 }
