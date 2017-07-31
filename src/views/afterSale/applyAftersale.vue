@@ -241,7 +241,7 @@ export default {
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
     let data = {
-      "orderNo": "LPE20170713137427", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102892\",\"discountAmount\":\"0\",\"goodsCode\":\"81958\",\"goodsDetSid\":\"0611880001\",\"goodsName\":\"三和四美 糟方腐乳 500g\",\"goodsSid\":\"271091\",\"goodsStan\":\"500g\",\"goodsType\":\"1\",\"goodsWeight\":\"0.5\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"7.3\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707131374270101\",\"oriPrice\":\"8.03\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 四川南路26号\",\"receiver\":\"怎胖\",\"phone\":\"18679475831\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
+      "orderNo": "LPE20170731139359", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102551\",\"discountAmount\":\"0\",\"goodsCode\":\"132047\",\"goodsDetSid\":\"0485849001\",\"goodsName\":\"双枪竹工艺筷 5双\",\"goodsSid\":\"273335\",\"goodsStan\":\"5双\",\"goodsType\":\"1\",\"goodsWeight\":\"0.25\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"22.9\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707311393590101\",\"oriPrice\":\"0\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 HK岁JS你URL\",\"receiver\":\"骨髓瘤\",\"phone\":\"13816014858\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
      // "orderNo": "MAE20170516125850", "orderDetail": "{\"tax\":\"0.00\",\"bgCateSid\":\"103139\",\"discountAmount\":\"14.18\",\"goodsCode\":\"2349427\",\"goodsDetSid\":\"154600\",\"goodsName\":\"新增商品件数设置免邮上海\",\"goodsSid\":\"1353887\",\"goodsType\":\"1\",\"goodsWeight\":\"3\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"80680\",\"salePrice\":\"13\",\"merchantId\":\"2986\",\"orderDetailNo\":\"MAE201705161258500102\",\"oriPrice\":\"3\",\"picUrl\":\"http://img18.st.iblimg.com/mp-212/mp/goods/2078322318_360x360.jpg\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":2,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":2}", "address": "{\"address\":\"上海市 市辖区 黄浦区 哼哼唧唧斤斤计较\",\"receiver\":\"任天野\",\"phone\":\"13813015545\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
     }
     console.log(data)
@@ -326,19 +326,27 @@ export default {
         if (this.serType.length > 0) {
             for (let i = 0; i < this.serType.length; i++) {
                 let index = parseInt(this.serType[i]) - 1
-                this.$nextTick(() => {
-                  $("#serviceType span").eq(index).removeClass("disAble")
-                })
+                this.serviceTypeArr[index].disabled = false
+                // this.$nextTick(() => {
+                //   $("#serviceType span").eq(index).removeClass("disAble")
+                // })
             }
         }
         for (let i = 0; i < this.payMethodList.length; i++) {
             let index = parseInt(this.payMethodList[i]) - 1
+            this.bankList[index].disAble = false
             this.$nextTick(() => {
-              $("#bank span").eq(index).removeClass("disAble")
               if (index == 1) {
                   $("#bank").find(".bank").slideDown()
               }
             })
+            // this.$nextTick(() => {
+            //   $("#bank span").eq(index).removeClass("disAble")
+            //   this.bankList[index].disAble = false
+            //   if (index == 1) {
+            //       $("#bank").find(".bank").slideDown()
+            //   }
+            // })
         }
         if (this.refundMethodCode) {
           this.$nextTick(() => {
@@ -390,7 +398,7 @@ export default {
             if (!$(this).hasClass("disAble")) {
                 $(this).addClass("hotSpan")
                 that.type = index + 1
-                console.log(that.type)
+                console.log("zpwoao" + that.type)
                 return false
             }
           })
@@ -471,7 +479,6 @@ export default {
         reasonImageList: url,
         reasonImageListCephUrl: url,
       }
-      console.log("下一步：", JSON.stringify(req))
       this.$router.push({
         name: 'selectReturnMethod',
         params: {
