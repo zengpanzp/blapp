@@ -5,12 +5,12 @@ export const prdRouter = [
     meta: {
       title: '精品闪购'
     },
-    component: r => require.ensure([], () => r(require('../views/flashSale/flashSales')), 'flashSales')
+    component: r => require.ensure([], () => r(require('../views/flashSale/flashSalesNew')), 'flashSales')
   },
   /* 陈鹏 精品闪购活动列表页 */
   {
     path: '/flashsaleproductspage/:flashId/:isStart',
-    component: r => require.ensure([], () => r(require('../views/flashSale/productsListView')), 'flashsaleproductspage')
+    component: r => require.ensure([], () => r(require('../views/flashSale/productsListViewNew')), 'flashsaleproductspage')
   },
   /* 陈鹏 电器城首页 */
   {
