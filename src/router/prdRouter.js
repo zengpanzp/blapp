@@ -541,7 +541,7 @@ export const prdRouter = [
   },
   /* 曾攀 提交售后 */
   {
-    path: '/selectReturnMethod/:obj',
+    path: '/selectReturnMethod',
     name: 'selectReturnMethod',
     meta: {
       title: '选择售后返还方式',
