@@ -207,7 +207,7 @@ export default {
     },
     /* 点击分类加载数据 */
     selectCate(key, index, flashname, item) {
-      document.body.scrollTop = 0
+      $('#container')[0].scrollTop = 0
       if (item && item.miniList && item.miniList.length) {
         setTimeout(() => {
           this.miniUrl = item.miniList[0].miniUrl
