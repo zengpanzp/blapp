@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "6C6JHMW46K.com.blo2o.ibl",
+                "paths": ["/universal/*", "*"]
+            }
+        ]
+    }
+}
