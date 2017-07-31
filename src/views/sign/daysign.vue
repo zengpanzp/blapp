@@ -309,7 +309,6 @@
                 }
                 this.bigGoodsList = bigGoods;
               }
-              this.pageLoad();
             }
             // 无签到资格的资源位
             for (let i = 13; i < 17; i++) {

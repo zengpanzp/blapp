@@ -98,13 +98,11 @@
     created() {
       this.tabItem = this.tab[0];
       // 登录成功的回调地址
-      this.backUrl = this.$route.query.backUrl;
+      let backUrl = this.$route.query.backUrl;
+      localStorage.setItem("BL_LOGIN_CENTER_CALLBACKURL", backUrl)
       window.MD5 = MD5;
     },
     mounted() {
-      api.showImgCode().then(data => {
-          console.log(data)
-      })
       this.$loading.close();
     },
     methods: {
@@ -127,7 +125,6 @@
         }).then(data => {
           if (data.body.resCode == "00100000") {
              let json = JSON.parse(data.body.obj);
-//             location.href = decodeURIComponent(json.url);
              location.href = json.url;
           }
         });
@@ -148,19 +145,20 @@
                 loginName: this.phone,
                 password: MD5(this.pass),
                 type: "1",
-                relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html?",
+                relocationURI: "",
                 mpFlag: ""
               }).then(data => {
-                  console.log(data);
                 if (this.checked) { // 2周内免登录
                 }
                 if (data.body.resCode == "00100000") {
-                  let url = decodeURIComponent(this.backUrl);
+                  let callbackUrl = localStorage.getItem("BL_LOGIN_CENTER_CALLBACKURL");
+                  let url = decodeURIComponent(callbackUrl);
                   if (url.indexOf("?") > 0) {
-                      url += '&token=' + data.body.token;
+                      url += '&token=' + data.body.obj.member_token;
                   } else {
-                      url += "?token=" + data.body.token
+                      url += "?token=" + data.body.obj.member_token
                   }
+                  localStorage.setItem("BL_LOGIN_CENTER_CALLBACKURL", "")
                   location.href = url;
                 } else {
                     this.alertTip(data.body.msg);
@@ -180,18 +178,20 @@
                 loginName: this.mobile,
                 smsCode: this.code,
                 type: "2",
-                relocationURI: "https://m.bl.com/h5-web/member/view_memberIndex.html",
+                relocationURI: "",
                 mpFlag: ""
               }).then(data => {
                 if (this.checkedSMS) { // 2周内免登录
                 }
                 if (data.body.resCode == "00100000") {
-                  let url = decodeURIComponent(this.backUrl);
+                  let callbackUrl = localStorage.getItem("BL_LOGIN_CENTER_CALLBACKURL");
+                  let url = decodeURIComponent(callbackUrl);
                   if (url.indexOf("?") > 0) {
                     url += '&token=' + data.body.obj.member_token;
                   } else {
                     url += "?token=" + data.body.obj.member_token;
                   }
+                  localStorage.setItem("BL_LOGIN_CENTER_CALLBACKURL", "")
                   location.href = url;
                 } else {
                   this.alertTip(data.body.msg);
@@ -210,7 +210,6 @@
             mobile: this.mobile
           }).then(data => {
             let json = JSON.parse(data.body.obj);
-            console.log(json)
             let that = this;
             if (json.resCode == "00100000") {
               let times = 60;
@@ -243,11 +242,11 @@
       },
       // 去注册
       register() {
-        this.$router.push({path: 'register?backUrl=' + this.backUrl})
+        this.$router.push({path: 'register'})
       },
       // 忘记密码
       forget() {
-        this.$router.push({path: 'findpass/1?backUrl=' + this.backUrl})
+        this.$router.push({path: 'findpass/1'})
       }
     }
   };
