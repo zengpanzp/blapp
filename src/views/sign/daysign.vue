@@ -188,6 +188,7 @@
         categoryId: 'APP_User',
         $title: 'APP_签到有奖',
       });
+      window.vue = this;
       let self = this;
       // 供app 调用弹出签到说明
       window.BLAlertSignConfirm = () => {

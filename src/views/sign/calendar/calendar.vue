@@ -166,7 +166,7 @@
             if (day != '') {
               let formatDate = utils.dateFormat('yyyy-MM-dd', day);
               for (let i = 0; i < this.lotteryList.length; i++) {
-                let dayStr = this.lotteryList[i].day > 10 ? this.lotteryList[i].day : ("0" + this.lotteryList[i].day);
+                let dayStr = this.lotteryList[i].day >= 10 ? this.lotteryList[i].day : ("0" + this.lotteryList[i].day);
                 let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
                 if (lotteryDate == formatDate) {
                   return true;
@@ -195,8 +195,8 @@
               if (month >= 0) {
                 this.curMonth = months[month];
                 this.nextMonth = months[month + 1];
-                this.startDate = this.curYear + "-" + ((month + 1) > 10 ? (month + 1) : ("0" + (month + 1))) + "-" + "01";
-                this.endDate = this.curYear + "-" + ((month + 1) > 10 ? (month + 1) : ("0" + (month + 1))) + "-" + new Date(this.curYear, (month + 1), 0).getDate();
+                this.startDate = this.curYear + "-" + ((month + 1) >= 10 ? (month + 1) : ("0" + (month + 1))) + "-" + "01";
+                this.endDate = this.curYear + "-" + ((month + 1) >= 10 ? (month + 1) : ("0" + (month + 1))) + "-" + new Date(this.curYear, (month + 1), 0).getDate();
                 if (month == 0) {
                   this.preMonth = "";
                 } else {
@@ -212,8 +212,10 @@
               if (month >= 0) {
                 this.curMonth = months[month];
                 this.nextMonth = months[month + 1];
-                this.startDate = this.curYear + "-" + ((month) > 10 ? (month + 1) : ("0" + (month))) + "-" + "01";
-                this.endDate = this.curYear + "-" + ((month) > 10 ? (month + 1) : ("0" + (month))) + "-" + new Date(this.curYear, month, 0).getDate();
+                console.log("next month", this.nextMonth)
+                this.startDate = this.curYear + "-" + ((month) >= 10 ? (month + 1) : ("0" + (month))) + "-" + "01";
+                this.endDate = this.curYear + "-" + ((month) >= 10 ? (month + 1) : ("0" + (month))) + "-" + new Date(this.curYear, month, 0).getDate();
+                console.log("startDate", this.startDate, "endDate", this.endDate)
                 if (month == 12) {
                   this.nextMonth = "";
                 } else {
@@ -233,7 +235,7 @@
               let intMonth = parseInt(month)
               return {
                   nextMonth: strs[intMonth],
-                  curMonthInt: intMonth > 10 ? intMonth : ("0" + intMonth),
+                  curMonthInt: intMonth >= 10 ? intMonth : ("0" + intMonth),
                   curMonth: strs[finalMonth],
                   curYear: year
               }
