@@ -153,7 +153,7 @@
             if (day != '') {
               let formatDate = utils.dateFormat('yyyy-MM-dd', day);
               for (let i = 0; i < this.signInList.length; i++) {
-                let dayStr = this.signInList[i] > 10 ? this.signInList[i] : ("0" + this.signInList[i]);
+                let dayStr = this.signInList[i] >= 10 ? this.signInList[i] : ("0" + this.signInList[i]);
                 let lotteryDate = this.curYear + "-" + this.curMonthInt + "-" + dayStr;
                 if (lotteryDate == formatDate) {
                   return true;
