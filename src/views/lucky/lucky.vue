@@ -234,7 +234,6 @@ export default {
   		})
   	},
   	getCoupon: function () {
-      debugger;
   		let requestData = {
 	  		userToken: this.memberToken,
 	        acquireChannel: "1",
