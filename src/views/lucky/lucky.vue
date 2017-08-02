@@ -95,7 +95,9 @@ export default {
     	click: false,
       remain: 1,
       ruleId: "",
-      coupon: "",
+      ruleIdT: "",
+      couponTemplateId: "",
+      couponCode: "",
       drawId: "4",
       isSigninFlag: '',
     	memberId: "",
@@ -120,9 +122,12 @@ export default {
   	} else {
   		this.ruleId = "1"
   	}
-  	if (this.$route.params.coupon && this.$route.params.coupon != "null") {
-  		this.coupon = this.$route.params.coupon
+  	if (this.$route.params.couponTemplateId && this.$route.params.couponTemplateId != "null") {
+  		this.couponTemplateId = this.$route.params.couponTemplateId
   	}
+    if (this.$route.params.couponCode && this.$route.params.couponCode != "null") {
+      this.couponCode = this.$route.params.couponCode
+    }
   	if (this.$route.params.isSigninFlag && this.$route.params.isSigninFlag != "null") {
   		this.isSigninFlag = this.$route.params.isSigninFlag
   	}
@@ -171,7 +176,7 @@ export default {
 	        requestData.isSigninFlag = 'Y'
 	    }
 	    if (this.ruleId == '1') {
-	        requestData.couponTemplateId = this.coupon.couponTemplateId;
+	        requestData.couponTemplateId = this.couponTemplateId;
 	    } else {
 	        requestData.drawId = this.ruleId;
 	    }
@@ -181,6 +186,7 @@ export default {
   			this.$loading.close()
   			if (data.body.obj) {
   				let obj = JSON.parse(data.body.obj)
+          this.ruleIdT = obj.drawId;
   				this.templateButtonPic = obj.templateButtonPic
   				for (let i = 0; i < obj.campDrawCoupons.length; i++) {
                 	list.push(obj.campDrawCoupons[i])
@@ -232,14 +238,14 @@ export default {
 	  		userToken: this.memberToken,
 	        acquireChannel: "1",
 	        drawType: "3",
-	        drawId: this.ruleId
+	        drawId: this.ruleIdT
 	  	}
 	  	if (this.isSigninFlag == 'Y') {
 	        requestData.isSigninFlag = 'Y'
 	    }
 	    if (this.ruleId == '1') {
-            requestData.couponTemplateId = this.coupon.couponTemplateId;
-            requestData.couponCode = this.coupon.couponCode;
+            requestData.couponTemplateId = this.couponTemplateId;
+            requestData.couponCode = this.couponCode;
             requestData.drawType = "0";
         }
         api.getCoupon(
@@ -359,11 +365,12 @@ export default {
     },
     goCoupon: function () {
     	if (this.ruleId != "1") {
-    		window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+    		  window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
 	            pageId: 'couponEcard',
 	            params: { type: 0 }
 	        })
     	} else {
+          window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerBack', {})
     	}
     }
   }

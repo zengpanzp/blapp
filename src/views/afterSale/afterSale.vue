@@ -150,7 +150,7 @@ export default {
     // 查看退货码
     refundCode(val) {
       this.$router.push({
-        path: 'code',
+        path: '/code',
         query: {
           code: val
         }

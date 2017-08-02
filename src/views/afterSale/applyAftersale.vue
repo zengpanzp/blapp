@@ -119,8 +119,6 @@
         <div class="columnTitle border corner-top">退款方式<label class="colorRed">*</label></div>
         <div class="proColor proColorPadding proColorBg corner-bottom return bank" id="bank">
             <span :class="{'disAble': item.disAble}" @click="bank(item, index)" v-for="(item, index) in bankList"><a>{{item.text}}</a></span>
-            <!-- <span class="disAble"><a>原支付返回</a></span>
-            <span class="disAble"><a>其他银行卡</a></span> -->
             <div class="service-miner-box font-color-ash2 bank" @click="changeBank" style="display: none">
                 收款人姓名<i class="iconfont icon-enter"></i>
             </div>
@@ -178,17 +176,17 @@ export default {
 
   data () {
     return {
+      goodIndex: 0,
       memberId: '', // 会员编号
       picked: true, // 申请凭证
       check: true,  // 检测报告
-      orderDetail: '', // 商品详情
+      orderDetail: {}, // 商品详情
       pic: '', // 商品图片
       orderNo: '', // 订单编号
       inlineLoading: null, // 加载
       level: '', // 会员等级
       address: '', // 地址
       list: [], // 原因集合
-      requestData: null, // 申请对象
       returnCnt: 1, // 申请数量
       maxReturnQuantity: '', // 最大提交数量
       canReturn: '', // 是否可以申请 1 是 0 否
@@ -206,6 +204,7 @@ export default {
       accountNo: '',
       bankName: '',
       version: '', // app版本号
+      deliveryList: [],
       serviceTypeArr: [{ // 类型
         text: '退货',
         disabled: true
@@ -240,16 +239,13 @@ export default {
     }
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
-    let data = {
-      "orderNo": "LPE20170713137427", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102892\",\"discountAmount\":\"0\",\"goodsCode\":\"81958\",\"goodsDetSid\":\"0611880001\",\"goodsName\":\"三和四美 糟方腐乳 500g\",\"goodsSid\":\"271091\",\"goodsStan\":\"500g\",\"goodsType\":\"1\",\"goodsWeight\":\"0.5\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"7.3\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707131374270101\",\"oriPrice\":\"8.03\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 四川南路26号\",\"receiver\":\"怎胖\",\"phone\":\"18679475831\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
-     // "orderNo": "MAE20170516125850", "orderDetail": "{\"tax\":\"0.00\",\"bgCateSid\":\"103139\",\"discountAmount\":\"14.18\",\"goodsCode\":\"2349427\",\"goodsDetSid\":\"154600\",\"goodsName\":\"新增商品件数设置免邮上海\",\"goodsSid\":\"1353887\",\"goodsType\":\"1\",\"goodsWeight\":\"3\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"80680\",\"salePrice\":\"13\",\"merchantId\":\"2986\",\"orderDetailNo\":\"MAE201705161258500102\",\"oriPrice\":\"3\",\"picUrl\":\"http://img18.st.iblimg.com/mp-212/mp/goods/2078322318_360x360.jpg\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":2,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":2}", "address": "{\"address\":\"上海市 市辖区 黄浦区 哼哼唧唧斤斤计较\",\"receiver\":\"任天野\",\"phone\":\"13813015545\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
-    }
-    console.log(data)
-    this.orderNo = data.orderNo
-    this.orderDetail = JSON.parse(data.orderDetail)
-    this.pic = this.orderDetail.picUrl ? this.orderDetail.picUrl : null
-    this.address = JSON.parse(data.address)
-    this.checkReturn()
+    console.log("我是售后申请页面：", this.$route.query.orderNO)
+    this.orderNo = 'LPE20170731139359'
+    this.goodIndex = 0
+  //  this.orderNo = this.$route.query.orderNO
+  //  this.goodIndex = this.$route.query.goodsIndex
+    this.pic = this.orderDetail.picUrl
+    this.getDel()
   },
   methods: {
     checkReturn() {
@@ -262,11 +258,11 @@ export default {
           console.log("zpzpzpzpz", data.body.obj)
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
-            this.requestData = resData
             this.maxReturnQuantity = resData.maxReturnQuantity
             this.canReturn = resData.canReturn
             this.serType = resData.serviceType
             this.payMethodList = resData.refundMethodList
+            this.deliveryList = resData.deliveryMethodList
             this.getRefundReason()
           } else {
             this.$toast(data.body.msg)
@@ -289,6 +285,57 @@ export default {
           $("#bank").find(".bank").slideUp()
         }
       })
+    },
+    getDel() {
+      api.queryDel({
+        memberId: this.memberId,
+        orderNo: this.orderNo
+        }).then(data => {
+          this.$loading.close()
+          console.log("del", data.body.obj)
+          if (data.body.obj) {
+            let obj = JSON.parse(data.body.obj)
+            let del = obj.orderDetailList[this.goodIndex]
+            this.orderDetail = {
+              tax: del.tax,
+              bgCateSid: del.bgCateSid,
+              discountAmount: del.discountAmount,
+              goodsCode: del.goodsCode,
+              goodsDetSid: del.goodsDetSid,
+              goodsName: del.goodsName,
+              goodsSid: del.goodsSid,
+              goodsType: del.goodsType,
+              goodsWeight: del.goodsWeight,
+              tariffRate: del.tariffRate,
+              shopSid: del.shopSid,
+              salePrice: del.salePrice,
+              merchantId: del.merchantId,
+              orderDetailNo: del.orderDetailNo,
+              oriPrice: del.oriPrice,
+              picUrl: del.picUrl ? del.picUrl : null,
+              purchaseType: del.purchaseType,
+              isGift: del.isGift,
+              saleSum: del.saleSum,
+              isCanReturn: del.isCanReturn,
+              integral: del.integral,
+              if7Refund: del.if7Refund,
+              allowReNum: del.allowReNum
+            }
+            this.address = {
+              address: obj.receptAddressDetail,
+              receiver: obj.receptName,
+              phone: obj.receptPhone,
+              provinceCode: obj.provinceCode,
+              cityCode: obj.cityCode,
+              districtCode: obj.districtCode
+            }
+            this.checkReturn()
+          } else {
+            this.$toast(data.body.msg)
+          }
+        }, err => {
+          console.log(err)
+        })
     },
     changeBank() {
       if (!this.isCan) {
@@ -326,19 +373,27 @@ export default {
         if (this.serType.length > 0) {
             for (let i = 0; i < this.serType.length; i++) {
                 let index = parseInt(this.serType[i]) - 1
-                this.$nextTick(() => {
-                  $("#serviceType span").eq(index).removeClass("disAble")
-                })
+                this.serviceTypeArr[index].disabled = false
+                // this.$nextTick(() => {
+                //   $("#serviceType span").eq(index).removeClass("disAble")
+                // })
             }
         }
         for (let i = 0; i < this.payMethodList.length; i++) {
             let index = parseInt(this.payMethodList[i]) - 1
+            this.bankList[index].disAble = false
             this.$nextTick(() => {
-              $("#bank span").eq(index).removeClass("disAble")
               if (index == 1) {
                   $("#bank").find(".bank").slideDown()
               }
             })
+            // this.$nextTick(() => {
+            //   $("#bank span").eq(index).removeClass("disAble")
+            //   this.bankList[index].disAble = false
+            //   if (index == 1) {
+            //       $("#bank").find(".bank").slideDown()
+            //   }
+            // })
         }
         if (this.refundMethodCode) {
           this.$nextTick(() => {
@@ -390,7 +445,7 @@ export default {
             if (!$(this).hasClass("disAble")) {
                 $(this).addClass("hotSpan")
                 that.type = index + 1
-                console.log(that.type)
+                console.log("zpwoao" + that.type)
                 return false
             }
           })
@@ -453,6 +508,7 @@ export default {
         }
       }
       let req = {
+        submitData: encodeURIComponent(JSON.stringify({
         orderNo: this.orderNo,
         orderDetailNo: this.orderDetail.orderDetailNo,
         memberId: this.memberId,
@@ -469,15 +525,22 @@ export default {
         reasonName: this.trueList,
         reasonDesc: this.question,
         reasonImageList: url,
-        reasonImageListCephUrl: url,
+        reasonImageListCephUrl: url
+      }))
+        // deliveryMethodList: this.deliveryList,
+        // address: this.address
       }
-      console.log("下一步：", JSON.stringify(req))
-      this.$router.push({
-        name: 'selectReturnMethod',
-        params: {
-          obj: encodeURIComponent(JSON.stringify(req))
-        }
+      console.log("提交：", req)
+      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'selectReturnMethod',
+          params: req
       })
+      // this.$router.push({
+      //   name: 'selectReturnMethod',
+      //   params: {
+      //     obj: encodeURIComponent(req)
+      //   }
+      // })
     }
   },
   computed: {
@@ -492,7 +555,6 @@ export default {
   // 路由取memberId
   beforeRouteEnter (to, from, next) {
     utils.isLogin().then(user => {
-      console.log("ppppp", user)
       next()
     })
   }
