@@ -85,8 +85,8 @@
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
         <div class="lazyload"><img v-lazy="{src: item.goodsImgPath}" class="dateImg lazy"></div>
-        <div class="name">{{item.goodsMsg}}</div>
-        <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
+        <div class="name flex-c">{{item.goodsMsg}}</div>
+        <div class="name money flex-c"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
       </li>
       <li  v-show="!busy" class="loadMore">
@@ -120,8 +120,8 @@
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <div class="top-menu bottom" v-show="noSignList&&noSignList.length>0">
         <div class="new-menu">
-          <div v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload new-menu-item">
-            <img v-lazy="{src: item.advList[0]&&item.advList[0].mediaUrl}">
+          <div v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="new-menu-item">
+            <img :src="item.advList[0]&&item.advList[0].mediaUrl">
           </div>
         </div>
       </div>
