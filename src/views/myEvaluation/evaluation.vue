@@ -12,7 +12,7 @@
     <div class="goods-box" v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
       <div class="goods-item flex" v-for="item in list">
         <div class="goods-img lazy-box">
-          <img class="lazy" v-lazy="{src: item.productPic}">
+          <img class="square-lazy" v-lazy="{ src: item.productPic, loading: require('src/assets/square_banner_loading.png'), error: require('src/assets/square_banner_loading.png') }">
         </div>
         <div class="goods-des flex-item">
           <div class="goods-title">{{item.productName}}</div>
