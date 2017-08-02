@@ -14,7 +14,7 @@
       </div>
       <div class="upload-pic-get lazy-box" v-if="upload.length < maxLength">
         <img :src="require('./i/assess-shoot.png')" alt="" class="lazy">
-        <input type="file" accept="image/jpg,image/jpeg,image/png" multiple="multiple" @change="readImage" class="cutfile">
+        <input type="file" accept="image/jpg,image/jpeg,image/png" multiple="multiple" @change="readImage" class="cutfile" value="">
       </div>
     </div>
     <div class="upload-pic-bottom" v-if="commentType == 'comment'">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ maxLength }}</span>张）</div>
@@ -60,13 +60,19 @@ export default {
       })
       let files = event.target.files
       let filesLen = files.length
+      console.log('=====', files)
+      if (files && files.length && files[0].size <= 0) {
+        this.inlineLoading.close()
+        $('.cutfile').val('')
+        return
+      }
       if (this.upload.length + filesLen > this.maxLength) {
         this.inlineLoading.close()
         this.$modal({
           title: '提示',
           content: `最多上传${this.maxLength}张`
         })
-        filesLen = 1
+        filesLen = this.maxLength - this.upload.length
       }
       for (let i = 0; i < filesLen; i++) {
         window.compressImg(files[i], 640, base64 => {
@@ -81,6 +87,7 @@ export default {
           // }
           if (this.upload.length + i + 1 > this.maxLength) {
             this.inlineLoading.close()
+            $('.cutfile').val('')
             return
           }
           api.upload({
