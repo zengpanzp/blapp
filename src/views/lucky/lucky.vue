@@ -98,7 +98,6 @@ export default {
       ruleIdT: "",
       couponTemplateId: "",
       couponCode: "",
-      ruleIdT: "",
       drawId: "4",
       isSigninFlag: '',
     	memberId: "",
@@ -186,7 +185,6 @@ export default {
   		).then(data => {
   			this.$loading.close()
   			if (data.body.obj) {
-          this.ruleIdT = obj.ruleIdT
   				let obj = JSON.parse(data.body.obj)
           this.ruleIdT = obj.drawId;
   				this.templateButtonPic = obj.templateButtonPic
