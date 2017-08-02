@@ -177,7 +177,7 @@ body,html{
   &.half:after {
     padding-top: 50%;
   }
-  .lazy{
+  .lazy, .square-lazy{
     position: absolute;
     left: 0;
     right: 0;
@@ -188,6 +188,9 @@ body,html{
   }
   img[lazy="loading"], img[lazy="error"] {
     width: rem(40);
+  }
+  .square-lazy{
+    width: 100% !important;
   }
 }
 
