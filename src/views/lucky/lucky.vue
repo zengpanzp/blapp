@@ -95,7 +95,8 @@ export default {
     	click: false,
       remain: 1,
       ruleId: "",
-      coupon: "",
+      couponTemplateId: "",
+      couponCode: "",
       drawId: "4",
       isSigninFlag: '',
     	memberId: "",
@@ -120,9 +121,12 @@ export default {
   	} else {
   		this.ruleId = "1"
   	}
-  	if (this.$route.params.coupon && this.$route.params.coupon != "null") {
-  		this.coupon = this.$route.params.coupon
+  	if (this.$route.params.couponTemplateId && this.$route.params.couponTemplateId != "null") {
+  		this.couponTemplateId = this.$route.params.couponTemplateId
   	}
+    if (this.$route.params.couponCode && this.$route.params.couponCode != "null") {
+      this.couponCode = this.$route.params.couponCode
+    }
   	if (this.$route.params.isSigninFlag && this.$route.params.isSigninFlag != "null") {
   		this.isSigninFlag = this.$route.params.isSigninFlag
   	}
@@ -171,7 +175,7 @@ export default {
 	        requestData.isSigninFlag = 'Y'
 	    }
 	    if (this.ruleId == '1') {
-	        requestData.couponTemplateId = this.coupon.couponTemplateId;
+	        requestData.couponTemplateId = this.couponTemplateId;
 	    } else {
 	        requestData.drawId = this.ruleId;
 	    }
@@ -238,8 +242,8 @@ export default {
 	        requestData.isSigninFlag = 'Y'
 	    }
 	    if (this.ruleId == '1') {
-            requestData.couponTemplateId = this.coupon.couponTemplateId;
-            requestData.couponCode = this.coupon.couponCode;
+            requestData.couponTemplateId = this.couponTemplateId;
+            requestData.couponCode = this.couponCode;
             requestData.drawType = "0";
         }
         api.getCoupon(

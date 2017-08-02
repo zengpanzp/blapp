@@ -1,0 +1,18 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "cn.com.bailian.bailianmobile",
+      "sha256_cert_fingerprints": ["1C:44:16:38:06:FE:83:B4:59:AB:07:34:CB:6E:B0:8A:9D:93:47:FF:86:7A:BE:39:EA:43:C3:E3:D7:C9:CE:47"]
+    }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.billy.androidtest",
+      "sha256_cert_fingerprints": ["1C:44:16:38:06:FE:83:B4:59:AB:07:34:CB:6E:B0:8A:9D:93:47:FF:86:7A:BE:39:EA:43:C3:E3:D7:C9:CE:47"]
+    }
+  }
+]

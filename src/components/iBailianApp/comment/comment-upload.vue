@@ -14,7 +14,7 @@
       </div>
       <div class="upload-pic-get lazy-box" v-if="upload.length < maxLength">
         <img :src="require('./i/assess-shoot.png')" alt="" class="lazy">
-        <input type="file" accept="image/*" multiple="multiple" @change="readImage" class="cutfile">
+        <input type="file" accept="image/jpg,image/jpeg,image/png" multiple="multiple" @change="readImage" class="cutfile">
       </div>
     </div>
     <div class="upload-pic-bottom" v-if="commentType == 'comment'">有图有真相，晒单最多可获20积分!（最多上传<span class="upload-length">{{ maxLength }}</span>张）</div>

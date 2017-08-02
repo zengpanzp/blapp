@@ -101,7 +101,6 @@
       }
     },
     created() {
-      this.backUrl = this.$route.query.backUrl;
       // 生成验证码
       this.generateImg();
       this.step = parseInt(this.$route.params.step);
@@ -115,15 +114,14 @@
         this.step = parseInt(value);
         let pre = this.step - 1;
         this.tabItem = this.tab[pre];
-        setTimeout(() => {
-          this.tabsModel = this.step;
-          if (this.step == 2) { // 默认发送短信验证码
-            clearInterval(this.timeId)
-            this.getSMSCode();
-          }
-        }, 200);
+//        setTimeout(() => {
+        this.tabsModel = this.step;
+        if (this.step == 2) { // 默认发送短信验证码
+          clearInterval(this.timeId)
+          this.getSMSCode();
+        }
+//        }, 200);
         this.$loading.close();
-        console.log("执行开始2")
       }
     },
     mounted() {
@@ -251,7 +249,7 @@
       goNext() {
         this.tabsModel += 1;
         this.step = this.tabsModel;
-        this.$router.push({path: '/findpass/' + this.step + "?backUrl=" + this.backUrl})
+        this.$router.push({path: '/findpass/' + this.step})
       },
       next() {
         if (this.tabItem.type == 1) { // 找回密码第一步
@@ -283,7 +281,7 @@
               if (json.resCode == "00100000") { // 修改成功
                 this.alertTip("密码修改成功!");
                 setTimeout(() => {
-                  this.$router.push({path: '/login?backUrl=' + this.backUrl})
+                  this.$router.push({path: '/login'})
                 }, 2500);
               }
             })

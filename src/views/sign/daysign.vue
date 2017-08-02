@@ -84,7 +84,7 @@
     <div class="line"></div>
     <ul class="goodsList">
       <li v-for="item in likeList" v-if="item" v-go-native-goods-detail="item">
-        <div class="pic lazyload"><img v-lazy="{src: item.goodsImgPath}" class="dateImg"></div>
+        <div class="lazyload"><img v-lazy="{src: item.goodsImgPath}" class="dateImg lazy"></div>
         <div class="name">{{item.goodsMsg}}</div>
         <div class="name money"><label>￥</label><span style="font-weight: bold">{{item.goodsPrice}}</span></div>
         <div class="similar" v-go-native-goods-similar.stop="item">看相似</div>
@@ -188,6 +188,7 @@
         categoryId: 'APP_User',
         $title: 'APP_签到有奖',
       });
+      window.vue = this;
       let self = this;
       // 供app 调用弹出签到说明
       window.BLAlertSignConfirm = () => {
@@ -309,7 +310,6 @@
                 }
                 this.bigGoodsList = bigGoods;
               }
-              this.pageLoad();
             }
             // 无签到资格的资源位
             for (let i = 13; i < 17; i++) {

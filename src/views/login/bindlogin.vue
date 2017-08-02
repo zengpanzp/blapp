@@ -52,6 +52,7 @@
     name: 'bindLogin',
     data() {
       return {
+        obj: "",
         hasBind: true,  // 假设已经绑定
         imgCodeInput: "",
         imgCode: '', // 图片验证码
@@ -62,6 +63,7 @@
       }
     },
     created() {
+        window.vue = this;
       this.$loading.close();
       this.generateImg();
       let param = this.$route.query.param;
@@ -70,8 +72,24 @@
         param: param
       }).then(data => {
         if (data.body.resCode == "00100000") {
-          let json = JSON.parse(data.body.obj);
+          let json = data.body.obj;
+          console.log("obj:", json);
           this.hasBind = (json.hasBind === "1");
+          if (json.hasBind == "1") { // 已绑定
+            json.hasBind = true;
+            let callbackUrl = localStorage.getItem("BL_LOGIN_CENTER_CALLBACKURL");
+            if (callbackUrl.indexOf("?") > 0) {
+              callbackUrl += '&token=' + json.member_token;
+            } else {
+              callbackUrl += "?token=" + json.member_token
+            }
+            localStorage.setItem("BL_LOGIN_CENTER_CALLBACKURL", "")
+            location.href = callbackUrl;
+          } else if (json.hasBind == "2") { // 未绑定
+            json.hasBind = false;
+          } else { // 为0 跳转到登录页面
+            this.$router.push({path: 'login'})
+          }
           this.obj = json;
         }
         console.log(data)
@@ -90,7 +108,7 @@
             if (json.resCode == "05111008") { // 已经存在可以进行绑定
               // 进行绑定
               api.bindOKPay({
-                sysid: "1103",
+                sysid: "2109",
                 channelId: "1",
                 loginId: this.mobile,
                 loginType: "code",
@@ -98,10 +116,22 @@
                 requestId: this.obj.requestId,
                 smsCode: this.smsCode,
                 third_party_id: this.obj.thirdPartyId,
-                third_party_id_type: "2",
+                third_party_id_type: "15",
                 third_party_mobile: this.obj.thirdPartyMobile
               }).then(data => {
-                console.log(data)
+                  console.log(data);
+                if (data.body.resCode == "00100000") { // 绑定成功
+                  let json = JSON.parse(data.body.obj)
+                  console.log(json)
+                  let callbackUrl = localStorage.getItem("BL_LOGIN_CENTER_CALLBACKURL");
+                  if (callbackUrl.indexOf("?") > 0) {
+                    callbackUrl += '&token=' + json.obj.member_token;
+                  } else {
+                    callbackUrl += "?token=" + json.obj.member_token
+                  }
+                  localStorage.setItem("BL_LOGIN_CENTER_CALLBACKURL", "")
+                  location.href = callbackUrl;
+                }
               });
             } else {
               this.alertTip("手机号已经被注册!")

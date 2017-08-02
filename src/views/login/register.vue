@@ -135,10 +135,21 @@
                 snNo: "",
                 sysid: "1103"
               }).then(data => {
-                console.log(data)
                 let json = JSON.parse(data.body.obj);
                 if (json.resCode == "00100000") { // 注册成功
-                  this.$router.push({path: 'login?backUrl=' + this.backUrl})
+                  console.log(json)
+//                  this.$router.push({path: 'login'})
+                  let callbackUrl = localStorage.getItem("BL_LOGIN_CENTER_CALLBACKURL");
+                  let url = decodeURIComponent(callbackUrl);
+                  if (url.indexOf("?") > 0) {
+                    url += '&token=' + data.body.obj.member_token;
+                  } else {
+                    url += "?token=" + data.body.obj.member_token
+                  }
+                  localStorage.setItem("BL_LOGIN_CENTER_CALLBACKURL", "")
+                  location.href = url;
+                } else {
+                    this.alertTip(json.msg)
                 }
               });
             }

@@ -24,10 +24,6 @@ export default {
   sendSMSCodeByRegister: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/sendRegisterValidateCodeMessage.htm', params);
   },
-  // 生成图片验证码
-  showImgCode: params => {
-    return Vue.http.post(baseUrl + '/captcha/getCaptchaCode.htm', params)
-  },
   // 重置密码的短信验证码
   sendSMSCodeByResetPass: params => {
     return Vue.http.post(baseUrl + '/baseinfo/jn/sendResetPasswordValidateCodeMessage.htm', params);

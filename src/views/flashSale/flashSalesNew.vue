@@ -31,7 +31,7 @@
             <div class="wumengcen" v-if="item.pictures">
               <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="(picturesUrl || '').replace(/^http:/, '')"></div>
               <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + isStart(item.effectiveStart) }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                <img v-lazy.container="{ src: (picturesUrl || '').replace(/^http:/, ''), error: require('src/assets/icon_banner_loading.png') }" alt="">
+                <img v-lazy.container="{ src: (picturesUrl || '').replace(/^http:/, '') }" alt="">
                 <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
               </router-link>
               <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
