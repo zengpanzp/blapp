@@ -1,10 +1,10 @@
 <template>
   <div class="expert-reserve">
-    <bl-cell title="地区">
-      <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊地区" readonly>
+    <bl-cell title="地区" @click.native="selectAddress">
+      <input class="select-main" slot="cell-main" v-model="address" type="text" placeholder="请选择就诊地区" readonly>
     </bl-cell>
-    <bl-cell title="医院">
-      <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊医院" readonly>
+    <bl-cell title="医院" @click.native="selectHospital">
+      <input class="select-main" slot="cell-main" v-model="hospital" type="text" placeholder="请选择就诊医院" readonly>
     </bl-cell>
     <bl-cell title="科室">
       <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊科室" readonly>
@@ -26,8 +26,44 @@ export default {
 
   data () {
     return {
-
+      myInfo: {},
+      address: null, // 地区
+      hospital: null, // 医院
     };
+  },
+  methods: {
+    selectAddress () {
+      let reqData = {
+        title: "选择地区",
+        limitedProvinceIds: ['866'], // 限上海地区
+      }
+      if (this.myInfo.provinceId && this.myInfo.cityId && this.myInfo.districtId) {
+        reqData.selectedAddressData = {
+          provinceId: this.myInfo.provinceId,
+          cityId: this.myInfo.cityId,
+          districtId: this.myInfo.districtId,
+        }
+      }
+      console.log(reqData)
+      window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', reqData, {
+        success: data => {
+          console.log(data)
+          let resData = JSON.parse(data)
+          let province = resData.kBLAddressSelectPickerViewProvince.nm
+          let city = resData.kBLAddressSelectPickerViewCity.nm
+          let district = resData.kBLAddressSelectPickerViewDistrict.nm
+          this.myInfo.provinceId = resData.kBLAddressSelectPickerViewProvince.id
+          this.myInfo.cityId = resData.kBLAddressSelectPickerViewCity.id
+          this.myInfo.districtId = resData.kBLAddressSelectPickerViewDistrict.id
+          this.address = `${province}${city}${district}`
+        },
+        fail: data => {
+          console.log(data)
+        },
+        progress: data => { console.log(data) }
+      })
+    },
+    selectHospital() {}
   }
 };
 </script>
