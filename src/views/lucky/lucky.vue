@@ -371,6 +371,7 @@ export default {
 	            params: { type: 0 }
 	        })
     	} else {
+        this.successFlag = false
     	}
     }
   }
