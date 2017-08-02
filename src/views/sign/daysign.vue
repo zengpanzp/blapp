@@ -120,8 +120,8 @@
       <div class="buytips">积分攒着当钱花，线上线下都可花</div>
       <div class="top-menu bottom" v-show="noSignList&&noSignList.length>0">
         <div class="new-menu">
-          <div v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="lazyload new-menu-item">
-            <img v-lazy="{src: item.advList[0]&&item.advList[0].mediaUrl}">
+          <div v-for="item in noSignList" v-if="item&&item.advList&&item.advList.length>0" v-go-native-resource="item.advList[0]" class="new-menu-item">
+            <img :src="item.advList[0]&&item.advList[0].mediaUrl">
           </div>
         </div>
       </div>

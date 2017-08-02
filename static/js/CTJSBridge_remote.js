@@ -35,6 +35,7 @@ function LinkToDevice(openCallback, closeCallback, errorCallback) {
     });
 
     wsConnection.addEventListener("message", function(event) {
+      console.log("event.data", event.data)
       if (event.data != "connection initialized") {
         var resultData = JSON.parse(event.data);
         var callbackIdentifier = resultData.callbackIdentifier;
@@ -47,7 +48,6 @@ function LinkToDevice(openCallback, closeCallback, errorCallback) {
 function CloseLink() {
   wsConnection.close();
 }
-
 function LoadNative(url) {
   wsConnection.send(url);
 }
