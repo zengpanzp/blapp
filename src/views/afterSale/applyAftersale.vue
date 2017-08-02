@@ -176,10 +176,11 @@ export default {
 
   data () {
     return {
+      goodIndex: 0,
       memberId: '', // 会员编号
       picked: true, // 申请凭证
       check: true,  // 检测报告
-      orderDetail: '', // 商品详情
+      orderDetail: {}, // 商品详情
       pic: '', // 商品图片
       orderNo: '', // 订单编号
       inlineLoading: null, // 加载
@@ -238,12 +239,13 @@ export default {
     }
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
-    console.log("我是售后申请页面：", this.$route.params)
-    this.orderNo = decodeURIComponent(this.$route.params.orderNO)
-    this.orderDetail = JSON.parse(decodeURIComponent(this.$route.params.orderDetail))
-    this.pic = this.orderDetail.picUrl ? this.orderDetail.picUrl : null
-    this.address = JSON.parse(decodeURIComponent(this.$route.params.address))
-    this.checkReturn()
+    console.log("我是售后申请页面：", this.$route.query.orderNO)
+    this.orderNo = 'LPE20170731139359'
+    this.goodIndex = 0
+  //  this.orderNo = this.$route.query.orderNO
+  //  this.goodIndex = this.$route.query.goodsIndex
+    this.pic = this.orderDetail.picUrl
+    this.getDel()
   },
   methods: {
     checkReturn() {
@@ -283,6 +285,57 @@ export default {
           $("#bank").find(".bank").slideUp()
         }
       })
+    },
+    getDel() {
+      api.queryDel({
+        memberId: this.memberId,
+        orderNo: this.orderNo
+        }).then(data => {
+          this.$loading.close()
+          console.log("del", data.body.obj)
+          if (data.body.obj) {
+            let obj = JSON.parse(data.body.obj)
+            let del = obj.orderDetailList[this.goodIndex]
+            this.orderDetail = {
+              tax: del.tax,
+              bgCateSid: del.bgCateSid,
+              discountAmount: del.discountAmount,
+              goodsCode: del.goodsCode,
+              goodsDetSid: del.goodsDetSid,
+              goodsName: del.goodsName,
+              goodsSid: del.goodsSid,
+              goodsType: del.goodsType,
+              goodsWeight: del.goodsWeight,
+              tariffRate: del.tariffRate,
+              shopSid: del.shopSid,
+              salePrice: del.salePrice,
+              merchantId: del.merchantId,
+              orderDetailNo: del.orderDetailNo,
+              oriPrice: del.oriPrice,
+              picUrl: del.picUrl ? del.picUrl : null,
+              purchaseType: del.purchaseType,
+              isGift: del.isGift,
+              saleSum: del.saleSum,
+              isCanReturn: del.isCanReturn,
+              integral: del.integral,
+              if7Refund: del.if7Refund,
+              allowReNum: del.allowReNum
+            }
+            this.address = {
+              address: obj.receptAddressDetail,
+              receiver: obj.receptName,
+              phone: obj.receptPhone,
+              provinceCode: obj.provinceCode,
+              cityCode: obj.cityCode,
+              districtCode: obj.districtCode
+            }
+            this.checkReturn()
+          } else {
+            this.$toast(data.body.msg)
+          }
+        }, err => {
+          console.log(err)
+        })
     },
     changeBank() {
       if (!this.isCan) {
@@ -454,7 +507,8 @@ export default {
           url += picList[i].cephUrl + ','
         }
       }
-      let submitData = {
+      let req = {
+        submitData: encodeURIComponent(JSON.stringify({
         orderNo: this.orderNo,
         orderDetailNo: this.orderDetail.orderDetailNo,
         memberId: this.memberId,
@@ -471,20 +525,22 @@ export default {
         reasonName: this.trueList,
         reasonDesc: this.question,
         reasonImageList: url,
-        reasonImageListCephUrl: url,
-      //  deliveryMethodList: this.deliveryList,
-      //  address: this.address
+        reasonImageListCephUrl: url
+      }))
+        // deliveryMethodList: this.deliveryList,
+        // address: this.address
       }
+      console.log("提交：", req)
+      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'selectReturnMethod',
+          params: req
+      })
       // this.$router.push({
       //   name: 'selectReturnMethod',
       //   params: {
-      //     obj: encodeURIComponent(JSON.stringify(submitData))
+      //     obj: encodeURIComponent(req)
       //   }
       // })
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'selectReturnMethod',
-          params: encodeURIComponent(JSON.stringify(submitData))
-      })
     }
   },
   computed: {

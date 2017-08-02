@@ -47,5 +47,9 @@ export default {
   // 图片更新
   checkPic: params => {
     return Vue.http.post(baseUrl + '/order/updateEvidenceUrl.htm', params)
+  },
+  // 查订单详情
+  queryDel: params => {
+    return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params)
   }
 }

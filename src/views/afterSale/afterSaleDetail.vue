@@ -212,6 +212,7 @@
             </div>
             <div class="fix-right">
               <a href="#" class="btn-sub" @click="goDel(returnOrder.orderNo)">订单详细</a>
+              <a  class="btn-sub" v-if="returnOrder.statusCode == '20032'" @click="returnCode(returnOrder.orderNo)">查看退货码</a>
               <a href="tel:4009008800" class="btn-sub active" v-if="config[5]">致电客服
               </a>
               <a class="btn-1 delivery" @click="getInformation" v-if="config[7]">填写发货信息</a>
@@ -436,6 +437,15 @@ export default {
         params: JSON.stringify(req)
       })
     },
+    // 退货码
+    returnCode(val) {
+      this.$router.push({
+        path: '/code',
+        query: {
+          code: val
+        }
+      })
+    },
     cancel(returnNo) {
       this.$modal({
         title: '提示',
@@ -538,7 +548,7 @@ export default {
       if (this.config[7]) {
         window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
               pageId: 'addLogistics',
-              params: encodeURIComponent(JSON.stringify(req))
+              params: JSON.stringify(req)
           })
       }
     }
