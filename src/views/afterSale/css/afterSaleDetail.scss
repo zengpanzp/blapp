@@ -19,10 +19,18 @@
       font-size: rem(24);
     }
     .btn-sub{
+      display: inline-block;
       width: rem(210);
-      height: rem(88);
       line-height: rem(88);
       text-align: center;
+      margin-left: rem(30);
+      border: 1px solid #ccc;
+      color: #666;
+      padding: 0 0 0 rem(10);
+      &.active{
+        border: 1px solid #333;
+        color: #333;
+      }
     }
     .servicePic{
       width: rem(24);
@@ -40,10 +48,6 @@
   padding: rem(12)
 }
 
-.con {
-  display: inline-block;
-}
-
 .new .orderbtn.orderbtnSize a {
   padding: rem(24) rem(16);
   font-size: rem(28);
@@ -54,6 +58,47 @@
 
 .new .pic {
   z-index: 99
+}
+
+.new .main img {
+  vertical-align: top;
+}
+.con {
+  display: inline-block;
+}
+
+.uploadPic a {
+  display: block;
+  margin: 0;
+  width: rem(160);
+  height: rem(160);
+  text-align: center;
+  line-height: rem(160);
+  border: 1px solid #888;
+  color: #888;
+  position: relative;
+  border-radius: rem(6);
+}
+
+.uploadPic {
+  padding: rem(20) rem(12);
+  background: #fff;
+  border: 1px solid #e9e9e9;
+  overflow: hidden;
+}
+
+.uploadPic dd {
+  width: rem(160);
+  height: rem(160);
+  position: relative;
+  float: left;
+  margin: 0 rem(16) rem(24);
+}
+.corner-bottom, .corner-bottom>input {
+  -webkit-border-bottom-left-radius: rem(12);
+  -webkit-border-bottom-right-radius: rem(12);
+  border-bottom-right-radius: rem(12);
+  border-bottom-left-radius: rem(12);
 }
 
 .new .font-color-ash1 {

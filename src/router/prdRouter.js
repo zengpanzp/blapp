@@ -530,7 +530,7 @@ export const prdRouter = [
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/seeMore')), 'seeMore')
   },
-  /* 曾攀 申请售后服务/:orderNo/:orderDetail/:address */
+  /* 曾攀 申请售后服务 */
   {
     path: '/applyAftersale',
     name: 'applyAftersale',
@@ -541,7 +541,7 @@ export const prdRouter = [
   },
   /* 曾攀 提交售后 */
   {
-    path: '/selectReturnMethod',
+    path: '/selectReturnMethod/:obj',
     name: 'selectReturnMethod',
     meta: {
       title: '选择售后返还方式',
