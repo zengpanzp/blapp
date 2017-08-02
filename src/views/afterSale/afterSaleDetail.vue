@@ -134,12 +134,12 @@
             </ul>
         </div>
         <div v-if="returnOrder.statusCode == '2001'||pic.length != 0">
-        <div class="columnTitle border return corner-top">图片凭证<span id="edit" style="display: none">编辑</span></div>
+        <div class="columnTitle border return corner-top">图片凭证<span @click="getPic" v-show="edit">{{compile}}</span></div>
         <div class="uploadPic corner-bottom">
-            <!-- <dd id="getPhoto" style="display: none"><a><i class="iconfont icon-add"></i></a></dd>
-            <p id="tip" style="display: none">最多上传<span>3</span>张，每张不超过<span>5M</span>,支持jpg,BMP,Png</p> -->
+            <dd v-for="item in pic" v-if="paper"><a href="#" class="go"><img class="upload" :src="item.cephUrl?item.cephUrl:item"/></a></dd>
             <p class="emptyPic" v-if="pic.length == 0">暂无图片</p>
         </div>
+        <bl-upload ref="upload" commentType="afterSale" maxLength="3" v-show="showPic"></bl-upload>
         </div>
         <div class="sell-service corner" id="storeAddress" v-if="returnOrder.deliveryMethod != 2 &&config[2]">
             <ul>
@@ -202,18 +202,21 @@
                 .
             </ul>
         </div>
-    <div class="btnBox">
-        <div class="btnFix">
-            <a  class="con" @click="serviceForbl(returnNo)">
+    <div class="btnBox" v-if="config">
+        <div class="btnFix flex-space flex-m">
+            <div class="fix-left">
+              <a  class="con" @click="serviceForbl(returnNo)">
               <div class="servicePic"><img src="./i/service.png"/></div>
             联系客服
             </a>
-            <a href="#" class="btn-sub" @click="goDel(returnOrder.orderNo)">订单详细</a>
-            <a href="tel:4009008800" class="btn-sub" v-if="config[5]">
-                致电客服
-            </a>
-            <a class="btn-1 delivery" @click="getInformation" v-if="config[7]">填写发货信息</a>
-            <a @click="cancel(returnNo)" class="btn-sub" v-if="config[6]">取消申请</a>
+            </div>
+            <div class="fix-right">
+              <a href="#" class="btn-sub" @click="goDel(returnOrder.orderNo)">订单详细</a>
+              <a href="tel:4009008800" class="btn-sub active" v-if="config[5]">致电客服
+              </a>
+              <a class="btn-1 delivery" @click="getInformation" v-if="config[7]">填写发货信息</a>
+              <a @click="cancel(returnNo)" class="btn-sub" v-if="config[6]">取消申请</a>
+            </div>
         </div>
     </div>
 </div>
@@ -242,10 +245,25 @@ export default {
         buy: {},
         version: '',
         level: '',
-        picture: ''
+        picture: '',
+        edit: false,
+        showPic: false,
+        paper: false,
+        compile: '编辑'
     };
   },
   created() {
+    // 售后详情页埋点
+    try {
+      console.log((new Date()).toLocaleString() + 'APP_售后详情')
+      sa.track('$pageview', {
+        pageId: 'APP_售后详情',
+        categoryId: 'APP_User',
+        $title: '售后详情'
+      });
+    } catch (err) {
+      console.log("sa error => " + err);
+    }
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
     if (this.$route.params.returnNo && this.$route.params.statusName) {
@@ -306,12 +324,14 @@ export default {
           }
           this.message = this.returnOrder.items[0]
           this.picture = this.message.goodsImage ? this.message.goodsImage : null
-          console.log("namename", JSON.stringify(this.message))
           this.wait = this.returnOrder.moneyTime[0]
           this.midle = this.returnOrder.moneyTime[1]
           this.succ = this.returnOrder.moneyTime[2]
           this.pic = this.returnOrder.picList
-          console.log("pic", JSON.stringify(this.pic))
+          if (this.pic.length > 0) {
+            this.paper = true
+          }
+          console.log("wowowowow" + this.pic.length + JSON.stringify(this.pic))
           this.buy = this.returnOrder.buyer
           this.store = this.returnOrder.store
           console.log("hahhahahah", JSON.stringify(this.returnOrder))
@@ -379,14 +399,22 @@ export default {
       }).then(data => {
         this.$loading.close()
         console.log("getConfig", data.body.obj)
-        let obj = JSON.parse(data.body.obj)
-        if (obj && obj.list) {
-        for (let i = 0; i < obj.list.length; i++) {
-            if (obj.list[i].value.indexOf(this.returnOrder.statusCode) != -1 && obj.list[i].label) {
-                this.config[obj.list[i].label] = true;
+        if (data.body.obj) {
+          let obj = JSON.parse(data.body.obj)
+          this.config = {}
+          if (obj && obj.list) {
+            for (let i = 0; i < obj.list.length; i++) {
+              if (obj.list[i].value.indexOf(this.returnOrder.statusCode) != -1 && obj.list[i].label) {
+                  this.config[obj.list[i].label] = true
+              }
             }
+          }
+        } else {
+          this.$toast(data.body.msg)
         }
-      }
+        if (this.returnOrder.statusCode == '2001') {
+          this.edit = true
+        }
       }, err => {
         console.log(err)
       })
@@ -411,20 +439,35 @@ export default {
     cancel(returnNo) {
       this.$modal({
         title: '提示',
-        content: '是否取消退货申请?'
-      })
-      api.getCancel(JSON.stringify({
-        memberId: this.memberId,
-        returnNo: returnNo
-      })).then(data => {
-        this.$loading.close()
-        console.log("cancel", data)
-        if (data.body.obj) {
-          this.$toast("~退货已取消~")
-        }
-      }, err => {
-        console.log(err)
-        this.$toast(err)
+        content: '是否取消退货申请?',
+        buttons: [{
+          text: '取消',
+          onClick: () => {
+            this.$toast('取消')
+          }
+        }, {
+          text: '确定',
+          onClick: () => {
+            api.getCancel(JSON.stringify({
+                memberId: this.memberId,
+                returnNo: returnNo
+              })).then(data => {
+                this.$loading.close()
+                console.log("cancel", data)
+                if (data.body.obj) {
+                  this.$toast("~退货已取消~")
+                  setTimeout(() => {
+                    this.$router.go(-1)
+                  }, 2000)
+                } else {
+                  this.$toast(data.body.msg)
+                }
+              }, err => {
+                console.log(err)
+                this.$toast(err)
+            })
+          }
+        }]
       })
     },
     serviceForbl(returnNo) {
@@ -448,11 +491,57 @@ export default {
       } else {
         window.location.href = `http://chat.bl.com/wechat/ios.jsp?skill=2003&vip=${vip}&goodsId=${this.message.goodsId}&goodsName=${this.message.goodsName}&goodsPicUrl=${this.picture}&orderNo=${this.returnOrder.orderNo}&memberId=${this.memberId}`
       }
+    },
+    getPic() {
+      this.showPic = true
+      this.compile = '保存图片'
+      if (this.compile == '保存图片') {
+        this.pic = this.$refs.upload.upload
+        console.log("ppppppppppppppp", JSON.stringify(this.pic))
+        this.paper = true
+        if (this.pic.length != 0) {
+          this.check()
+        }
+      }
+    },
+    check() {
+      let urls = ''
+      let others = ''
+      for (let i = 0; i < this.pic.length; i++) {
+          if (this.pic[i] != 0) {
+              urls = urls + this.pic[i].url + ","
+              others = others + this.pic[i].other + ","
+          }
+      }
+      api.checkPic({
+        memberId: this.memberId,
+        returnNo: this.returnNo,
+        returnPicUrl: urls.substr(0, urls.length - 1),
+        returnPicUrlCephUrl: others.substr(0, others.length - 1)
+      }).then(data => {
+        this.$loading.close()
+        console.log("pcipcicpicpci", JSON.stringify(this.$refs.upload.upload))
+        this.pic = this.$refs.upload.upload
+        this.$toast('图片已更新!')
+      }, err => {
+        console.log(err)
+        this.$toast('图片更新失败!')
+      })
+      this.showPic = false
+      this.compile = ''
+    },
+    // 填写发货信息
+    getInformation() {
+      let req = {
+        returnNo: this.returnNo
+      }
+      if (this.config[7]) {
+        window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+              pageId: 'addLogistics',
+              params: encodeURIComponent(JSON.stringify(req))
+          })
+      }
     }
-    // getInformation() {
-    //   if (this.config[7]) {
-    //   }
-    // }
   },
   // 路由取memberId
   beforeRouteEnter (to, from, next) {

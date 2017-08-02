@@ -532,7 +532,7 @@ export const prdRouter = [
   },
   /* 曾攀 申请售后服务/:orderNo/:orderDetail/:address */
   {
-    path: '/applyAftersale',
+    path: '/applyAftersale/:orderNo/:orderDetail/:address',
     name: 'applyAftersale',
     meta: {
       title: '申请售后服务',

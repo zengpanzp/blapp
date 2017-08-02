@@ -119,8 +119,6 @@
         <div class="columnTitle border corner-top">退款方式<label class="colorRed">*</label></div>
         <div class="proColor proColorPadding proColorBg corner-bottom return bank" id="bank">
             <span :class="{'disAble': item.disAble}" @click="bank(item, index)" v-for="(item, index) in bankList"><a>{{item.text}}</a></span>
-            <!-- <span class="disAble"><a>原支付返回</a></span>
-            <span class="disAble"><a>其他银行卡</a></span> -->
             <div class="service-miner-box font-color-ash2 bank" @click="changeBank" style="display: none">
                 收款人姓名<i class="iconfont icon-enter"></i>
             </div>
@@ -188,7 +186,6 @@ export default {
       level: '', // 会员等级
       address: '', // 地址
       list: [], // 原因集合
-      requestData: null, // 申请对象
       returnCnt: 1, // 申请数量
       maxReturnQuantity: '', // 最大提交数量
       canReturn: '', // 是否可以申请 1 是 0 否
@@ -206,6 +203,7 @@ export default {
       accountNo: '',
       bankName: '',
       version: '', // app版本号
+      deliveryList: [],
       serviceTypeArr: [{ // 类型
         text: '退货',
         disabled: true
@@ -240,15 +238,11 @@ export default {
     }
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
-    let data = {
-      "orderNo": "LPE20170731139359", "orderDetail": "{\"tax\":\"0.17\",\"bgCateSid\":\"102551\",\"discountAmount\":\"0\",\"goodsCode\":\"132047\",\"goodsDetSid\":\"0485849001\",\"goodsName\":\"双枪竹工艺筷 5双\",\"goodsSid\":\"273335\",\"goodsStan\":\"5双\",\"goodsType\":\"1\",\"goodsWeight\":\"0.25\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"-1\",\"salePrice\":\"22.9\",\"merchantId\":\"-1\",\"orderDetailNo\":\"LPE201707311393590101\",\"oriPrice\":\"0\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":1,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":1}", "address": "{\"address\":\"上海市 市辖区 黄浦区 HK岁JS你URL\",\"receiver\":\"骨髓瘤\",\"phone\":\"13816014858\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
-     // "orderNo": "MAE20170516125850", "orderDetail": "{\"tax\":\"0.00\",\"bgCateSid\":\"103139\",\"discountAmount\":\"14.18\",\"goodsCode\":\"2349427\",\"goodsDetSid\":\"154600\",\"goodsName\":\"新增商品件数设置免邮上海\",\"goodsSid\":\"1353887\",\"goodsType\":\"1\",\"goodsWeight\":\"3\",\"tariffRate\":\"0\",\"tariff\":\"0\",\"shopSid\":\"80680\",\"salePrice\":\"13\",\"merchantId\":\"2986\",\"orderDetailNo\":\"MAE201705161258500102\",\"oriPrice\":\"3\",\"picUrl\":\"http://img18.st.iblimg.com/mp-212/mp/goods/2078322318_360x360.jpg\",\"purchaseType\":\"0\",\"isGift\":0,\"saleSum\":2,\"isCanReturn\":false,\"integral\":0,\"if7Refund\":0,\"allowReNum\":2}", "address": "{\"address\":\"上海市 市辖区 黄浦区 哼哼唧唧斤斤计较\",\"receiver\":\"任天野\",\"phone\":\"13813015545\",\"provinceCode\":\"866\",\"cityCode\":\"867\",\"districtCode\":\"868\"}"
-    }
-    console.log(data)
-    this.orderNo = data.orderNo
-    this.orderDetail = JSON.parse(data.orderDetail)
+    console.log("我是售后申请页面：", this.$route.params)
+    this.orderNo = decodeURIComponent(this.$route.params.orderNO)
+    this.orderDetail = JSON.parse(decodeURIComponent(this.$route.params.orderDetail))
     this.pic = this.orderDetail.picUrl ? this.orderDetail.picUrl : null
-    this.address = JSON.parse(data.address)
+    this.address = JSON.parse(decodeURIComponent(this.$route.params.address))
     this.checkReturn()
   },
   methods: {
@@ -262,11 +256,11 @@ export default {
           console.log("zpzpzpzpz", data.body.obj)
           if (data.body.obj) {
             let resData = JSON.parse(data.body.obj)
-            this.requestData = resData
             this.maxReturnQuantity = resData.maxReturnQuantity
             this.canReturn = resData.canReturn
             this.serType = resData.serviceType
             this.payMethodList = resData.refundMethodList
+            this.deliveryList = resData.deliveryMethodList
             this.getRefundReason()
           } else {
             this.$toast(data.body.msg)
@@ -460,7 +454,7 @@ export default {
           url += picList[i].cephUrl + ','
         }
       }
-      let req = {
+      let submitData = {
         orderNo: this.orderNo,
         orderDetailNo: this.orderDetail.orderDetailNo,
         memberId: this.memberId,
@@ -478,12 +472,18 @@ export default {
         reasonDesc: this.question,
         reasonImageList: url,
         reasonImageListCephUrl: url,
+      //  deliveryMethodList: this.deliveryList,
+      //  address: this.address
       }
-      this.$router.push({
-        name: 'selectReturnMethod',
-        params: {
-          obj: encodeURIComponent(JSON.stringify(req))
-        }
+      // this.$router.push({
+      //   name: 'selectReturnMethod',
+      //   params: {
+      //     obj: encodeURIComponent(JSON.stringify(submitData))
+      //   }
+      // })
+      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          pageId: 'selectReturnMethod',
+          params: encodeURIComponent(JSON.stringify(submitData))
       })
     }
   },
@@ -499,7 +499,6 @@ export default {
   // 路由取memberId
   beforeRouteEnter (to, from, next) {
     utils.isLogin().then(user => {
-      console.log("ppppp", user)
       next()
     })
   }
