@@ -435,6 +435,7 @@ body {
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+        overflow: hidden;
         &.money{
           height: rem(40);
           line-height: rem(28);
