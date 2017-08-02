@@ -366,12 +366,12 @@ export default {
     },
     goCoupon: function () {
     	if (this.ruleId != "1") {
-    		window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+    		  window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
 	            pageId: 'couponEcard',
 	            params: { type: 0 }
 	        })
     	} else {
-        this.successFlag = false
+          window.CTJSBridge.LoadMethod('BLPageManager', 'pagemanagerBack', {})
     	}
     }
   }
