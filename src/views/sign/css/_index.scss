@@ -291,17 +291,16 @@ body {
     }
   }
   .top-menu {
-    padding: rem(20);
+    padding: rem(10);
     .new-menu {
       margin-left: rem(-10);
       overflow-y: hidden;
       .new-menu-item {
         padding-left: rem(10);
         display: inline-block;
-        margin-bottom: rem(-10);
+        margin-bottom: rem(10);
         float: left;
         width: 50%;
-        height: rem(220);
       }
     }
     &::after{
@@ -390,18 +389,20 @@ body {
   /*猜你喜欢商品推荐*/
   .goodsList{
     border-bottom:1px solid #ddd;
-    margin: rem(20);
+    margin: rem(10);
     li{
       float: left;
-      height: rem(467);
       width: 50%;
       margin-bottom: rem(26);
       position: relative;
-      .pic{
-        height: rem(345);
-        line-height: rem(345);
-        text-align: center;
-        vertical-align: middle;
+      a{
+        display: block;
+        border: none;
+        margin: .07812rem;
+        border-radius: .15625rem;
+        background: #fff;
+        position: relative;
+        overflow: hidden;
       }
       &:last-child{
         height: rem(60);
@@ -426,6 +427,7 @@ body {
         line-height: rem(33);
         margin-left: rem(10);
         margin-top: rem(10);
+        margin-right: rem(10);
         font-size: rem(24);
         color:#666;
         overflow: hidden;
