@@ -95,6 +95,7 @@ export default {
     	click: false,
       remain: 1,
       ruleId: "",
+      ruleIdT: "",
       couponTemplateId: "",
       couponCode: "",
       drawId: "4",
@@ -184,6 +185,7 @@ export default {
   		).then(data => {
   			this.$loading.close()
   			if (data.body.obj) {
+          this.ruleIdT = obj.ruleIdT
   				let obj = JSON.parse(data.body.obj)
   				this.templateButtonPic = obj.templateButtonPic
   				for (let i = 0; i < obj.campDrawCoupons.length; i++) {
@@ -236,7 +238,7 @@ export default {
 	  		userToken: this.memberToken,
 	        acquireChannel: "1",
 	        drawType: "3",
-	        drawId: this.ruleId
+	        drawId: this.ruleIdT
 	  	}
 	  	if (this.isSigninFlag == 'Y') {
 	        requestData.isSigninFlag = 'Y'
