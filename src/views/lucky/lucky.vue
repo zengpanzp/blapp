@@ -97,6 +97,7 @@ export default {
       ruleId: "",
       couponTemplateId: "",
       couponCode: "",
+      ruleIdT: "",
       drawId: "4",
       isSigninFlag: '',
     	memberId: "",
@@ -185,6 +186,7 @@ export default {
   			this.$loading.close()
   			if (data.body.obj) {
   				let obj = JSON.parse(data.body.obj)
+          this.ruleIdT = obj.drawId;
   				this.templateButtonPic = obj.templateButtonPic
   				for (let i = 0; i < obj.campDrawCoupons.length; i++) {
                 	list.push(obj.campDrawCoupons[i])
@@ -232,11 +234,12 @@ export default {
   		})
   	},
   	getCoupon: function () {
+      debugger;
   		let requestData = {
 	  		userToken: this.memberToken,
 	        acquireChannel: "1",
 	        drawType: "3",
-	        drawId: this.ruleId
+	        drawId: this.ruleIdT
 	  	}
 	  	if (this.isSigninFlag == 'Y') {
 	        requestData.isSigninFlag = 'Y'
