@@ -478,7 +478,7 @@ export const prdRouter = [
 },
   /* 郭健 转一转 */
   {
-    path: '/lucky/:coupon/:ruleId/:isSigninFlag',
+    path: '/lucky/:couponTemplateId/:couponCode/:ruleId/:isSigninFlag',
     meta: {
       title: '转一转'
     },

@@ -95,7 +95,10 @@ export default {
     	click: false,
       remain: 1,
       ruleId: "",
-      coupon: "",
+      ruleIdT: "",
+      couponTemplateId: "",
+      couponCode: "",
+      ruleIdT: "",
       drawId: "4",
       isSigninFlag: '',
     	memberId: "",
@@ -120,9 +123,12 @@ export default {
   	} else {
   		this.ruleId = "1"
   	}
-  	if (this.$route.params.coupon && this.$route.params.coupon != "null") {
-  		this.coupon = this.$route.params.coupon
+  	if (this.$route.params.couponTemplateId && this.$route.params.couponTemplateId != "null") {
+  		this.couponTemplateId = this.$route.params.couponTemplateId
   	}
+    if (this.$route.params.couponCode && this.$route.params.couponCode != "null") {
+      this.couponCode = this.$route.params.couponCode
+    }
   	if (this.$route.params.isSigninFlag && this.$route.params.isSigninFlag != "null") {
   		this.isSigninFlag = this.$route.params.isSigninFlag
   	}
@@ -171,7 +177,7 @@ export default {
 	        requestData.isSigninFlag = 'Y'
 	    }
 	    if (this.ruleId == '1') {
-	        requestData.couponTemplateId = this.coupon.couponTemplateId;
+	        requestData.couponTemplateId = this.couponTemplateId;
 	    } else {
 	        requestData.drawId = this.ruleId;
 	    }
@@ -180,7 +186,9 @@ export default {
   		).then(data => {
   			this.$loading.close()
   			if (data.body.obj) {
+          this.ruleIdT = obj.ruleIdT
   				let obj = JSON.parse(data.body.obj)
+          this.ruleIdT = obj.drawId;
   				this.templateButtonPic = obj.templateButtonPic
   				for (let i = 0; i < obj.campDrawCoupons.length; i++) {
                 	list.push(obj.campDrawCoupons[i])
@@ -228,18 +236,19 @@ export default {
   		})
   	},
   	getCoupon: function () {
+      debugger;
   		let requestData = {
 	  		userToken: this.memberToken,
 	        acquireChannel: "1",
 	        drawType: "3",
-	        drawId: this.ruleId
+	        drawId: this.ruleIdT
 	  	}
 	  	if (this.isSigninFlag == 'Y') {
 	        requestData.isSigninFlag = 'Y'
 	    }
 	    if (this.ruleId == '1') {
-            requestData.couponTemplateId = this.coupon.couponTemplateId;
-            requestData.couponCode = this.coupon.couponCode;
+            requestData.couponTemplateId = this.couponTemplateId;
+            requestData.couponCode = this.couponCode;
             requestData.drawType = "0";
         }
         api.getCoupon(
