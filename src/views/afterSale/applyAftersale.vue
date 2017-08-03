@@ -203,6 +203,7 @@ export default {
       accountName: '',
       accountNo: '',
       bankName: '',
+      hasFreight: '',
       version: '', // app版本号
       deliveryList: [],
       serviceTypeArr: [{ // 类型
@@ -240,10 +241,10 @@ export default {
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
     console.log("我是售后申请页面：", this.$route.query.orderNO)
-    this.orderNo = 'LPE20170731139359'
+    this.orderNo = 'LAD20170728139147'
     this.goodIndex = 0
-  //  this.orderNo = this.$route.query.orderNO
-  //  this.goodIndex = this.$route.query.goodsIndex
+    // this.orderNo = this.$route.query.orderNO
+    // this.goodIndex = this.$route.query.goodsIndex
     this.pic = this.orderDetail.picUrl
     this.getDel()
   },
@@ -263,6 +264,7 @@ export default {
             this.serType = resData.serviceType
             this.payMethodList = resData.refundMethodList
             this.deliveryList = resData.deliveryMethodList
+            this.hasFreight = resData.hasFreight
             this.getRefundReason()
           } else {
             this.$toast(data.body.msg)
@@ -327,7 +329,8 @@ export default {
               phone: obj.receptPhone,
               provinceCode: obj.provinceCode,
               cityCode: obj.cityCode,
-              districtCode: obj.districtCode
+              districtCode: obj.districtCode,
+              id: 0
             }
             this.checkReturn()
           } else {
@@ -507,8 +510,7 @@ export default {
           url += picList[i].cephUrl + ','
         }
       }
-      let req = {
-        submitData: encodeURIComponent(JSON.stringify({
+      let req = JSON.stringify({
         orderNo: this.orderNo,
         orderDetailNo: this.orderDetail.orderDetailNo,
         memberId: this.memberId,
@@ -525,22 +527,17 @@ export default {
         reasonName: this.trueList,
         reasonDesc: this.question,
         reasonImageList: url,
-        reasonImageListCephUrl: url
-      }))
-        // deliveryMethodList: this.deliveryList,
-        // address: this.address
-      }
-      console.log("提交：", req)
-      window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-          pageId: 'selectReturnMethod',
-          params: req
+        reasonImageListCephUrl: url,
+        deliveryMethodList: this.deliveryList,
+        address: this.address,
+        hasFreight: this.hasFreight
       })
-      // this.$router.push({
-      //   name: 'selectReturnMethod',
-      //   params: {
-      //     obj: encodeURIComponent(req)
-      //   }
-      // })
+      this.$router.push({
+        name: 'selectReturnMethod',
+        params: {
+          obj: encodeURIComponent(req)
+        }
+      })
     }
   },
   computed: {

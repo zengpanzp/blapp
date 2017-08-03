@@ -507,7 +507,6 @@ export default {
       this.compile = '保存图片'
       if (this.compile == '保存图片') {
         this.pic = this.$refs.upload.upload
-        console.log("ppppppppppppppp", JSON.stringify(this.pic))
         this.paper = true
         if (this.pic.length != 0) {
           this.check()

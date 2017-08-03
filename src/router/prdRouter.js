@@ -432,7 +432,7 @@ export const prdRouter = [
   {
     path: '/blprivilegeClub',
     meta: {
-      title: '更多权益',
+      title: '更多权益'
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
   },
@@ -440,7 +440,7 @@ export const prdRouter = [
   {
     path: '/applyShop/:power',
     meta: {
-      title: '适用门店',
+      title: '适用门店'
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/applyShop')), 'applyShop')
   },
@@ -475,7 +475,7 @@ export const prdRouter = [
     title: '注册'
   },
   component: r => require.ensure([], () => r(require('../views/login/register')), 'register')
-},
+  },
   /* 郭健 转一转 */
   {
     path: '/lucky/:coupon/:ruleId/:isSigninFlag',
@@ -488,7 +488,7 @@ export const prdRouter = [
   {
     path: '/integralExchange',
     meta: {
-      title: '选择积分互换商户',
+      title: '选择积分互换商户'
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/integralExchange')), 'integralExchange')
   },
@@ -501,7 +501,7 @@ export const prdRouter = [
   {
     path: '/afterSale',
     meta: {
-      title: '售后单列表',
+      title: '售后单列表'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/afterSale')), 'afterSale')
   },
@@ -509,7 +509,8 @@ export const prdRouter = [
   {
     path: '/afterSaleDetail/:returnNo/:statusName',
     meta: {
-      title: '售后详情',
+      name: 'afterSaleDetail',
+      title: '售后详情'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/afterSaleDetail')), 'afterSaleDetail')
   },
@@ -517,7 +518,7 @@ export const prdRouter = [
   {
     path: '/returnHistoryPage/:returnNo/:returnHistory',
     meta: {
-      title: '售后处理进度',
+      title: '售后处理进度'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/returnHistoryPage')), 'returnHistoryPage')
   },
@@ -526,7 +527,7 @@ export const prdRouter = [
     path: '/seeMore/:goods',
     name: 'seeMore',
     meta: {
-      title: '售后商品列表',
+      title: '售后商品列表'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/seeMore')), 'seeMore')
   },
@@ -535,7 +536,7 @@ export const prdRouter = [
     path: '/applyAftersale',
     name: 'applyAftersale',
     meta: {
-      title: '申请售后服务',
+      title: '申请售后服务'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/applyAftersale')), 'applyAftersale')
   },
@@ -544,15 +545,24 @@ export const prdRouter = [
     path: '/selectReturnMethod/:obj',
     name: 'selectReturnMethod',
     meta: {
-      title: '选择售后返还方式',
+      title: '选择售后返还方式'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/selectReturnMethod')), 'selectReturnMethod')
+  },
+  /* 曾攀 提交成功页面 */
+  {
+    path: '/saleSuccess/:data',
+    name: 'saleSuccess',
+    meta: {
+      title: '提交成功页面'
+    },
+    component: r => require.ensure([], () => r(require('../views/afterSale/saleSuccess')), 'saleSuccess')
   },
   /* 薛天玲 售后 退货码 */
   {
     path: '/code',
     meta: {
-      title: '退货码',
+      title: '退货码'
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/code')), 'code')
   }

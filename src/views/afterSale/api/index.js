@@ -51,5 +51,13 @@ export default {
   // 查订单详情
   queryDel: params => {
     return Vue.http.post(baseUrl + '/order/getOrderDetail.htm', params)
+  },
+  // 提交售后订单
+  submitOdr: params => {
+    return Vue.http.post(baseUrl + '/order/submitReturn.htm', params)
+  },
+  // 获取选择框信息
+  getPicker: params => {
+    return Vue.http.post(baseUrl + '/dict/list.htm.htm', params)
   }
 }

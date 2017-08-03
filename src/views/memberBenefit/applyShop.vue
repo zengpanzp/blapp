@@ -99,7 +99,6 @@ export default {
       if (isAndroid) {
           window.CTJSBridge.LoadMethod('Location', 'getLocation', {
           success: data => {
-            console.log("565656565" + data)
             let obj = JSON.parse(data)
             this.longitude = obj.longitude
             this.latitude = obj.latitude

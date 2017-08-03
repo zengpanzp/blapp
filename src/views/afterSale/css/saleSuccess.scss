@@ -1,0 +1,54 @@
+@charset "utf-8";
+@import "src/sass/tobe/function";
+ 	.main {
+		margin: 0 auto;
+		min-width: 300px;
+		width: auto;
+		padding: rem(12);
+		position: relative;
+			.payList {
+			background: #fff;
+			border: 1px solid #e9e9e9;
+			margin-bottom: rem(12);
+			font-size: rem(28);
+			overflow: hidden;
+			}
+	}
+
+ 	.corner{
+		-webkit-border-radius: rem(12);
+		border-radius: rem(12);
+	}
+
+ 	.payList ul{
+		list-style: none
+	}
+
+ 	.payList li {
+		width: auto;
+		margin-top: 0;
+		text-align: left;
+		float: none;
+		line-height: normal;
+		font-size: rem(28);
+		font-weight: 300;
+		border-bottom: 1px solid #e9e9e9;
+		line-height: rem(88);
+		padding: 0 rem(10);
+		&:last-child{
+			border-bottom: 0;
+		}
+	}
+
+	.main .payBtn{
+		margin-top: rem(40);
+		.flex-item{
+			text-align: center;
+			padding: rem(18) rem(20);
+			border: 1px solid #ccc;
+			border-radius: rem(8);
+			&:first-child{
+				margin-right: rem(30)
+			}
+		}
+	}

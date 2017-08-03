@@ -199,13 +199,17 @@ export default {
         if (data.body.obj) {
           let obj = JSON.parse(data.body.obj)
           if (parseInt(obj.usedTimes) > 0 || parseInt(obj.remainTimes) > 0) {
-            $("#con").show()
-            $("#vip").show()
+            this.$nextTick(() => {
+              $("#con").show()
+              $("#vip").show()
+            })
             return
           }
           if (parseInt(obj.usedTimes) == 0 && parseInt(obj.remainTimes) == 0) {
-            $("#con").show()
-            $("#vip").show().attr("href", "javascript:void(0)").css("backgroundColor", "#ccc")
+            this.$nextTick(() => {
+              $("#con").show()
+              $("#vip").show().attr("href", "javascript:void(0)").css("backgroundColor", "#ccc")
+            })
           }
         } else {
           this.$toast(data.body.msg)
