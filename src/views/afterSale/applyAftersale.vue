@@ -241,10 +241,10 @@ export default {
     this.memberId = utils.dbGet('userInfo').member_id
     this.level = utils.dbGet('userInfo').memberLevelCode
     console.log("我是售后申请页面：", this.$route.query.orderNO)
-    this.orderNo = 'LAD20170728139147'
-    this.goodIndex = 0
-    // this.orderNo = this.$route.query.orderNO
-    // this.goodIndex = this.$route.query.goodsIndex
+    // this.orderNo = 'LAD20170728139147'
+    // this.goodIndex = 0
+    this.orderNo = this.$route.query.orderNO
+    this.goodIndex = this.$route.query.goodsIndex
     this.pic = this.orderDetail.picUrl
     this.getDel()
   },
