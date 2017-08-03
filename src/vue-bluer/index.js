@@ -30,6 +30,9 @@ const install = function(Vue) {
   if (install.installed) return;
   // Vue.component('bl' + Bar.name, Bar);
   // Vue.component('bl' + Switch.name, Switch);
+  Vue.component('blBar', resolve => {
+    require(['./bar'], resolve)
+  });
   Vue.component('blButton', resolve => {
     require(['./button'], resolve)
   });
@@ -60,6 +63,10 @@ const install = function(Vue) {
   // slide-bar
   Vue.component('blSlideBar', resolve => {
     require(['src/components/iBailianApp/slideBar/bl-slide-bar'], resolve)
+  });
+  // pop-select
+  Vue.component('blPopselect', resolve => {
+    require(['src/components/iBailianApp/popSelect/popSelect'], resolve)
   });
 
   Vue.component('bl' + tabContainer.name, tabContainer);

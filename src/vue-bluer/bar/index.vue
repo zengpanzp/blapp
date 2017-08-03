@@ -120,8 +120,6 @@
       barStyle: {
         type: String
       },
-    },
-    components: {
     }
   };
 </script>

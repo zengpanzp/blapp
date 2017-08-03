@@ -4,7 +4,7 @@
       <input class="select-main" slot="cell-main" v-model="address" type="text" placeholder="请选择就诊地区" readonly>
     </bl-cell>
     <bl-cell title="医院" @click.native="selectHospital">
-      <input class="select-main" slot="cell-main" v-model="hospital" type="text" placeholder="请选择就诊医院" readonly>
+      <input class="select-main" slot="cell-main" :value="textHospital" type="text" placeholder="请选择就诊医院" readonly>
     </bl-cell>
     <bl-cell title="科室">
       <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊科室" readonly>
@@ -16,19 +16,38 @@
       <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊时间" readonly>
     </bl-cell>
     <bl-button type="expert-btn" :disabled="true">立即预约</bl-button>
+    <bl-popselect
+      title="选择医院"
+      :showModal="showModal"
+      :selectArr="hospitalList"
+      @on-hide="showModal = $event"
+      v-model="hospital">
+    </bl-popselect>
+    <bl-popselect
+      title="选择医院"
+      :showModal="showModalDep"
+      :selectArr="departmentList"
+      @on-hide="showModalDep = $event"
+      v-model="departmentname">
+    </bl-popselect>
   </div>
 </template>
 
 <script>
+import api from './api/expertReserve'
 export default {
 
   name: 'expertReserve',
 
   data () {
     return {
-      myInfo: {},
-      address: null, // 地区
+      addressInfo: {},
+      showModal: false,
+      showModalDep: false,
       hospital: null, // 医院
+      hospitalList: [],
+      departmentname: null, // 科室
+      departmentList: []
     };
   },
   methods: {
@@ -36,26 +55,27 @@ export default {
       let reqData = {
         title: "选择地区",
         limitedProvinceIds: ['866'], // 限上海地区
-      }
-      if (this.myInfo.provinceId && this.myInfo.cityId && this.myInfo.districtId) {
-        reqData.selectedAddressData = {
-          provinceId: this.myInfo.provinceId,
-          cityId: this.myInfo.cityId,
-          districtId: this.myInfo.districtId,
+        selectedAddressData: {
+          provinceId: this.addressInfo.provinceId,
+          cityId: this.addressInfo.cityId,
+          districtId: this.addressInfo.districtId,
         }
       }
-      console.log(reqData)
       window.CTJSBridge.LoadMethod('AddressSelectPickerView', 'show', reqData, {
         success: data => {
-          console.log(data)
           let resData = JSON.parse(data)
           let province = resData.kBLAddressSelectPickerViewProvince.nm
           let city = resData.kBLAddressSelectPickerViewCity.nm
           let district = resData.kBLAddressSelectPickerViewDistrict.nm
-          this.myInfo.provinceId = resData.kBLAddressSelectPickerViewProvince.id
-          this.myInfo.cityId = resData.kBLAddressSelectPickerViewCity.id
-          this.myInfo.districtId = resData.kBLAddressSelectPickerViewDistrict.id
-          this.address = `${province}${city}${district}`
+          this.addressInfo = {
+            province: province,
+            provinceId: resData.kBLAddressSelectPickerViewProvince.id,
+            cityId: resData.kBLAddressSelectPickerViewCity.id,
+            city: city,
+            districtId: resData.kBLAddressSelectPickerViewDistrict.id,
+            district: district
+          }
+          this.address = `${province}${district}`
         },
         fail: data => {
           console.log(data)
@@ -63,7 +83,50 @@ export default {
         progress: data => { console.log(data) }
       })
     },
-    selectHospital() {}
+    selectHospital() {
+      this.showModal = true
+    }
+  },
+  computed: {
+    textHospital() {
+      for (let item of this.hospitalList) {
+        if (item.value == this.hospital) {
+          return item.label
+        }
+      }
+    }
+  },
+  watch: {
+    'addressInfo.district'(val) {
+      console.log(val)
+      this.hospital = null
+      this.departmentname = null
+      api.queryHospitalByArea({
+        ruleCode: '20160624152997',
+        province: '上海',
+        city: '上海',
+        area: val
+      }).then(res => {
+        if (res.body.obj) {
+          let resData = JSON.parse(res.body.obj)
+          console.log('查询医院', resData)
+          if (resData.length > 0) {
+            let tempList = []
+            for (var i = 0; i < resData.length; i++) {
+              tempList.push({
+                label: resData[i].supplierName,
+                value: resData[i].supplierCode
+              })
+            }
+            this.hospitalList = tempList
+          } else {
+            this.$toast('查询结果为空或者暂不支持改地区')
+          }
+        } else {
+          this.$toast(res.body.msg)
+        }
+      })
+    }
   }
 };
 </script>

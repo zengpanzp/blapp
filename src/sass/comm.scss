@@ -261,4 +261,25 @@ body,html{
   z-index: 10003;
 }
 
+// select
+.select-icon{
+  -webkit-appearance: none;
+  width: rem(46) !important;
+  height: rem(46) !important;
+  min-height: rem(46) !important;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin-right: rem(20);
+  margin-left: rem(20);
+  border-radius: 50%;
+  &:checked{
+    background-color: #e6133c;
+    border: 1px solid #e6133c;
+    background-image: url('../assets/form-checked.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50%;
+  }
+}
+
 

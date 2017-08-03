@@ -1,10 +1,10 @@
 <template>
-  <div class="bl-cell flex-m">
+  <router-link :to="{ name: '' }" :tag="tag" class="bl-cell flex-m">
     <div class="bl-cell-title">{{ title }}</div>
     <div class="bl-cell-input flex-item" :class="{ 'arrow-right': showArrowRight }">
       <slot name="cell-main"></slot>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -17,6 +17,10 @@ export default {
     showArrowRight: {
       type: Boolean,
       default: true
+    },
+    tag: {
+      type: String,
+      default: 'div'
     }
   }
 };
@@ -30,6 +34,7 @@ export default {
     font-size: rem(28);
     border-bottom: 1px solid #ddd;
     min-height: rem(88);
+    position: relative;
     .bl-cell-title{
       margin-right: rem(20);
     }
