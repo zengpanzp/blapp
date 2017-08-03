@@ -4,7 +4,7 @@
    <div class="section1">
      <div class="list">
       <ul>
-        <li class="first">
+        <li class="first" @click="avatar">
           <div>头像</div>
           <div class="up-img flex-item">
             <b>
@@ -12,7 +12,7 @@
               <i class="head iconfont arrow-back"></i>
             </b>
             <!-- 上传头像 -->
-            <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file">
+           <!--  <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file"> -->
           </div>
         </li>
         <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
@@ -134,6 +134,18 @@ export default {
   	})
   },
   methods: {
+    avatar() {
+      window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
+        // type: 'camera'
+      }, {success: data => {
+          console.log('success' + data)
+          // let image = JSON.parse { }
+        },
+        fail: () => {
+          console.log('fail')
+        }
+      })
+    },
     exit() {
       window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
         title: "提示",
