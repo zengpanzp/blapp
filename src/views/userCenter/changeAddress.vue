@@ -76,8 +76,8 @@ export default {
       if (this.provinceId) {
         reqData.selectedAddressData = {
           provinceId: this.provinceId,
-          cityId: this.city,
-          districtId: this.district,
+          cityId: this.cityId,
+          districtId: this.distirctId,
         }
       } else {
         if (this.myInfo.province && this.myInfo.city && this.myInfo.district) {
