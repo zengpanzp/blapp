@@ -19,6 +19,7 @@
             <div class="order-time">{{ product.datetime }}</div>
           </div>
           <div class="comment-content">
+            <div class="comment-tag" v-if="product.tags && product.tags.length"><span class="tag-item" v-for="item in product.tags">{{ item }}</span></div>
             <div class="comment">{{ product.comments }}</div>
             <div class="comment-pic">
               <div class="upload-pic-item" v-for="(item, index) in product.pictures">
@@ -31,9 +32,13 @@
               <div class="comment-date">购买日期:{{ product.orderTime }}</div>
               <div class="comment-thumif fill" v-if="product.isLike == '01'">({{ votes.good }})</div>
             </div>
+            <div class="comment-reply" v-if="product.reply && product.reply.length">【客服回复】<span class="tag-item" v-for="item in product.reply">{{ item }}</span></div>
           </div>
         </div>
-        <div class="comment-again"><span>【追评】</span>{{ commentAgain.content }}</div>
+        <div class="comment-again">
+          <span>【追评】</span>{{ commentAgain.content }}
+          <div class="comment-reply" v-if="commentAgain && commentAgain.reply && commentAgain.reply.length">【客服回复】<span class="tag-item" v-for="item in commentAgain.reply">{{ item.content }}</span></div>
+        </div>
       </div>
     </div>
   </div>

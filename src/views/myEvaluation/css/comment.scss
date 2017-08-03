@@ -174,7 +174,27 @@
   color: #999999;
   padding-left: rem(20);
   word-break: break-all;
-  span{
+  > span{
+    color: #e6133c;
+  }
+}
+
+.comment-reply{
+  font-size: rem(28);
+  color: gray;
+  margin-top: rem(10);
+  > span{
+    margin-right: 0;
+  }
+}
+.tag-item{
+  color: #e6133c;
+  font-size: rem(28);
+  margin-right: rem(10);
+  color: gray;
+}
+.comment-tag{
+  .tag-item{
     color: #e6133c;
   }
 }

@@ -177,22 +177,26 @@ export default {
       if (data.body.obj) {
         let obj = data.body.obj.replace(/http:\/\//g, "https://")
         let resData = JSON.parse(obj)
-        if (resData && resData.resultInfo && resData.resultInfo.rows) {
-          let resRow = resData.resultInfo.rows
-          if (resRow && resRow.length) {
-            this.loading = true
-            this.busy = false
-            this.list = this.list.concat(resRow)
-          }
-          if (resRow.length < 10) {
-            this.loading = false
-            this.busy = true
-          }
+        console.log(resData)
+        let resRow = []
+        if (resData.resultInfo && resData.resultInfo.rows) {
+          resRow = resData.resultInfo.rows
+        } else if (resData.resultInfo && resData.resultInfo.length > 0) {
+          resRow = resData.resultInfo
+        }
+        if (resRow && resRow.length) {
+          this.loading = true
+          this.busy = false
+          this.list = this.list.concat(resRow)
         } else if (once) {
           this.loading = false
           this.noRows = true
         } else {
           this.loading = false
+        }
+        if (resRow.length < 10) {
+          this.loading = false
+          this.busy = true
         }
       }
     },

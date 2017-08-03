@@ -21,6 +21,10 @@
           <div class="comment-title">请选择低分原因：</div>
           <div class="quice-box" v-for="item in lowValue"><input type="checkbox" name="" :value="item.value" v-model="lowModel"><span class="quice">{{ item.text }}</span></div>
         </div>
+        <div class="comment-because" v-if="product.tags">
+          <div class="comment-title">心得:</div>
+          <div class="quice-box" v-for="item in product.tags"><input type="checkbox" name="" :value="item" v-model="tagModel"><span class="quice">{{ item }}</span></div>
+        </div>
         <bl-comment ref="comment" placeholder="评价有积分，积分可抵现，快来给没有购买的小伙伴提供一些参考吧！" maxLength="250" v-model="messageBoole"></bl-comment>
       </div>
       <bl-upload ref="upload"></bl-upload>
@@ -58,6 +62,7 @@ export default {
         value: 'lscore'
       }],
       lowModel: [],
+      tagModel: [],
       star: 5,
       niMing: false,
       product: {},
@@ -88,7 +93,7 @@ export default {
           dscore: this.lowModel.indexOf('dscore') != -1 ? this.star : 5, // 描述符合评分
           sscore: this.lowModel.indexOf('sscore') != -1 ? this.star : 5, // 服务态度评分
           lscore: this.lowModel.indexOf('lscore') != -1 ? this.star : 5, // 物流速度评分
-          label: [], // 标签
+          label: this.tagModel, // 标签
           ip: '127.0.0.1',
           saleName: product.shopId,
           productName: product.productName,
