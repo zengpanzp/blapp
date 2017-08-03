@@ -73,11 +73,19 @@ export default {
         title: "修改地址",
         limitedProvinceIds: []
       }
-      if (this.myInfo.province && this.myInfo.city && this.myInfo.district) {
+      if (this.provinceId) {
         reqData.selectedAddressData = {
-          provinceId: this.myInfo.province,
-          cityId: this.myInfo.city,
-          districtId: this.myInfo.district,
+          provinceId: this.provinceId,
+          cityId: this.city,
+          districtId: this.district,
+        }
+      } else {
+        if (this.myInfo.province && this.myInfo.city && this.myInfo.district) {
+          reqData.selectedAddressData = {
+            provinceId: this.myInfo.province,
+            cityId: this.myInfo.city,
+            districtId: this.myInfo.district,
+          }
         }
       }
       console.log(reqData)
