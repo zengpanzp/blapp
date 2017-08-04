@@ -134,18 +134,6 @@ export default {
   	})
   },
   methods: {
-    avatar() {
-      window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
-        // type: 'camera'
-      }, {success: data => {
-          console.log('success' + data)
-          // let image = JSON.parse { }
-        },
-        fail: () => {
-          console.log('fail')
-        }
-      })
-    },
     exit() {
       window.CTJSBridge.LoadMethod('AlertController', 'showAlert', {
         title: "提示",
@@ -198,6 +186,34 @@ export default {
     },
     gender () {
       this.sheetVisible = true
+    },
+    avatar() {
+      window.CTJSBridge.LoadMethod('Camera', 'presentPickerView', {
+        // type: 'camera'
+      }, {success: data => {
+          console.log('success' + data)
+          api.userCenter.upload({
+            appId: 'BL_IBLAPP',
+            base64Content: data,
+            fileName: new Date().getTime(),
+            mediaType: 'jpg',
+            reSize: 0
+          }).then(res => {
+            if (res.body.obj) {
+              console.log('上传图片返回:', JSON.parse(res.body.obj))
+              let resData = JSON.parse(res.body.obj)
+              this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
+              console.log(this.avatarUrl)
+              this.updateGender()
+            } else {
+              this.$toast(res.body.msg)
+            }
+          })
+        },
+        fail: () => {
+          console.log('fail')
+        }
+      })
     },
     readImage(event) {
       this.inlineLoading = this.$toast({
