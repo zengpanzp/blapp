@@ -1,11 +1,11 @@
 <template>
   <div class="calendar-container">
-    <div class="calendar-header flex" :style="calendarHeaderStyle">
+    <div class="calendar-header flex">
       <div class="arrow flex-c-m" @click="subMonth"><div class="iconfont arrow-back"></div></div>
       <div class="date-box flex-item">{{ trueSelectYear }}年{{ trueSelectMonth }}月</div>
       <div class="arrow flex-c-m" @click="addMonth"><div class="iconfont arrow-back tran-right"></div></div>
     </div>
-    <div class="week flex" :style="[ weekStyle ]">
+    <div class="week flex">
       <div class="flex-item" v-for="(item, index) in week" :class="{weekend: index === 0 || index === 6}">{{ item }}</div>
     </div>
     <div class="days">
@@ -77,9 +77,7 @@ export default {
       default() {
         return {}
       }
-    },
-    calendarHeaderStyle: Object,
-    weekStyle: Object
+    }
   },
   methods: {
     subMonth() {
@@ -191,17 +189,13 @@ export default {
       let index = 0;
       let arr = [];
       // 该月份下星期几之前的下标都是上个月的日期
-      if (this.showLastDays) {
-        for (; index < this.firstDayInWeek; index++) {
-          arr.push(index)
-        }
+      for (; index < this.firstDayInWeek; index++) {
+        arr.push(index)
       }
       // 该月份下星期几加上总天数小于42之内的数据则是下个月的日期
-      if (this.showNextDays) {
-        index = this.firstDayInWeek + this.dayCount;
-        for (; index < 42; index++) {
-          arr.push(index);
-        }
+      index = this.firstDayInWeek + this.dayCount;
+      for (; index < 42; index++) {
+        arr.push(index);
       }
       return [...arr, ...this.unselectData]
     }
@@ -215,4 +209,4 @@ export default {
 };
 </script>
 
-<style lang="scss" src="./css/calendar.scss" scoped></style>
+<style lang="scss" src="./css/calendar.scss"></style>

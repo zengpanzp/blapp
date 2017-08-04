@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import calendar from 'components/iBailianApp/calendar/calendar'
 export default {
 
   name: 'calendarDemo',
@@ -13,9 +12,6 @@ export default {
       unselectData: [],
       selectDate: {}
     };
-  },
-  components: {
-    BlCalendar: calendar
   }
 };
 </script>

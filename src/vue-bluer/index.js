@@ -68,6 +68,10 @@ const install = function(Vue) {
   Vue.component('blPopselect', resolve => {
     require(['src/components/iBailianApp/popSelect/popSelect'], resolve)
   });
+  // bl-calendar
+  Vue.component('blCalendar', resolve => {
+    require(['src/components/iBailianApp/calendar/calendar'], resolve)
+  });
 
   Vue.component('bl' + tabContainer.name, tabContainer);
   Vue.component('bl' + tabContainerItem.name, tabContainerItem);

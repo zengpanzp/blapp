@@ -8,7 +8,7 @@
       <input slot="cell-main" type="tel" v-model="patientMobile" placeholder="请填写电话" name="">
     </bl-cell>
     <div class="cell-title">选择日期</div>
-    <bl-calendar ref="calendar" :unselectData="unselectData" v-model="selectDate" :limit="limit" :showNextDays="false" @changeMonth="changeMonth"></bl-calendar>
+    <bl-calendar ref="calendar" :unselectData="unselectData" v-model="selectDate" :limit="limit" :showNextDays="false" :showLastDays="false" @changeMonth="changeMonth"></bl-calendar>
     <div class="reserve-box" v-if="selectDate && selectDate.year">
       <div class="reserve-date">
         <div>{{ selectDate.month }}·{{ selectDate.days }}</div>
@@ -41,9 +41,6 @@ export default {
       now: new Date(),
       disabledDays: 7 // 几天后不能选
     };
-  },
-  components: {
-    BlCalendar: () => System.import('components/iBailianApp/calendar/calendar')
   },
   created() {
     this.limit = {
