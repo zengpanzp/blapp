@@ -12,7 +12,10 @@ import { prdRouter } from './prdRouter'
 let router = prdRouter
 
 if (process.env.NODE_ENV !== 'production') {
-  router = prdRouter.concat(require('./uiRouter').uiRouter)
+  router = prdRouter.concat(require('./uiRouter').uiRouter).concat(require('./componentsRouter').componentsRouter)
+}
+if (window.CTJSBridge.platform === 'H5') {
+  router = router.concat(require('./h5Router').h5Router)
 }
 Vue.use(Router)
 

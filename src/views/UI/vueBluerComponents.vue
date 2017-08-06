@@ -295,13 +295,6 @@ export default {
     }
   },
   computed: {
-    timeCoundDown() {
-      return 11
-    }
-  },
-  mounted() {
-    // this.buttonBottom = this.$refs.pupupButton.getBoundingClientRect().bottom;
-    this.$loading.close()
   }
 };
 </script>

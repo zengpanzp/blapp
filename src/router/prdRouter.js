@@ -3,7 +3,8 @@ export const prdRouter = [
   {
     path: '/flashSales',
     meta: {
-      title: '精品闪购'
+      title: '精品闪购',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/flashSale/flashSalesNew')), 'flashSales')
   },
@@ -16,7 +17,8 @@ export const prdRouter = [
   {
     path: '/electricMainPage',
     meta: {
-      title: '电器城'
+      title: '电器城',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/electricCity/electricHome')), 'electricMainPage')
   },
@@ -44,9 +46,10 @@ export const prdRouter = [
   /* 神马 签到 日签 */
   {
     path: '/sign/daysign',
-      meta: {
-        title: '每日福利'
-      },
+    meta: {
+      title: '每日福利',
+      guideLink: true
+    },
     component: r => require.ensure([], () => r(require('../views/sign/daysign')), 'daysign')
   },
   /* 神马 百联财礼 */
@@ -71,7 +74,8 @@ export const prdRouter = [
   {
     path: '/recharge',
     meta: {
-      title: '充值缴费'
+      title: '充值缴费',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/recharge/index')), 'index')
   },
@@ -164,7 +168,8 @@ export const prdRouter = [
   {
     path: '/giftCardHome',
     meta: {
-      title: '礼品卡'
+      title: '礼品卡',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/giftcard/giftcard-home')), 'giftCardHome')
   },
@@ -185,7 +190,8 @@ export const prdRouter = [
   {
     path: '/eCardList/:orderNo/:orderTime',
     meta: {
-      title: '电子卡详情'
+      title: '电子卡详情',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/E-card/ecardList')), 'eCardList')
   },
@@ -193,7 +199,8 @@ export const prdRouter = [
   {
     path: '/messageCenter',
     meta: {
-      title: '消息中心'
+      title: '消息中心',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/messageCenter/messageCenter')), 'messageCenter')
   },
@@ -207,7 +214,8 @@ export const prdRouter = [
   {
     path: '/myCollection',
     meta: {
-      title: '我的收藏'
+      title: '我的收藏',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/myCollection/collection')), 'myCollection')
   },
@@ -216,7 +224,8 @@ export const prdRouter = [
     path: '/userCenter/myInfo',
     meta: {
       title: '设置',
-      notLoading: true
+      notLoading: true,
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/userCenter/myInfo')), 'myInfo'),
   },
@@ -305,7 +314,8 @@ export const prdRouter = [
   {
     path: '/memberCard',
     meta: {
-      title: '百联通会员卡'
+      title: '百联通会员卡',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberCard/memberCard')), 'memberCard')
   },
@@ -321,7 +331,8 @@ export const prdRouter = [
   {
     path: '/myEvaluation',
     meta: {
-      title: '我的评价'
+      title: '我的评价',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/myEvaluation/evaluation')), 'myEvaluation')
   },
@@ -361,7 +372,8 @@ export const prdRouter = [
   {
     path: '/unicom',
     meta: {
-      title: '联通专区'
+      title: '联通专区',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/unicom/unicom')), 'unicom')
   },
@@ -369,7 +381,8 @@ export const prdRouter = [
   {
     path: '/myWallet',
     meta: {
-      title: '我的钱包'
+      title: '我的钱包',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/myWallet/myWallet')), 'myWallet')
   },
@@ -397,7 +410,8 @@ export const prdRouter = [
   {
     path: '/powerDetail',
     meta: {
-      title: '会员权益'
+      title: '会员权益',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/powerDetail')), 'powerDetail')
   },
@@ -406,7 +420,8 @@ export const prdRouter = [
     path: '/LtVipReserve',
     meta: {
       title: '龙腾贵宾室预约',
-      notLoading: true
+      notLoading: true,
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipReserve')), 'LtVipReserve')
   },
@@ -424,7 +439,8 @@ export const prdRouter = [
     path: '/expertReserve',
     meta: {
       title: '专家预约',
-      notLoading: true
+      notLoading: true,
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/expertReserve')), 'expertReserve')
   },
@@ -432,7 +448,8 @@ export const prdRouter = [
   {
     path: '/blprivilegeClub',
     meta: {
-      title: '更多权益'
+      title: '更多权益',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/blprivilegeClub')), 'blprivilegeClub')
   },
@@ -448,8 +465,9 @@ export const prdRouter = [
   {
     path: '/login',
       meta: {
-    title: '登录页面'
-  },
+      title: '登录页面',
+      guideLink: true
+    },
     component: r => require.ensure([], () => r(require('../views/login/login')), 'login')
   },
   /* 神马 ecp 联合登录 */
@@ -472,15 +490,17 @@ export const prdRouter = [
   {
     path: '/register',
       meta: {
-    title: '注册'
-  },
-  component: r => require.ensure([], () => r(require('../views/login/register')), 'register')
+      title: '注册',
+      guideLink: true
+    },
+    component: r => require.ensure([], () => r(require('../views/login/register')), 'register')
   },
   /* 郭健 转一转 */
   {
     path: '/lucky/:couponTemplateId/:couponCode/:ruleId/:isSigninFlag',
     meta: {
-      title: '转一转'
+      title: '转一转',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/lucky/lucky')), 'lucky')
   },
@@ -488,7 +508,8 @@ export const prdRouter = [
   {
     path: '/integralExchange',
     meta: {
-      title: '选择积分互换商户'
+      title: '选择积分互换商户',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/integralExchange')), 'integralExchange')
   },
@@ -501,7 +522,8 @@ export const prdRouter = [
   {
     path: '/afterSale',
     meta: {
-      title: '售后单列表'
+      title: '售后单列表',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/afterSale')), 'afterSale')
   },
@@ -527,7 +549,8 @@ export const prdRouter = [
     path: '/seeMore/:goods',
     name: 'seeMore',
     meta: {
-      title: '售后商品列表'
+      title: '售后商品列表',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/seeMore')), 'seeMore')
   },
@@ -536,7 +559,8 @@ export const prdRouter = [
     path: '/applyAftersale',
     name: 'applyAftersale',
     meta: {
-      title: '申请售后服务'
+      title: '申请售后服务',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/applyAftersale')), 'applyAftersale')
   },
@@ -562,7 +586,8 @@ export const prdRouter = [
   {
     path: '/code',
     meta: {
-      title: '退货码'
+      title: '退货码',
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/afterSale/code')), 'code')
   }

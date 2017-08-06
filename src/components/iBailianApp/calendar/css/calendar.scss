@@ -6,116 +6,119 @@ $unselectColor: #ccc;
 $selectColor: #fff;
 $selectBgColor: #feb600;
 
-.tran-right{
-  -webkit-transform: rotate(180deg);
-  transform: rotate(180deg);
-}
-.calendar-header{
-  .arrow{
-    width: rem(88);
-    line-height: rem(88);
-    text-align: center;
-    font-family: 'SimHei';
-    font-size: rem(40);
-    color: #666;
-    &:active{
-      opacity: .6;
+.calendar-container{
+  .tran-right{
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+  .calendar-header{
+    .arrow{
+      width: rem(88);
+      line-height: rem(88);
+      text-align: center;
+      font-family: 'SimHei';
+      font-size: rem(40);
+      color: #666;
+      &:active{
+        opacity: .6;
+      }
+    }
+    .date-box{
+      text-align: center;
+      line-height: rem(88);
+      font-size: rem(36);
+      color: #999;
     }
   }
-  .date-box{
-    text-align: center;
-    line-height: rem(88);
-    font-size: rem(36);
-    color: #999;
-  }
-}
 
-.week{
-  background-color: #feb600;
-  color: #fff;
-  .flex-item{
-    line-height: rem(88);
-    text-align: center;
-    font-size: rem(30);
+  .week{
+    background-color: #feb600;
+    color: #fff;
+    .flex-item{
+      line-height: rem(88);
+      text-align: center;
+      font-size: rem(30);
+    }
   }
-}
 
-.days{
-  overflow-y: hidden;
-  font-size: rem(32);
-  .days-item{
-    display: inline-block;
-    float: left;
-    width: 14.2857%;
-    text-align: center;
-    color: #333;
-    position: relative;
-    .cal-tag{
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      font-style: normal;
-      font-weight: normal;
-      font-size: rem(24);
+  .days{
+    overflow-y: hidden;
+    font-size: rem(32);
+    .days-item{
+      display: inline-block;
+      float: left;
+      width: 14.2857%;
+      text-align: center;
       color: #333;
-    }
-    i{
-      line-height: 1;
-    }
-    &.weekend{
-      color: $weekendColor;
-      // 周六和周日的样式
-    }
-    &.unselect{
-      // 不能选中的样式
-      color: $unselectColor;
-    }
-    &.select{
-      &:before{
-        content: '';
+      position: relative;
+      .cal-tag{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        font-style: normal;
+        font-weight: normal;
+        font-size: rem(24);
+        color: #333;
+      }
+      i{
+        line-height: 1;
+      }
+      &.weekend{
+        color: $weekendColor;
+        // 周六和周日的样式
+      }
+      &.unselect{
+        // 不能选中的样式
+        color: $unselectColor;
+      }
+      &.select{
+        &:before{
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          z-index: 100;
+          width: rem(66);
+          height: rem(66);
+          background: $selectBgColor url('../i/select.png') center center no-repeat;
+          background-size: rem(28) auto;
+          -webkit-animation: fadeOut .8s ease;
+          animation: fadeOut .8s ease;
+          opacity: 0;
+        }
+        // 选中的样式
+        i{
+          width: rem(66);
+          height: rem(66);
+          background: $selectBgColor;
+          border-radius: 50%;
+          padding: rem(18) 0;
+          text-align: center;
+          color: $selectColor;
+        }
+      }
+      i{
         position: absolute;
         top: 50%;
         left: 50%;
         -webkit-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
-        border-radius: 50%;
-        z-index: 100;
-        width: rem(66);
-        height: rem(66);
-        background: $selectBgColor url('../i/select.png') center center no-repeat;
-        background-size: rem(28) auto;
-        -webkit-animation: fadeOut .8s ease;
-        animation: fadeOut .8s ease;
-        opacity: 0;
+        font-style: normal;
       }
-      // 选中的样式
-      i{
-        width: rem(66);
-        height: rem(66);
-        background: $selectBgColor;
-        border-radius: 50%;
-        padding: rem(18) 0;
-        text-align: center;
-        color: $selectColor;
+      &:after{
+        content: '';
+        display: block;
+        padding-top: 100%;
       }
-    }
-    i{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -webkit-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-      font-style: normal;
-    }
-    &:after{
-      content: '';
-      display: block;
-      padding-top: 100%;
-    }
-    &.unselect{
-      color: #cccccc;
+      &.unselect{
+        color: #cccccc;
+      }
     }
   }
 }
+

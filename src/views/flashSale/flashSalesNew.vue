@@ -161,6 +161,7 @@ export default {
     }
   },
   activated() {
+    this.loaded && this.$loading.close()
     // sensor analytics
     try {
       console.log((new Date()).toLocaleString())

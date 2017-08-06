@@ -28,43 +28,62 @@ import Cell from './cell'
 import scrollRecord from './route-data/scroll-record'
 const install = function(Vue) {
   if (install.installed) return;
-  // Vue.component('bl' + Bar.name, Bar);
-  // Vue.component('bl' + Switch.name, Switch);
+  // bl-switch
+  Vue.component('blSwitch', resolve => {
+    require(['./switch'], resolve)
+  });// bl-bar
   Vue.component('blBar', resolve => {
     require(['./bar'], resolve)
   });
+  // bl-button
   Vue.component('blButton', resolve => {
     require(['./button'], resolve)
   });
+  // bl-actionsheet
   Vue.component('blActionsheet', resolve => {
     require(['./actionsheet'], resolve)
   });
+  // bl-popup
   Vue.component('blPopup', resolve => {
     require(['./popup'], resolve)
   });
+  // bl-slide
   Vue.component('blSlide', resolve => {
     require(['./slide'], resolve)
   });
+  // bl-swipeout
   Vue.component('blSwipeout', resolve => {
     require(['./swipeout/swipeout'], resolve)
   });
+  // bl-swipeout-item
   Vue.component('blSwipeoutItem', resolve => {
     require(['./swipeout/swipeout-item'], resolve)
   });
+  // bl-swipeout-button
   Vue.component('blSwipeoutButton', resolve => {
     require(['./swipeout/swipeout-button'], resolve)
   });
+  // bl-picker
+  Vue.component('blPicker', resolve => {
+    require(['./picker/picker'], resolve)
+  });
+  // bl-datetime-picker
+  Vue.component('blDatetimePicker', resolve => {
+    require(['./datetime-picker'], resolve)
+  });
+  // bl-upload
   Vue.component('blUpload', resolve => {
     require(['src/components/iBailianApp/comment/comment-upload'], resolve)
   });
+  // bl-comment
   Vue.component('blComment', resolve => {
     require(['src/components/iBailianApp/comment/comment-textarea'], resolve)
   });
-  // slide-bar
+  // bl-slide-bar
   Vue.component('blSlideBar', resolve => {
     require(['src/components/iBailianApp/slideBar/bl-slide-bar'], resolve)
   });
-  // pop-select
+  // bl-popselect
   Vue.component('blPopselect', resolve => {
     require(['src/components/iBailianApp/popSelect/popSelect'], resolve)
   });
