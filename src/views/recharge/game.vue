@@ -249,9 +249,6 @@
         serverInfo: undefined
       }
     },
-    components: {
-      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
-    },
     created() {
       this.tabItem = this.tab[0]
       this.$loading.close()

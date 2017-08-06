@@ -14,7 +14,7 @@
       </div>
       <div class="right-down" :class="{ active: isOpen }" @click="isOpen = !isOpen"></div>
     </div>
-    <ele-card class="card-margin" :item="eItem" v-if="load"></ele-card>
+    <bl-ele-card class="card-margin" :item="eItem" v-if="load"></bl-ele-card>
     <div v-show="!load" class="card-wrap">
       <h5 class="cwrap-title">{{ cwrapTitle }}</h5>
       <bl-card-list v-if="jumpId" :jumpId="jumpId" @finish="inlineLoading && inlineLoading.close()"></bl-card-list>
@@ -32,12 +32,6 @@ let fnScroll = (el) => {
 export default {
 
   name: 'giftcard-theme',
-
-  components: {
-    'eleCard': () => System.import('./_eleCard'),
-    'blShopCard': () => System.import('src/components/iBailianApp/shopCard'),
-    'blCardList': () => System.import('./_cardLIst'),
-  },
 
   data () {
     return {

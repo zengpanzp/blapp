@@ -92,6 +92,36 @@ const install = function(Vue) {
     require(['src/components/iBailianApp/calendar/calendar'], resolve)
   });
 
+  /* 充值缴费字母表组件 */
+  // bl-sort-listView
+  Vue.component('blSortListView', resolve => {
+    require(['src/components/iBailianApp/sortListView/sortList'], resolve)
+  });
+  // bl-home-menu
+  Vue.component('blHomeMenu', resolve => {
+    require(['src/views/recharge/_home'], resolve)
+  });
+
+  /* 签到日历组件 */
+  // bl-sign-calendar
+  Vue.component('blSignCalendar', resolve => {
+    require(['src/views/sign/calendar/calendar'], resolve)
+  });
+
+  /* 礼品卡组件 */
+  // bl-shop-card
+  Vue.component('blShopCard', resolve => {
+    require(['src/components/iBailianApp/shopCard'], resolve)
+  });
+  // bl-ele-card
+  Vue.component('blEleCard', resolve => {
+    require(['src/views/giftcard/_eleCard'], resolve)
+  });
+  // bl-card-list
+  Vue.component('blCardList', resolve => {
+    require(['src/views/giftcard/_cardList'], resolve)
+  });
+
   Vue.component('bl' + tabContainer.name, tabContainer);
   Vue.component('bl' + tabContainerItem.name, tabContainerItem);
   Vue.component('bl' + Cell.name, Cell);

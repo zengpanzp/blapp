@@ -29,9 +29,6 @@
   import CONST from 'src/const'
 export default {
   name: 'index',
-  components: {
-    'blHomeMenu': () => System.import('./_home')
-  },
   data() {
     return {
       show: false,

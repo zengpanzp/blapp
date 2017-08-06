@@ -127,9 +127,6 @@
   export default {
 
     name: 'bill',
-    components: {
-      'blHomeMenu': () => System.import('./_home')
-    },
     data() {
       return {
         buttons: [{

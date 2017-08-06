@@ -7,9 +7,9 @@
     <div class="overlay test" @touchmove.prevent v-show="showOverlay"></div>
     <img class="fail" @click="goIndex" @touchmove.prevent src="./i/fail.png" v-if="fail">
     <div class="overlay" @touchmove.prevent v-show="showSignRemark" style="z-index: 9997;"></div>
-    <bl-calendar class="dcalendar" id="ccalendar" v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
+    <bl-sign-calendar class="dcalendar" id="ccalendar" v-show="showCalendar" @click="getCalendarHistory" :signInList="signInList" :afterLotteryList="afterLotteryList" :lotteryList="lotteryList" :show-calendar="showCalendar" :start-date="startDate" :end-date="endDate" max-date="1m"
                 :is-double-check=true :is-vication=true>
-    </bl-calendar>
+    </bl-sign-calendar>
     <section class="dheader" :style="{'background-image':'url('+signBg+')'}">
       <div class="tips">
         <div>{{message1}}</div>
@@ -176,9 +176,6 @@
           signRuleCode: '', // 抽奖规则ID
           hasLottery: false // 是否是已抽奖
       }
-    },
-    components: {
-      'blCalendar': () => System.import('./calendar/calendar')
     },
     computed: {
     },

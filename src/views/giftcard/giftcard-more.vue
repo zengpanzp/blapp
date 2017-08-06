@@ -29,10 +29,6 @@
         }
       }
     },
-    components: {
-      'blCardList': () => System.import('./_cardLIst'),
-      'blShopCard': () => System.import('src/components/iBailianApp/shopCard'),
-    },
     created() {
       document.title = decodeURI(this.$route.query.themeName)
       window.CTJSBridge && window.CTJSBridge._setNativeTitle(decodeURI(this.$route.query.themeName))

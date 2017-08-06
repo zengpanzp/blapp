@@ -28,7 +28,7 @@
                         <div v-for="item in panel"  class="month-panel">
                             <div class="month-list">
                                 <ul>
-                                    <li @click.prevent="selectedFunc" v-for="day in item.days" date-sec="new Date(day).getTime() || ''" :class="{'selected-star': isStartDate == new Date(day).getTime(),
+                                    <li v-for="day in item.days" date-sec="new Date(day).getTime() || ''" :class="{'selected-star': isStartDate == new Date(day).getTime(),
     //                                            'selected-end': isEndDate == new Date(day).getTime(),
     //                                            'selected-line': isStartDate < new Date(day).getTime() && new Date(day).getTime() < isEndDate,
     //                                            'disabled': today > new Date(day).getTime() || new Date(day).getTime() > lastDay,

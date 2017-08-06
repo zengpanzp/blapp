@@ -29,8 +29,8 @@
               <div class="account"><input v-model="phone" type="text" placeholder="请输入联系号码"></div>
             </li>
           </ul>
-          <bl-action-sheet :actions="actions" v-model="sheetVisible" modal="true">
-          </bl-action-sheet>
+          <bl-actionsheet :actions="actions" v-model="sheetVisible" modal="true">
+          </bl-actionsheet>
           <div class="phoneFixBottom">
             <div class="config-button-contain">
               <button class="edit-config-button middleFont" @click="next" :disabled="isCantouch">
@@ -48,11 +48,6 @@
   export default {
 
     name: 'addAccount',
-
-    components: {
-      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList'),
-      'blActionSheet': () => System.import('src/vue-bluer/actionsheet/index')
-    },
 
     data() {
       return {

@@ -57,10 +57,6 @@ export default {
 
   name: 'keepgiftcard-home',
 
-  components: {
-    'blShopCard': () => System.import('src/components/iBailianApp/shopCard')
-  },
-
   data () {
     return {
       loaded: false,

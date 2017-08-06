@@ -49,10 +49,6 @@
 
     name: 'rates',
 
-    components: {
-      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
-    },
-
     data() {
       return {
         groupId: 0,  // 分组id

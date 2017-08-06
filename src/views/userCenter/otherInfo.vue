@@ -1,24 +1,14 @@
 <template>
   <div class="wholepage">
-    <bl-popup v-model="showModel" position="right" class="sxerji">
-      <div class="topHeader">
-        <a class="cancel" @click="[showModel = false]">取消</a>
-        <a class="ok" @click="[showModel = false, confirmHandle()]">
-          <svg class="icon"><use xlink:href="#icon-check"></use></svg>确认
-        </a>
-      </div>
-      <div class="serviceWrap">
-        <div class="priceSelect">
-          <ul id="flashSale_brand">
-            <li v-for="item in list">
-              <input class="filter-input" type="checkbox" :value="item.value" name="filter" v-model="value" v-if="isMutil">
-              <input class="filter-input" type="radio" :value="item.value" name="filter" v-model="value" v-else>
-              <a href="javascript:;">{{ item.label }}<svg class="icon"><use xlink:href="#icon-check"></use></svg></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </bl-popup>
+    <bl-slide-bar
+      :showModal="showModel"
+      @modalChange="showModel = $event"
+      :list="list"
+      :value="value"
+      @input="[value = $event, confirmHandle()]"
+      :isMutil="isMutil"
+      title="">
+    </bl-slide-bar>
     <div class="section1" v-for="item in desTitle">
      <div class="list">
       <ul>

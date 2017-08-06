@@ -44,9 +44,6 @@
   export default {
 
     name: 'linetv',
-    components: {
-      'blSortListView': () => System.import('src/components/iBailianApp/sortListView/sortList')
-    },
     data() {
       return {
         type: "ds", // 默认为有线电视
