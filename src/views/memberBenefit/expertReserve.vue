@@ -12,7 +12,7 @@
     <bl-cell title="日期" @click.native="selectDateHandle">
       <input class="select-main" slot="cell-main" :value="selectDate.year && `${selectDate.year}-${selectDate.month}-${selectDate.days}`" type="text" placeholder="请选择就诊日期" readonly>
     </bl-cell>
-    <bl-cell title="时间">
+    <bl-cell title="时间" @click.native="selectTimeHandle">
       <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊时间" readonly>
     </bl-cell>
     <bl-button type="expert-btn" :disabled="true">立即预约</bl-button>
@@ -42,6 +42,23 @@
       v-model="selectDate"
       :selectCalendar="true">
     </bl-popselect>
+    <bl-popselect
+      title="选择就诊时间"
+      :showModal="showModalDepTime"
+      @on-hide="showModalDepTime = $event">
+      <div class="select-time-box" slot="select-slot">
+        <div class="select-time-item flex-space flex-m">
+          <div class="select-item-left">
+            <div class="yu-title">预约日期：8月17日 (周四)</div>
+            <div class="yu-text">剩余号源：<span class="yu-num">5</span>个</div>
+          </div>
+          <div class="select-item-right">
+            <div class="time-btn active">上午</div>
+            <div class="time-btn">上午</div>
+          </div>
+        </div>
+      </div>
+    </bl-popselect>
   </div>
 </template>
 
@@ -56,9 +73,10 @@ export default {
       ruleCode: '20160624152997',
       address: '',
       addressInfo: {},
-      showModal: false,
-      showModalDep: false,
-      showModalDate: false,
+      showModal: false, // 医院
+      showModalDep: false, // 科室
+      showModalDate: false, // 日期
+      showModalDepTime: false, // 时间
       hospital: null, // 医院
       hospitalList: [],
       departmentname: null, // 科室
@@ -69,6 +87,8 @@ export default {
       selectDate: {},
       limit: {},
       disabledDays: 5, // 几天后不能选
+
+      morningAfternoon: 1, // 1上午，2下午
 
       inlineLoading: null
     };
@@ -129,26 +149,68 @@ export default {
       if (this.hospitalList && this.hospitalList.length) {
         this.showModal = true
       } else {
-        this.$toast('请先选择地区')
+        this.showMessage()
       }
     },
     selectDepartment() {
       if (this.departmentList && this.departmentList.length) {
         this.showModalDep = true
       } else {
-        this.$toast('请先选择医院')
+        this.showMessage()
       }
     },
     selectDateHandle() {
-      if (this.hospitalList && this.hospitalList.length) {
-        if (this.departmentList && this.departmentList.length) {
-          this.showModalDate = true
-        } else {
-          this.$toast('请先选择医院')
-        }
+      if (this.address && this.hospital) {
+        this.showModalDate = true
       } else {
-        this.$toast('请先选择地区')
+        this.showMessage()
       }
+    },
+    selectTimeHandle() {
+      if (this.address && this.hospital) {
+        api.queryRemainResourceNum({
+          ruleCode: this.ruleCode,
+          supplierCode: '001',
+          supplierName: this.hospital.label,
+          deptCatCode: this.departmentname.value,
+          deptCat: this.departmentname.label,
+          bookDate: `${this.selectDate.year}${this.selectDate.month}${this.selectDate.days}`,
+          morningAfternoon: this.morningAfternoon
+        }).then(res => {
+          if (res.body.obj) {
+            let resData = JSON.parse(res.body.obj)
+            console.log('选择时间：', resData)
+            if (resData.length) {
+              this.showModalDepTime = true
+            } else {
+              this.$toast('没有所选日期的号源')
+            }
+          } else {
+            this.$toast(res.body.msg)
+          }
+        })
+      } else {
+        this.showMessage()
+      }
+    },
+    showMessage() {
+      if (!this.address) {
+        this.$toast('请先选择地区')
+        return false
+      }
+      if (!this.hospital) {
+        this.$toast('请先选择医院')
+        return false
+      }
+      if (!this.departmentname) {
+        this.$toast('请先选择科室')
+        return false
+      }
+      if (!this.selectDate.days) {
+        this.$toast('请先选择日期')
+        return false
+      }
+      return true
     }
   },
   computed: {
@@ -291,6 +353,44 @@ export default {
     }
     .days .days-item.select:before,.days .days-item.select i{
       background-color: #39ca74;
+    }
+  }
+
+  .select-time-box{
+    background-color: #fff;
+    .select-time-item{
+      padding: rem(30) 0;
+      margin: 0 rem(30);
+      border-bottom: 1px solid #e9e9e9;
+      color: #2a2a2a;
+      .yu-title{
+        font-size: rem(30);
+      }
+      .yu-text{
+        font-size: rem(28);
+        .yu-num{
+          color: #39ca74;
+        }
+      }
+      &:last-child{
+        border-bottom: 0;
+      }
+      .select-item-right{
+        font-size: 0;
+        .time-btn{
+          display: inline-block;
+          border: 1px solid #efefef;
+          border-radius: rem(8);
+          padding: rem(18) rem(25);
+          margin-left: rem(15);
+          font-size: rem(28);
+          &.active{
+            background-color: #39ca74;
+            border: 1px solid #39ca74;
+            color: #fff;
+          }
+        }
+      }
     }
   }
 </style>

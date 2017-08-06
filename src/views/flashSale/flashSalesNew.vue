@@ -1,73 +1,75 @@
 <style lang="scss" src="./css/_flashSales.scss" scoped></style>
 <template>
-  <div class="flash-sales" id="container" v-scroll-top v-scroll-record>
-    <!-- 轮播图 -->
-    <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
-    <!-- end -->
-    <!-- 分类 -->
-    <div class="navigation tab-box-sticky">
-      <ul class="ovfs hide-scrollbar flash-ovfs">
-        <li class="ovfs-item" :class="{ active: isActive == 'j' }" @click="selectCate('j', undefined, '今日上新')">
-          <p>今日上新</p>
-        </li>
-        <li class="ovfs-item" :class="{ active: isActive == item.flashCategories}" v-if="item.flashCategoriesName != '闪购首页'" v-for="(item, index) in queryCate" @click="selectCate(item.flashCategories, item.flashCategories, item.flashCategoriesName, item)">
-          <p v-text="item.flashCategoriesName"></p>
-        </li>
-        <li class="ovfs-item" :class="{ active: isActive == 'z' }" @click="selectCate('z', undefined, '最后疯抢')">
-          <p>最后疯抢</p>
-        </li>
-        <li class="ovfs-item" :class="{ active: isActive == 'p' }" @click="selectCate('p', undefined, 品牌预告)">
-          <p>品牌预告</p>
-        </li>
-      </ul>
-    </div>
-    <!-- <iframe v-if="miniUrl" :src="miniUrl.replace(/^http:/, '')" id="Iframe" frameborder="0" scrolling="yes" style="border:0px; width:100%;"></iframe> -->
-    <!-- end -->
-    <!-- 闪购商品列表 -->
-    <div class="flash-list" v-infinite-scroll="getList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-      <template>
-        <div class="todynew" v-for="item in filterGetFlashDetailData">
-          <div class="todynew-img">
-            <div class="wumengcen" v-if="item.pictures">
-              <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="(picturesUrl || '').replace(/^http:/, '')"></div>
-              <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + isStart(item.effectiveStart) }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
-                <img v-lazy.container="{ src: (picturesUrl || '').replace(/^http:/, '') }" alt="">
-                <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
-              </router-link>
-              <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
-            </div>
-            <div class="D" v-if="isActive === 'z'" v-text="timeCoundDown(item.effectiveEnd)"></div>
-            <div class="D" v-else-if="isActive === 'p'" v-text="timeCoundNotice(item.effectiveStart)"></div>
-            <div class="bottom-todynew">
-              <div class="le-fonts"><img :src="(item.brandList[0].brandLogo || '').replace(/^http:/, '')" :alt="item.brandList[0].brandNameCN"></div>
-              <div class="dd-fonts">
-                <div class="le2-fonts" v-text="item.flashName"></div>
-                <div class="tian-number" v-if="isActive === 'p' || isActive === 'z'"></div>
-                <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
+  <div>
+    <div class="flash-sales" id="container" v-scroll-top v-scroll-record>
+      <!-- 轮播图 -->
+      <bl-slide class="flash-swipe" :slides="allSlides" :autoPlay="true"></bl-slide>
+      <!-- end -->
+      <!-- 分类 -->
+      <div class="navigation tab-box-sticky">
+        <ul class="ovfs hide-scrollbar flash-ovfs">
+          <li class="ovfs-item" :class="{ active: isActive == 'j' }" @click="selectCate('j', undefined, '今日上新')">
+            <p>今日上新</p>
+          </li>
+          <li class="ovfs-item" :class="{ active: isActive == item.flashCategories}" v-if="item.flashCategoriesName != '闪购首页'" v-for="(item, index) in queryCate" @click="selectCate(item.flashCategories, item.flashCategories, item.flashCategoriesName, item)">
+            <p v-text="item.flashCategoriesName"></p>
+          </li>
+          <li class="ovfs-item" :class="{ active: isActive == 'z' }" @click="selectCate('z', undefined, '最后疯抢')">
+            <p>最后疯抢</p>
+          </li>
+          <li class="ovfs-item" :class="{ active: isActive == 'p' }" @click="selectCate('p', undefined, 品牌预告)">
+            <p>品牌预告</p>
+          </li>
+        </ul>
+      </div>
+      <!-- <iframe v-if="miniUrl" :src="miniUrl.replace(/^http:/, '')" id="Iframe" frameborder="0" scrolling="yes" style="border:0px; width:100%;"></iframe> -->
+      <!-- end -->
+      <!-- 闪购商品列表 -->
+      <div class="flash-list" v-infinite-scroll="getList" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+        <template>
+          <div class="todynew" v-for="item in filterGetFlashDetailData">
+            <div class="todynew-img">
+              <div class="wumengcen" v-if="item.pictures">
+                <div class="small-bg flex-c-m" v-if="picturesType === 90" v-for="{ picturesType, picturesUrl } in item.pictures"><img :src="(picturesUrl || '').replace(/^http:/, '')"></div>
+                <router-link :to="{ path: '/flashsaleproductspage/' + item.flashId + '/' + isStart(item.effectiveStart) }" v-if="picturesType === 10" v-for="({ picturesType, picturesUrl }, index) in item.pictures">
+                  <img v-lazy.container="{ src: (picturesUrl || '').replace(/^http:/, '') }" alt="">
+                  <div class="mengcen-bg" v-if="isActive === 'p' || isActive === 'z'"></div>
+                </router-link>
+                <div class="jian juan"><span>{{ item.flashAdvertisement }}</span></div>
               </div>
-              <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
-              <div class="ri-fonts" v-else><span v-text="item.advValue"></span>元起</div>
+              <div class="D" v-if="isActive === 'z'" v-text="timeCoundDown(item.effectiveEnd)"></div>
+              <div class="D" v-else-if="isActive === 'p'" v-text="timeCoundNotice(item.effectiveStart)"></div>
+              <div class="bottom-todynew">
+                <div class="le-fonts"><img :src="(item.brandList[0].brandLogo || '').replace(/^http:/, '')" :alt="item.brandList[0].brandNameCN"></div>
+                <div class="dd-fonts">
+                  <div class="le2-fonts" v-text="item.flashName"></div>
+                  <div class="tian-number" v-if="isActive === 'p' || isActive === 'z'"></div>
+                  <div class="tian-number" v-else v-text="timeCoundDown(item.effectiveEnd)"></div>
+                </div>
+                <div class="ri-fonts" v-if="item.advType == 0"><span v-text="item.advValue"></span>折起</div>
+                <div class="ri-fonts" v-else><span v-text="item.advValue"></span>元起</div>
+              </div>
             </div>
           </div>
+        </template>
+        <div class="infinite-layer" v-if="loading">
+          <div class="infinite-preloader"></div>
+          <div>加载中...</div>
         </div>
-      </template>
-      <div class="infinite-layer" v-if="loading">
-        <div class="infinite-preloader"></div>
-        <div>加载中...</div>
+        <div class="no-flash-list" v-if="showNo">暂时没有该闪购活动</div>
       </div>
-      <div class="no-flash-list" v-if="showNo">暂时没有该闪购活动</div>
-    </div>
-    <!-- end -->
-    <!-- bottom -->
-    <div class="bot-shangou">
-      <div class="title-todynew todynew2">
-        <div>
-          <span>i百联精品闪购</span>
+      <!-- end -->
+      <!-- bottom -->
+      <div class="bot-shangou">
+        <div class="title-todynew todynew2">
+          <div>
+            <span>i百联精品闪购</span>
+          </div>
         </div>
+        <div class="bot-fonts">每天10点惊喜诞生</div>
       </div>
-      <div class="bot-fonts">每天10点惊喜诞生</div>
+      <!-- bottom end-->
     </div>
-    <!-- bottom end-->
   </div>
 </template>
 <script>
@@ -117,7 +119,6 @@ export default {
     }).then(res => {
       if (res.body.obj) {
         let resData = JSON.parse(res.body.obj).obj
-        console.log(resData)
         this.allSlides = resData.otherResource[0].advList
         this.$nextTick(() => {
           this.scrollFixed()

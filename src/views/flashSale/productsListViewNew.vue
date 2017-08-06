@@ -1,58 +1,6 @@
 <style lang="scss" src="./css/_productsListView.scss" scoped></style>
 <template>
-  <div class="flash-list new page-view" v-infinite-scroll="getListGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10" v-scroll-top>
-    <div class="quickbuy-active">
-      <ul>
-        <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
-          <a href="javascript:;">
-            <img :src="(picturesUrl || '').replace(/^http:/, '')" alt="">
-          </a>
-          <div class="quickbuy-active-titles">
-            <div class="active-store-logo" v-if="flashSalesGoods.brandList">
-              <img :src="(flashSalesGoods.brandList[0].brandLogo || '').replace(/^http:/, '')" :alt="flashSalesGoods.brandList[0].brandNameCN">
-            </div>
-            <div class="active-title-detail">
-              <div class="active-detail-container">
-                <p>{{ flashSalesGoods.flashName }}</p>
-                <p class="discount-store-text">{{ flashSalesGoods.flashAdvertisement }}</p>
-                <p class="discount-num">
-                  <label v-if="flashSalesGoods.advType == 0">{{ flashSalesGoods.advValue }}折起</label>
-                  <label v-else>{{ flashSalesGoods.advValue }}元起</label>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="quickbuy-log" v-if="picturesType === 16" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
-            <img :src="(picturesUrl || '').replace(/^http:/, '')">
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="flashtitle">
-      <div class="title-head"></div>
-      <div class="countdown">{{ days + hours + minutes + seconds + flag }}</div>
-    </div>
-    <div id="flashProductsList">
-      <ul class="index-productlist">
-        <template v-for="item in filterlistGoodsData">
-          <li v-go-native-goods-detail="item[0]" :disabled="$route.params.isStart == 0" @click="sensorGoods(item[0], $route.params.isStart)">
-            <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
-              <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
-              <div class="lazy-box">
-                <img class="square-lazy" v-lazy="{ src: (item[0].goodsImgPath || '').replace(/^http:/, ''), loading: require('src/assets/square_banner_loading.png'), error: require('src/assets/square_banner_loading.png') }" alt="">
-              </div>
-              <h3>{{ item[0].goodsMsg }}</h3>
-              <p><span class="price"><span>¥</span>{{ $route.params.isStart == 0 ? '???' : item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
-            </a>
-          </li>
-        </template>
-      </ul>
-      <div class="infinite-layer" v-if="loading">
-        <div class="infinite-preloader"></div>
-        <div>加载中...</div>
-      </div>
-      <div class="no-goods" v-if="noGoods">当前闪购活动没有商品</div>
-    </div>
+  <div class="flash-list new">
     <div class="product-filter">
       <ul class="flex">
         <li :class="{ selected: isSelect === 1 }" @click="selected(1)"><div class="flex-c-m">默认</div></li>
@@ -69,24 +17,69 @@
         <li @click="showModel = true"><div class="flex-c-m">筛选</div></li>
       </ul>
     </div>
-    <bl-popup v-model="showModel" position="right" class="sxerji">
-      <div class="topHeader" ref="topHeader">
-        <a class="cancel" @click="showModel = false">取消</a><span>筛选</span><a class="ok" @click="[showModel = false, sureFilter()]"><svg class="icon"><use xlink:href="#icon-check"></use></svg>确认</a>
+    <bl-slide-bar
+      :showModal="showModel"
+      @modalChange="showModel = $event"
+      :list="brandList"
+      :value="brandSid"
+      @input="[brandSid = $event, sureFilter()]"
+      :isMutil="true"
+      :showReset="true">
+    </bl-slide-bar>
+    <div class="page-view" id="container" v-infinite-scroll="getListGoods" infinite-scroll-disabled="busy" infinite-scroll-distance="10" v-scroll-top>
+      <div class="quickbuy-active">
+        <ul>
+          <li v-if="picturesType === 11" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
+            <a href="javascript:;">
+              <img :src="(picturesUrl || '').replace(/^http:/, '')" alt="">
+            </a>
+            <div class="quickbuy-active-titles">
+              <div class="active-store-logo" v-if="flashSalesGoods.brandList">
+                <img :src="(flashSalesGoods.brandList[0].brandLogo || '').replace(/^http:/, '')" :alt="flashSalesGoods.brandList[0].brandNameCN">
+              </div>
+              <div class="active-title-detail">
+                <div class="active-detail-container">
+                  <p>{{ flashSalesGoods.flashName }}</p>
+                  <p class="discount-store-text">{{ flashSalesGoods.flashAdvertisement }}</p>
+                  <p class="discount-num">
+                    <label v-if="flashSalesGoods.advType == 0">{{ flashSalesGoods.advValue }}折起</label>
+                    <label v-else>{{ flashSalesGoods.advValue }}元起</label>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="quickbuy-log" v-if="picturesType === 16" v-for="({ picturesType, picturesUrl }, index) in flashSalesGoods.pictures">
+              <img :src="(picturesUrl || '').replace(/^http:/, '')">
+            </div>
+          </li>
+        </ul>
       </div>
-      <div class="serviceWrap">
-        <div class="priceSelect">
-          <ul id="flashSale_brand">
-            <li v-for="item in flashSalesGoods.brandList">
-              <input class="filter-input" type="checkbox" :value="item.brandSid" v-model="brandSid">
-              <a>{{ item.brandNameCN }}<svg class="icon"><use xlink:href="#icon-check"></use></svg></a>
+      <div class="flashtitle">
+        <div class="title-head"></div>
+        <div class="countdown" id="countdown"></div>
+      </div>
+      <div id="flashProductsList">
+        <ul class="index-productlist">
+          <template v-for="item in filterlistGoodsData">
+            <li v-go-native-goods-detail="item[0]" :disabled="$route.params.isStart == 0" @click="sensorGoods(item[0], $route.params.isStart)">
+              <a href="javascript:;" :class="{ 'end': item[0].isAvailable !== '1' }">
+                <span class="endmark" v-if="item[0].isAvailable !== '1'">抢光了</span>
+                <div class="lazy-box">
+                  <img class="square-lazy" v-lazy.container="{ src: (item[0].goodsImgPath || '').replace(/^http:/, ''), loading: require('src/assets/square_banner_loading.png'), error: require('src/assets/square_banner_loading.png') }" alt="">
+                </div>
+                <h3>{{ item[0].goodsMsg }}</h3>
+                <p><span class="price"><span>¥</span>{{ $route.params.isStart == 0 ? '???' : item[0].marketPrice }}</span><span class="cost">参考价：¥{{ item[0].goodsPrice }}</span></p>
+              </a>
             </li>
-          </ul>
-          <div class="chongzhi" ref="resetBtn">
-            <button type="button" data-role="none" class="resetIcon" @click="brandSid = []">重置选项</button>
-          </div>
+          </template>
+        </ul>
+        <div class="infinite-layer" v-if="loading">
+          <div class="infinite-preloader"></div>
+          <div>加载中...</div>
         </div>
+        <div class="no-goods" v-if="noGoods">当前闪购活动没有商品</div>
       </div>
-    </bl-popup>
+    </div>
   </div>
 </template>
 <script>
@@ -105,13 +98,6 @@ export default {
       brandSid: [],
       noGoods: false,
 
-      /* 倒计时用的变量 */
-      days: '',
-      hours: '',
-      minutes: '',
-      seconds: '',
-      flag: '',
-      listPages: 0, // 总页数
       /* 商品数据 */
       listGoodsData: [], // 闪购活动商品列表
       flashSalesGoods: {}, // 闪购商品
@@ -185,9 +171,23 @@ export default {
   computed: {
     filterlistGoodsData() {
       return this.listGoodsData
+    },
+    brandList() {
+      let tempList = []
+      let trueList = this.flashSalesGoods.brandList
+      if (trueList && trueList.length) {
+        for (let i = 0; i < trueList.length; i++) {
+          tempList.push({
+            value: trueList[i].brandSid,
+            label: trueList[i].brandNameCN
+          })
+        }
+      }
+      return tempList
     }
   },
   destroyed() {
+    clearTimeout(this.setTime)
     this.$loading.close()
   },
   methods: {
@@ -239,13 +239,14 @@ export default {
       let startDate = new Date(startTime.replace(/-/g, "/"))
       let endDate = new Date(endTime.replace(/-/g, "/"))
       let countDate
+      let flag
       let now = new Date();
       if (now >= startDate) {
         countDate = endDate;
-        this.flag = "后结束"
+        flag = "后结束"
       } else {
         countDate = startDate;
-        this.flag = "后开售"
+        flag = "后开售"
       }
       let date3 = countDate.getTime() - now.getTime();
       // 计算天数
@@ -259,13 +260,10 @@ export default {
       let level3 = leave2 % (60 * 1000);
       let seconds = Math.floor(level3 / 1000);
 
-      this.days = days >= 1 ? days + '天' : ''
-      this.hours = (hours < 10 ? '0' + hours : hours) + '小时'
-      this.minutes = (minutes < 10 ? '0' + minutes : minutes) + '分钟'
-      this.seconds = (seconds < 10 ? '0' + seconds : seconds) + '秒'
+      $('#countdown').text((days >= 1 ? days + '天' : '') + ((hours < 10 ? '0' + hours : hours) + '小时') + ((minutes < 10 ? '0' + minutes : minutes) + '分钟') + ((seconds < 10 ? '0' + seconds : seconds) + '秒') + flag)
       this.setTime = setTimeout(() => {
         if (minutes === 0 && seconds === 0) {
-          this.setTime = null
+          clearTimeout(this.setTime)
         }
         this.countdown(startTime, endTime)
       }, 1000)

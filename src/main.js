@@ -71,8 +71,10 @@ Vue.directive('scroll-top', {
     }
     ducDiv.className = 'gotop'
     ducDiv.style.display = 'none'
-    if (el.parentNode && !binding.modifiers.window) {
-      el.parentNode.appendChild(ducDiv)
+    if (!binding.modifiers.window) {
+      Vue.nextTick(() => {
+        el.parentNode && el.parentNode.appendChild(ducDiv)
+      });
     } else {
       el.appendChild(ducDiv)
     }

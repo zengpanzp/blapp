@@ -16,12 +16,16 @@
             <a href="javascript:;">{{ item.label }}<svg class="icon"><use xlink:href="#icon-check"></use></svg></a>
           </li>
         </ul>
+        <div class="chongzhi" v-if="showReset">
+          <button type="button" class="resetIcon" @click="value = (isMutil ? [] : '')">重置选项</button>
+        </div>
       </div>
     </div>
   </bl-popup>
 </template>
 
 <script>
+import utils from 'src/utils'
 export default {
 
   name: 'bl-slide-bar',
@@ -47,6 +51,10 @@ export default {
     title: {
       type: String,
       default: '筛选'
+    },
+    showReset: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -61,7 +69,10 @@ export default {
   watch: {
     showModal(val) {
       if (!val) {
+        utils.looseBody()
         this.$emit('modalChange', val)
+      } else {
+        utils.fixedBody()
       }
     }
   }
@@ -71,7 +82,7 @@ export default {
 <style lang="scss" scoped>
   @import "src/sass/tobe/function";
   .priceSelect {
-    margin-bottom: rem(.375*31.25);
+    margin-bottom: rem(10);
     background: #fff;
     font-size: rem(28);
     li{
@@ -100,22 +111,17 @@ export default {
     }
     a {
       position: relative;
-      height: rem(3*31.25);
-      line-height: rem(3*31.25);
+      height: rem(88);
+      line-height: rem(88);
       border-bottom: 1px solid #e9e9e9;
       color: #666;
-      padding: 0 rem(.625*31.25);
+      padding: 0 rem(20);
       display: block;
       margin: 0;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis
     }
-    // li.select{
-    //   .icon{
-    //     display: block;
-    //   }
-    // }
   }
   .new .topHeader span {
     color: #e6133c;
@@ -127,7 +133,7 @@ export default {
     z-index: 600000;
     height: 100%;
     width: 75%;
-    border-radius: 12px
+    // border-radius: rem(24);
   }
 
   .flash-list .chongzhi,
@@ -136,40 +142,8 @@ export default {
   }
 
   .chongzhi {
-    height: 50px;
     width: 100%;
     padding-top: 9px
-  }
-
-  .active-title-detail {
-    height: rem(5.5375*31.25);
-    border: 2px solid #333;
-    box-sizing: border-box;
-    border-top: none;
-    padding: 1px
-  }
-
-  .active-detail-container {
-    display: block;
-    height: 100%;
-    background: rgba(0, 0, 0, .6);
-    p {
-      font-size: rem(.75*31.25);
-      padding-top: rem(.25*31.25)
-    }
-
-    .discount-num {
-      color: #f0c17f;
-      label {
-        font-size: rem(1.125*31.25);
-        padding-bottom: rem(.25*31.25)
-      }
-    }
-
-    .discount-store-text {
-      padding-top: rem(.25*31.25);
-      font-size: rem(.625*31.25)
-    }
   }
 
   .topHeader {
@@ -180,28 +154,27 @@ export default {
     padding: 0;
     background: #f5f5f5;
     border-bottom: 1px solid #e9e9e9;
-    font-size: rem(1.1*31.25);
+    font-size: rem(32);
     font-weight: 400;
     z-index: 1;
     color: #343434;
     overflow: hidden;
-    border-top-left-radius: rem(.375*31.25);
+    // border-top-left-radius: rem(12);
     a {
       display: inline-block;
-      font-size: rem(.875*31.25);
-      margin: rem(.32*31.25) rem(.375*31.25);
+      font-size: rem(28);
+      margin: rem(10) rem(12);
       border: none;
-      border-radius: rem(.375*31.25);
-      height: rem(2.25*31.25);
-      line-height: rem(2.25*31.25);
-      padding: 0 rem(.375*31.25);
+      border-radius: rem(12);
+      line-height: rem(70);
+      padding: 0 rem(12);
       color: #424242
     }
     .ok {
-      right: rem(.25*31.25);
+      right: rem(8);
       background: #e6133c;
       color: #fff;
-      padding: 0 rem(.75*31.25);
+      padding: 0 rem(24);
     }
     .cancel {
       left: 0
@@ -222,5 +195,14 @@ export default {
     position: absolute;
     top: 0;
     text-align: center
+  }
+  .resetIcon {
+    padding: rem(18) rem(94);
+    display: block;
+    margin: rem(20) auto;
+    color: #232323;
+    background: #fff;
+    border: 1px solid #e9e9e9;
+    border-radius: rem(12)
   }
 </style>

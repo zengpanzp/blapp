@@ -35,5 +35,14 @@ export const uiRouter = [
       notLoading: true
     },
     component: r => require.ensure([], () => r(require('../views/UI/slideBardemo')), 'slideBardemo')
+  },
+  {
+    path: '/testUpload',
+    meta: {
+      title: 'upload',
+      isWeb: true,
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/UI/commentUpload')), 'commentUpload')
   }
 ]

@@ -33,9 +33,9 @@ export default {
     return {
       week: ["日", "一", "二", "三", "四", "五", "六"],
       toDay: new Date(),
-      selectYear: this.value.year || new Date().getFullYear(),
-      selectMonth: this.value.month || new Date().getMonth() + 1,
-      selectDay: this.value.days || new Date().getDate()
+      selectYear: Number(this.value.year) || new Date().getFullYear(),
+      selectMonth: Number(this.value.month) || new Date().getMonth() + 1,
+      selectDay: Number(this.value.days) || new Date().getDate()
     };
   },
   props: {

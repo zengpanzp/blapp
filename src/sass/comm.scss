@@ -163,6 +163,7 @@ body,html{
 /* 返回顶部 */
 .gotop{
   @extend %gotop;
+  min-height: auto !important;
 }
 
 /* 懒加载 */
@@ -245,6 +246,15 @@ body,html{
   top: 0;
   right: 0;
   left: 0;
+}
+
+.page-view{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 //Android

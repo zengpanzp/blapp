@@ -229,6 +229,28 @@ const getTimeFormatToday = () => {
 
   return year + month + day + hour + min + sec;
 }
+
+/**
+ * 解决滑动上面的浮层下面的内容滚动
+ * @chenpeng
+ * @DateTime 2017-08-06T12:05:23+0800
+ * @return   {[type]}                 [description]
+ */
+const fixedBody = () => {
+  var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+  document.body.style.cssText += 'position:fixed;width:100%;height:100%;top:-' + scrollTop + 'px;';
+}
+
+const looseBody = () => {
+  var body = document.body;
+  body.style.position = '';
+  body.style.width = '';
+  body.style.height = '';
+  var top = body.style.top;
+  document.body.scrollTop = document.documentElement.scrollTop = -parseInt(top);
+  body.style.top = '';
+}
+
 export default {
   dbGet,
   dbSet,
@@ -242,4 +264,6 @@ export default {
   addCard,
   orderBy,
   getTimeFormatToday,
+  fixedBody,
+  looseBody
 }

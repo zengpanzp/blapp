@@ -6,7 +6,7 @@
         <div class="lazy-box">
           <img class="lazy" :src="item.url">
         </div>
-        <div class="remove-upload-pic flex-c-m" @click="upload.splice(index, 1)">
+        <div class="remove-upload-pic flex-c-m" @click="uploadSlice(index)">
           <svg class="icon">
             <use xlink:href="#icon-close"></use>
           </svg>
@@ -107,7 +107,7 @@ export default {
                 resData = resData[0]
               }
               this.upload.push({
-                pid: i,
+                pid: this.upload.length,
                 url: resData.mediaCephUrl,
                 mediaId: resData.mediaId,
                 cephUrl: resData.mediaCephUrl
@@ -123,6 +123,12 @@ export default {
     },
     toFixed2(num) {
       return parseFloat(+num.toFixed(2));
+    },
+    uploadSlice(index) {
+      this.upload.splice(index, 1)
+      for (let i = index; i < this.upload.length; i++) {
+        this.upload[i].pid -= 1
+      }
     }
   }
 };

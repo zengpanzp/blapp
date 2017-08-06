@@ -6,7 +6,8 @@
       <div class="button confirm-btn" slot="right-button" @click="confirm">确认</div>
     </bl-bar>
     <bl-calendar
-      v-if="selectCalendar"
+      class="pop-select-calendar"
+      v-if="selectCalendar && showModal"
       :limit="limit"
       :unselectData="unselectData"
       :showLastDays="false"
@@ -107,5 +108,8 @@ export default {
     max-height: rem(700);
     overflow-x: hidden;
     overflow-y: auto;
+  }
+  .pop-select-calendar{
+    min-height: rem(700);
   }
 </style>
