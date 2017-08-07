@@ -192,9 +192,10 @@ export default {
         // type: 'camera'
       }, {success: data => {
           console.log('success' + data)
+          let imgData = JSON.parse(data).imageSrc
           api.userCenter.upload({
             appId: 'BL_IBLAPP',
-            base64Content: data,
+            base64Content: imgData,
             fileName: new Date().getTime(),
             mediaType: 'jpg',
             reSize: 0

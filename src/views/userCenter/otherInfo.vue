@@ -11,15 +11,9 @@
     </bl-slide-bar>
     <div class="section1" v-for="item in desTitle">
      <div class="list">
-      <ul>
-      	<li v-for="inner in item.options" @click="chooseHandle(inner)">
-          <div class="label">{{ inner.title }}</div>
-          <div class="label-right">
-            {{ inner.currentInfo }}
-            <i class="iconfont arrow-back"></i>
-          </div>
-        </li>
-      </ul>
+      <bl-cell :title="inner.title" :showArrowRight="true" v-for="inner in item.options" @click.native="chooseHandle(inner)">
+        <input slot="cell-main" type="text" :value="inner.currentInfo" readonly style="text-align: right">
+      </bl-cell>
     </div>
     </div>
  </div>
