@@ -13,9 +13,9 @@
       <input class="select-main" slot="cell-main" :value="selectDate.year && `${selectDate.year}-${selectDate.month}-${selectDate.days}`" type="text" placeholder="请选择就诊日期" readonly>
     </bl-cell>
     <bl-cell title="时间" @click.native="selectTimeHandle">
-      <input class="select-main" slot="cell-main" type="text" placeholder="请选择就诊时间" readonly>
+      <input class="select-main" slot="cell-main" :value="trueDepTime && (trueDepTime.morningAfternoon == 1 ? '上午' : '下午')" type="text" placeholder="请选择就诊时间" readonly>
     </bl-cell>
-    <bl-button type="expert-btn" :disabled="true">立即预约</bl-button>
+    <bl-button type="expert-btn" :disabled="!this.departmentname">立即预约</bl-button>
     <bl-popselect
       title="选择医院"
       :showModal="showModal"
@@ -45,16 +45,23 @@
     <bl-popselect
       title="选择就诊时间"
       :showModal="showModalDepTime"
-      @on-hide="showModalDepTime = $event">
+      @on-hide="showModalDepTime = $event"
+      @input="confirmDeptime">
       <div class="select-time-box" slot="select-slot">
-        <div class="select-time-item flex-space flex-m">
+        <div class="select-time-item flex-space flex-m" v-if="index % 2 === 0" v-for="(item, index) in depTimeList">
           <div class="select-item-left">
-            <div class="yu-title">预约日期：8月17日 (周四)</div>
-            <div class="yu-text">剩余号源：<span class="yu-num">5</span>个</div>
+            <div class="yu-title">预约日期：{{ yuDate(item.bookDate) }}</div>
+            <div class="yu-text">剩余号源：<span class="yu-num">{{ item.resourceNum }}</span>个</div>
           </div>
           <div class="select-item-right">
-            <div class="time-btn active">上午</div>
-            <div class="time-btn">上午</div>
+            <label>
+              <input type="radio" name="depTime" :value="depTimeList[index]" v-model="depTime">
+              <span class="time-btn">上午</span>
+            </label>
+            <label>
+              <input type="radio" name="depTime" :value="depTimeList[index + 1]" v-model="depTime">
+              <span class="time-btn">下午</span>
+            </label>
           </div>
         </div>
       </div>
@@ -70,6 +77,7 @@ export default {
 
   data () {
     return {
+      week: ["日", "一", "二", "三", "四", "五", "六"],
       ruleCode: '20160624152997',
       address: '',
       addressInfo: {},
@@ -89,6 +97,9 @@ export default {
       disabledDays: 5, // 几天后不能选
 
       morningAfternoon: 1, // 1上午，2下午
+      depTimeList: [],
+      depTime: null,
+      trueDepTime: null,
 
       inlineLoading: null
     };
@@ -97,7 +108,9 @@ export default {
     this.limit = {
       minYear: this.now.getFullYear(),
       minMonth: this.now.getMonth() + 1,
-      minDay: this.now.getDate()
+      minDay: this.now.getDate(),
+      maxYear: this.now.getFullYear(),
+      maxMonth: this.now.getMonth() + 2
     }
     this.unselectData = this.trueUnSelectDate
   },
@@ -110,9 +123,10 @@ export default {
       if (selectTimeArr[0] == nowTimeYear && selectTimeArr[1] == nowTimeMonth + 1) {
         this.unselectData = this.trueUnSelectDate
       } else {
-        this.unselectData = []
+        this.unselectData = this.unselectWeek
       }
     },
+    // 选择地区
     selectAddress () {
       let reqData = {
         title: "选择地区",
@@ -145,6 +159,7 @@ export default {
         progress: data => { console.log(data) }
       })
     },
+    // 选择医院
     selectHospital() {
       if (this.hospitalList && this.hospitalList.length) {
         this.showModal = true
@@ -152,6 +167,7 @@ export default {
         this.showMessage()
       }
     },
+    // 选择科室
     selectDepartment() {
       if (this.departmentList && this.departmentList.length) {
         this.showModalDep = true
@@ -159,6 +175,7 @@ export default {
         this.showMessage()
       }
     },
+    // 就诊日期
     selectDateHandle() {
       if (this.address && this.hospital) {
         this.showModalDate = true
@@ -166,29 +183,10 @@ export default {
         this.showMessage()
       }
     },
+    // 点击选择就诊时间，查可预约日期
     selectTimeHandle() {
-      if (this.address && this.hospital) {
-        api.queryRemainResourceNum({
-          ruleCode: this.ruleCode,
-          supplierCode: '001',
-          supplierName: this.hospital.label,
-          deptCatCode: this.departmentname.value,
-          deptCat: this.departmentname.label,
-          bookDate: `${this.selectDate.year}${this.selectDate.month}${this.selectDate.days}`,
-          morningAfternoon: this.morningAfternoon
-        }).then(res => {
-          if (res.body.obj) {
-            let resData = JSON.parse(res.body.obj)
-            console.log('选择时间：', resData)
-            if (resData.length) {
-              this.showModalDepTime = true
-            } else {
-              this.$toast('没有所选日期的号源')
-            }
-          } else {
-            this.$toast(res.body.msg)
-          }
-        })
+      if (this.address && this.hospital && this.departmentname) {
+        this.showModalDepTime = true
       } else {
         this.showMessage()
       }
@@ -211,6 +209,21 @@ export default {
         return false
       }
       return true
+    },
+    yuDate(bookDate) {
+      // 8月17日 (周四)
+      let trueTime = String(bookDate).substring(0, 4) + '/' + String(bookDate).substring(4, 6) + '/' + String(bookDate).substring(6, 8)
+      let trueDate = new Date(trueTime)
+      return `${trueDate.getMonth() + 1}月${trueDate.getDate()}日(${this.week[trueDate.getDay()]})`
+    },
+    confirmDeptime() {
+      this.trueDepTime = this.depTime
+      let bookDate = String(this.trueDepTime.bookDate)
+      this.selectDate = {
+        year: bookDate.substring(0, 4),
+        month: bookDate.substring(4, 6),
+        days: bookDate.substring(6, 8)
+      }
     }
   },
   computed: {
@@ -227,10 +240,21 @@ export default {
       for (; i < (firstDayInWeek - 1) + toTays + this.disabledDays; i++) {
         unselectData.push(i)
       }
-      return unselectData
+      return [...unselectData, ...this.unselectWeek]
+    },
+    // 周末不可选
+    unselectWeek() {
+      let tempList = []
+      for (let i = 0; i <= 42; i++) {
+        if (i % 7 === 0 || i % 7 === 6) {
+          tempList.push(i)
+        }
+      }
+      return tempList
     }
   },
   watch: {
+    // 地区改变查医院
     'addressInfo.district'(val) {
       console.log(val)
       this.hospital = null
@@ -271,6 +295,7 @@ export default {
         this.inlineLoading && this.inlineLoading.close()
       })
     },
+    // 医院改变查科室
     hospital(val) {
       console.log(val)
       if (val && val.value && val.label) {
@@ -308,6 +333,38 @@ export default {
           this.inlineLoading && this.inlineLoading.close()
         })
       }
+    },
+    departmentname() {
+      this.selectDate = {}
+      this.trueDepTime = null
+    },
+    selectDate(date) {
+      /* eslint-disable */
+      let res = {"list":[{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170831,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170831,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170901,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170901,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170904,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170904,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170905,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170905,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170906,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170906,"morningAfternoon":2,"resourceNum":30}]}
+      this.depTimeList = res.list
+      this.depTime || (this.depTime = this.depTimeList[0])
+      // api.queryRemainResourceNum({
+      //   ruleCode: this.ruleCode,
+      //   supplierCode: '001',
+      //   supplierName: this.hospital.label,
+      //   deptCatCode: this.departmentname.value,
+      //   deptCat: this.departmentname.label,
+      //   bookDate: `${this.selectDate.year}${this.selectDate.month}${this.selectDate.days}`,
+      //   morningAfternoon: this.morningAfternoon
+      // }).then(res => {
+      //   if (res.body.obj) {
+      //     let resData = JSON.parse(res.body.obj)
+      //     console.log('选择时间：', resData)
+      //     if (resData.list && resData.list.length) {
+      //       this.showModalDepTime = true
+      //       this.depTimeList = resData
+      //     } else {
+      //       this.$toast('没有所选日期的号源')
+      //     }
+      //   } else {
+      //     this.$toast(res.body.msg)
+      //   }
+      // })
     }
   }
 };
@@ -348,10 +405,10 @@ export default {
         }
       }
     }
-    .week{
+     .calendar-container .week{
       background-color: #39ca74;
     }
-    .days .days-item.select:before,.days .days-item.select i{
+     .calendar-container .days .days-item.select:before, .calendar-container .days .days-item.select i{
       background-color: #39ca74;
     }
   }
@@ -377,6 +434,21 @@ export default {
       }
       .select-item-right{
         font-size: 0;
+        label{
+          position: relative;
+          display: inline-block;
+          input{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            &:checked + .time-btn{
+              background-color: #39ca74;
+              border: 1px solid #39ca74;
+              color: #fff;
+            }
+          }
+        }
         .time-btn{
           display: inline-block;
           border: 1px solid #efefef;
@@ -384,11 +456,6 @@ export default {
           padding: rem(18) rem(25);
           margin-left: rem(15);
           font-size: rem(28);
-          &.active{
-            background-color: #39ca74;
-            border: 1px solid #39ca74;
-            color: #fff;
-          }
         }
       }
     }

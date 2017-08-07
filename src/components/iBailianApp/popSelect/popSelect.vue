@@ -55,6 +55,10 @@ export default {
     value: {},
     // list数组
     selectArr: Array,
+    firstSelect: {
+      type: Boolean,
+      default: true
+    },
 
     // 日历
     selectCalendar: {
@@ -75,6 +79,10 @@ export default {
     showModal(val) {
       if (!val) {
         this.$emit('on-hide', false)
+      } else {
+        if (this.firstSelect && !this.value && this.selectArr && this.selectArr.length) {
+          this.value = this.selectArr[0]
+        }
       }
     }
   }
