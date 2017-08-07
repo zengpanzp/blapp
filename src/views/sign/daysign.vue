@@ -616,15 +616,16 @@
             $title: 'APP_签到有奖',
           });
           let signRuleCode = this.signRuleCode; // 抽奖规则id
-          // 跳转到cordova页面
-          window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
-            pageId: 'lucky',
-            params: JSON.stringify({
-              coupon: null,
-              ruleId: signRuleCode,
-              isSigninFlag: "Y"
-            })
-          })
+          // 跳转到大转盘页面
+          this.$router.push({path: '/lucky/' + null + '/' + null + '/' + signRuleCode + '/' + "Y"})
+          // window.CTJSBridge && window.CTJSBridge.LoadMethod('BLPageManager', 'NavigateWithStringParams', {
+          //   pageId: 'lucky',
+          //   params: JSON.stringify({
+          //     coupon: null,
+          //     ruleId: signRuleCode,
+          //     isSigninFlag: "Y"
+          //   })
+          // })
         }
       },
       // 进行签到
