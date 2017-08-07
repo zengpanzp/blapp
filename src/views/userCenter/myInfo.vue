@@ -11,8 +11,6 @@
               <i class="head iconfont arrow-back"></i>
               <img :src="avatarUrl" v-show="avatarUrl">
             </div>
-            <!-- 上传头像 -->
-           <!--  <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file"> -->
           </div>
         </li>
         <li @click="nick">昵称<i>{{ nickName }}<i class="iconfont arrow-back"></i></i></li>
@@ -201,11 +199,15 @@ export default {
             reSize: 0
           }).then(res => {
             if (res.body.obj) {
-              console.log('上传图片返回:', JSON.parse(res.body.obj))
-              let resData = JSON.parse(res.body.obj)
-              this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
-              console.log(this.avatarUrl)
-              this.updateGender()
+              try {
+                console.log('上传图片返回:', JSON.parse(res.body.obj))
+                let resData = JSON.parse(res.body.obj)
+                this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
+                console.log(this.avatarUrl)
+                this.updateGender()
+              } catch (err) {
+                console.log(err)
+              }
             } else {
               this.$toast(res.body.msg)
             }
@@ -214,36 +216,6 @@ export default {
         fail: () => {
           console.log('fail')
         }
-      })
-    },
-    readImage(event) {
-      this.inlineLoading = this.$toast({
-        iconClass: 'preloader white',
-        duration: 'loading',
-        className: 'loading-bg'
-      })
-      let files = event.target.files
-      window.compressImg(files[0], 640, base64 => {
-        api.userCenter.upload({
-          appId: 'BL_IBLAPP',
-          base64Content: base64.split(",")[1],
-          fileName: new Date().getTime(),
-          mediaType: 'jpg',
-          reSize: 0
-        }).then(res => {
-          this.inlineLoading.close()
-          if (res.body.obj) {
-            console.log('上传图片返回:', JSON.parse(res.body.obj))
-            let resData = JSON.parse(res.body.obj)
-            this.avatarUrl = resData.mediaCephUrl ? resData.mediaCephUrl : resData[0].mediaCephUrl
-            console.log(this.avatarUrl)
-            this.updateGender()
-          } else {
-            this.$toast(res.body.msg)
-          }
-        }, () => {
-          this.inlineLoading.close()
-        })
       })
     },
     male () {

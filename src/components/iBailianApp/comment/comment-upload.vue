@@ -26,6 +26,7 @@
 </template>
 
 <script>
+window.lsloader.load(window.lsloaderBase + 'processImg', 'static/js/processImg.js');
 import api from './api/upload'
 export default {
 
