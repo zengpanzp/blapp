@@ -7,10 +7,10 @@
         <li class="first" @click="avatar">
           <div>头像</div>
           <div class="up-img flex-item">
-            <b>
-              <img :src="avatarUrl" v-show="avatarUrl">
+            <div>
               <i class="head iconfont arrow-back"></i>
-            </b>
+              <img :src="avatarUrl" v-show="avatarUrl">
+            </div>
             <!-- 上传头像 -->
            <!--  <input class="up-files" type="file" accept="image/*" @change="readImage" ref="file"> -->
           </div>

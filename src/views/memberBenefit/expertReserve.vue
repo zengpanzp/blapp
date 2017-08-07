@@ -35,11 +35,11 @@
       title="选择日期<small>可预约<span>5</span>天后的号源</small>"
       :showModal="showModalDate"
       @on-hide="showModalDate = $event"
-
       :unselectData="unselectData"
       :limit="limit"
       :changeMonth="changeMonth"
-      v-model="selectDate"
+      :value="selectDate"
+      @input="dateConfirm"
       :selectCalendar="true">
     </bl-popselect>
     <bl-popselect
@@ -108,11 +108,8 @@ export default {
     this.limit = {
       minYear: this.now.getFullYear(),
       minMonth: this.now.getMonth() + 1,
-      minDay: this.now.getDate(),
-      maxYear: this.now.getFullYear(),
-      maxMonth: this.now.getMonth() + 2
+      minDay: this.now.getDate()
     }
-    this.unselectData = this.trueUnSelectDate
   },
   methods: {
     changeMonth(selectTime) {
@@ -177,7 +174,14 @@ export default {
     },
     // 就诊日期
     selectDateHandle() {
+      console.log(!this.selectDate.year)
+      console.log(Number(this.selectDate.month), this.now.getMonth() + 1)
       if (this.address && this.hospital) {
+        if (!this.selectDate.year || (this.selectDate.year && Number(this.selectDate.year) == this.now.getFullYear() && Number(this.selectDate.month) == this.now.getMonth() + 1)) {
+          this.unselectData = this.trueUnSelectDate
+        } else {
+          this.unselectData = this.unselectWeek
+        }
         this.showModalDate = true
       } else {
         this.showMessage()
@@ -186,6 +190,32 @@ export default {
     // 点击选择就诊时间，查可预约日期
     selectTimeHandle() {
       if (this.address && this.hospital && this.departmentname) {
+        /* eslint-disable */
+        let res = {"list":[{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170831,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170831,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170901,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170901,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170904,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170904,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170905,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170905,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170906,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170906,"morningAfternoon":2,"resourceNum":30}]}
+        this.depTimeList = res.list
+        this.depTime || (this.depTime = this.depTimeList[0])
+        // api.queryRemainResourceNum({
+        //   ruleCode: this.ruleCode,
+        //   supplierCode: '001',
+        //   supplierName: this.hospital.label,
+        //   deptCatCode: this.departmentname.value,
+        //   deptCat: this.departmentname.label,
+        //   bookDate: `${this.selectDate.year}${this.selectDate.month}${this.selectDate.days}`,
+        //   morningAfternoon: this.morningAfternoon
+        // }).then(res => {
+        //   if (res.body.obj) {
+        //     let resData = JSON.parse(res.body.obj)
+        //     console.log('选择时间：', resData)
+        //     if (resData.list && resData.list.length) {
+        //       this.showModalDepTime = true
+        //       this.depTimeList = resData
+        //     } else {
+        //       this.$toast('没有所选日期的号源')
+        //     }
+        //   } else {
+        //     this.$toast(res.body.msg)
+        //   }
+        // })
         this.showModalDepTime = true
       } else {
         this.showMessage()
@@ -223,6 +253,12 @@ export default {
         year: bookDate.substring(0, 4),
         month: bookDate.substring(4, 6),
         days: bookDate.substring(6, 8)
+      }
+    },
+    dateConfirm(date) {
+      if (date.date !== this.selectDate.date) {
+        this.trueDepTime = null
+        this.selectDate = date
       }
     }
   },
@@ -334,37 +370,10 @@ export default {
         })
       }
     },
+    // 科室改变了，日期跟时间归零
     departmentname() {
       this.selectDate = {}
       this.trueDepTime = null
-    },
-    selectDate(date) {
-      /* eslint-disable */
-      let res = {"list":[{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170831,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170831,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170901,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170901,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170904,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170904,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170905,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170905,"morningAfternoon":2,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170906,"morningAfternoon":1,"resourceNum":30},{"ruleCode":"20160624152997","supplierCode":"001","supplierName":"中山医院","bookDate":20170906,"morningAfternoon":2,"resourceNum":30}]}
-      this.depTimeList = res.list
-      this.depTime || (this.depTime = this.depTimeList[0])
-      // api.queryRemainResourceNum({
-      //   ruleCode: this.ruleCode,
-      //   supplierCode: '001',
-      //   supplierName: this.hospital.label,
-      //   deptCatCode: this.departmentname.value,
-      //   deptCat: this.departmentname.label,
-      //   bookDate: `${this.selectDate.year}${this.selectDate.month}${this.selectDate.days}`,
-      //   morningAfternoon: this.morningAfternoon
-      // }).then(res => {
-      //   if (res.body.obj) {
-      //     let resData = JSON.parse(res.body.obj)
-      //     console.log('选择时间：', resData)
-      //     if (resData.list && resData.list.length) {
-      //       this.showModalDepTime = true
-      //       this.depTimeList = resData
-      //     } else {
-      //       this.$toast('没有所选日期的号源')
-      //     }
-      //   } else {
-      //     this.$toast(res.body.msg)
-      //   }
-      // })
     }
   }
 };
