@@ -101,7 +101,7 @@ export default {
       activity: []
     }).then(data => {
       console.log("-------pic----" + data.body.obj)
-      this.$loading.close()
+      // this.$loading.close()
       if (data.body.obj) {
         let resData = JSON.parse(data.body.obj)
         if (resData && resData.obj.otherResource) {
@@ -145,7 +145,7 @@ export default {
         memberId: this.memberId,
         channelId: 1
       }).then(data => {
-        this.$loading.close()
+        // this.$loading.close()
         if (data.body.obj) {
           let resData = JSON.parse(data.body.obj)
           if (resData && resData.resultInfo) {

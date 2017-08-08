@@ -11,7 +11,7 @@
     <h3 class="second-title">prd路由</h3>
     <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.guideLink" v-for="(item, index) in aprdRouter">{{ index }}: {{ item.meta.title }}</router-link>
 
-    <h3 class="second-title">H5路由</h3>
+    <h3 class="second-title" v-if="isH5">H5路由</h3>
     <router-link :to="{ path: item.path }" v-if="item.meta && item.meta.title" v-for="(item, index) in ah5Router">{{ index }}: {{ item.meta.title }}</router-link>
   </div>
 </template>
@@ -32,6 +32,7 @@ export default {
       aprdRouter: [],
       acomponentsRouter: [],
       ah5Router: [],
+      isH5: false
     };
   },
   created() {
@@ -39,6 +40,11 @@ export default {
     this.aprdRouter = prdRouter
     this.acomponentsRouter = componentsRouter
     this.ah5Router = h5Router
+    try {
+      this.isH5 = window.CTJSBridge && window.CTJSBridge.isH5
+    } catch (err) {
+      console.log(err)
+    }
   }
 };
 </script>

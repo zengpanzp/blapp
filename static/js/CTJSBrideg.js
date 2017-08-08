@@ -73,6 +73,6 @@ bridge.prototype._setNativeTitle = function(title) {
   // body...
 };
 
-bridge.prototype.platform = 'H5'
+bridge.prototype.isH5 = true
 
 var CTJSBridge = new bridge();
