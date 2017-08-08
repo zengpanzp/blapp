@@ -15,7 +15,7 @@
     <bl-cell title="时间" @click.native="selectTimeHandle">
       <input class="select-main" slot="cell-main" :value="trueDepTime && (trueDepTime.morningAfternoon == 1 ? '上午' : '下午')" type="text" placeholder="请选择就诊时间" readonly>
     </bl-cell>
-    <bl-button type="expert-btn" :disabled="!this.departmentname">立即预约</bl-button>
+    <bl-button type="expert-btn" :disabled="!this.trueDepTime">立即预约</bl-button>
     <bl-popselect
       title="选择医院"
       :showModal="showModal"

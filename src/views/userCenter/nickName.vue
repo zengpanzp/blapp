@@ -2,7 +2,7 @@
 <div class="myEmail">
 	<div class="section1">
 		<ul>
-			<li class="cell-top">当前昵称: {{ nickName ? nickName : '暂无昵称' }}</li>
+			<li class="cell-top">当前昵称: {{ nickName ? nickName : '' }}</li>
 			<li class="cell-bottom"><input type="text" id="change-email" placeholder="修改昵称" v-model="nickname_input"><a class="iconfont close clear" @click="clear_input" v-show="nickname_input"></a></li>
 		</ul>
 	</div>
