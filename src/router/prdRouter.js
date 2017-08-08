@@ -430,7 +430,8 @@ export const prdRouter = [
     path: '/LtVipSuccess',
     meta: {
       title: '预约成功',
-      notLoading: true
+      notLoading: true,
+      guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/LtVipSuccess')), 'LtVipSuccess')
   },
@@ -443,6 +444,24 @@ export const prdRouter = [
       guideLink: true
     },
     component: r => require.ensure([], () => r(require('../views/memberBenefit/expertReserve')), 'expertReserve')
+  },
+  /* 陈鹏 专家预约,提交页面 */
+  {
+    path: '/expertAppointment_submitPage',
+    meta: {
+      title: '提交预约信息',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/expertAppointment_submitPage')), 'expertAppointment_submitPage')
+  },
+  /* 陈鹏 专家预约,成功页面 */
+  {
+    path: '/expertAppointment_successPage',
+    meta: {
+      title: '提交预约信息',
+      notLoading: true
+    },
+    component: r => require.ensure([], () => r(require('../views/memberBenefit/expertAppointment_successPage')), 'expertAppointment_successPage')
   },
   /* 曾攀 更多权益 */
   {

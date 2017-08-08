@@ -15,7 +15,7 @@
     <bl-cell title="时间" @click.native="selectTimeHandle">
       <input class="select-main" slot="cell-main" :value="trueDepTime && (trueDepTime.morningAfternoon == 1 ? '上午' : '下午')" type="text" placeholder="请选择就诊时间" readonly>
     </bl-cell>
-    <bl-button type="expert-btn" :disabled="!this.trueDepTime">立即预约</bl-button>
+    <bl-button type="expert-btn" :disabled="!this.trueDepTime" @click="submit">立即预约</bl-button>
     <bl-popselect
       title="选择医院"
       :showModal="showModal"
@@ -260,6 +260,25 @@ export default {
         this.trueDepTime = null
         this.selectDate = date
       }
+    },
+    submit() {
+      let dateTime = `${this.selectDate.year}-${this.selectDate.month}-${this.selectDate.days}`
+      let reqData = {
+        address: this.address,
+        hospital: this.hospital.label,
+        departmentname: this.departmentname.label,
+        visitdate: dateTime,
+        visittimeshow: this.trueDepTime.morningAfternoon,
+        deptCatCode: this.departmentname.value,
+        date: dateTime
+      }
+      console.log(reqData)
+      this.$router.push({
+        path: '/expertAppointment_submitPage',
+        query: {
+          data: JSON.stringify(reqData)
+        }
+      })
     }
   },
   computed: {

@@ -66,7 +66,7 @@ export default {
             mainCell: ".swiper-wrapper",
             effect: this.effect,
             autoPlay: this.autoPlay,
-            delayTime: 300,
+            delayTime: 600,
             interTime: 2000,
             autoPage: this.pagination,
             switchLoad: "_src"
