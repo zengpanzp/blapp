@@ -50,6 +50,9 @@ export default {
       this.selected = this.myInfo.provinceName + this.myInfo.cityName + this.myInfo.districtName
       this.postcode = this.myInfo.postCode
       this.detail = this.myInfo.address
+      this.provinceId = this.myInfo.provinceId
+      this.cityId = this.myInfo.cityId
+      this.distirctId = this.myInfo.distirctId
     },
     getMyInfo(force = false) {
       if (utils.dbGet('myInfo') && !force) {
