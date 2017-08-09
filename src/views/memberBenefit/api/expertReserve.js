@@ -24,7 +24,7 @@ export default {
   queryDeptCatByHospital: params => {
     return Vue.http.post(baseUrl + '/memberActivity/queryDeptCatByHospital.htm', params)
   },
-  // TODO
+  // 查询时间
   queryRemainResourceNum: params => {
     return Vue.http.post(baseUrl + '/memberActivity/queryRemainResourceNum.htm', params)
   },

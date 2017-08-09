@@ -16,12 +16,14 @@
       @changeMonth="changeMonth">
     </bl-calendar>
     <div class="select-pop-box" v-else>
-      <bl-cell :title="item.label" tag="label" :showArrowRight="false" v-for="item in selectArr" v-if="selectArr && selectArr.length">
-        <div class="select-box" slot="cell-main">
-          <input type="checkbox" :value="item" class="select-icon" v-model="value" name="select" slot="cell-main" v-if="isMutil">
-          <input type="radio" :value="item" class="select-icon" v-model="value" name="select" slot="cell-main">
-        </div>
-      </bl-cell>
+      <label v-for="item in selectArr" v-if="selectArr && selectArr.length">
+        <bl-cell :title="item.label" :showArrowRight="false">
+          <div class="select-box" slot="cell-main">
+            <input type="checkbox" :value="item" class="select-icon" v-model="value" name="select" slot="cell-main" v-if="isMutil">
+            <input type="radio" :value="item" class="select-icon" v-model="value" name="select" slot="cell-main">
+          </div>
+        </bl-cell>
+      </label>
       <slot name="select-slot"></slot>
     </div>
   </bl-popup>
