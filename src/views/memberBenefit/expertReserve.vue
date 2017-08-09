@@ -217,7 +217,6 @@ export default {
             this.$toast(res.body.msg)
           }
         })
-        this.showModalDepTime = true
       } else {
         this.showMessage()
       }
