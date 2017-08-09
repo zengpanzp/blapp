@@ -322,7 +322,7 @@ export default {
 
   data () {
     return {
-    	powerId: this.$route.query.powerId || 20,
+    	powerId: this.$route.query.powerId || 10,
     	conHeight: '',
     	list: [
     	{
@@ -376,6 +376,3 @@ export default {
 	}
 };
 </script>
-
-<style lang="css" scoped>
-</style>
