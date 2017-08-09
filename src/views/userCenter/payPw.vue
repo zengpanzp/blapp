@@ -7,7 +7,7 @@
         <b class="iconfont lock clear"></b>
         <input maxlength="6" type="password" placeholder="支付密码" v-model="pw_input">
       </li>
-  		<router-link to="/userCenter/checkPhone"><p class="forget-password">忘记密码>&nbsp;&nbsp;</p></router-link>
+  		<router-link to="/userCenter/checkPhone" replace><p class="forget-password">忘记密码>&nbsp;&nbsp;</p></router-link>
     </p>
     </form>
 	</div>
@@ -62,7 +62,7 @@ export default {
                 })
                 console.log("member_id" + member_id)
                 setTimeout(() => {
-                  this.$router.push({
+                  this.$router.replace({
                     path: 'submitPw',
                     query: {
                       pwd: MD5(this.pw_input),
