@@ -43,6 +43,7 @@ export default {
         background: url("./arrow.png") no-repeat right center;
         background-size: rem(12) auto;
         padding-right: rem(24);
+        min-height: rem(88);
       }
     }
   }
