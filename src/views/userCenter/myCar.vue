@@ -93,8 +93,15 @@ export default {
             carLicense: this.input,
             actionType: 1
           }).then(data => {
-            console.log(data)
-            this.licenseCode = this.input
+            if (data.body.obj) {
+              console.log(data)
+              this.licenseCode = this.input
+            } else {
+              this.$toast({
+                message: data.body.msg,
+                position: "bottom"
+              })
+            }
           })
         })
   		} else {
